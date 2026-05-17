@@ -8,16 +8,31 @@
     <header th:replace="fragments/header :: header"></header>
 
     <main>
-        <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
+        <section class="hero" style="background: linear-gradient(135deg, rgba(0,0,0,0.70) 0%, rgba(0,20,30,0.55) 40%, rgba(0,0,0,0.65) 100%), url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
             <div class="hero-part"></div>
             <div class="hero-part"></div>
             <div class="hero-part"></div>
             <div class="hero-part"></div>
             <div class="hero-part"></div>
+            <div class="hero-curve" aria-hidden="true">
+                <svg viewBox="0 0 400 120" preserveAspectRatio="none" style="width:100%;height:100%;">
+                    <path d="M 0,60 Q 100,0 200,60 T 400,60" fill="none" stroke="rgba(212,118,42,0.20)" stroke-width="2" stroke-dasharray="8 6"/>
+                </svg>
+            </div>
             <div class="hero-overlay">
-                <h1>MONTEASTUR ENVIOS</h1>
-                <p>Monteastur Env&iacute;os lleva tu mercanc&iacute;a y carga pesada a Paraguay con seguridad y seguimiento personalizado, cuidando cada detalle de tu log&iacute;stica.</p>
-                <a href="https://wa.me/34642687292" class="btn" target="_blank">Consult&aacute; precios y disponibilidad</a>
+                <span class="hero-brand">MONTEASTUR ENVIOS</span>
+                <div class="hero-tags">
+                    <span class="hero-tag">Puerta a puerta</span>
+                    <span class="hero-tag">Carga pesada</span>
+                    <span class="hero-tag">Aduanas</span>
+                    <span class="hero-tag">Paraguay</span>
+                </div>
+                <h1>Transporte y gesti&oacute;n de aduanas Espa&ntilde;a&ndash;Paraguay</h1>
+                <p>Llevamos tu mercanc&iacute;a, mudanza o carga pesada con seguridad, seguimiento personalizado y trato cercano.</p>
+                <div class="hero-ctas">
+                    <a href="https://wa.me/34642687292" class="btn" target="_blank">Consult&aacute; precios y disponibilidad</a>
+                    <a href="/casa" class="btn btn-secondary">Ver servicios</a>
+                </div>
             </div>
         </section>
 
