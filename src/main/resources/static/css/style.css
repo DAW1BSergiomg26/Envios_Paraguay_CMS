@@ -1379,6 +1379,157 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     transform: scale(0.97);
 }
 
+/* COMO FUNCIONA - Timeline Premium */
+.como-funciona {
+    text-align: center;
+    padding: 20px 0 10px;
+}
+
+.como-funciona h2 {
+    font-size: 32px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 12px;
+}
+
+.como-funciona h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3f6338, #d4762a);
+    border-radius: 2px;
+}
+
+.como-funciona > p {
+    font-size: 17px;
+    color: #888;
+    margin: 16px auto 40px;
+    max-width: 600px;
+}
+
+.como-funciona-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.como-funciona-grid::before {
+    content: "";
+    position: absolute;
+    top: 44px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, #3f6338, #d4762a, #3f6338);
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.paso-card {
+    background: rgba(255,255,255,0.70);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.40);
+    padding: 32px 20px 28px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.paso-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.88);
+}
+
+.paso-numero {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3f6338, #557c45);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 4px 14px rgba(63,99,56,0.25);
+    position: relative;
+    z-index: 2;
+}
+
+.paso-icono {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.paso-card h4 {
+    font-size: 16px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.paso-card p {
+    font-size: 13.5px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.como-funciona-cta {
+    margin-top: 40px;
+}
+
+@media (max-width: 900px) {
+    .como-funciona-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .como-funciona-grid::before {
+        display: none;
+    }
+
+    .paso-card {
+        padding: 24px 16px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .como-funciona-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+    }
+
+    .como-funciona h2 {
+        font-size: 26px;
+    }
+
+    .como-funciona > p {
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    .paso-card {
+        padding: 22px 18px;
+    }
+}
+
 /* TABLE HOVER */
 .table-wrap tbody tr {
     transition: background 0.2s ease;
