@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header :: head('Reservas')"></head>
+<head th:replace="fragments/header :: head('Envíos')"></head>
 
 <body>
 
@@ -9,14 +9,14 @@
 
     <main>
         <section class="pagina-titulo reveal">
-            <h2>Reservas</h2>
-            <p>Completa el formulario para reservar tu estancia.</p>
+            <h2>En&iacute;os</h2>
+            <p>Solicita tu env&iacute;o a Paraguay desde Pola de Siero. R&aacute;pido, seguro y con seguimiento.</p>
         </section>
 
         <section class="contenido reveal" th:if="${!reservaEnviada}">
             <div class="reserva-header">
-                <h3>Planifica tu escapada</h3>
-                <p>Elige fechas disponibles y completa tu solicitud.</p>
+                <h3>Solicita tu env&iacute;o</h3>
+                <p>Elige fechas y completa los datos de tu env&iacute;o.</p>
             </div>
             <div class="reserva-layout">
             <div class="reserva-calendario">
@@ -40,13 +40,13 @@
                     </table>
                 </div>
                 <div class="calendario-leyenda">
-                    <span class="leyenda libre"></span> Libre
-                    <span class="leyenda ocupado"></span> Ocupado
+                    <span class="leyenda libre"></span> Disponible
+                    <span class="leyenda ocupado"></span> Reservado
                     <span class="leyenda pasado"></span> Pasado
                 </div>
             </div>
             <div class="reserva-formulario">
-                <h3><span>&#9997;&#65039;</span> Solicitud de reserva</h3>
+                <h3><span>&#9997;&#65039;</span> Solicitud de env&iacute;o</h3>
                 <form action="#" th:action="@{/reservas}" method="post">
                 <div class="rf-group">
                     <label for="nombreCliente">Nombre completo *</label>
@@ -61,22 +61,22 @@
                     <input type="tel" id="telefono" name="telefono" class="rf-control">
                 </div>
                 <div class="rf-group">
-                    <label for="fechaEntrada">Fecha de entrada *</label>
+                    <label for="fechaEntrada">Fecha de recogida *</label>
                     <input type="date" id="fechaEntrada" name="fechaEntrada" required class="rf-control">
                 </div>
                 <div class="rf-group">
-                    <label for="fechaSalida">Fecha de salida *</label>
+                    <label for="fechaSalida">Fecha de entrega *</label>
                     <input type="date" id="fechaSalida" name="fechaSalida" required class="rf-control">
                 </div>
                 <div class="rf-group">
-                    <label for="numeroHuespedes">N&uacute;mero de hu&eacute;spedes *</label>
+                    <label for="numeroHuespedes">Bultos aprox. *</label>
                     <input type="number" id="numeroHuespedes" name="numeroHuespedes" min="1" max="20" required class="rf-control">
                 </div>
                 <div class="rf-group">
                     <label for="comentarios">Comentarios</label>
                     <textarea id="comentarios" name="comentarios" rows="4" class="rf-control"></textarea>
                 </div>
-                <button type="submit" class="btn btn-block">Solicitar reserva</button>
+                <button type="submit" class="btn btn-block">Solicitar env&iacute;o</button>
                 <p class="reserva-confianza">Tus datos est&aacute;n protegidos y no ser&aacute;n compartidos.</p>
             </form>
             </div>
@@ -84,8 +84,8 @@
         </section>
 
         <section class="contenido" th:if="${reservaEnviada}" style="text-align: center;">
-            <h3 style="color: #3f6338; font-size: 28px; margin-bottom: 15px;">¡Solicitud enviada!</h3>
-            <p style="font-size: 18px; color: #555;">Hemos recibido tu solicitud de reserva. Te confirmaremos la disponibilidad lo antes posible.</p>
+            <h3 style="color: #3f6338; font-size: 28px; margin-bottom: 15px;">&iexcl;Solicitud enviada!</h3>
+            <p style="font-size: 18px; color: #555;">Hemos recibido tu solicitud de env&iacute;o. Te confirmaremos los detalles lo antes posible.</p>
             <a href="/" class="btn" style="margin-top: 20px;">Volver al inicio</a>
         </section>
     </main>

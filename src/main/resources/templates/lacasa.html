@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header :: head('La Casa')"></head>
+<head th:replace="fragments/header :: head('Servicios')"></head>
 
 <body>
 
@@ -9,40 +9,40 @@
 
     <main>
         <section class="pagina-titulo reveal">
-            <h2>La Casa</h2>
-            <p>Descubre nuestros espacios, diseñados para tu descanso.</p>
+            <h2>Servicios</h2>
+            <p>Log&iacute;stica profesional entre Paraguay y Espa&ntilde;a. Soluciones a medida para cada env&iacute;o.</p>
         </section>
 
         <section class="contenido reveal">
-            <p>Casa Rural cuenta con 4 habitaciones dobles, todas ellas con baño completo, calefacción y vistas al entorno natural. Dispone de cocina totalmente equipada, amplio salón con chimenea, jardín privado y zona de barbacoa.</p>
-            <p>La casa ha sido reformada manteniendo la arquitectura tradicional asturiana, combinando piedra y madera con todas las comodidades modernas.</p>
+            <p>Ofrecemos un servicio integral de log&iacute;stica internacional con cobertura total entre Asturias y Paraguay. Gestionamos desde paqueter&iacute;a documental hasta carga consolidada, con seguimiento en tiempo real y entregas puerta a puerta. Recogemos en Pola de Siero y alrededores.</p>
+            <p>Nuestra infraestructura log&iacute;stica combina almacenes propios, flota de reparto y alianzas con los mejores operadores internacionales para garantizar que tu carga llegue a su destino en el menor tiempo posible.</p>
 
             <div class="casa-caracteristicas">
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#128716;</div>
-                    <h4>4 Habitaciones</h4>
-                    <p>Dobles con baño completo, calefacción y vistas a la naturaleza.</p>
+                    <div class="casa-card-icono">&#128230;</div>
+                    <h4>Paqueter&iacute;a exprés</h4>
+                    <p>Env&iacute;os urgentes con entrega en 24&ndash;48h. Documentos, peque&ntilde;os paquetes y mercanc&iacute;a ligera.</p>
                 </div>
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#127858;</div>
-                    <h4>Cocina equipada</h4>
-                    <p>Totalmente equipada con electrodomésticos modernos y utensilios.</p>
+                    <div class="casa-card-icono">&#128666;</div>
+                    <h4>Carga consolidada</h4>
+                    <p>Transporte de mercanc&iacute;a paletizada con optimizaci&oacute;n de costes. Consolidamos tu carga para maximizar el ahorro.</p>
                 </div>
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#128293;</div>
-                    <h4>Salón con chimenea</h4>
-                    <p>Amplio y acogedor, ideal para relajarse después del día.</p>
+                    <div class="casa-card-icono">&#128200;</div>
+                    <h4>Seguimiento en l&iacute;nea</h4>
+                    <p>Plataforma de tracking en tiempo real. Localiza tu env&iacute;o en cualquier momento desde cualquier dispositivo.</p>
                 </div>
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#127793;</div>
-                    <h4>Jardín &amp; barbacoa</h4>
-                    <p>Jardín privado con zona de barbacoa para disfrutar al aire libre.</p>
+                    <div class="casa-card-icono">&#128179;</div>
+                    <h4>Seguro incluido</h4>
+                    <p>Todos los env&iacute;os cuentan con seguro de cobertura internacional. Tu carga protegida en cada etapa del trayecto.</p>
                 </div>
             </div>
         </section>
 
         <section class="galeria reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
-            <h3>Galer&iacute;a de im&aacute;genes</h3>
+            <h3>Galer&iacute;a de operaciones</h3>
             <div class="grid-public">
                 <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
                     <img th:src="${img.url}" th:alt="${img.titulo}">

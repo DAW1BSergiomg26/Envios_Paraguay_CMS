@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head('Operaciones')"></head>
+
+<body>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <main>
+        <section class="pagina-titulo reveal">
+            <h2>Operaciones</h2>
+            <p>As&iacute; trabajamos. Procesos log&iacute;sticos de principio a fin.</p>
+        </section>
+
+        <section class="contenido reveal">
+            <p>En MONTEASTUR gestionamos cada env&iacute;o como si fuera el &uacute;nico. Desde la recogida en Pola de Siero hasta la entrega final en Paraguay, todo nuestro equipo trabaja para que tu carga llegue segura y a tiempo.</p>
+            <p>Contamos con almacenes de consolidaci&oacute;n, flota propia de recogida y una red de socios internacionales que garantizan la trazabilidad completa de cada env&iacute;o.</p>
+
+            <div class="casa-caracteristicas">
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#128666;</div>
+                    <h4>Recogida en Asturias</h4>
+                    <p>Recogemos tu carga en Pola de Siero y alrededores. Coordinamos la cita en el momento que mejor te venga.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#127758;</div>
+                    <h4>Consolidaci&oacute;n internacional</h4>
+                    <p>Agrupamos tu carga con otros env&iacute;os para optimizar costes sin comprometer los plazos de entrega.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#9992;&#65039;</div>
+                    <h4>Transporte a&eacute;reo y mar&iacute;timo</h4>
+                    <p>Elegimos la mejor ruta para tu env&iacute;o seg&uacute;n urgencia, volumen y presupuesto. Flexibilidad total.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#128230;</div>
+                    <h4>Entrega en Paraguay</h4>
+                    <p>Distribuci&oacute;n final en Asunci&oacute;n y principales ciudades. Gestionamos aduanas y documentaci&oacute;n.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="galeria reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
+            <h3>Galer&iacute;a de operaciones</h3>
+            <div class="grid-public">
+                <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
+                    <img th:src="${img.url}" th:alt="${img.titulo}">
+                    <span th:text="${img.titulo}">T&iacute;tulo</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-label="Visor de im&aacute;genes">
+        <button class="lightbox-cerrar" id="lbCer" aria-label="Cerrar">&times;</button>
+        <button class="lightbox-nav lightbox-nav-prev" id="lbPrev" aria-label="Anterior">&#8249;</button>
+        <button class="lightbox-nav lightbox-nav-next" id="lbNext" aria-label="Siguiente">&#8250;</button>
+        <div class="lightbox-contenido">
+            <img id="lbImg" src="" alt="">
+            <p class="lightbox-titulo" id="lbTit"></p>
+        </div>
+    </div>
+
+</body>
+</html>
