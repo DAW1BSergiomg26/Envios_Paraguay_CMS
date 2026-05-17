@@ -1057,6 +1057,177 @@ textarea.rf-control {
     color: #666;
 }
 
+/* OPERACIONES - Premium grid */
+.ops-intro {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.8;
+    max-width: 780px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.ops-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.ops-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(63, 99, 56, 0.12);
+    border-radius: 18px;
+    padding: 32px 24px 28px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    overflow: hidden;
+}
+
+.ops-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(63, 99, 56, 0.03), rgba(212, 118, 42, 0.03));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.ops-card:hover::before {
+    opacity: 1;
+}
+
+.ops-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 40px rgba(63, 99, 56, 0.12), 0 0 30px rgba(212, 118, 42, 0.06);
+    border-color: rgba(212, 118, 42, 0.25);
+}
+
+.ops-card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #d4762a;
+    background: rgba(212, 118, 42, 0.1);
+    border: 1px solid rgba(212, 118, 42, 0.15);
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+}
+
+.ops-card-icono {
+    font-size: 38px;
+    line-height: 1;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 2px 8px rgba(63, 99, 56, 0.15));
+    transition: transform 0.35s ease;
+}
+
+.ops-card:hover .ops-card-icono {
+    transform: scale(1.1);
+}
+
+.ops-card h4 {
+    font-size: 17px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.ops-card p {
+    font-size: 13.5px;
+    color: #666;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.ops-cta {
+    text-align: center;
+    margin-top: 50px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px solid rgba(63, 99, 56, 0.1);
+}
+
+.ops-cta p {
+    font-size: 18px;
+    color: #3f6338;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.ops-placeholder {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.ops-placeholder-card {
+    display: inline-block;
+    padding: 40px 36px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px dashed rgba(63, 99, 56, 0.2);
+    border-radius: 18px;
+    max-width: 480px;
+}
+
+.ops-placeholder-icono {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 14px;
+    opacity: 0.5;
+}
+
+.ops-placeholder-card h4 {
+    font-size: 18px;
+    color: #3f6338;
+    margin-bottom: 8px;
+}
+
+.ops-placeholder-card p {
+    font-size: 14px;
+    color: #999;
+    margin: 0;
+}
+
+@media (max-width: 900px) {
+    .ops-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ops-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .ops-card {
+        padding: 26px 18px 22px;
+    }
+
+    .ops-cta {
+        padding: 30px 18px;
+    }
+
+    .ops-cta p {
+        font-size: 16px;
+    }
+
+    .ops-placeholder-card {
+        padding: 30px 20px;
+    }
+}
+
 /* CONTACTO - Layout */
 .contacto-grid {
     display: grid;
