@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header-en :: head('Bookings')"></head>
+<head th:replace="fragments/header-en :: head('Shipments')"></head>
 
 <body>
 
@@ -9,14 +9,14 @@
 
     <main>
         <section class="pagina-titulo reveal">
-            <h2>Bookings</h2>
-            <p>Complete the form to book your stay.</p>
+            <h2>Shipments</h2>
+            <p>Request your shipment to Paraguay from Pola de Siero. Fast, secure and trackable.</p>
         </section>
 
         <section class="contenido reveal" th:if="${!reservaEnviada}">
             <div class="reserva-header">
-                <h3>Plan your getaway</h3>
-                <p>Choose available dates and complete your request.</p>
+                <h3>Request your shipment</h3>
+                <p>Choose dates and complete your shipping details.</p>
             </div>
             <div class="reserva-layout">
             <div class="reserva-calendario">
@@ -40,13 +40,13 @@
                     </table>
                 </div>
                 <div class="calendario-leyenda">
-                    <span class="leyenda libre"></span> Free
-                    <span class="leyenda ocupado"></span> Occupied
+                    <span class="leyenda libre"></span> Available
+                    <span class="leyenda ocupado"></span> Booked
                     <span class="leyenda pasado"></span> Past
                 </div>
             </div>
             <div class="reserva-formulario">
-                <h3><span>&#9997;&#65039;</span> Booking request</h3>
+                <h3><span>&#9997;&#65039;</span> Shipping request</h3>
                 <form action="#" th:action="@{/en/reservas}" method="post">
                 <div class="rf-group">
                     <label for="nombreCliente">Full name *</label>
@@ -61,22 +61,22 @@
                     <input type="tel" id="telefono" name="telefono" class="rf-control">
                 </div>
                 <div class="rf-group">
-                    <label for="fechaEntrada">Check-in *</label>
+                    <label for="fechaEntrada">Pickup date *</label>
                     <input type="date" id="fechaEntrada" name="fechaEntrada" required class="rf-control">
                 </div>
                 <div class="rf-group">
-                    <label for="fechaSalida">Check-out *</label>
+                    <label for="fechaSalida">Delivery date *</label>
                     <input type="date" id="fechaSalida" name="fechaSalida" required class="rf-control">
                 </div>
                 <div class="rf-group">
-                    <label for="numeroHuespedes">Number of guests *</label>
+                    <label for="numeroHuespedes">Approx. packages *</label>
                     <input type="number" id="numeroHuespedes" name="numeroHuespedes" min="1" max="20" required class="rf-control">
                 </div>
                 <div class="rf-group">
                     <label for="comentarios">Comments</label>
                     <textarea id="comentarios" name="comentarios" rows="4" class="rf-control"></textarea>
                 </div>
-                <button type="submit" class="btn btn-block">Request booking</button>
+                <button type="submit" class="btn btn-block">Request shipment</button>
                 <p class="reserva-confianza">Your data is protected and will not be shared.</p>
             </form>
             </div>
@@ -85,7 +85,7 @@
 
         <section class="contenido" th:if="${reservaEnviada}" style="text-align: center;">
             <h3 style="color: #3f6338; font-size: 28px; margin-bottom: 15px;">Request sent!</h3>
-            <p style="font-size: 18px; color: #555;">We have received your booking request. We will confirm availability as soon as possible.</p>
+            <p style="font-size: 18px; color: #555;">We have received your shipping request. We will confirm the details as soon as possible.</p>
             <a href="/en" class="btn" style="margin-top: 20px;">Back to home</a>
         </section>
     </main>

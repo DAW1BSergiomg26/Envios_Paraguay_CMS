@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMS - Dashboard | Casa Rural</title>
+    <title>CMS - Dashboard | MONTEASTUR ENVIOS</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
     <script src="/js/app.js" defer></script>
 </head>
@@ -11,14 +11,14 @@
 
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2>CASA RURAL</h2>
+        <h2>MONTEASTUR ENVIOS</h2>
         <small>Panel de Gesti&oacute;n</small>
-        <span class="refugio-tag">Refugio Premium</span>
+        <span class="refugio-tag">Log&iacute;stica Premium</span>
     </div>
     <nav class="nav-links">
         <a href="/admin/dashboard" class="active">Panel de Inicio</a>
-        <a href="/admin/reservas">Gestionar Reservas</a>
-        <a href="/admin/mensajesrecibidos">Mensajes Recibidos</a>
+        <a href="/admin/reservas">Gestionar Env&iacute;os</a>
+        <a href="/admin/mensajesrecibidos">Consultas Clientes</a>
         <a href="/admin/imagenes">Galer&iacute;a de Fotos</a>
         <a href="/admin/textos">Textos Legales</a>
         <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
@@ -39,14 +39,14 @@
 
     <div class="quick-actions">
         <a href="/admin/reservas" class="quick-action-card">
-            <span class="qa-icon">📅</span>
-            <span class="qa-title">Gestionar Reservas</span>
-            <span class="qa-desc">Administra fechas y estados</span>
+            <span class="qa-icon">📦</span>
+            <span class="qa-title">Gestionar Env&iacute;os</span>
+            <span class="qa-desc">Administra env&iacute;os y estados</span>
         </a>
         <a href="/admin/mensajesrecibidos" class="quick-action-card">
             <span class="qa-icon">✉️</span>
-            <span class="qa-title">Ver Mensajes</span>
-            <span class="qa-desc">Consulta los mensajes recibidos</span>
+            <span class="qa-title">Consultas Clientes</span>
+            <span class="qa-desc">Consulta las consultas recibidas</span>
         </a>
         <a href="/admin/imagenes" class="quick-action-card">
             <span class="qa-icon">🖼️</span>
@@ -62,11 +62,11 @@
 
     <div class="card">
         <h1>Resumen General</h1>
-        <p>Datos actualizados del contenido de la Casa Rural.</p>
+        <p>Panel de control de operaciones log&iacute;sticas.</p>
         <div class="stats-grid">
             <div class="stat-item">
                 <span class="stat-icon">📊</span>
-                <span>Total Reservas</span>
+                <span>Total Env&iacute;os</span>
                 <strong th:text="${totalReservas}">0</strong>
             </div>
             <div class="stat-item">
@@ -76,7 +76,7 @@
             </div>
             <div class="stat-item">
                 <span class="stat-icon">✉️</span>
-                <span>Mensajes</span>
+                <span>Consultas</span>
                 <strong style="color: var(--verde);" th:text="${totalMensajes}">0</strong>
             </div>
             <div class="stat-item">

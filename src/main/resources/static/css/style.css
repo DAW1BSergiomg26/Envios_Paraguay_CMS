@@ -433,6 +433,96 @@ footer {
     to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Hero brand label */
+.hero-brand {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.50);
+    margin-bottom: 16px;
+    animation: heroFadeUp 0.7s ease both;
+}
+
+/* Hero tags */
+.hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    animation: heroFadeUp 0.7s ease 0.15s both;
+}
+
+.hero-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.12);
+    transition: all 0.3s ease;
+}
+
+.hero-tag:hover {
+    background: rgba(212,118,42,0.25);
+    border-color: rgba(212,118,42,0.30);
+    transform: translateY(-1px);
+}
+
+/* Hero CTA row */
+.hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 8px;
+    animation: heroFadeUp 0.7s ease 0.45s both;
+}
+
+.hero-ctas .btn {
+    padding: 16px 34px;
+    font-size: 18px;
+    letter-spacing: 0.3px;
+}
+
+/* Secondary button */
+.btn-secondary {
+    background: transparent;
+    border: 1.5px solid rgba(255,255,255,0.30);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(255,255,255,0.50);
+    box-shadow: none;
+    transform: translateY(-2px);
+}
+
+/* Hero decorative curve */
+.hero-curve {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
 .btn-cookies {
     margin-top: 20px;
 }
@@ -1379,6 +1469,326 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     transform: scale(0.97);
 }
 
+/* COMO FUNCIONA - Timeline Premium */
+.como-funciona {
+    text-align: center;
+    padding: 20px 0 10px;
+}
+
+.como-funciona h2 {
+    font-size: 32px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 12px;
+}
+
+.como-funciona h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3f6338, #d4762a);
+    border-radius: 2px;
+}
+
+.como-funciona > p {
+    font-size: 17px;
+    color: #888;
+    margin: 16px auto 40px;
+    max-width: 600px;
+}
+
+.como-funciona-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.como-funciona-grid::before {
+    content: "";
+    position: absolute;
+    top: 44px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, #3f6338, #d4762a, #3f6338);
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.paso-card {
+    background: rgba(255,255,255,0.70);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.40);
+    padding: 32px 20px 28px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.paso-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.88);
+}
+
+.paso-numero {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3f6338, #557c45);
+    color: white;
+    font-size: 16px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 4px 14px rgba(63,99,56,0.25);
+    position: relative;
+    z-index: 2;
+}
+
+.paso-icono {
+    font-size: 28px;
+    margin-bottom: 12px;
+    display: block;
+}
+
+.paso-card h4 {
+    font-size: 16px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.paso-card p {
+    font-size: 13.5px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.como-funciona-cta {
+    margin-top: 40px;
+}
+
+/* Tracking log&iacute;stico premium */
+.tracking-section {
+    padding: 80px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.tracking-section h2 {
+    font-size: 36px;
+    color: #3f6338;
+    margin-bottom: 12px;
+    font-weight: 800;
+}
+
+.tracking-section > p {
+    font-size: 16px;
+    color: #777;
+    margin-bottom: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tracking-timeline {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    position: relative;
+    padding: 20px 0;
+}
+
+.tracking-timeline::before {
+    content: '';
+    position: absolute;
+    top: 60px;
+    left: 15%;
+    right: 15%;
+    height: 3px;
+    background: linear-gradient(90deg, #3f6338, #d4762a, #3f6338);
+    border-radius: 2px;
+    z-index: 0;
+}
+
+.tracking-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 30px 20px 25px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(63, 99, 56, 0.15);
+    border-radius: 16px;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.tracking-step:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(63, 99, 56, 0.15), 0 0 20px rgba(212, 118, 42, 0.1);
+    border-color: rgba(212, 118, 42, 0.3);
+}
+
+.tracking-icon {
+    font-size: 42px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 8px rgba(63, 99, 56, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.tracking-step:hover .tracking-icon {
+    transform: scale(1.12);
+}
+
+.tracking-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.tracking-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #d4762a;
+    background: rgba(212, 118, 42, 0.1);
+    padding: 2px 10px;
+    border-radius: 20px;
+}
+
+.tracking-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #3f6338;
+    margin-top: 4px;
+}
+
+.tracking-badge {
+    font-size: 11px;
+    font-weight: 600;
+    color: #d4762a;
+    background: rgba(212, 118, 42, 0.12);
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-top: 4px;
+    border: 1px solid rgba(212, 118, 42, 0.2);
+}
+
+.tracking-badge-done {
+    color: #3f6338;
+    background: rgba(63, 99, 56, 0.12);
+    border-color: rgba(63, 99, 56, 0.2);
+}
+
+.tracking-dot {
+    display: none;
+}
+
+.tracking-cta {
+    margin-top: 45px;
+}
+
+@media (max-width: 900px) {
+    .como-funciona-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .como-funciona-grid::before {
+        display: none;
+    }
+
+    .paso-card {
+        padding: 24px 16px 20px;
+    }
+
+    .tracking-timeline {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .tracking-timeline::before {
+        display: none;
+    }
+
+    .tracking-section h2 {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .como-funciona-grid {
+        grid-template-columns: 1fr;
+        max-width: 320px;
+    }
+
+    .como-funciona h2 {
+        font-size: 26px;
+    }
+
+    .como-funciona > p {
+        font-size: 15px;
+        margin-bottom: 30px;
+    }
+
+    .paso-card {
+        padding: 22px 18px;
+    }
+
+    .tracking-timeline {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        max-width: 380px;
+        margin: 0 auto;
+    }
+
+    .tracking-section {
+        padding: 50px 16px;
+    }
+
+    .tracking-section h2 {
+        font-size: 26px;
+    }
+
+    .tracking-step {
+        flex-direction: row;
+        padding: 18px 16px;
+        text-align: left;
+    }
+
+    .tracking-info {
+        align-items: flex-start;
+    }
+
+    .tracking-icon {
+        font-size: 32px;
+    }
+}
+
 /* TABLE HOVER */
 .table-wrap tbody tr {
     transition: background 0.2s ease;
@@ -1488,7 +1898,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         font-size: 17px;
     }
 
-    .hero-overlay .btn {
+.hero-overlay .btn,
+.hero-ctas .btn {
         padding: 14px 30px;
         font-size: 17px;
     }
