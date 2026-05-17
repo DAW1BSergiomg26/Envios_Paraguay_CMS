@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header-en :: head('The House')"></head>
+
+<body>
+
+    <header th:replace="fragments/header-en :: header"></header>
+
+    <main>
+        <section class="pagina-titulo reveal">
+            <h2>The House</h2>
+            <p>Discover our spaces, designed for your comfort.</p>
+        </section>
+
+        <section class="contenido reveal">
+            <p>Casa Rural has 4 double rooms, each with private bathroom, heating and views of the natural surroundings. It features a fully equipped kitchen, a spacious living room with fireplace, private garden and barbecue area.</p>
+            <p>The house has been renovated preserving traditional Asturian architecture, combining stone and wood with all modern comforts.</p>
+
+            <div class="casa-caracteristicas">
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#128716;</div>
+                    <h4>4 Bedrooms</h4>
+                    <p>Double rooms with private bathroom, heating and nature views.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#127858;</div>
+                    <h4>Kitchen</h4>
+                    <p>Fully equipped with modern appliances and utensils.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#128293;</div>
+                    <h4>Living room</h4>
+                    <p>Spacious with fireplace, perfect for relaxing after the day.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#127793;</div>
+                    <h4>Garden &amp; BBQ</h4>
+                    <p>Private garden with barbecue area to enjoy the outdoors.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="galeria reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
+            <h3>Image Gallery</h3>
+            <div class="grid-public">
+                <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
+                    <img th:src="${img.url}" th:alt="${img.titulo}">
+                    <span th:text="${img.titulo}">Title</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="fragments/footer-en :: footer"></footer>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
+        <button class="lightbox-cerrar" id="lbCer" aria-label="Close">&times;</button>
+        <button class="lightbox-nav lightbox-nav-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+        <button class="lightbox-nav lightbox-nav-next" id="lbNext" aria-label="Next">&#8250;</button>
+        <div class="lightbox-contenido">
+            <img id="lbImg" src="" alt="">
+            <p class="lightbox-titulo" id="lbTit"></p>
+        </div>
+    </div>
+
+</body>
+</html>

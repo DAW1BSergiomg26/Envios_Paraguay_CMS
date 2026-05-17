@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head('Reservas')"></head>
+
+<body>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <main>
+        <section class="pagina-titulo reveal">
+            <h2>Reservas</h2>
+            <p>Completa el formulario para reservar tu estancia.</p>
+        </section>
+
+        <section class="contenido reveal" th:if="${!reservaEnviada}">
+            <div class="reserva-header">
+                <h3>Planifica tu escapada</h3>
+                <p>Elige fechas disponibles y completa tu solicitud.</p>
+            </div>
+            <div class="reserva-layout">
+            <div class="reserva-calendario">
+                <h3><span>&#128197;</span> Disponibilidad</h3>
+                <div th:each="mes : ${calendarios}" class="calendario-mes">
+                    <h4 th:text="${mes.nombre + ' ' + mes.year}">Mayo 2026</h4>
+                    <table>
+                        <thead>
+                            <tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sá</th><th>Do</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="semana : ${mes.semanas}">
+                                <td th:each="dia : ${semana}">
+                                    <span th:if="${dia.relleno}" class="dia-relleno">&nbsp;</span>
+                                    <span th:if="${!dia.relleno and dia.pasado}" class="dia-pasado" th:text="${dia.numero}"></span>
+                                    <span th:if="${!dia.relleno and !dia.pasado and dia.ocupado}" class="dia-ocupado" th:text="${dia.numero}"></span>
+                                    <span th:if="${!dia.relleno and !dia.pasado and !dia.ocupado}" class="dia-libre" th:text="${dia.numero}"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="calendario-leyenda">
+                    <span class="leyenda libre"></span> Libre
+                    <span class="leyenda ocupado"></span> Ocupado
+                    <span class="leyenda pasado"></span> Pasado
+                </div>
+            </div>
+            <div class="reserva-formulario">
+                <h3><span>&#9997;&#65039;</span> Solicitud de reserva</h3>
+                <form action="#" th:action="@{/reservas}" method="post">
+                <div class="rf-group">
+                    <label for="nombreCliente">Nombre completo *</label>
+                    <input type="text" id="nombreCliente" name="nombreCliente" required class="rf-control">
+                </div>
+                <div class="rf-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required class="rf-control">
+                </div>
+                <div class="rf-group">
+                    <label for="telefono">Tel&eacute;fono</label>
+                    <input type="tel" id="telefono" name="telefono" class="rf-control">
+                </div>
+                <div class="rf-group">
+                    <label for="fechaEntrada">Fecha de entrada *</label>
+                    <input type="date" id="fechaEntrada" name="fechaEntrada" required class="rf-control">
+                </div>
+                <div class="rf-group">
+                    <label for="fechaSalida">Fecha de salida *</label>
+                    <input type="date" id="fechaSalida" name="fechaSalida" required class="rf-control">
+                </div>
+                <div class="rf-group">
+                    <label for="numeroHuespedes">N&uacute;mero de hu&eacute;spedes *</label>
+                    <input type="number" id="numeroHuespedes" name="numeroHuespedes" min="1" max="20" required class="rf-control">
+                </div>
+                <div class="rf-group">
+                    <label for="comentarios">Comentarios</label>
+                    <textarea id="comentarios" name="comentarios" rows="4" class="rf-control"></textarea>
+                </div>
+                <button type="submit" class="btn btn-block">Solicitar reserva</button>
+                <p class="reserva-confianza">Tus datos est&aacute;n protegidos y no ser&aacute;n compartidos.</p>
+            </form>
+            </div>
+            </div>
+        </section>
+
+        <section class="contenido" th:if="${reservaEnviada}" style="text-align: center;">
+            <h3 style="color: #3f6338; font-size: 28px; margin-bottom: 15px;">¡Solicitud enviada!</h3>
+            <p style="font-size: 18px; color: #555;">Hemos recibido tu solicitud de reserva. Te confirmaremos la disponibilidad lo antes posible.</p>
+            <a href="/" class="btn" style="margin-top: 20px;">Volver al inicio</a>
+        </section>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

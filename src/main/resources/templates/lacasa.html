@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head('La Casa')"></head>
+
+<body>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <main>
+        <section class="pagina-titulo reveal">
+            <h2>La Casa</h2>
+            <p>Descubre nuestros espacios, diseñados para tu descanso.</p>
+        </section>
+
+        <section class="contenido reveal">
+            <p>Casa Rural cuenta con 4 habitaciones dobles, todas ellas con baño completo, calefacción y vistas al entorno natural. Dispone de cocina totalmente equipada, amplio salón con chimenea, jardín privado y zona de barbacoa.</p>
+            <p>La casa ha sido reformada manteniendo la arquitectura tradicional asturiana, combinando piedra y madera con todas las comodidades modernas.</p>
+
+            <div class="casa-caracteristicas">
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#128716;</div>
+                    <h4>4 Habitaciones</h4>
+                    <p>Dobles con baño completo, calefacción y vistas a la naturaleza.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#127858;</div>
+                    <h4>Cocina equipada</h4>
+                    <p>Totalmente equipada con electrodomésticos modernos y utensilios.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#128293;</div>
+                    <h4>Salón con chimenea</h4>
+                    <p>Amplio y acogedor, ideal para relajarse después del día.</p>
+                </div>
+                <div class="casa-card">
+                    <div class="casa-card-icono">&#127793;</div>
+                    <h4>Jardín &amp; barbacoa</h4>
+                    <p>Jardín privado con zona de barbacoa para disfrutar al aire libre.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="galeria reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
+            <h3>Galer&iacute;a de im&aacute;genes</h3>
+            <div class="grid-public">
+                <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
+                    <img th:src="${img.url}" th:alt="${img.titulo}">
+                    <span th:text="${img.titulo}">T&iacute;tulo</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-label="Visor de im&aacute;genes">
+        <button class="lightbox-cerrar" id="lbCer" aria-label="Cerrar">&times;</button>
+        <button class="lightbox-nav lightbox-nav-prev" id="lbPrev" aria-label="Anterior">&#8249;</button>
+        <button class="lightbox-nav lightbox-nav-next" id="lbNext" aria-label="Siguiente">&#8250;</button>
+        <div class="lightbox-contenido">
+            <img id="lbImg" src="" alt="">
+            <p class="lightbox-titulo" id="lbTit"></p>
+        </div>
+    </div>
+
+</body>
+</html>

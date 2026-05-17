@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS - Reservas | Casa Rural</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script src="/js/app.js" defer></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>CASA RURAL</h2>
+        <small>Panel de Gesti&oacute;n</small>
+        <span class="refugio-tag">Refugio Premium</span>
+    </div>
+    <nav class="nav-links">
+        <a href="/admin/dashboard">Panel de Inicio</a>
+        <a href="/admin/reservas" class="active">Gestionar Reservas</a>
+        <a href="/admin/mensajesrecibidos">Mensajes Recibidos</a>
+        <a href="/admin/imagenes">Galería de Fotos</a>
+        <a href="/admin/textos">Textos Legales</a>
+        <a href="/" class="btn-web">Ver Web Pública</a>
+    </nav>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit" class="btn-logout">Cerrar Sesión</button>
+    </form>
+</div>
+
+<div class="main-content">
+    <div class="card">
+        <h1>Listado de Reservas</h1>
+        <p th:if="${#lists.size(reservas) == 0}" class="vacio">No hay reservas registradas.</p>
+        <div class="table-wrap" th:if="${#lists.size(reservas) > 0}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Cliente</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Entrada</th>
+                        <th>Salida</th>
+                        <th>Huéspedes</th>
+                        <th>Estado</th>
+                        <th>Comentarios</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="r : ${reservas}">
+                        <td th:text="${r.nombreCliente}">Juan Pérez</td>
+                        <td th:text="${r.email}">correo@ejemplo.com</td>
+                        <td th:text="${r.telefono} ?: '—'">123456789</td>
+                        <td th:text="${#temporals.format(r.fechaEntrada, 'dd/MM/yyyy')}">12/06/2026</td>
+                        <td th:text="${#temporals.format(r.fechaSalida, 'dd/MM/yyyy')}">15/06/2026</td>
+                        <td th:text="${r.numeroHuespedes}">3</td>
+                        <td>
+                            <span th:if="${r.estado == 'pendiente'}" class="estado-pendiente">Pendiente</span>
+                            <span th:if="${r.estado == 'aprobada' or r.estado == 'confirmada'}" class="estado-aprobada">Aprobada</span>
+                            <span th:if="${r.estado == 'cancelada'}" class="estado-cancelada">Cancelada</span>
+                        </td>
+                        <td th:text="${r.comentarios} ?: '—'" style="max-width: 200px; white-space: normal;">comentario</td>
+                        <td class="acciones">
+                            <form th:if="${r.estado == 'pendiente'}" th:action="@{/admin/reservas/aprobar/{id}(id=${r.id})}" method="post" style="display:inline">
+                                <button type="submit" class="btn-aprobar" title="Aprobar">✓</button>
+                            </form>
+                            <form th:if="${r.estado == 'pendiente' or r.estado == 'aprobada' or r.estado == 'confirmada'}" th:action="@{/admin/reservas/cancelar/{id}(id=${r.id})}" method="post" style="display:inline">
+                                <button type="submit" class="btn-cancelar" title="Cancelar" onclick="return confirm('¿Cancelar esta reserva?')">✕</button>
+                            </form>
+                            <form th:action="@{/admin/reservas/eliminar/{id}(id=${r.id})}" method="post" style="display:inline">
+                                <button type="submit" class="btn-eliminar" title="Eliminar" onclick="return confirm('¿Eliminar esta reserva definitivamente?')">🗑</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

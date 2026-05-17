@@ -1,0 +1,47 @@
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo} + ' - Casa Rural'">Casa Rural</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<th:block th:fragment="header">
+    <header>
+        <div class="header-top">
+            <a href="/en" class="logo">Casa Rural</a>
+            <div class="header-derecha">
+                <span class="telefono">+34 123 123 123</span>
+                <div class="idiomas">
+                    <a href="/">ES</a>
+                    <a href="/en">EN</a>
+                </div>
+            </div>
+        </div>
+        <nav>
+            <a href="/en">Home</a>
+            <a href="/en/casa">The House</a>
+            <a href="/en/reservas">Bookings</a>
+            <a href="/en/contacto">Contact</a>
+        </nav>
+    </header>
+
+    <div id="cookie-banner">
+        <p>This website uses cookies to improve your experience.
+            <a href="/en/politica-cookies">More info</a>
+        </p>
+        <button onclick="acceptCookies()">Accept</button>
+    </div>
+
+    <script>
+        function acceptCookies() {
+            localStorage.setItem('cookies_aceptadas', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('cookies_aceptadas') === 'true') {
+                document.getElementById('cookie-banner').style.display = 'none';
+            }
+        });
+    </script>
+    <script src="/js/app.js" defer></script>
+</th:block>

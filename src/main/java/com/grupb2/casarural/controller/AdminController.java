@@ -1,0 +1,194 @@
+package com.grupb2.casarural.controller;
+
+import com.grupb2.casarural.model.Imagen;
+import com.grupb2.casarural.model.MensajeContacto;
+import com.grupb2.casarural.model.Reserva;
+import com.grupb2.casarural.model.TextoLegal;
+import com.grupb2.casarural.repository.ImagenRepository;
+import com.grupb2.casarural.repository.MensajeContactoRepository;
+import com.grupb2.casarural.repository.ReservaRepository;
+import com.grupb2.casarural.repository.TextoLegalRepository;
+import com.grupb2.casarural.service.EmailService;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
+@Controller
+@RequestMapping("/admin")
+public class AdminController {
+
+    private final ReservaRepository reservaRepo;
+    private final ImagenRepository imagenRepo;
+    private final MensajeContactoRepository mensajeRepo;
+    private final TextoLegalRepository textoRepo;
+    private final EmailService emailService;
+
+    public AdminController(ReservaRepository reservaRepo, ImagenRepository imagenRepo,
+                           MensajeContactoRepository mensajeRepo, TextoLegalRepository textoRepo,
+                           EmailService emailService) {
+        this.reservaRepo = reservaRepo;
+        this.imagenRepo = imagenRepo;
+        this.mensajeRepo = mensajeRepo;
+        this.textoRepo = textoRepo;
+        this.emailService = emailService;
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("totalReservas", reservaRepo.count());
+        model.addAttribute("reservasPendientes", reservaRepo.countByEstado("pendiente"));
+        model.addAttribute("totalMensajes", mensajeRepo.count());
+        model.addAttribute("totalImagenes", imagenRepo.count());
+        model.addAttribute("ultimasReservas", reservaRepo.findTop5ByOrderByCreatedAtDesc());
+        model.addAttribute("ultimosMensajes", mensajeRepo.findTop5ByOrderByFechaEnvioDesc());
+        return "cms/dashboard";
+    }
+
+    @GetMapping("/mensajesrecibidos")
+    public String mensajesRecibidos(Model model) {
+        model.addAttribute("mensajes", mensajeRepo.findAllByOrderByFechaEnvioDesc());
+        return "cms/contactos";
+    }
+
+    @GetMapping("/reservas")
+    public String reservas(Model model) {
+        model.addAttribute("reservas", reservaRepo.findAllByOrderByCreatedAtDesc());
+        return "cms/reservas";
+    }
+
+    @PostMapping("/reservas/aprobar/{id}")
+    public String aprobarReserva(@PathVariable Long id) {
+        reservaRepo.findById(id).ifPresent(r -> {
+            r.setEstado("aprobada");
+            reservaRepo.save(r);
+            emailService.notificarReservaAprobada(r);
+        });
+        return "redirect:/admin/reservas";
+    }
+
+    @PostMapping("/reservas/cancelar/{id}")
+    public String cancelarReserva(@PathVariable Long id) {
+        reservaRepo.findById(id).ifPresent(r -> {
+            r.setEstado("cancelada");
+            reservaRepo.save(r);
+        });
+        return "redirect:/admin/reservas";
+    }
+
+    @PostMapping("/reservas/eliminar/{id}")
+    public String eliminarReserva(@PathVariable Long id) {
+        reservaRepo.deleteById(id);
+        return "redirect:/admin/reservas";
+    }
+
+    @GetMapping("/imagenes")
+    public String imagenes(Model model) {
+        try {
+            model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
+        } catch (Exception e) {
+            model.addAttribute("imagenes", Collections.emptyList());
+            model.addAttribute("error", "Error al cargar las imágenes: " + e.getMessage());
+        }
+        return "cms/imagenes";
+    }
+
+    @PostMapping("/imagenes")
+    public String subirImagen(@RequestParam String titulo,
+                               @RequestParam(required = false) String descripcion,
+                               @RequestParam(required = false) String categoria,
+                               @RequestParam Integer orden,
+                               @RequestParam("archivo") MultipartFile archivo,
+                               RedirectAttributes ra) {
+
+        if (archivo.isEmpty()) {
+            ra.addFlashAttribute("error", "Debes seleccionar un archivo.");
+            return "redirect:/admin/imagenes";
+        }
+
+        try {
+            String uploadsDir = System.getProperty("user.dir") + "/uploads/";
+            File dir = new File(uploadsDir);
+            if (!dir.exists()) dir.mkdirs();
+
+            String originalName = archivo.getOriginalFilename();
+            String extension = "";
+            if (originalName != null && originalName.contains(".")) {
+                extension = originalName.substring(originalName.lastIndexOf("."));
+            }
+            String uniqueName = UUID.randomUUID().toString() + extension;
+            Path rutaCompleta = Paths.get(uploadsDir + uniqueName);
+            Files.write(rutaCompleta, archivo.getBytes());
+
+            String url = "/uploads/" + uniqueName;
+            Imagen img = new Imagen(titulo, descripcion, url, categoria, orden);
+            imagenRepo.save(img);
+
+            ra.addFlashAttribute("exito", "Imagen subida correctamente.");
+        } catch (IOException e) {
+            ra.addFlashAttribute("error", "Error al guardar el archivo: " + e.getMessage());
+        }
+
+        return "redirect:/admin/imagenes";
+    }
+
+    @PostMapping("/imagenes/eliminar/{id}")
+    public String eliminarImagen(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            var opt = imagenRepo.findById(id);
+            if (opt.isPresent()) {
+                Imagen img = opt.get();
+                // Delete file from filesystem
+                String url = img.getUrl();
+                if (url != null && url.startsWith("/uploads/")) {
+                    String fileName = url.substring("/uploads/".length());
+                    Path filePath = Paths.get(System.getProperty("user.dir") + "/uploads/" + fileName);
+                    try {
+                        Files.deleteIfExists(filePath);
+                    } catch (IOException ignored) {}
+                }
+                imagenRepo.delete(img);
+                ra.addFlashAttribute("exito", "Imagen eliminada correctamente.");
+            } else {
+                ra.addFlashAttribute("error", "Imagen no encontrada.");
+            }
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al eliminar: " + e.getMessage());
+        }
+        return "redirect:/admin/imagenes";
+    }
+
+    @GetMapping("/textos")
+    public String textos(Model model) {
+        model.addAttribute("avisoLegal", textoRepo.findBySlug("aviso-legal").orElse(null));
+        model.addAttribute("politicaCookies", textoRepo.findBySlug("politica-cookies").orElse(null));
+        return "cms/textos";
+    }
+
+    @PostMapping("/textos")
+    public String guardarTexto(@RequestParam String slug,
+                               @RequestParam String titulo,
+                               @RequestParam String contenido) {
+        textoRepo.findBySlug(slug).ifPresent(t -> {
+            t.setTitulo(titulo);
+            t.setContenido(contenido);
+            t.setUpdatedAt(java.time.LocalDateTime.now());
+            textoRepo.save(t);
+        });
+        return "redirect:/admin/textos";
+    }
+}

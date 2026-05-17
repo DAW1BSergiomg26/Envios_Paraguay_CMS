@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head('Inicio')"></head>
+
+<body>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <main>
+        <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)), url('https://images.unsplash.com/photo-1587061949733-7d23317c19b8?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
+            <div class="hero-part"></div>
+            <div class="hero-part"></div>
+            <div class="hero-part"></div>
+            <div class="hero-part"></div>
+            <div class="hero-part"></div>
+            <div class="hero-overlay">
+                <h1>Tu escapada rural te espera</h1>
+                <p>Descansa en plena naturaleza, rodeado de montañas y tranquilidad.</p>
+                <a href="/reservas" class="btn">Reservar ahora</a>
+            </div>
+        </section>
+
+        <section class="home-welcome reveal">
+            <h2>Bienvenidos a Casa Rural</h2>
+            <p>Disfruta de una estancia inolvidable en plena naturaleza. Confort, tranquilidad y los mejores paisajes asturianos te esperan.</p>
+        </section>
+
+        <section class="destacados reveal">
+            <a href="/casa" class="destacado-card">
+                <h3>La Casa</h3>
+                <p>Conoce nuestras instalaciones: habitaciones amplias, cocina equipada y un acogedor salón con chimenea.</p>
+            </a>
+            <a href="/reservas" class="destacado-card">
+                <h3>Reservas</h3>
+                <p>Consulta disponibilidad y reserva tu estancia. Te esperamos para vivir una experiencia única.</p>
+            </a>
+            <a href="/contacto" class="destacado-card">
+                <h3>Contacto</h3>
+                <p>Estamos en Asturias, España. Llámanos o escríbenos y te atenderemos personalmente.</p>
+            </a>
+        </section>
+
+        <div class="home-phone reveal">
+            <p>¿Prefieres llamarnos?</p>
+            <a href="tel:+34600000000">+34 123 123 123</a>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>

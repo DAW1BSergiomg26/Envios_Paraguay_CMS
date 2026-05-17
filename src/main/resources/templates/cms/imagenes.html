@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMS - Galer&iacute;a | Casa Rural</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script src="/js/app.js" defer></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>CASA RURAL</h2>
+        <small>Panel de Gesti&oacute;n</small>
+        <span class="refugio-tag">Refugio Premium</span>
+    </div>
+    <nav class="nav-links">
+        <a href="/admin/dashboard">Panel de Inicio</a>
+        <a href="/admin/reservas">Gestionar Reservas</a>
+        <a href="/admin/mensajesrecibidos">Mensajes Recibidos</a>
+        <a href="/admin/imagenes" class="active">Galer&iacute;a de Fotos</a>
+        <a href="/admin/textos">Textos Legales</a>
+        <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
+    </nav>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
+    </form>
+</div>
+
+<div class="main-content">
+    <div class="card">
+        <h1>Galer&iacute;a de Fotos</h1>
+        <p>Sube y gestiona las im&aacute;genes de la p&aacute;gina &quot;La Casa&quot;.</p>
+
+        <div class="imagenes-layout">
+
+            <div class="imagenes-main">
+
+                <div th:if="${exito}" class="toast toast-success">
+                    <span class="toast-icon">✓</span>
+                    <span th:text="${exito}">Imagen subida</span>
+                </div>
+                <div th:if="${error}" class="toast toast-error">
+                    <span class="toast-icon">!</span>
+                    <span th:text="${error}">Error</span>
+                </div>
+
+                <h3 style="color: #3f6338; margin-bottom: 15px; font-size: 18px;">Subir nueva imagen</h3>
+
+                <form action="#" th:action="@{/admin/imagenes}" method="post" enctype="multipart/form-data">
+                    <div style="margin-bottom: 14px;">
+                        <label for="titulo" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">T&iacute;tulo *</label>
+                        <input type="text" id="titulo" name="titulo" required
+                               style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label for="descripcion" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Descripci&oacute;n</label>
+                        <textarea id="descripcion" name="descripcion" rows="3"
+                                  style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; resize: vertical; box-sizing: border-box;"></textarea>
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label for="categoria" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Categor&iacute;a</label>
+                        <select id="categoria" name="categoria"
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                            <option value="">Sin categor&iacute;a</option>
+                            <option value="exterior">Exterior</option>
+                            <option value="interior">Interior</option>
+                            <option value="habitacion">Habitaci&oacute;n</option>
+                            <option value="entorno">Entorno</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 14px;">
+                        <label for="orden" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Orden *</label>
+                        <input type="number" id="orden" name="orden" min="1" required
+                               style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    </div>
+                    <div style="margin-bottom: 18px;">
+                        <label for="archivo" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Archivo de imagen *</label>
+                        <input type="file" id="archivo" name="archivo" accept="image/*" required
+                               style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;">
+                    </div>
+                    <button type="submit" class="btn-upload">Subir imagen</button>
+                </form>
+
+                <hr style="margin: 28px 0; border: none; border-top: 1px solid rgba(0,0,0,0.06);">
+
+                <h3 style="color: #3f6338; margin-bottom: 15px; font-size: 18px;">Im&aacute;genes subidas</h3>
+
+                <p th:if="${imagenes == null or imagenes.isEmpty()}" class="vacio">No hay im&aacute;genes registradas.</p>
+
+                <div class="grid-fotos" th:if="${imagenes != null and !imagenes.isEmpty()}" id="galeriaGrid">
+                    <div class="foto-item" th:each="img : ${imagenes}"
+                         th:data-url="${img?.url}"
+                         th:data-titulo="${img?.titulo}"
+                         th:data-descripcion="${img?.descripcion ?: ''}"
+                         th:data-categoria="${img?.categoria ?: ''}">
+                        <img th:src="${img?.url}" th:alt="${img?.titulo}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23ddd%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%22200%22 y=%22150%22 text-anchor=%22middle%22 fill=%22%23999%22 font-size=%2216%22%3EImagen no disponible%3C/text%3E%3C/svg%3E'">
+                        <span th:text="${img?.titulo ?: 'Sin t&iacute;tulo'}">T&iacute;tulo</span>
+                        <div class="foto-info">
+                            <span th:if="${img?.categoria}" class="foto-cat" th:text="${img?.categoria}">categor&iacute;a</span>
+                            <span class="foto-ord" th:if="${img?.orden != null}">Ord. <span th:text="${img?.orden}">1</span></span>
+                        </div>
+                        <form th:action="@{/admin/imagenes/eliminar/{id}(id=${img.id})}" method="post" class="foto-delete-form" onsubmit="return confirm('¿Eliminar esta imagen?')">
+                            <button type="submit" class="btn-delete" title="Eliminar imagen">&times;</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="preview-panel" id="previewPanel">
+                <div class="preview-panel-header">
+                    <h3><span>&#128065;</span> Vista previa</h3>
+                    <small>Haz clic en una imagen para previsualizarla</small>
+                </div>
+                <div th:if="${imagenes != null and !imagenes.isEmpty()}" id="previewContent">
+                    <img class="preview-panel-img" id="previewImg"
+                         th:src="${imagenes[0]?.url}"
+                         th:alt="${imagenes[0]?.titulo}">
+                    <div class="preview-panel-body">
+                        <div class="preview-panel-titulo" id="previewTitulo" th:text="${imagenes[0]?.titulo}">T&iacute;tulo</div>
+                        <div class="preview-panel-desc" id="previewDescripcion" th:text="${imagenes[0]?.descripcion ?: 'Sin descripci&oacute;n.'}">Descripci&oacute;n</div>
+                        <div class="preview-panel-meta">
+                            <span class="preview-panel-tag" id="previewCategoria" th:if="${imagenes[0]?.categoria}" th:text="${imagenes[0]?.categoria}">categor&iacute;a</span>
+                        </div>
+                        <div class="preview-panel-stats">
+                            <div class="preview-panel-stat">
+                                <strong th:text="${#lists.size(imagenes)}">0</strong>
+                                <span>Im&aacute;genes</span>
+                            </div>
+                            <div class="preview-panel-stat">
+                                <strong id="previewCatCount">0</strong>
+                                <span>Categor&iacute;as</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${imagenes == null or imagenes.isEmpty()}" class="preview-panel-empty">
+                    <div class="preview-panel-empty-icon">&#128247;</div>
+                    <p>No hay im&aacute;genes para mostrar.<br>Sube tu primera foto.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+(function() {
+    var items = document.querySelectorAll('#galeriaGrid .foto-item');
+    if (!items.length) return;
+
+    var previewImg = document.getElementById('previewImg');
+    var previewTitulo = document.getElementById('previewTitulo');
+    var previewDesc = document.getElementById('previewDescripcion');
+    var previewCat = document.getElementById('previewCategoria');
+
+    function actualizarPreview(el) {
+        var url = el.getAttribute('data-url');
+        var tit = el.getAttribute('data-titulo');
+        var desc = el.getAttribute('data-descripcion') || 'Sin descripci\u00f3n.';
+        var cat = el.getAttribute('data-categoria');
+
+        if (previewImg) {
+            previewImg.classList.remove('preview-panel-transition');
+            previewImg.src = '';
+            previewImg.src = url;
+            previewImg.alt = tit;
+            void previewImg.offsetWidth;
+            previewImg.classList.add('preview-panel-transition');
+        }
+        if (previewTitulo) previewTitulo.textContent = tit;
+        if (previewDesc) previewDesc.textContent = desc;
+        if (previewCat) {
+            if (cat) {
+                previewCat.textContent = cat;
+                previewCat.style.display = 'inline';
+            } else {
+                previewCat.style.display = 'none';
+            }
+        }
+
+        items.forEach(function(i) { i.classList.remove('selected'); });
+        el.classList.add('selected');
+    }
+
+    items.forEach(function(item) {
+        item.addEventListener('click', function(e) {
+            if (e.target.closest('.foto-delete-form')) return;
+            actualizarPreview(this);
+        });
+    });
+
+    if (items.length) {
+        var cats = {};
+        items.forEach(function(item) {
+            var c = item.getAttribute('data-categoria');
+            if (c) cats[c] = true;
+        });
+        var catCount = document.getElementById('previewCatCount');
+        if (catCount) catCount.textContent = Object.keys(cats).length;
+
+        items[0].classList.add('selected');
+    }
+})();
+</script>
+
+</body>
+</html>
