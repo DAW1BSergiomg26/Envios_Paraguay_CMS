@@ -1,9 +1,11 @@
 package com.grupb2.casarural.controller;
 
+import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.Imagen;
 import com.grupb2.casarural.model.MensajeContacto;
 import com.grupb2.casarural.model.Reserva;
 import com.grupb2.casarural.model.TextoLegal;
+import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.repository.ImagenRepository;
 import com.grupb2.casarural.repository.MensajeContactoRepository;
 import com.grupb2.casarural.repository.ReservaRepository;
@@ -36,15 +38,17 @@ public class AdminController {
     private final ImagenRepository imagenRepo;
     private final MensajeContactoRepository mensajeRepo;
     private final TextoLegalRepository textoRepo;
+    private final EnvioTrackingRepository trackingRepo;
     private final EmailService emailService;
 
     public AdminController(ReservaRepository reservaRepo, ImagenRepository imagenRepo,
                            MensajeContactoRepository mensajeRepo, TextoLegalRepository textoRepo,
-                           EmailService emailService) {
+                           EnvioTrackingRepository trackingRepo, EmailService emailService) {
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.mensajeRepo = mensajeRepo;
         this.textoRepo = textoRepo;
+        this.trackingRepo = trackingRepo;
         this.emailService = emailService;
     }
 
@@ -177,6 +181,67 @@ public class AdminController {
         model.addAttribute("avisoLegal", textoRepo.findBySlug("aviso-legal").orElse(null));
         model.addAttribute("politicaCookies", textoRepo.findBySlug("politica-cookies").orElse(null));
         return "cms/textos";
+    }
+
+    @GetMapping("/tracking")
+    public String listarTracking(Model model) {
+        model.addAttribute("envios", trackingRepo.findAllByOrderByUltimaActualizacionDesc());
+        return "cms/tracking";
+    }
+
+    @GetMapping("/tracking/nuevo")
+    public String nuevoTracking(Model model) {
+        long count = trackingRepo.count() + 1;
+        String codigo = String.format("MT-%d-%04d", java.time.LocalDateTime.now().getYear(), count);
+        model.addAttribute("envio", new EnvioTracking());
+        model.addAttribute("codigoSugerido", codigo);
+        return "cms/tracking-form";
+    }
+
+    @GetMapping("/tracking/editar/{id}")
+    public String editarTracking(@PathVariable Long id, Model model) {
+        model.addAttribute("envio", trackingRepo.findById(id).orElse(null));
+        return "cms/tracking-form";
+    }
+
+    @PostMapping("/tracking/guardar")
+    public String guardarTracking(@RequestParam(required = false) Long id,
+                                   @RequestParam String codigoUnico,
+                                   @RequestParam String estado,
+                                   @RequestParam String destinatario,
+                                   @RequestParam(required = false) String origen,
+                                   @RequestParam(required = false) String destino,
+                                @RequestParam(required = false) String peso,
+                                @RequestParam(required = false) String contenido,
+                                @RequestParam(required = false) String observaciones,
+                                RedirectAttributes ra) {
+        EnvioTracking envio;
+        if (id != null) {
+            envio = trackingRepo.findById(id).orElse(new EnvioTracking());
+            envio.setId(id);
+        } else {
+            envio = new EnvioTracking();
+            envio.setFechaCreacion(java.time.LocalDateTime.now());
+        }
+        envio.setCodigoUnico(codigoUnico.trim().toUpperCase());
+        envio.setEstado(estado);
+        envio.setDestinatario(destinatario);
+        envio.setOrigen(origen);
+        envio.setDestino(destino);
+        envio.setPeso(peso);
+        envio.setContenido(contenido);
+        envio.setObservaciones(observaciones);
+        envio.setUltimaActualizacion(java.time.LocalDateTime.now());
+        trackingRepo.save(envio);
+        ra.addFlashAttribute("exito", "Envío guardado correctamente.");
+        return "redirect:/admin/tracking";
+    }
+
+    @PostMapping("/tracking/eliminar/{id}")
+    public String eliminarTracking(@PathVariable Long id, RedirectAttributes ra) {
+        trackingRepo.deleteById(id);
+        ra.addFlashAttribute("exito", "Envío eliminado.");
+        return "redirect:/admin/tracking";
     }
 
     @PostMapping("/textos")

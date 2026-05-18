@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:if="${envio.id != null}">CMS - Editar Env&iacute;o | Casa Rural</title>
+    <title th:unless="${envio.id != null}">CMS - Nuevo Env&iacute;o | Casa Rural</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+    <script src="/js/app.js" defer></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-header">
+        <h2>CASA RURAL</h2>
+        <small>Panel de Gesti&oacute;n</small>
+        <span class="refugio-tag">Refugio Premium</span>
+    </div>
+    <nav class="nav-links">
+        <a href="/admin/dashboard">Panel de Inicio</a>
+        <a href="/admin/reservas">Gestionar Reservas</a>
+        <a href="/admin/mensajesrecibidos">Mensajes Recibidos</a>
+        <a href="/admin/tracking">Seguimiento Env&iacute;os</a>
+        <a href="/admin/imagenes">Galer&iacute;a de Fotos</a>
+        <a href="/admin/textos">Textos Legales</a>
+        <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
+    </nav>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
+    </form>
+</div>
+
+<div class="main-content">
+
+    <div class="dashboard-header">
+        <div class="dashboard-header-content">
+            <h1 th:if="${envio.id != null}">Editar Env&iacute;o</h1>
+            <h1 th:unless="${envio.id != null}">Nuevo Env&iacute;o</h1>
+            <p>Completa los datos del env&iacute;o.</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <form th:action="@{/admin/tracking/guardar}" method="post">
+            <input type="hidden" name="id" th:value="${envio.id}">
+
+            <div class="legal-editor">
+                <label>C&oacute;digo &uacute;nico</label>
+                <input type="text" name="codigoUnico" th:value="${envio.codigoUnico != null ? envio.codigoUnico : codigoSugerido}" required class="tracking-admin-input">
+
+                <label>Destinatario</label>
+                <input type="text" name="destinatario" th:value="${envio.destinatario}" required class="tracking-admin-input">
+
+                <label>Estado</label>
+                <select name="estado" required class="tracking-admin-select">
+                    <option value="RECIBIDO" th:selected="${envio.estado == 'RECIBIDO'}">📦 Recibido en origen</option>
+                    <option value="EN_ADUANA_ORIGEN" th:selected="${envio.estado == 'EN_ADUANA_ORIGEN'}">🛃 Aduana de origen</option>
+                    <option value="EN_TRANSITO" th:selected="${envio.estado == 'EN_TRANSITO'}">🚢 Tr&aacute;nsito atl&aacute;ntico</option>
+                    <option value="EN_ADUANA_DESTINO" th:selected="${envio.estado == 'EN_ADUANA_DESTINO'}">🛃 Aduana de destino</option>
+                    <option value="EN_REPARTO" th:selected="${envio.estado == 'EN_REPARTO'}">🇵🇾 Reparto local</option>
+                    <option value="ENTREGADO" th:selected="${envio.estado == 'ENTREGADO'}">✅ Entregado</option>
+                </select>
+
+                <label>Origen</label>
+                <input type="text" name="origen" th:value="${envio.origen}" class="tracking-admin-input">
+
+                <label>Destino</label>
+                <input type="text" name="destino" th:value="${envio.destino}" class="tracking-admin-input">
+
+                <label>Peso</label>
+                <input type="text" name="peso" th:value="${envio.peso}" placeholder="Ej: 120 kg" class="tracking-admin-input">
+
+                <label>Contenido</label>
+                <input type="text" name="contenido" th:value="${envio.contenido}" placeholder="Ej: Maquinaria industrial" class="tracking-admin-input">
+
+                <label>Observaciones</label>
+                <textarea name="observaciones" th:text="${envio.observaciones}" class="tracking-admin-textarea" placeholder="Notas internas o novedades del env&iacute;o..."></textarea>
+
+                <div class="tracking-form-actions">
+                    <button type="submit" class="btn-save">💾 Guardar env&iacute;o</button>
+                    <a href="/admin/tracking" class="btn-cancel-form">Cancelar</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 /* =============================================
-   CMS ADMIN - MONTEASTUR
+   CMS ADMIN - Casa Rural
    Cinematographic Premium Theme
    ============================================= */
 
@@ -651,159 +651,6 @@ body::after {
     padding-bottom: 8px;
     border-bottom: 2px solid rgba(0,0,0,0.06);
     letter-spacing: 0.2px;
-}
-
-/* OPS LOG - Operaciones activas */
-.ops-log-card {
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    padding: 32px;
-    border-radius: 20px;
-    box-shadow: var(--glass-shadow);
-    border: 1px solid var(--glass-border);
-    margin-top: 30px;
-    transition: all 0.35s ease;
-}
-
-.ops-log-card:hover {
-    box-shadow: 0 16px 48px rgba(0,0,0,0.16);
-    transform: translateY(-2px);
-}
-
-.ops-log-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(0,0,0,0.06);
-}
-
-.ops-log-header h3 {
-    color: var(--verde);
-    font-size: 1.15rem;
-    margin: 0;
-    letter-spacing: 0.2px;
-}
-
-.ops-log-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1.2px;
-    color: var(--naranja);
-    background: rgba(212,118,42,0.1);
-    border: 1px solid rgba(212,118,42,0.15);
-    padding: 4px 14px;
-    border-radius: 20px;
-}
-
-.ops-log-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.ops-log-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 18px 20px;
-    background: rgba(255,255,255,0.55);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 14px;
-    transition: all 0.3s ease;
-}
-
-.ops-log-item:hover {
-    background: rgba(255,255,255,0.75);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    border-color: rgba(63,99,56,0.15);
-}
-
-.ops-log-icon {
-    font-size: 1.5rem;
-    line-height: 1;
-    flex-shrink: 0;
-}
-
-.ops-log-info {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    min-width: 0;
-    flex: 1;
-}
-
-.ops-log-title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #333;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.ops-log-meta {
-    font-size: 0.72rem;
-    color: #999;
-}
-
-.ops-log-status {
-    font-size: 0.62rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    padding: 3px 12px;
-    border-radius: 20px;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.ops-status-preparacion {
-    color: var(--naranja);
-    background: rgba(212,118,42,0.1);
-    border: 1px solid rgba(212,118,42,0.15);
-}
-
-.ops-status-transito {
-    color: #2980b9;
-    background: rgba(41,128,185,0.08);
-    border: 1px solid rgba(41,128,185,0.15);
-}
-
-.ops-status-pendiente {
-    color: #888;
-    background: rgba(0,0,0,0.04);
-    border: 1px solid rgba(0,0,0,0.08);
-}
-
-.ops-status-entregado {
-    color: var(--verde-confirmada);
-    background: rgba(39,174,96,0.08);
-    border: 1px solid rgba(39,174,96,0.15);
-}
-
-@media (max-width: 900px) {
-    .ops-log-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .ops-log-card {
-        padding: 24px;
-    }
-}
-
-@media (max-width: 600px) {
-    .ops-log-grid {
-        grid-template-columns: 1fr;
-    }
-    .ops-log-item {
-        padding: 14px 16px;
-    }
 }
 
 .dash-table {
@@ -1484,6 +1331,40 @@ tr:nth-child(even):hover td {
 .legal-editor label:not(:first-child) {
     margin-top: 10px;
 }
+
+/* TRACKING ESTADOS ADMIN - Premium Badges */
+.tr-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.2px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.tr-badge:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+
+/* Reuse public estado colors but ensure admin compat */
+.estado-RECIBIDO { background: linear-gradient(135deg, rgba(63,99,56,0.12), rgba(63,99,56,0.06)); color: #3f6338; box-shadow: 0 2px 12px rgba(63,99,56,0.10); }
+.estado-EN_ADUANA_ORIGEN { background: linear-gradient(135deg, rgba(212,118,42,0.14), rgba(212,118,42,0.06)); color: #b8651f; box-shadow: 0 2px 12px rgba(212,118,42,0.10); }
+.estado-EN_TRANSITO { background: linear-gradient(135deg, rgba(33,150,243,0.14), rgba(33,150,243,0.06)); color: #1976d2; box-shadow: 0 2px 12px rgba(33,150,243,0.10); }
+.estado-EN_ADUANA_DESTINO { background: linear-gradient(135deg, rgba(212,118,42,0.14), rgba(212,118,42,0.06)); color: #b8651f; box-shadow: 0 2px 12px rgba(212,118,42,0.10); }
+.estado-EN_REPARTO { background: linear-gradient(135deg, rgba(156,39,176,0.14), rgba(156,39,176,0.06)); color: #7b1fa2; box-shadow: 0 2px 12px rgba(156,39,176,0.10); }
+.estado-ENTREGADO { background: linear-gradient(135deg, rgba(39,174,96,0.14), rgba(39,174,96,0.06)); color: #1e8449; box-shadow: 0 2px 12px rgba(39,174,96,0.10); }
+
+.estado-RECIBIDO:hover { box-shadow: 0 4px 20px rgba(63,99,56,0.18); }
+.estado-EN_ADUANA_ORIGEN:hover { box-shadow: 0 4px 20px rgba(212,118,42,0.18); }
+.estado-EN_TRANSITO:hover { box-shadow: 0 4px 20px rgba(33,150,243,0.18); }
+.estado-EN_ADUANA_DESTINO:hover { box-shadow: 0 4px 20px rgba(212,118,42,0.18); }
+.estado-EN_REPARTO:hover { box-shadow: 0 4px 20px rgba(156,39,176,0.18); }
+.estado-ENTREGADO:hover { box-shadow: 0 4px 20px rgba(39,174,96,0.18); }
 
 /* AMBIENT PARTICLES */
 .ambient-particle {
