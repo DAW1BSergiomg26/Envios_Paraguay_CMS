@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMS - Dashboard | Casa Rural</title>
+    <title>CMS - Centro Log&iacute;stico | MONTEASTUR ENVIOS</title>
     <link rel="stylesheet" th:href="@{/css/admin.css}">
     <script src="/js/app.js" defer></script>
 </head>
@@ -11,14 +11,14 @@
 
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2>CASA RURAL</h2>
-        <small>Panel de Gesti&oacute;n</small>
-        <span class="refugio-tag">Refugio Premium</span>
+        <h2>MONTEASTUR ENVIOS</h2>
+        <small>Centro de Operaciones</small>
+        <span class="refugio-tag">Log&iacute;stica Premium</span>
     </div>
     <nav class="nav-links">
         <a href="/admin/dashboard" class="active">Panel de Inicio</a>
-        <a href="/admin/reservas">Gestionar Reservas</a>
-        <a href="/admin/mensajesrecibidos">Mensajes Recibidos</a>
+        <a href="/admin/reservas">Gestionar Env&iacute;os</a>
+        <a href="/admin/mensajesrecibidos">Consultas Clientes</a>
         <a href="/admin/imagenes">Galer&iacute;a de Fotos</a>
         <a href="/admin/textos">Textos Legales</a>
         <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
@@ -32,57 +32,114 @@
 
     <div class="dashboard-header">
         <div class="dashboard-header-content">
-            <h1>Bienvenido, Administrador</h1>
-            <p>Panel de control &mdash; Centro de gesti&oacute;n premium</p>
+            <h1>Centro de Operaciones</h1>
+            <p>Panel de control &mdash; Log&iacute;stica internacional MONTEASTUR</p>
         </div>
     </div>
 
     <div class="quick-actions">
         <a href="/admin/reservas" class="quick-action-card">
-            <span class="qa-icon">📅</span>
-            <span class="qa-title">Gestionar Reservas</span>
-            <span class="qa-desc">Administra fechas y estados</span>
+            <span class="qa-icon">&#128230;</span>
+            <span class="qa-title">Gestionar Env&iacute;os</span>
+            <span class="qa-desc">Administra env&iacute;os y estados log&iacute;sticos</span>
         </a>
         <a href="/admin/mensajesrecibidos" class="quick-action-card">
-            <span class="qa-icon">✉️</span>
-            <span class="qa-title">Ver Mensajes</span>
-            <span class="qa-desc">Consulta los mensajes recibidos</span>
+            <span class="qa-icon">&#128172;</span>
+            <span class="qa-title">Consultas Clientes</span>
+            <span class="qa-desc">Revisa solicitudes recibidas</span>
         </a>
         <a href="/admin/imagenes" class="quick-action-card">
-            <span class="qa-icon">🖼️</span>
+            <span class="qa-icon">&#128247;</span>
             <span class="qa-title">Subir Imagen</span>
-            <span class="qa-desc">A&ntilde;ade fotos a la galer&iacute;a</span>
+            <span class="qa-desc">A&ntilde;ade fotos de operaciones</span>
         </a>
         <a href="/" class="quick-action-card">
-            <span class="qa-icon">🌐</span>
+            <span class="qa-icon">&#127758;</span>
             <span class="qa-title">Ver Web P&uacute;blica</span>
             <span class="qa-desc">Visualiza la web en vivo</span>
         </a>
     </div>
 
     <div class="card">
-        <h1>Resumen General</h1>
-        <p>Datos actualizados del contenido de la Casa Rural.</p>
+        <h1>Resumen de Operaciones</h1>
+        <p>Estado actual de la actividad log&iacute;stica.</p>
         <div class="stats-grid">
             <div class="stat-item">
-                <span class="stat-icon">📊</span>
-                <span>Total Reservas</span>
+                <span class="stat-icon">&#128230;</span>
+                <span>Total Env&iacute;os</span>
                 <strong th:text="${totalReservas}">0</strong>
             </div>
             <div class="stat-item">
-                <span class="stat-icon">⏳</span>
+                <span class="stat-icon">&#9203;</span>
                 <span>Pendientes</span>
                 <strong style="color: var(--naranja);" th:text="${reservasPendientes}">0</strong>
             </div>
             <div class="stat-item">
-                <span class="stat-icon">✉️</span>
-                <span>Mensajes</span>
+                <span class="stat-icon">&#128172;</span>
+                <span>Consultas</span>
                 <strong style="color: var(--verde);" th:text="${totalMensajes}">0</strong>
             </div>
             <div class="stat-item">
-                <span class="stat-icon">🖼️</span>
+                <span class="stat-icon">&#128247;</span>
                 <span>Im&aacute;genes</span>
                 <strong style="color: var(--naranja);" th:text="${totalImagenes}">0</strong>
+            </div>
+        </div>
+    </div>
+
+    <div class="ops-log-card">
+        <div class="ops-log-header">
+            <h3>Operaciones activas</h3>
+            <span class="ops-log-badge">6 en curso</span>
+        </div>
+        <div class="ops-log-grid">
+            <div class="ops-log-item">
+                <span class="ops-log-icon">&#9973;</span>
+                <div class="ops-log-info">
+                    <span class="ops-log-title">Pr&oacute;ximo env&iacute;o mar&iacute;timo</span>
+                    <span class="ops-log-meta">Salida estimada esta semana</span>
+                </div>
+                <span class="ops-log-status ops-status-preparacion">En preparaci&oacute;n</span>
+            </div>
+            <div class="ops-log-item">
+                <span class="ops-log-icon">&#128666;</span>
+                <div class="ops-log-info">
+                    <span class="ops-log-title">Operaciones activas</span>
+                    <span class="ops-log-meta">3 env&iacute;os en curso actualmente</span>
+                </div>
+                <span class="ops-log-status ops-status-transito">En tr&aacute;nsito</span>
+            </div>
+            <div class="ops-log-item">
+                <span class="ops-log-icon">&#128188;</span>
+                <div class="ops-log-info">
+                    <span class="ops-log-title">Gesti&oacute;n de aduanas</span>
+                    <span class="ops-log-meta">Documentaci&oacute;n en proceso</span>
+                </div>
+                <span class="ops-log-status ops-status-pendiente">Pendiente</span>
+            </div>
+            <div class="ops-log-item">
+                <span class="ops-log-icon">&#128065;</span>
+                <div class="ops-log-info">
+                    <span class="ops-log-title">Seguimientos activos</span>
+                    <span class="ops-log-meta">2 env&iacute;os con tracking en vivo</span>
+                </div>
+                <span class="ops-log-status ops-status-transito">En tr&aacute;nsito</span>
+            </div>
+            <div class="ops-log-item">
+                <span class="ops-log-icon">&#128172;</span>
+                <div class="ops-log-info">
+                    <span class="ops-log-title">Solicitudes recientes</span>
+                    <span class="ops-log-meta">4 consultas sin responder</span>
+                </div>
+                <span class="ops-log-status ops-status-pendiente">Pendiente</span>
+            </div>
+            <div class="ops-log-item">
+                <span class="ops-log-icon">&#9989;</span>
+                <div class="ops-log-info">
+                    <span class="ops-log-title">Entregas completadas</span>
+                    <span class="ops-log-meta">12 env&iacute;os entregados este mes</span>
+                </div>
+                <span class="ops-log-status ops-status-entregado">Entregado</span>
             </div>
         </div>
     </div>
@@ -115,25 +172,26 @@
         </div>
 
         <div class="card">
-            <h3>Actividad Reciente</h3>
+            <h3>Bit&aacute;cora de actividad</h3>
             <p th:if="${#lists.size(ultimasReservas) == 0 and #lists.size(ultimosMensajes) == 0}" class="vacio">Sin actividad reciente.</p>
             <div class="timeline" th:if="${#lists.size(ultimasReservas) > 0 or #lists.size(ultimosMensajes) > 0}">
                 <div th:each="r : ${ultimasReservas}" class="timeline-item timeline-reserva">
-                    <span class="timeline-icon">📅</span>
+                    <span class="timeline-icon">&#128230;</span>
                     <div class="timeline-content">
                         <strong th:text="${r.nombreCliente}">Cliente</strong>
-                        <span th:text="${#temporals.format(r.fechaEntrada, 'dd/MM')} + ' - ' + ${#temporals.format(r.fechaSalida, 'dd/MM')}">12/06 - 15/06</span>
+                        <span th:text="${r.estado == 'pendiente' ? 'Env&iacute;o pendiente de gesti&oacute;n' : r.estado == 'aprobada' or r.estado == 'confirmada' ? 'Env&iacute;o aprobado y en proceso' : 'Env&iacute;o cancelado'}">Estado</span>
                         <span th:if="${r.estado == 'pendiente'}" class="estado-pendiente">Pendiente</span>
-                        <span th:if="${r.estado == 'aprobada' or r.estado == 'confirmada'}" class="estado-aprobada">Aprobada</span>
-                        <span th:if="${r.estado == 'cancelada'}" class="estado-cancelada">Cancelada</span>
+                        <span th:if="${r.estado == 'aprobada' or r.estado == 'confirmada'}" class="estado-aprobada">En proceso</span>
+                        <span th:if="${r.estado == 'cancelada'}" class="estado-cancelada">Cancelado</span>
                     </div>
                     <span class="timeline-time" th:text="${#temporals.format(r.fechaEntrada, 'dd/MM')}">12/06</span>
                 </div>
                 <div th:each="m : ${ultimosMensajes}" class="timeline-item timeline-mensaje">
-                    <span class="timeline-icon">✉️</span>
+                    <span class="timeline-icon">&#128172;</span>
                     <div class="timeline-content">
                         <strong th:text="${m.nombre}">Nombre</strong>
-                        <span th:text="${m.email}">email@ejemplo.com</span>
+                        <span>Nueva consulta de cliente</span>
+                        <span th:text="${m.email}" style="font-size:0.75rem;color:#bbb;">email</span>
                     </div>
                     <span class="timeline-time" th:text="${#temporals.format(m.fechaEnvio, 'dd/MM HH:mm')}">15/05 12:00</span>
                 </div>

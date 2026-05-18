@@ -8,42 +8,165 @@
     <header th:replace="fragments/header-en :: header"></header>
 
     <main>
-        <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.50), rgba(0,0,0,0.50)), url('https://images.unsplash.com/photo-1587061949733-7d23317c19b8?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
+        <section class="hero" style="background: linear-gradient(135deg, rgba(0,0,0,0.65) 0%, rgba(0,20,30,0.50) 40%, rgba(0,0,0,0.60) 100%), url('/img/monteastur/hero/hero-monteastur.jpg'); background-size: cover; background-position: center;">
             <div class="hero-part"></div>
             <div class="hero-part"></div>
             <div class="hero-part"></div>
             <div class="hero-part"></div>
             <div class="hero-part"></div>
+            <div class="hero-curve" aria-hidden="true">
+                <svg viewBox="0 0 400 120" preserveAspectRatio="none" style="width:100%;height:100%;">
+                    <path d="M 0,60 Q 100,0 200,60 T 400,60" fill="none" stroke="rgba(212,118,42,0.20)" stroke-width="2" stroke-dasharray="8 6"/>
+                </svg>
+            </div>
             <div class="hero-overlay">
-                <h1>Your countryside getaway awaits</h1>
-                <p>Rest in nature, surrounded by mountains and peace.</p>
-                <a href="/en/reservas" class="btn">Book now</a>
+                <span class="hero-brand">MONTEASTUR ENVIOS</span>
+                <div class="hero-tags">
+                    <span class="hero-tag">Door to door</span>
+                    <span class="hero-tag">Heavy cargo</span>
+                    <span class="hero-tag">Customs</span>
+                    <span class="hero-tag">Paraguay</span>
+                </div>
+                <h1>Transport &amp; customs clearance Spain&ndash;Paraguay</h1>
+                <p>We take your merchandise, move or heavy cargo with security, personalised tracking and close attention.</p>
+                <div class="hero-ctas">
+                    <a href="https://wa.me/34642687292" class="btn" target="_blank">Check prices and availability</a>
+                    <a href="/en/casa" class="btn btn-secondary">View services</a>
+                </div>
             </div>
         </section>
 
         <section class="home-welcome reveal">
-            <h2>Welcome to Casa Rural</h2>
-            <p>Enjoy an unforgettable stay in the heart of nature. Comfort, tranquility and the best Asturian landscapes await you.</p>
+            <h2>MONTEASTUR ENVIOS</h2>
+            <p>Experts in international transport and customs management. We ship vehicles, machinery and all types of heavy cargo to Paraguay with personalised tracking. From Asturias to Paraguay, we take care of your cargo as if it were our own.</p>
         </section>
 
         <section class="destacados reveal">
             <a href="/en/casa" class="destacado-card">
-                <h3>The House</h3>
-                <p>Discover our facilities: spacious rooms, a fully equipped kitchen and a cozy living room with fireplace.</p>
+                <h3>Services</h3>
+                <p>International transport, customs management, vehicle shipping, machinery and heavy cargo to Paraguay. Tailored solutions for every load.</p>
             </a>
             <a href="/en/reservas" class="destacado-card">
-                <h3>Bookings</h3>
-                <p>Check availability and book your stay. We look forward to welcoming you for a unique experience.</p>
+                <h3>Ship now</h3>
+                <p>Request your shipment quickly and easily. Pickup in Pola de Siero or check availability for your type of cargo.</p>
             </a>
             <a href="/en/contacto" class="destacado-card">
                 <h3>Contact</h3>
-                <p>We are in Asturias, Spain. Call us or send us a message and we will be happy to help.</p>
+                <p>We are in Pola de Siero. Ask us about prices and availability at 642 687 292 or monteastur@hotmail.es.</p>
             </a>
         </section>
 
+        <section class="como-funciona reveal">
+            <h2>How it works</h2>
+            <p>Four steps to send your cargo from Asturias to Paraguay.</p>
+            <div class="como-funciona-grid">
+                <div class="paso-card">
+                    <span class="paso-numero">1</span>
+                    <span class="paso-icono">&#128222;</span>
+                    <h4>Contact us</h4>
+                    <p>Call us at 642 687 292 or write to us on WhatsApp. Tell us what you need to send and we will advise you with no obligation.</p>
+                </div>
+                <div class="paso-card">
+                    <span class="paso-numero">2</span>
+                    <span class="paso-icono">&#128230;</span>
+                    <h4>We prepare your shipment</h4>
+                    <p>We pick up your cargo in Pola de Siero and surrounding areas, or you can drop it off at our collection point. Packaging and documentation included.</p>
+                </div>
+                <div class="paso-card">
+                    <span class="paso-numero">3</span>
+                    <span class="paso-icono">&#128666;</span>
+                    <h4>We handle the cargo</h4>
+                    <p>We consolidate, document and dispatch your shipment with the best international carriers. You just wait.</p>
+                </div>
+                <div class="paso-card">
+                    <span class="paso-numero">4</span>
+                    <span class="paso-icono">&#127758;</span>
+                    <h4>Tracking to Paraguay</h4>
+                    <p>Full tracking from pickup to final delivery in Asunci&oacute;n and main cities in Paraguay.</p>
+                </div>
+            </div>
+            <div class="como-funciona-cta">
+                <a href="https://wa.me/34642687292" class="btn" target="_blank">Check prices and availability</a>
+            </div>
+        </section>
+
+        <section class="tracking-section reveal">
+            <h2>Shipment Tracking</h2>
+            <p>Personalised tracking throughout the entire logistics process.</p>
+            <div class="tracking-timeline">
+                <div class="tracking-step">
+                    <span class="tracking-icon">&#128230;</span>
+                    <div class="tracking-info">
+                        <span class="tracking-label">Step 1</span>
+                        <span class="tracking-title">Preparing cargo</span>
+                        <span class="tracking-badge">In progress</span>
+                    </div>
+                    <span class="tracking-dot"></span>
+                </div>
+                <div class="tracking-step">
+                    <span class="tracking-icon">&#128666;</span>
+                    <div class="tracking-info">
+                        <span class="tracking-label">Step 2</span>
+                        <span class="tracking-title">Pickup completed</span>
+                        <span class="tracking-badge">Pending</span>
+                    </div>
+                    <span class="tracking-dot"></span>
+                </div>
+                <div class="tracking-step">
+                    <span class="tracking-icon">&#128188;</span>
+                    <div class="tracking-info">
+                        <span class="tracking-label">Step 3</span>
+                        <span class="tracking-title">Customs clearance</span>
+                        <span class="tracking-badge">Pending</span>
+                    </div>
+                    <span class="tracking-dot"></span>
+                </div>
+                <div class="tracking-step">
+                    <span class="tracking-icon">&#9973;</span>
+                    <div class="tracking-info">
+                        <span class="tracking-label">Step 4</span>
+                        <span class="tracking-title">In transit to Paraguay</span>
+                        <span class="tracking-badge">Pending</span>
+                    </div>
+                    <span class="tracking-dot"></span>
+                </div>
+                <div class="tracking-step">
+                    <span class="tracking-icon">&#127758;</span>
+                    <div class="tracking-info">
+                        <span class="tracking-label">Step 5</span>
+                        <span class="tracking-title">Arrived at destination</span>
+                        <span class="tracking-badge">Pending</span>
+                    </div>
+                    <span class="tracking-dot"></span>
+                </div>
+                <div class="tracking-step">
+                    <span class="tracking-icon">&#9989;</span>
+                    <div class="tracking-info">
+                        <span class="tracking-label">Step 6</span>
+                        <span class="tracking-title">Delivered</span>
+                        <span class="tracking-badge tracking-badge-done">Completed</span>
+                    </div>
+                    <span class="tracking-dot"></span>
+                </div>
+            </div>
+            <div class="tracking-cta">
+                <a href="https://wa.me/34642687292" class="btn" target="_blank">Check availability</a>
+            </div>
+        </section>
+
+        <section class="brand-banner reveal">
+            <div class="brand-banner-bg" style="background-image: url('/img/monteastur/branding/banner-monteastur.jpg');"></div>
+            <div class="brand-banner-overlay"></div>
+            <div class="brand-banner-content">
+                <h3>MONTEASTUR ENVIOS</h3>
+                <p>Experts in international transport &amp; customs clearance Spain&ndash;Paraguay</p>
+                <a href="https://wa.me/34642687292" class="btn" target="_blank">Check prices and availability</a>
+            </div>
+        </section>
+
         <div class="home-phone reveal">
-            <p>Prefer to call us?</p>
-            <a href="tel:+34600000000">+34 123 123 123</a>
+            <p>Prefer to talk to us?</p>
+            <a href="tel:+34642687292">642 687 292</a>
         </div>
     </main>
 

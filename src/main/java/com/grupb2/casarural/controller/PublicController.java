@@ -49,6 +49,12 @@ public class PublicController {
         return "lacasa";
     }
 
+    @GetMapping("/operaciones")
+    public String operaciones(Model model) {
+        model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
+        return "operaciones";
+    }
+
     @GetMapping("/entorno")
     public String entorno() {
         return "entorno";
@@ -120,6 +126,12 @@ public class PublicController {
     public String enCasa(Model model) {
         model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
         return "en/casa";
+    }
+
+    @GetMapping("/en/operaciones")
+    public String enOperaciones(Model model) {
+        model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
+        return "en/operaciones";
     }
 
     @GetMapping("/en/reservas")

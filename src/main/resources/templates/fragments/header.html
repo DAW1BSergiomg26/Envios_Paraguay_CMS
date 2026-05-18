@@ -1,16 +1,22 @@
 <head th:fragment="head(titulo)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${titulo} + ' - Casa Rural'">Casa Rural</title>
+    <title th:text="${titulo} + ' - MONTEASTUR ENVIOS'">MONTEASTUR ENVIOS</title>
+    <meta name="description" content="MONTEASTUR ENVIOS - Transporte internacional y gesti&oacute;n de aduanas Espa&ntilde;a&ndash;Paraguay. Env&iacute;os de carga pesada, veh&iacute;culos y maquinaria con seguimiento personalizado.">
+    <meta property="og:title" th:content="${titulo} + ' - MONTEASTUR ENVIOS'">
+    <meta property="og:description" content="Transporte internacional y gesti&oacute;n de aduanas Espa&ntilde;a&ndash;Paraguay. Env&iacute;os de carga pesada, veh&iacute;culos y maquinaria.">
+    <meta property="og:image" content="/img/monteastur/branding/banner-monteastur.jpg">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/jpeg" href="/img/monteastur/branding/banner-monteastur.jpg">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <th:block th:fragment="header">
     <header>
         <div class="header-top">
-            <a href="/" class="logo">Casa Rural</a>
+            <a href="/" class="logo">MONTEASTUR ENVIOS</a>
             <div class="header-derecha">
-                <span class="telefono">+34 123 123 123</span>
+                <span class="telefono">642 687 292</span>
                 <div class="idiomas">
                     <a href="/">ES</a>
                     <a href="/en">EN</a>
@@ -19,8 +25,9 @@
         </div>
         <nav>
             <a href="/">Inicio</a>
-            <a href="/casa">La Casa</a>
-            <a href="/reservas">Reservas</a>
+            <a href="/casa">Servicios</a>
+            <a href="/reservas">Envíos</a>
+            <a href="/operaciones">Operaciones</a>
             <a href="/contacto">Contacto</a>
         </nav>
     </header>
