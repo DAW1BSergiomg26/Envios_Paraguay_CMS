@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header-en :: head('Operations')"></head>
+<head th:replace="~{fragments/header-en :: head('Operations')}"></head>
 
 <body>
 
-    <header th:replace="fragments/header-en :: header"></header>
+    <header th:replace="~{fragments/header-en :: header}"></header>
 
     <main>
         <section class="pagina-titulo reveal">
@@ -144,7 +144,7 @@
         </section>
     </main>
 
-    <footer th:replace="fragments/footer-en :: footer"></footer>
+    <footer th:replace="~{fragments/footer-en :: footer}"></footer>
 
     <div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
         <button class="lightbox-cerrar" id="lbCer" aria-label="Close">&times;</button>

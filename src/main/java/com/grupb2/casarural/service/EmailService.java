@@ -17,10 +17,10 @@ public class EmailService {
     @Autowired(required = false)
     private JavaMailSender mailSender;
 
-    @Value("${spring.mail.from:notificaciones@casarrural.com}")
+    @Value("${spring.mail.from:notificaciones@monteastur.com}")
     private String from;
 
-    @Value("${spring.mail.to:admin@casarrural.com}")
+    @Value("${spring.mail.to:monteastur@hotmail.es}")
     private String to;
 
     private void enviar(String asunto, String texto) {
@@ -42,14 +42,14 @@ public class EmailService {
     }
 
     public void notificarContacto(String nombre, String email, String mensaje) {
-        enviar("Nuevo mensaje de contacto - Casa Rural",
+        enviar("Nuevo mensaje de contacto - MONTEASTUR ENVIOS",
                 "Nombre: " + nombre + "\n" +
                 "Email: " + email + "\n\n" +
                 "Mensaje:\n" + mensaje);
     }
 
     public void notificarReserva(Reserva r) {
-        enviar("Nueva reserva - Casa Rural",
+        enviar("Nueva reserva - MONTEASTUR ENVIOS",
                 "Cliente: " + r.getNombreCliente() + "\n" +
                 "Email: " + r.getEmail() + "\n" +
                 "Teléfono: " + (r.getTelefono() != null ? r.getTelefono() : "—") + "\n" +
@@ -61,7 +61,7 @@ public class EmailService {
     }
 
     public void notificarReservaAprobada(Reserva r) {
-        enviar("Reserva confirmada - Casa Rural",
+        enviar("Reserva confirmada - MONTEASTUR ENVIOS",
                 "La reserva de " + r.getNombreCliente() + " ha sido APROBADA.\n\n" +
                 "Email: " + r.getEmail() + "\n" +
                 "Entrada: " + r.getFechaEntrada() + "\n" +
