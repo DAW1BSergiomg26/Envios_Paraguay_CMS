@@ -37,6 +37,10 @@ public class EnvioTracking {
     @Column(columnDefinition = "TEXT")
     private String observaciones;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
     public EnvioTracking() {}
 
     public EnvioTracking(String codigoUnico, String estado, String destinatario,
@@ -74,6 +78,8 @@ public class EnvioTracking {
     public void setUltimaActualizacion(LocalDateTime ultimaActualizacion) { this.ultimaActualizacion = ultimaActualizacion; }
     public String getObservaciones() { return observaciones; }
     public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
+    public Cliente getCliente() { return cliente; }
+    public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
     public String getUbicacionActual() {
         if (estado == null) return "";

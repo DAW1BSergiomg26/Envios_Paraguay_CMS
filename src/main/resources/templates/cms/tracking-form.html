@@ -73,6 +73,12 @@
                 <label>Contenido</label>
                 <input type="text" name="contenido" th:value="${envio.contenido}" placeholder="Ej: Maquinaria industrial" class="tracking-admin-input">
 
+                <label>Cliente asociado</label>
+                <select name="clienteId" class="tracking-admin-select">
+                    <option value="">— Sin cliente —</option>
+                    <option th:each="c : ${clientes}" th:value="${c.id}" th:selected="${envio.cliente != null and envio.cliente.id == c.id}" th:text="${c.nombre + ' (' + c.email + ')'}">Cliente</option>
+                </select>
+
                 <label>Observaciones</label>
                 <textarea name="observaciones" th:text="${envio.observaciones}" class="tracking-admin-textarea" placeholder="Notas internas o novedades del env&iacute;o..."></textarea>
 

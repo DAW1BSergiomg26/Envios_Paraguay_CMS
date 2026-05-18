@@ -1,10 +1,12 @@
 package com.grupb2.casarural.controller;
 
+import com.grupb2.casarural.model.Cliente;
 import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.Imagen;
 import com.grupb2.casarural.model.MensajeContacto;
 import com.grupb2.casarural.model.Reserva;
 import com.grupb2.casarural.model.TextoLegal;
+import com.grupb2.casarural.repository.ClienteRepository;
 import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.repository.ImagenRepository;
 import com.grupb2.casarural.repository.MensajeContactoRepository;
@@ -40,16 +42,19 @@ public class AdminController {
     private final TextoLegalRepository textoRepo;
     private final EnvioTrackingRepository trackingRepo;
     private final EmailService emailService;
+    private final ClienteRepository clienteRepo;
 
     public AdminController(ReservaRepository reservaRepo, ImagenRepository imagenRepo,
                            MensajeContactoRepository mensajeRepo, TextoLegalRepository textoRepo,
-                           EnvioTrackingRepository trackingRepo, EmailService emailService) {
+                           EnvioTrackingRepository trackingRepo, EmailService emailService,
+                           ClienteRepository clienteRepo) {
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.mensajeRepo = mensajeRepo;
         this.textoRepo = textoRepo;
         this.trackingRepo = trackingRepo;
         this.emailService = emailService;
+        this.clienteRepo = clienteRepo;
     }
 
     @GetMapping("/dashboard")
@@ -195,12 +200,14 @@ public class AdminController {
         String codigo = String.format("MT-%d-%04d", java.time.LocalDateTime.now().getYear(), count);
         model.addAttribute("envio", new EnvioTracking());
         model.addAttribute("codigoSugerido", codigo);
+        model.addAttribute("clientes", clienteRepo.findAll());
         return "cms/tracking-form";
     }
 
     @GetMapping("/tracking/editar/{id}")
     public String editarTracking(@PathVariable Long id, Model model) {
         model.addAttribute("envio", trackingRepo.findById(id).orElse(null));
+        model.addAttribute("clientes", clienteRepo.findAll());
         return "cms/tracking-form";
     }
 
@@ -211,10 +218,11 @@ public class AdminController {
                                    @RequestParam String destinatario,
                                    @RequestParam(required = false) String origen,
                                    @RequestParam(required = false) String destino,
-                                @RequestParam(required = false) String peso,
-                                @RequestParam(required = false) String contenido,
-                                @RequestParam(required = false) String observaciones,
-                                RedirectAttributes ra) {
+                                   @RequestParam(required = false) String peso,
+                                   @RequestParam(required = false) String contenido,
+                                   @RequestParam(required = false) String observaciones,
+                                   @RequestParam(required = false) Long clienteId,
+                                   RedirectAttributes ra) {
         EnvioTracking envio;
         if (id != null) {
             envio = trackingRepo.findById(id).orElse(new EnvioTracking());
@@ -232,6 +240,9 @@ public class AdminController {
         envio.setContenido(contenido);
         envio.setObservaciones(observaciones);
         envio.setUltimaActualizacion(java.time.LocalDateTime.now());
+        if (clienteId != null) {
+            clienteRepo.findById(clienteId).ifPresent(envio::setCliente);
+        }
         trackingRepo.save(envio);
         ra.addFlashAttribute("exito", "Envío guardado correctamente.");
         return "redirect:/admin/tracking";

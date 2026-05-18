@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Clientes | MONTEASTUR ENVIOS</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="login-body">
+
+<div class="login-wrapper">
+    <div class="login-header">
+        <span class="login-icon">👤</span>
+        <h1>Acceso Clientes</h1>
+        <p>MONTEASTUR ENVIOS</p>
+    </div>
+
+    <div th:if="${error}" class="toast toast-error" th:text="${error}">Error</div>
+
+    <form method="post" action="/cliente/login">
+        <div class="login-field">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="tu@email.com" required>
+        </div>
+        <div class="login-field">
+            <label>Contrase&ntilde;a</label>
+            <input type="password" name="password" placeholder="••••••" required>
+        </div>
+        <button type="submit" class="btn-login">Ingresar al panel</button>
+    </form>
+
+    <div class="login-footer">
+        <a href="/">← Volver a la web</a>
+    </div>
+</div>
+
+</body>
+</html>
