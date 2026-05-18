@@ -1,21 +1,45 @@
 package com.grupb2.casarural.config;
 
+import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.TextoLegal;
+import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.repository.TextoLegalRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class DataInitializer implements CommandLineRunner {
 
     private final TextoLegalRepository repo;
+    private final EnvioTrackingRepository trackingRepo;
 
-    public DataInitializer(TextoLegalRepository repo) {
+    public DataInitializer(TextoLegalRepository repo, EnvioTrackingRepository trackingRepo) {
         this.repo = repo;
+        this.trackingRepo = trackingRepo;
     }
 
     @Override
     public void run(String... args) {
+        if (trackingRepo.findByCodigoUnico("MT-2026-0001").isEmpty()) {
+            EnvioTracking e1 = new EnvioTracking("MT-2026-0001", "EN_TRANSITO",
+                "María González", "Pola de Siero, Asturias", "Asunción, Paraguay",
+                "120 kg", "Maquinaria industrial");
+            e1.setFechaCreacion(LocalDateTime.of(2026, 5, 10, 9, 0));
+            e1.setUltimaActualizacion(LocalDateTime.of(2026, 5, 15, 14, 30));
+            e1.setObservaciones("El buque zarpó del puerto de Gijón con destino a Montevideo. Escala técnica prevista en las Islas Canarias.");
+            trackingRepo.save(e1);
+        }
+        if (trackingRepo.findByCodigoUnico("MT-2026-0002").isEmpty()) {
+            EnvioTracking e2 = new EnvioTracking("MT-2026-0002", "EN_ADUANA_DESTINO",
+                "Carlos Mendoza", "Gijón, Asturias", "Encarnación, Paraguay",
+                "85 kg", "Electrodomésticos y menaje");
+            e2.setFechaCreacion(LocalDateTime.of(2026, 5, 8, 11, 0));
+            e2.setUltimaActualizacion(LocalDateTime.of(2026, 5, 17, 10, 15));
+            e2.setObservaciones("Documentación en revisión por la Dirección Nacional de Aduanas. Pendiente de pago de tasas.");
+            trackingRepo.save(e2);
+        }
         if (repo.findBySlug("aviso-legal").isEmpty()) {
             repo.save(new TextoLegal("aviso-legal", "Aviso Legal",
                 "<h3>1. Datos identificativos</h3>\n" +

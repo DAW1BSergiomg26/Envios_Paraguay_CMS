@@ -1,9 +1,11 @@
 package com.grupb2.casarural.controller;
 
+import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.Imagen;
 import com.grupb2.casarural.model.MensajeContacto;
 import com.grupb2.casarural.model.Reserva;
 import com.grupb2.casarural.model.TextoLegal;
+import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.repository.ImagenRepository;
 import com.grupb2.casarural.repository.MensajeContactoRepository;
 import com.grupb2.casarural.repository.ReservaRepository;
@@ -26,15 +28,17 @@ public class PublicController {
     private final ReservaRepository reservaRepo;
     private final ImagenRepository imagenRepo;
     private final TextoLegalRepository textoRepo;
+    private final EnvioTrackingRepository trackingRepo;
     private final EmailService emailService;
 
     public PublicController(MensajeContactoRepository mensajeRepo, ReservaRepository reservaRepo,
                             ImagenRepository imagenRepo, TextoLegalRepository textoRepo,
-                            EmailService emailService) {
+                            EnvioTrackingRepository trackingRepo, EmailService emailService) {
         this.mensajeRepo = mensajeRepo;
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.textoRepo = textoRepo;
+        this.trackingRepo = trackingRepo;
         this.emailService = emailService;
     }
 
@@ -47,12 +51,6 @@ public class PublicController {
     public String laCasa(Model model) {
         model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
         return "lacasa";
-    }
-
-    @GetMapping("/operaciones")
-    public String operaciones(Model model) {
-        model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
-        return "operaciones";
     }
 
     @GetMapping("/entorno")
@@ -128,12 +126,6 @@ public class PublicController {
         return "en/casa";
     }
 
-    @GetMapping("/en/operaciones")
-    public String enOperaciones(Model model) {
-        model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
-        return "en/operaciones";
-    }
-
     @GetMapping("/en/reservas")
     public String enReservas(Model model, HttpServletRequest request) {
         request.getSession();
@@ -183,6 +175,20 @@ public class PublicController {
     public String enAvisoLegal(Model model) {
         model.addAttribute("texto", textoRepo.findBySlug("aviso-legal").orElse(null));
         return "en/aviso-legal";
+    }
+
+    @GetMapping("/tracking")
+    public String tracking(Model model) {
+        model.addAttribute("envio", null);
+        model.addAttribute("buscado", false);
+        return "tracking";
+    }
+
+    @PostMapping("/tracking")
+    public String buscarTracking(@RequestParam String codigo, Model model) {
+        model.addAttribute("envio", trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase()).orElse(null));
+        model.addAttribute("buscado", true);
+        return "tracking";
     }
 
     @GetMapping("/en/politica-cookies")

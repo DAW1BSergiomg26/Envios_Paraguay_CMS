@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragments/header :: head('Seguimiento')"></head>
+
+<body>
+
+    <header th:replace="fragments/header :: header"></header>
+
+    <main>
+        <section class="pagina-titulo">
+            <h2>Seguimiento de tu env&iacute;o</h2>
+            <p>Introduce tu c&oacute;digo MONTEASTUR para conocer el estado de tu env&iacute;o.</p>
+        </section>
+
+        <form method="post" action="/tracking" class="tracking-premium-form">
+            <div class="tracking-input-wrapper">
+                <span class="tracking-input-icon">🔍</span>
+                <input type="text" name="codigo" placeholder="Introduce tu c&oacute;digo MONTEASTUR" required class="tracking-premium-input">
+            </div>
+            <button type="submit" class="btn btn-tracking-search">
+                <span>Buscar</span>
+                <span class="btn-search-arrow">→</span>
+            </button>
+        </form>
+
+        <div th:if="${buscado and envio == null}" class="tracking-not-found-premium">
+            <div class="tnf-icon">🔍</div>
+            <h3>No encontramos ning&uacute;n env&iacute;o con ese c&oacute;digo.</h3>
+            <p>Verific&aacute; el c&oacute;digo e intent&aacute; de nuevo, o consultanos por WhatsApp.</p>
+            <a href="https://wa.me/34642687292" class="btn btn-whatsapp" target="_blank" rel="noopener">
+                <span class="wa-icon">💬</span> Consultar por WhatsApp
+            </a>
+        </div>
+
+        <div th:if="${envio != null}" class="tracking-result-premium">
+            <div class="tracking-mini-resume">
+                <div class="tr-item">
+                    <span class="tr-label">C&oacute;digo</span>
+                    <span class="tr-value tr-code" th:text="${envio.codigoUnico}">MT-2026-0001</span>
+                </div>
+                <div class="tr-item">
+                    <span class="tr-label">Estado</span>
+                    <span class="tr-badge" th:classappend="'estado-' + ${envio.estado}">
+                        <span th:switch="${envio.estado}">
+                            <span th:case="'RECIBIDO'">📦 Recibido</span>
+                            <span th:case="'EN_ADUANA_ORIGEN'">🛃 Aduana origen</span>
+                            <span th:case="'EN_TRANSITO'">🚢 En tr&aacute;nsito</span>
+                            <span th:case="'EN_ADUANA_DESTINO'">🛃 Aduana destino</span>
+                            <span th:case="'EN_REPARTO'">🇵🇾 En reparto</span>
+                            <span th:case="'ENTREGADO'">✅ Entregado</span>
+                            <span th:case="*" th:text="${envio.estado}"></span>
+                        </span>
+                    </span>
+                </div>
+                <div class="tr-item">
+                    <span class="tr-label">Ubicaci&oacute;n actual</span>
+                    <span class="tr-value" th:text="${envio.ubicacionActual}">Asturias</span>
+                </div>
+                <div class="tr-item">
+                    <span class="tr-label">&Uacute;ltima actualizaci&oacute;n</span>
+                    <span class="tr-value" th:text="${#temporals.format(envio.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</span>
+                </div>
+            </div>
+
+            <div class="tracking-route">
+                <span class="route-dot route-start">🇪🇸 Asturias</span>
+                <span class="route-line"><span class="route-line-glow"></span></span>
+                <span class="route-dot route-mid">🌊 Atl&aacute;ntico</span>
+                <span class="route-line"><span class="route-line-glow"></span></span>
+                <span class="route-dot route-end">🇵🇾 Paraguay</span>
+            </div>
+
+            <div class="tracking-info-grid">
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Destinatario</span>
+                    <span class="tracking-info-value" th:text="${envio.destinatario}">Nombre</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Origen</span>
+                    <span class="tracking-info-value" th:text="${envio.origen}">Origen</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Destino</span>
+                    <span class="tracking-info-value" th:text="${envio.destino}">Destino</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Peso</span>
+                    <span class="tracking-info-value" th:text="${envio.peso}">0 kg</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Contenido</span>
+                    <span class="tracking-info-value" th:text="${envio.contenido}">Descripci&oacute;n</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Fecha de creaci&oacute;n</span>
+                    <span class="tracking-info-value" th:text="${#temporals.format(envio.fechaCreacion, 'dd/MM/yyyy')}">10/05/2026</span>
+                </div>
+            </div>
+
+            <div th:if="${envio.observaciones != null and !envio.observaciones.isEmpty()}" class="tracking-observaciones">
+                <span class="tracking-obs-label">📝 Nota del operador</span>
+                <p class="tracking-obs-text" th:text="${envio.observaciones}">Observaciones</p>
+            </div>
+
+            <div class="tracking-timeline-premium">
+                <h3 class="tracking-timeline-title">Estado del env&iacute;o</h3>
+                <div class="tracking-timeline-steps">
+                    <div th:class="'tl-step ' + (${envio.estado == 'RECIBIDO' or envio.estado == 'EN_ADUANA_ORIGEN' or envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'RECIBIDO'} ? ' active' : '')">
+                        <div class="tl-step-icon">📦</div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Recibido en origen</strong>
+                            <span th:if="${envio.estado == 'RECIBIDO'}" class="tl-step-label">Procesando</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_ADUANA_ORIGEN' or envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_ADUANA_ORIGEN'} ? ' active' : '')">
+                        <div class="tl-step-icon">🛃</div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Aduana de origen</strong>
+                            <span th:if="${envio.estado == 'EN_ADUANA_ORIGEN'}" class="tl-step-label">En proceso</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_TRANSITO'} ? ' active' : '')">
+                        <div class="tl-step-icon">🚢</div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Tr&aacute;nsito atl&aacute;ntico</strong>
+                            <span th:if="${envio.estado == 'EN_TRANSITO'}" class="tl-step-label">En ruta</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_ADUANA_DESTINO'} ? ' active' : '')">
+                        <div class="tl-step-icon">🛃</div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Aduana de destino</strong>
+                            <span th:if="${envio.estado == 'EN_ADUANA_DESTINO'}" class="tl-step-label">En tr&aacute;mite</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_REPARTO'} ? ' active' : '')">
+                        <div class="tl-step-icon">🇵🇾</div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>En reparto local</strong>
+                            <span th:if="${envio.estado == 'EN_REPARTO'}" class="tl-step-label">En reparto</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'ENTREGADO'} ? 'completed active' : '')">
+                        <div class="tl-step-icon tl-step-icon-final">✅</div>
+                        <div class="tl-step-line tl-step-line-final"></div>
+                        <div class="tl-step-content">
+                            <strong>Entregado</strong>
+                            <span th:if="${envio.estado == 'ENTREGADO'}" class="tl-step-label tl-step-label-delivered">Entregado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tracking-whatsapp-cta">
+                <p>¿Ten&eacute;s dudas sobre tu env&iacute;o?</p>
+                <a href="https://wa.me/34642687292" class="btn btn-whatsapp" target="_blank" rel="noopener">
+                    <span class="wa-icon">💬</span> Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/footer :: footer"></footer>
+
+</body>
+</html>
