@@ -1057,6 +1057,352 @@ textarea.rf-control {
     color: #666;
 }
 
+/* OPERACIONES - Premium grid */
+.ops-intro {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.8;
+    max-width: 780px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.ops-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.ops-card {
+    background: rgba(255, 255, 255, 0.65);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(63, 99, 56, 0.12);
+    border-radius: 18px;
+    padding: 32px 24px 28px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    overflow: hidden;
+}
+
+.ops-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(63, 99, 56, 0.03), rgba(212, 118, 42, 0.03));
+    opacity: 0;
+    transition: opacity 0.35s ease;
+}
+
+.ops-card:hover::before {
+    opacity: 1;
+}
+
+.ops-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 40px rgba(63, 99, 56, 0.12), 0 0 30px rgba(212, 118, 42, 0.06);
+    border-color: rgba(212, 118, 42, 0.25);
+}
+
+.ops-card-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #d4762a;
+    background: rgba(212, 118, 42, 0.1);
+    border: 1px solid rgba(212, 118, 42, 0.15);
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+}
+
+.ops-card-icono {
+    font-size: 38px;
+    line-height: 1;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 2px 8px rgba(63, 99, 56, 0.15));
+    transition: transform 0.35s ease;
+}
+
+.ops-card:hover .ops-card-icono {
+    transform: scale(1.1);
+}
+
+.ops-card h4 {
+    font-size: 17px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.ops-card p {
+    font-size: 13.5px;
+    color: #666;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.ops-cta {
+    text-align: center;
+    margin-top: 50px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 20px;
+    border: 1px solid rgba(63, 99, 56, 0.1);
+}
+
+.ops-cta p {
+    font-size: 18px;
+    color: #3f6338;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.ops-placeholder {
+    margin-top: 40px;
+    text-align: center;
+}
+
+.ops-placeholder-card {
+    display: inline-block;
+    padding: 40px 36px;
+    background: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px dashed rgba(63, 99, 56, 0.2);
+    border-radius: 18px;
+    max-width: 480px;
+}
+
+.ops-placeholder-icono {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 14px;
+    opacity: 0.5;
+}
+
+.ops-placeholder-card h4 {
+    font-size: 18px;
+    color: #3f6338;
+    margin-bottom: 8px;
+}
+
+.ops-placeholder-card p {
+    font-size: 14px;
+    color: #999;
+    margin: 0;
+}
+
+/* Env&iacute;os reales - Cinematic grid */
+.ops-envios-reales {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.ops-envios-reales h3 {
+    font-size: 30px;
+    color: #3f6338;
+    margin-bottom: 6px;
+    font-weight: 800;
+}
+
+.ops-envios-reales > p {
+    font-size: 15px;
+    color: #999;
+    margin-bottom: 40px;
+}
+
+.ops-envios-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.ops-envio-card {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    height: 260px;
+    cursor: default;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.ops-envio-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+}
+
+.ops-envio-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.ops-envio-card:hover .ops-envio-bg {
+    transform: scale(1.06);
+}
+
+.ops-envio-bg-cajas {
+    background: linear-gradient(135deg, #1a2a3a, #3f6338);
+}
+
+.ops-envio-bg-mudanzas {
+    background: linear-gradient(135deg, #2d1b0e, #6b4c2a);
+}
+
+.ops-envio-bg-vehiculos {
+    background: linear-gradient(135deg, #1a2a3a, #2c4a5e);
+}
+
+.ops-envio-bg-pesada {
+    background: linear-gradient(135deg, #1a1a2e, #3f6338);
+}
+
+.ops-envio-bg-contenedores {
+    background: linear-gradient(135deg, #0d1b2a, #2c4a5e);
+}
+
+.ops-envio-bg-embalaje {
+    background: linear-gradient(135deg, #2d1b0e, #3f6338);
+}
+
+.ops-envio-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.65) 100%);
+    z-index: 1;
+    transition: opacity 0.4s ease;
+}
+
+.ops-envio-card:hover .ops-envio-overlay {
+    opacity: 0.85;
+}
+
+.ops-envio-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    padding: 28px 20px;
+    text-align: center;
+}
+
+.ops-envio-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #d4762a;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(212, 118, 42, 0.35);
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    backdrop-filter: blur(4px);
+}
+
+.ops-envio-content h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.ops-envio-content p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+}
+
+.ops-envios-cta {
+    margin-top: 40px;
+}
+
+/* Override placeholder bg when real img ready */
+.ops-envio-card.has-image .ops-envio-bg {
+    background-size: cover;
+    background-position: center;
+}
+
+@media (max-width: 900px) {
+    .ops-envios-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .ops-envio-card {
+        height: 220px;
+    }
+
+    .ops-envios-reales h3 {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ops-envios-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .ops-envio-card {
+        height: 200px;
+    }
+
+    .ops-envio-content h4 {
+        font-size: 16px;
+    }
+
+    .ops-envios-reales h3 {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 900px) {
+    .ops-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ops-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .ops-card {
+        padding: 26px 18px 22px;
+    }
+
+    .ops-cta {
+        padding: 30px 18px;
+    }
+
+    .ops-cta p {
+        font-size: 16px;
+    }
+
+    .ops-placeholder-card {
+        padding: 30px 20px;
+    }
+}
+
 /* CONTACTO - Layout */
 .contacto-grid {
     display: grid;
