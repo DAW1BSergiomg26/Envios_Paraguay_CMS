@@ -970,6 +970,359 @@ textarea.rf-control {
     line-height: 1.7;
 }
 
+/* PUENTE - Ruta visual atlántica */
+.puente-section {
+    padding: 80px 20px;
+    margin: 40px 0 50px;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #0d1a0d 0%, #0a1a2e 40%, #1a2218 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.puente-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 60% 40% at 20% 50%, rgba(212,118,42,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 80% 50%, rgba(63,99,56,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 25% at 50% 80%, rgba(255,200,100,0.03) 0%, transparent 45%);
+    pointer-events: none;
+}
+
+.puente-section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0px, transparent 1px, transparent 80px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.012) 0px, transparent 1px, transparent 80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.puente-part {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: puentePartFloat 12s ease-in-out infinite;
+    opacity: 0;
+}
+
+.puente-part:nth-child(1) { top: 12%; left: 10%; width: 3px; height: 3px; background: rgba(212,118,42,0.2); animation-delay: 0s; }
+.puente-part:nth-child(2) { top: 75%; left: 85%; width: 2px; height: 2px; background: rgba(255,255,255,0.12); animation-delay: 2.5s; }
+.puente-part:nth-child(3) { top: 22%; left: 80%; width: 4px; height: 4px; background: rgba(255,200,100,0.1); animation-delay: 5s; }
+.puente-part:nth-child(4) { top: 82%; left: 15%; width: 2px; height: 2px; background: rgba(212,118,42,0.15); animation-delay: 7.5s; }
+.puente-part:nth-child(5) { top: 10%; left: 50%; width: 3px; height: 3px; background: rgba(255,255,255,0.1); animation-delay: 10s; }
+
+@keyframes puentePartFloat {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+    15% { opacity: 1; }
+    50% { transform: translateY(-35px) translateX(12px); opacity: 0.7; }
+    85% { opacity: 0.2; }
+}
+
+.puente-card {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    padding: 50px 40px;
+}
+
+.puente-header h2 {
+    font-size: 36px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+}
+
+.puente-subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: rgba(212,118,42,0.5);
+    margin-bottom: 8px;
+}
+
+.puente-header p {
+    font-size: 17px;
+    color: rgba(255,255,255,0.75);
+    max-width: 600px;
+    margin: 0 auto 30px;
+    line-height: 1.7;
+}
+
+.puente-route {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 24px;
+    position: relative;
+}
+
+.puente-stop {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 6px 16px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.puente-stop::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, rgba(212,118,42,0.2), rgba(255,255,255,0.05));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.puente-stop:hover {
+    color: white;
+    border-color: rgba(212,118,42,0.3);
+    transform: translateY(-2px);
+}
+
+.puente-stop:hover::before {
+    opacity: 1;
+}
+
+.puente-dash {
+    flex: 1;
+    height: 2px;
+    max-width: 80px;
+    background: linear-gradient(90deg, rgba(212,118,42,0.12), rgba(255,255,255,0.1), rgba(63,99,56,0.12));
+    position: relative;
+    overflow: hidden;
+}
+
+.puente-dash::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212,118,42,0.3), transparent);
+    animation: dashGlide 3s ease-in-out infinite;
+}
+
+@keyframes dashGlide {
+    0% { left: -50%; }
+    100% { left: 100%; }
+}
+
+.puente-water-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    padding: 0 16px;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.puente-water-label::after {
+    content: "~";
+    display: block;
+    font-size: 14px;
+    color: rgba(212,118,42,0.15);
+    animation: waterWave 4s ease-in-out infinite;
+}
+
+@keyframes waterWave {
+    0%, 100% { transform: translateY(0); opacity: 0.3; }
+    50% { transform: translateY(-3px); opacity: 0.8; }
+}
+
+.puente-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.puente-tag {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 5px 16px;
+    border-radius: 20px;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.puente-tag::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: 21px;
+    background: linear-gradient(135deg, rgba(212,118,42,0.15), transparent, rgba(63,99,56,0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+}
+
+.puente-tag:hover {
+    color: white;
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(212,118,42,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(212,118,42,0.12);
+}
+
+.puente-tag:hover::after {
+    opacity: 1;
+}
+
+.puente-micro {
+    font-size: 18px;
+    font-style: italic;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+    line-height: 1.6;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.puente-story {
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 28px;
+    letter-spacing: 0.5px;
+}
+
+.puente-card .btn:hover {
+    box-shadow: 0 10px 30px rgba(212,118,42,0.40), 0 0 50px rgba(212,118,42,0.15);
+}
+
+@media (max-width: 900px) {
+    .puente-section {
+        padding: 50px 16px;
+        margin: 30px 0 40px;
+    }
+
+    .puente-card {
+        padding: 36px 24px;
+    }
+
+    .puente-header h2 {
+        font-size: 28px;
+    }
+
+    .puente-header p {
+        font-size: 15px;
+    }
+
+    .puente-water-label {
+        font-size: 9px;
+        padding: 0 12px;
+    }
+
+    .puente-story {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .puente-section {
+        padding: 36px 12px;
+        border-radius: 16px;
+        margin: 20px 0 30px;
+    }
+
+    .puente-card {
+        padding: 28px 16px;
+        border-radius: 18px;
+    }
+
+    .puente-header h2 {
+        font-size: 24px;
+    }
+
+    .puente-header p {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .puente-route {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .puente-water-label {
+        width: 100%;
+        order: -1;
+        padding: 0;
+        text-align: center;
+    }
+
+    .puente-water-label::after {
+        display: inline;
+        margin-left: 6px;
+        animation: waterWave 3s ease-in-out infinite;
+    }
+
+    .puente-dash {
+        display: none;
+    }
+
+    .puente-micro {
+        font-size: 16px;
+    }
+
+    .puente-story {
+        font-size: 13px;
+    }
+
+    .puente-tags {
+        gap: 6px;
+    }
+
+    .puente-tag {
+        font-size: 10px;
+        padding: 4px 12px;
+    }
+
+    .puente-part {
+        display: none;
+    }
+
+    .puente-subtitle {
+        font-size: 11px;
+    }
+}
+
 /* HOME - Brand banner */
 .brand-banner {
     position: relative;
