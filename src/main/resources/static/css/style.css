@@ -970,6 +970,385 @@ textarea.rf-control {
     line-height: 1.7;
 }
 
+/* ACTIVIDAD VIVA - Operaciones activas MONTEASTUR */
+.actividad-section {
+    padding: 60px 0;
+    margin: 30px 0 40px;
+    position: relative;
+}
+
+.actividad-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 55% 30% at 25% 35%, rgba(212,118,42,0.03) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 25% at 75% 65%, rgba(63,99,56,0.04) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.actividad-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.actividad-header h2 {
+    font-size: 32px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    font-weight: 800;
+}
+
+.actividad-header h2::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #3f6338, #d4762a);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+
+.actividad-header p {
+    font-size: 16px;
+    color: #888;
+    max-width: 500px;
+    margin: 14px auto 0;
+}
+
+.actividad-ticker {
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(63,99,56,0.08);
+    border-radius: 16px;
+    padding: 20px 24px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px 28px;
+    position: relative;
+    z-index: 1;
+}
+
+.actividad-ticker-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+    animation: tickerPulse 3s ease-in-out infinite;
+}
+
+.actividad-ticker-item:nth-child(2) { animation-delay: 1s; }
+.actividad-ticker-item:nth-child(3) { animation-delay: 2s; }
+
+@keyframes tickerPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+}
+
+.actividad-ticker-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.actividad-ticker-item span {
+    color: #999;
+    font-size: 13px;
+}
+
+.actividad-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 30px;
+    position: relative;
+    z-index: 1;
+}
+
+.actividad-timeline-card {
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(63,99,56,0.08);
+    border-radius: 18px;
+    padding: 28px 24px;
+}
+
+.actividad-timeline-card h4 {
+    font-size: 14px;
+    color: #3f6338;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 18px;
+}
+
+.actividad-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #555;
+    position: relative;
+    padding-left: 20px;
+}
+
+.actividad-step:last-child {
+    margin-bottom: 0;
+}
+
+.actividad-step::before {
+    content: "";
+    position: absolute;
+    left: 4px;
+    top: 6px;
+    width: 3px;
+    height: calc(100% + 4px);
+    background: linear-gradient(180deg, rgba(63,99,56,0.2), rgba(212,118,42,0.1));
+    border-radius: 2px;
+}
+
+.actividad-step:last-child::before {
+    display: none;
+}
+
+.actividad-step-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.actividad-step-dot.done {
+    background: #3f6338;
+    box-shadow: 0 0 8px rgba(63,99,56,0.2);
+}
+
+.actividad-step-dot.active {
+    background: #d4762a;
+    box-shadow: 0 0 10px rgba(212,118,42,0.25);
+    animation: dotGlow 2s ease-in-out infinite;
+}
+
+.actividad-step-dot.pending {
+    background: rgba(63,99,56,0.12);
+    border: 1.5px solid rgba(63,99,56,0.15);
+}
+
+@keyframes dotGlow {
+    0%, 100% { box-shadow: 0 0 8px rgba(212,118,42,0.2); }
+    50% { box-shadow: 0 0 16px rgba(212,118,42,0.4); }
+}
+
+.actividad-step-label {
+    font-size: 13px;
+    color: #888;
+}
+
+.actividad-movimientos-card {
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(63,99,56,0.08);
+    border-radius: 18px;
+    padding: 28px 24px;
+}
+
+.actividad-movimientos-card h4 {
+    font-size: 14px;
+    color: #3f6338;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 18px;
+}
+
+.actividad-movimientos-card h4::after {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, #d4762a, transparent);
+    margin-top: 8px;
+    border-radius: 2px;
+}
+
+.actividad-movimiento {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.actividad-movimiento:last-child {
+    margin-bottom: 0;
+}
+
+.actividad-movimiento-icon {
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.actividad-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+}
+
+.actividad-stat {
+    text-align: center;
+    background: rgba(255,255,255,0.3);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(63,99,56,0.06);
+    border-radius: 14px;
+    padding: 20px 12px;
+    transition: all 0.3s ease;
+}
+
+.actividad-stat:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.4);
+    border-color: rgba(212,118,42,0.12);
+}
+
+.actividad-stat-icon {
+    font-size: 24px;
+    display: block;
+    margin-bottom: 6px;
+    opacity: 0.5;
+    transition: transform 0.3s ease;
+}
+
+.actividad-stat:hover .actividad-stat-icon {
+    transform: scale(1.1);
+}
+
+.actividad-stat h4 {
+    font-size: 12px;
+    color: #3f6338;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+
+.actividad-stat p {
+    font-size: 11px;
+    color: #999;
+    margin: 0;
+}
+
+.actividad-cta {
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.actividad-cta .btn:hover {
+    box-shadow: 0 10px 30px rgba(212,118,42,0.40), 0 0 50px rgba(212,118,42,0.12);
+}
+
+@media (max-width: 900px) {
+    .actividad-header h2 {
+        font-size: 28px;
+    }
+
+    .actividad-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .actividad-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .actividad-ticker {
+        padding: 16px 18px;
+        gap: 12px 20px;
+    }
+
+    .actividad-ticker-item {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .actividad-section {
+        padding: 30px 0;
+        margin: 20px 0 30px;
+    }
+
+    .actividad-header h2 {
+        font-size: 24px;
+    }
+
+    .actividad-header p {
+        font-size: 14px;
+    }
+
+    .actividad-ticker {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 16px;
+    }
+
+    .actividad-ticker-item {
+        font-size: 13px;
+        white-space: normal;
+    }
+
+    .actividad-grid {
+        gap: 14px;
+    }
+
+    .actividad-timeline-card,
+    .actividad-movimientos-card {
+        padding: 22px 18px;
+    }
+
+    .actividad-timeline-card h4,
+    .actividad-movimientos-card h4 {
+        font-size: 13px;
+    }
+
+    .actividad-step {
+        font-size: 13px;
+    }
+
+    .actividad-movimiento {
+        font-size: 13px;
+    }
+
+    .actividad-stats {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .actividad-stat {
+        padding: 16px 10px;
+    }
+
+    .actividad-stat h4 {
+        font-size: 11px;
+    }
+}
+
 /* HOME - Brand banner */
 .brand-banner {
     position: relative;
