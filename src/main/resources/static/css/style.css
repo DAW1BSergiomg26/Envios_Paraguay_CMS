@@ -367,11 +367,14 @@ footer {
 }
 
 .hero-overlay h1 {
-    font-size: 64px;
+    font-size: 52px;
     font-weight: 800;
-    margin-bottom: 16px;
-    letter-spacing: -0.5px;
+    margin-bottom: 14px;
+    letter-spacing: -0.3px;
     text-shadow: 0 4px 30px rgba(0,0,0,0.30);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-overlay p {
@@ -431,6 +434,89 @@ footer {
 @keyframes heroBtnIn {
     from { opacity: 0; transform: translateY(15px); }
     to   { opacity: 1; transform: translateY(0); }
+}
+
+/* HERO - Curve decoration */
+.hero-curve {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    pointer-events: none;
+    z-index: 3;
+    opacity: 0.6;
+}
+
+/* HERO - Brand label */
+.hero-brand {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.50);
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 6px 18px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.04);
+    backdrop-filter: blur(4px);
+}
+
+/* HERO - Tags */
+.hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.hero-tag {
+    font-size: 13px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.hero-tag:hover {
+    background: rgba(255,255,255,0.12);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* HERO - CTAs */
+.hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+/* Button secondary */
+.btn-secondary {
+    background: transparent;
+    border: 2px solid rgba(255,255,255,0.30);
+    box-shadow: none;
+}
+
+.btn-secondary::after {
+    display: none;
+}
+
+.btn-secondary:hover {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(255,255,255,0.50);
+    box-shadow: none;
+    transform: translateY(-3px);
 }
 
 .btn-cookies {
@@ -878,6 +964,303 @@ textarea.rf-control {
     max-width: 700px;
     margin: 0 auto;
     line-height: 1.7;
+}
+
+/* HOME - Cómo funciona */
+.como-funciona {
+    text-align: center;
+    margin-bottom: 60px;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.como-funciona h2 {
+    font-size: 36px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.como-funciona h2::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #3f6338, #557c45);
+    border-radius: 2px;
+    margin: 12px auto 0;
+}
+
+.como-funciona > p {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.como-funciona-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 36px;
+}
+
+.paso-card {
+    background: white;
+    padding: 32px 20px 28px;
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+    text-align: center;
+    transition: all 0.35s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.paso-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.10);
+}
+
+.paso-numero {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #3f6338, #557c45);
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    box-shadow: 0 3px 10px rgba(63,99,56,0.25);
+}
+
+.paso-icono {
+    font-size: 36px;
+    margin-bottom: 12px;
+    margin-top: 8px;
+    display: block;
+    line-height: 1;
+}
+
+.paso-card h4 {
+    font-size: 17px;
+    color: #3f6338;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.paso-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    max-width: 260px;
+    margin: 0 auto;
+}
+
+.como-funciona-cta {
+    text-align: center;
+}
+
+.como-funciona-cta .btn {
+    padding: 16px 36px;
+    font-size: 17px;
+}
+
+/* HOME - Tracking Section */
+.tracking-section {
+    text-align: center;
+    margin-bottom: 60px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tracking-section h2 {
+    font-size: 32px;
+    color: #3f6338;
+    margin-bottom: 8px;
+}
+
+.tracking-section h2::after {
+    content: "";
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(90deg, #3f6338, #557c45);
+    border-radius: 2px;
+    margin: 10px auto 0;
+}
+
+.tracking-section > p {
+    font-size: 17px;
+    color: #666;
+    margin-bottom: 36px;
+}
+
+.tracking-section .tracking-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    margin-bottom: 32px;
+    position: relative;
+}
+
+.tracking-section .tracking-step {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid #f0eee9;
+    text-align: left;
+    opacity: 1;
+    transition: all 0.3s ease;
+}
+
+.tracking-section .tracking-step:last-child {
+    border-bottom: none;
+}
+
+.tracking-section .tracking-step:hover {
+    background: rgba(63,99,56,0.02);
+    padding-left: 6px;
+    border-radius: 8px;
+}
+
+.tracking-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(63,99,56,0.08);
+    font-size: 20px;
+    transition: all 0.3s ease;
+}
+
+.tracking-step:hover .tracking-icon {
+    background: rgba(63,99,56,0.14);
+    transform: scale(1.05);
+}
+
+.tracking-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.tracking-label {
+    font-size: 12px;
+    color: #999;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.tracking-title {
+    font-size: 16px;
+    color: #333;
+    font-weight: 700;
+}
+
+.tracking-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 12px;
+    border-radius: 20px;
+    background: rgba(212,118,42,0.10);
+    color: #d4762a;
+    white-space: nowrap;
+}
+
+.tracking-badge-done {
+    background: rgba(39,174,96,0.10);
+    color: #27ae60;
+}
+
+.tracking-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: rgba(212,118,42,0.20);
+    flex-shrink: 0;
+}
+
+.tracking-step:first-child .tracking-dot {
+    background: #d4762a;
+    box-shadow: 0 0 8px rgba(212,118,42,0.30);
+}
+
+.tracking-cta {
+    text-align: center;
+}
+
+/* HOME - Brand Banner */
+.brand-banner {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.20);
+}
+
+.brand-banner-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    animation: heroFadeIn 1s ease;
+}
+
+.brand-banner-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.65) 0%, rgba(0,20,30,0.45) 50%, rgba(0,0,0,0.60) 100%);
+    z-index: 1;
+}
+
+.brand-banner-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 50px 40px;
+    max-width: 700px;
+}
+
+.brand-banner-content h3 {
+    font-size: 36px;
+    color: white;
+    margin-bottom: 12px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.25);
+}
+
+.brand-banner-content p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.80);
+    margin-bottom: 28px;
+    line-height: 1.6;
 }
 
 /* HOME - Phone CTA */
@@ -2122,9 +2505,47 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     .hero {
         height: 50vh;
         min-height: 380px;
+        margin-bottom: 40px;
     }
 
     .hero-part { display: none; }
+
+    .banner-reserva {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+        gap: 16px;
+    }
+
+    .banner-reserva-telefono a {
+        font-size: 22px;
+    }
+
+    .hero-ctas {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-ctas .btn {
+        width: 100%;
+        max-width: 360px;
+    }
+
+    .como-funciona-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .brand-banner {
+        min-height: 260px;
+    }
+
+    .brand-banner-content h3 {
+        font-size: 28px;
+    }
+
+    .brand-banner-content p {
+        font-size: 16px;
+    }
 
     .pagina-titulo h2 {
         font-size: 36px;
@@ -2142,6 +2563,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
     .gal-item {
         height: 220px;
+    }
+
+    .banner-reserva {
+        padding: 20px 16px;
+        border-radius: 14px;
+    }
+
+    .banner-reserva-principal {
+        font-size: 18px;
+    }
+
+    .banner-reserva-secundario {
+        font-size: 14px;
+    }
+
+    .banner-reserva-telefono a {
+        font-size: 20px;
     }
 
     .lightbox {
@@ -2164,6 +2602,39 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         width: 40px;
         height: 40px;
         font-size: 26px;
+    }
+
+    .como-funciona h2 {
+        font-size: 28px;
+    }
+
+    .tracking-section h2 {
+        font-size: 28px;
+    }
+
+    .tracking-section .tracking-step {
+        grid-template-columns: 36px 1fr auto;
+        gap: 10px;
+        padding: 12px 0;
+    }
+
+    .tracking-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 16px;
+    }
+
+    .tracking-title {
+        font-size: 14px;
+    }
+
+    .tracking-badge {
+        font-size: 10px;
+        padding: 2px 10px;
+    }
+
+    .brand-banner-content h3 {
+        font-size: 24px;
     }
 }
 
@@ -2277,5 +2748,86 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     .btn-block {
         padding: 14px 20px;
         font-size: 16px;
+    }
+
+    .hero-overlay {
+        padding: 20px;
+    }
+
+    .hero-brand {
+        font-size: 11px;
+        padding: 4px 14px;
+        margin-bottom: 14px;
+    }
+
+    .hero-tag {
+        font-size: 11px;
+        padding: 3px 12px;
+    }
+
+    .hero-ctas .btn {
+        padding: 14px 24px;
+        font-size: 16px;
+    }
+
+    .como-funciona-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .paso-card {
+        padding: 24px 16px 22px;
+    }
+
+    .paso-card p {
+        max-width: 100%;
+    }
+
+    .como-funciona-cta .btn {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .tracking-section .tracking-step {
+        grid-template-columns: 30px 1fr auto;
+        gap: 8px;
+        padding: 10px 0;
+    }
+
+    .tracking-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .tracking-title {
+        font-size: 13px;
+    }
+
+    .tracking-badge {
+        font-size: 9px;
+        padding: 2px 8px;
+    }
+
+    .brand-banner {
+        min-height: 220px;
+        border-radius: 16px;
+    }
+
+    .brand-banner-content {
+        padding: 30px 20px;
+    }
+
+    .brand-banner-content h3 {
+        font-size: 22px;
+    }
+
+    .brand-banner-content p {
+        font-size: 14px;
+    }
+
+    .brand-banner-content .btn {
+        padding: 14px 24px;
+        font-size: 15px;
     }
 }
