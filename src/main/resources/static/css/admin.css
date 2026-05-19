@@ -1554,6 +1554,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 .ct-user { color: #e0e0e0; font-weight: 600; }
 .ct-logout { color: #e74a4a; text-decoration: none; font-size: 13px; }
 .ct-logout:hover { text-decoration: underline; }
+.ct-back { color: #d4a76a; text-decoration: none; font-size: 13px; transition: 0.3s; }
+.ct-back:hover { color: #e0b87a; text-decoration: underline; }
 
 .cp-card {
     background: #1e1e32; border: 1px solid #2a2a4e; border-radius: 16px;
