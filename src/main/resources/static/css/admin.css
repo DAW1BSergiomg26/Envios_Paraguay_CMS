@@ -1667,13 +1667,13 @@ html::before {
     top: 0;
     left: 0;
     right: 0;
-    height: 6px;
+    height: 12px;
     background: linear-gradient(
         to bottom,
-        #d62828 33.33%,
-        #f8f9fa 33.33%,
-        #f8f9fa 66.66%,
-        #1d4ed8 66.66%
+        #d62828 4px,
+        #f8f9fa 4px,
+        #f8f9fa 8px,
+        #1d4ed8 8px
     );
     z-index: 10000;
     pointer-events: none;
@@ -1685,11 +1685,11 @@ html::after {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 6px;
+    height: 8px;
     background: linear-gradient(
         to bottom,
-        #1e40af 50%,
-        #facc15 50%
+        #1e40af 4px,
+        #facc15 4px
     );
     z-index: 10000;
     pointer-events: none;

@@ -2834,25 +2834,25 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* ===== IDENTIDAD CULTURAL: Asturias ↔ Paraguay ===== */
 .cultural-strip-paraguay {
-    height: 6px;
+    height: 12px;
     width: 100%;
     flex-shrink: 0;
     background: linear-gradient(
         to bottom,
-        #d62828 33.33%,
-        #f8f9fa 33.33%,
-        #f8f9fa 66.66%,
-        #1d4ed8 66.66%
+        #d62828 4px,
+        #f8f9fa 4px,
+        #f8f9fa 8px,
+        #1d4ed8 8px
     );
 }
 
 .cultural-strip-asturias {
-    height: 6px;
+    height: 8px;
     width: 100%;
     flex-shrink: 0;
     background: linear-gradient(
         to bottom,
-        #1e40af 50%,
-        #facc15 50%
+        #1e40af 4px,
+        #facc15 4px
     );
 }
