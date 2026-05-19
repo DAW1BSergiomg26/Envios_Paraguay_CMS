@@ -1814,3 +1814,16 @@ html::after {
 .cp-eventos .cp-ev-title {
     margin-bottom: 1rem;
 }
+
+.ft-link-ct {
+    color: #d4a76a;
+    display: block;
+    font-size: 15px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.ft-link-ct:hover {
+    color: #e8c88a;
+}

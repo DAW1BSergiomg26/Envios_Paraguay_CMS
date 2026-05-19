@@ -2953,3 +2953,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     color: #444;
     line-height: 1.4;
 }
+
+.ft-link-ct {
+    color: #d4a76a;
+    display: block;
+    font-size: 15px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.ft-link-ct:hover {
+    color: #e8c88a;
+}
