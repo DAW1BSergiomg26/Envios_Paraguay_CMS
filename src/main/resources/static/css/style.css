@@ -181,6 +181,37 @@ nav a:hover {
     text-decoration: underline;
 }
 
+
+/* FOOTER PREMIUM ACCESS */
+.footer-premium-links {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-premium-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #d4762a !important;
+    font-weight: 700;
+    text-decoration: none !important;
+    font-size: 15px;
+    padding: 6px 0;
+    transition: all 0.3s ease;
+}
+
+.footer-premium-link:hover {
+    color: #e8914a !important;
+    transform: translateX(5px);
+}
+
+.footer-premium-link svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
 /* FOOTER */
 footer {
     background: #2d4a28;
