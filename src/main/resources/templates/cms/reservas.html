@@ -9,29 +9,12 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>MONTEASTUR ENVIOS</h2>
-        <small>Panel de Gesti&oacute;n</small>
-        <span class="refugio-tag">Log&iacute;stica Premium</span>
-    </div>
-    <nav class="nav-links">
-        <a href="/admin/dashboard">Panel de Inicio</a>
-        <a href="/admin/reservas" class="active">Gestionar Env&iacute;os</a>
-        <a href="/admin/mensajesrecibidos">Consultas Clientes</a>
-        <a href="/admin/imagenes">Galería de Fotos</a>
-        <a href="/admin/textos">Textos Legales</a>
-        <a href="/" class="btn-web">Ver Web Pública</a>
-    </nav>
-    <form th:action="@{/logout}" method="post" class="logout-form">
-        <button type="submit" class="btn-logout">Cerrar Sesión</button>
-    </form>
-</div>
+<div th:replace="~{fragments/admin-sidebar :: admin-sidebar(seccionActiva='reservas')}"></div>
 
 <div class="main-content">
     <div class="card">
-        <h1>Listado de Env&iacute;os</h1>
-        <p th:if="${#lists.size(reservas) == 0}" class="vacio">No hay env&iacute;os registrados.</p>
+        <h1 style="color: #d4762a;">Listado de Env&iacute;os</h1>
+        <p th:if="${#lists.size(reservas) == 0}" class="vacio" style="color: #3f6338; font-weight: 600;">No hay env&iacute;os registrados.</p>
         <div class="table-wrap" th:if="${#lists.size(reservas) > 0}">
             <table>
                 <thead>

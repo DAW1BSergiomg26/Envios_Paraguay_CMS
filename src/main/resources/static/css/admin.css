@@ -1,28 +1,1036 @@
 /* =============================================
    CMS ADMIN + PANEL CLIENTE - MONTEASTUR ENVIOS
-   Cinematographic Premium Theme
+   Cinematographic Premium Theme - REFACTOR VISUAL FINAL
    ============================================= */
 
 :root {
     --verde: #3f6338;
     --verde-oscuro: #2d4a28;
     --verde-gradient: linear-gradient(135deg, #3f6338, #557c45);
+    /* CORPORATE ORANGE */
     --naranja: #d4762a;
-    --naranja-hover: #b8651f;
+    --naranja-hover: #e8893a;
+    /* TYPOGRAPHY CONTRAST COHESION */
+    --blanco-principal: #f5f5f0;
+    --blanco-secundario: #e8e8e2;
+    --gris-texto-legible: #c8c8c0;
+    --oscuro-texto-fondo-claro: #1f2a1f;
+    --oscuro-texto-fondo-claro-sec: #2d342a;
+    /* ESTADOS */
+    --verde-exito: #4caf82;
+    --naranja-advertencia: #f0a830;
+    --rojo-error: #e05555;
+    /* REST OF VARIABLES */
     --fondo: #ece9e2;
-    --blanco: #ffffff;
     --texto: #222;
     --texto-sec: #555;
     --sombra: 0 8px 25px rgba(0,0,0,0.08);
     --borde: #ddd;
-    --rojo: #c0392b;
-    --verde-confirmada: #27ae60;
-    --glass-bg: rgba(255,255,255,0.88);
-    --glass-border: rgba(255,255,255,0.25);
-    --glass-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    --glow-naranja: rgba(212,118,42,0.12);
-    --glow-verde: rgba(63,99,56,0.10);
+    --glass-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    /* PREMIUM DARK GLASSMORPHISM BACKGROUND */
+    --glass-bg: rgba(20, 28, 18, 0.88); /* Fondo oscuro translúcido */
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
+
+/* GLOBAL TYPOGRAPHY CONTRAST & IDENTITY */
+body {
+    font-size: 15px; /* Tamaño base del panel */
+    line-height: 1.6; /* Respiración visual */
+}
+
+/* Títulos principales: naranja corporativo #d4762a */
+h1, h2, h3, h4, .qa-title {
+    color: var(--naranja) !important;
+}
+
+.dashboard-header-content h1,
+.card h1,
+.card h3,
+.sidebar-header h2,
+.cp-ev-title,
+.evidencia-section h3,
+.login-header h1 {
+    color: var(--naranja) !important;
+    font-size: 20px !important;
+    letter-spacing: 0.4px !important;
+}
+
+/* Subtítulos importantes: blanco premium #f5f5f0 */
+.dashboard-header-content p, /* "Panel de control — Centro de gestión premium" */
+.sidebar-header small,     /* "Centro de Operaciones" */
+.sidebar-header .refugio-tag, /* "Logística Premium" */
+.nav-links a.active,
+label,
+.cp-card-header .cp-code,
+.cp-obs-label,
+.cp-empty h3,
+.evidencia-info strong {
+    color: var(--blanco-principal) !important;
+    font-weight: 700 !important;
+}
+
+/* Textos descriptivos: blanco suave legible #e8e8e2 */
+.card > p, /* "Datos actualizados del contenido..." */
+.status-value,
+.stat-item strong,
+.timeline-content strong, /* Nombres de clientes */
+.dash-table td,
+.cp-value,
+.cp-obs-text,
+td,
+.form-group input,
+.legal-editor textarea,
+.evidencia-input,
+.evidencia-select,
+.evidencia-file,
+.evidencia-info strong,
+.cp-ev-info strong {
+    color: var(--blanco-secundario) !important;
+    font-size: 14px !important; /* Datos de tablas/listas */
+}
+
+/* Textos secundarios: gris cálido claro #c8c8c0 */
+.status-label,
+.stat-item span,
+.qa-desc,
+.timeline-time, /* Fechas de actividad */
+.cp-label,
+.timeline-content span, /* Emails de actividad */
+small,
+p,
+.login-header p, /* Subtítulo login cliente */
+.login-wrapper .back-link, /* "Volver a la web pública" */
+.evidencia-desc,
+.evidencia-date,
+.evidencia-link,
+.cp-ev-desc,
+.cp-ev-date,
+.cp-ev-link,
+.cp-empty p,
+.cp-empty span {
+    color: var(--gris-texto-legible) !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+/* Labels de campos de login */
+.form-group label, .login-field label {
+    color: var(--oscuro-texto-fondo-claro) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.8px !important;
+    font-size: 13px !important;
+}
+
+/* Inputs y Textareas */
+.form-group input, .login-field input, .legal-editor textarea, .evidencia-input, .evidencia-select, .evidencia-file {
+    background: rgba(255,255,255,0.7) !important; /* Fondo input claro */
+    border: 1px solid rgba(212,118,42,0.35) !important; /* Borde naranja sutil */
+    color: var(--oscuro-texto-fondo-claro) !important; /* Texto oscuro en input */
+    font-size: 14px !important;
+}
+.form-group input::placeholder, .login-field input::placeholder {
+    color: #6b7a6b !important; /* Placeholder gris legible en fondo claro */
+}
+.form-group input:focus, .login-field input:focus, .legal-editor textarea:focus, .evidencia-input:focus, .evidencia-select:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important;
+    background: #ffffff !important;
+}
+
+/* Botones de Login/Submit */
+.btn-login {
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+}
+
+/* Mensajes de Error/Éxito */
+.error-msg, .logout-msg, .toast-error, .toast-success {
+    border-left: 3px solid var(--rojo-error) !important;
+    background: rgba(255,235,238,0.95) !important; /* Fondo rojo pálido */
+    color: var(--oscuro-texto-fondo-claro) !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+}
+.logout-msg, .toast-success {
+    border-color: var(--verde-exito) !important;
+    background: rgba(220,255,220,0.95) !important; /* Fondo verde pálido */
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+
+/* Link "Volver a la web pública" */
+.login-footer a, .login-wrapper .back-link {
+    color: var(--naranja) !important;
+    font-weight: 500 !important;
+    text-decoration: none !important;
+    font-size: 13px !important;
+    transition: text-decoration 0.2s ease, color 0.2s ease !important;
+}
+.login-footer a:hover, .login-wrapper .back-link:hover {
+    text-decoration: underline !important;
+    color: var(--naranja-hover) !important;
+}
+
+/* ACTIVIDAD RECIENTE - DETALLES ESPECÍFICOS */
+.timeline-item {
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important; /* Separadores */
+}
+.timeline-item:hover {
+    background: rgba(212,118,42,0.08) !important; /* Hover sobre item */
+}
+
+/* ESTADOS BADGES */
+.estado-aprobada {
+    color: var(--verde-exito) !important;
+    background: rgba(76, 175, 130, 0.15) !important;
+    border: 1px solid rgba(76, 175, 130, 0.35) !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+}
+.estado-pendiente {
+    color: var(--naranja-advertencia) !important;
+    background: rgba(240, 168, 48, 0.15) !important;
+    border: 1px solid rgba(240, 168, 48, 0.35) !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+    font-size: 12px !important;
+}
+
+/* ICONOS */
+.timeline-icon, .qa-icon, .stat-icon, .login-icon {
+    color: var(--naranja) !important; /* Iconos con acento naranja */
+    font-size: 1.5rem !important; /* Tamaño base para iconos */
+}
+
+/* Ajustes de backgrounds para dark glassmorphism (reafirmar y corregir) */
+.card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--glass-shadow) !important;
+}
+.card:hover {
+    background: rgba(26, 34, 24, 0.94) !important;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3) !important;
+}
+
+.quick-action-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+}
+.quick-action-card:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.2) !important;
+}
+.stat-item {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+}
+.stat-item:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2) !important;
+}
+.status-item {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.status-item:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+}
+.dashboard-header {
+    background: linear-gradient(135deg, rgba(63,99,56,0.1), rgba(212,118,42,0.06)) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
+}
+
+/* Tablas */
+.dash-table th, table th {
+    background: linear-gradient(135deg, rgba(63,99,56,0.9), rgba(85,124,69,0.9)) !important;
+}
+.dash-table tr:nth-child(even) td, table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+.dash-table tr:hover td, table tr:hover td {
+    background: rgba(212,118,42,0.06) !important;
+}
+
+/* General input/textarea/select */
+input, textarea, select {
+    border-color: rgba(212,118,42,0.35) !important;
+    background: rgba(255,255,255,0.7) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+    font-size: 14px !important;
+}
+input:focus, textarea:focus, select:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important;
+    background: #ffffff !important;
+}
+input::placeholder, textarea::placeholder, select::placeholder {
+    color: #6b7a6b !important;
+}
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(170deg, rgba(45,74,40,0.96), rgba(30,55,30,0.98)) !important;
+}
+.sidebar-header h2 {
+    color: var(--naranja) !important;
+}
+.nav-links a {
+    color: var(--gris-texto-legible) !important;
+    font-size: 15px !important;
+}
+.nav-links a:hover {
+    color: var(--blanco-principal) !important;
+    background: rgba(255,255,255,0.06) !important;
+}
+.nav-links a.active {
+    color: var(--blanco-principal) !important;
+    border-right: 3px solid var(--naranja) !important;
+    background: linear-gradient(90deg, rgba(255,255,255,0.08), transparent) !important;
+}
+
+/* Logout button */
+.btn-logout {
+    background: rgba(255,255,255,0.04) !important;
+    color: var(--gris-texto-legible) !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+}
+.btn-logout:hover {
+    background: rgba(255,255,255,0.08) !important;
+    color: var(--blanco-principal) !important;
+    border-color: rgba(255,255,255,0.15) !important;
+}
+
+/* Login wrapper (Panel Admin) */
+.login-wrapper {
+    background: rgba(255,255,255,0.88) !important; /* Fondo claro para el login */
+    box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.10) !important;
+}
+.login-wrapper h1 {
+    color: var(--naranja) !important;
+}
+.login-wrapper .subtitle {
+    color: var(--oscuro-texto-fondo-claro) !important; /* Texto oscuro */
+    font-weight: 700 !important;
+    font-size: 18px !important; /* Aumentar ligeramente */
+}
+.login-wrapper .back-link {
+    color: var(--naranja) !important;
+    font-size: 13px !important;
+}
+.error-msg, .logout-msg {
+    background: rgba(255,235,238,0.95) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+    border-left: 3px solid var(--rojo-error) !important;
+}
+.logout-msg {
+    background: rgba(220,255,220,0.95) !important;
+    border-color: var(--verde-exito) !important;
+}
+
+/* Client Panel Specific */
+.cliente-topbar {
+    background: #1a1a2e !important;
+    border-bottom: 1px solid #2a2a4e !important;
+    color: var(--gris-texto-legible) !important;
+    font-size: 14px !important;
+}
+.ct-left strong {
+    color: var(--naranja) !important;
+}
+.ct-user {
+    color: var(--blanco-principal) !important;
+    font-weight: 600 !important;
+}
+.ct-logout {
+    color: var(--naranja) !important;
+    font-size: 13px !important;
+}
+.cp-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-card-header .cp-code {
+    color: var(--naranja) !important;
+}
+.cp-label {
+    color: var(--gris-texto-legible) !important;
+    font-size: 12px !important;
+}
+.cp-value {
+    color: var(--blanco-secundario) !important;
+    font-size: 15px !important;
+}
+.cp-obs {
+    background: rgba(212,118,42,0.1) !important;
+    border-left: 3px solid var(--naranja) !important;
+}
+.cp-obs-label {
+    color: var(--naranja) !important;
+    font-size: 13px !important;
+}
+.cp-obs-text {
+    color: var(--blanco-secundario) !important;
+    font-size: 14px !important;
+}
+.cp-timeline {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-tl-step span {
+    color: var(--gris-texto-legible) !important;
+    font-size: 11px !important;
+}
+.cp-tl-icon {
+    color: var(--naranja) !important;
+    font-size: 24px !important;
+}
+.cp-tl-step.done .cp-tl-icon {
+    color: var(--verde-exito) !important;
+}
+.cp-tl-step.current .cp-tl-icon {
+    color: var(--naranja-advertencia) !important;
+}
+.cp-tl-step.current {
+    color: var(--naranja-advertencia) !important;
+    font-weight: 700 !important;
+}
+.cp-tl-step.done {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-whatsapp .btn-whatsapp-sm {
+    background: linear-gradient(135deg, #25D366, #128C7E) !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+.cp-whatsapp .btn-whatsapp-sm:hover {
+    background: linear-gradient(135deg, #1da851, #0e7a6b) !important;
+}
+.cp-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+.cp-empty h3 {
+    color: var(--blanco-principal) !important;
+    font-size: 22px !important;
+}
+.cp-empty p {
+    color: var(--gris-texto-legible) !important;
+    font-size: 15px !important;
+}
+.cp-empty-icon {
+    color: var(--naranja) !important;
+    font-size: 48px !important;
+}
+.evidencia-section h3 {
+    color: var(--naranja) !important;
+    font-size: 18px !important;
+}
+.evidencia-form {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.evidencia-input, .evidencia-select, .evidencia-file {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--blanco-secundario) !important;
+    font-size: 14px !important;
+}
+.evidencia-input:focus, .evidencia-select:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important;
+    background: rgba(255,255,255,0.1) !important;
+}
+.btn-evidencia-upload {
+    background: linear-gradient(135deg, var(--naranja), var(--naranja-hover)) !important;
+    color: #ffffff !important;
+    font-size: 14px !important;
+}
+.btn-evidencia-upload:hover {
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja)) !important;
+}
+.evidencia-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.evidencia-preview {
+    background: rgba(0,0,0,0.2) !important;
+}
+.evidencia-doc-icon {
+    background: rgba(0,0,0,0.2) !important;
+    color: var(--blanco-principal) !important;
+}
+.evidencia-info strong {
+    color: var(--blanco-principal) !important;
+    font-size: 14px !important;
+}
+.evidencia-desc {
+    color: var(--gris-texto-legible) !important;
+    font-size: 12px !important;
+}
+.evidencia-date {
+    color: var(--gris-texto-legible) !important;
+    font-size: 11px !important;
+}
+.evidencia-link {
+    color: var(--naranja) !important;
+    font-size: 13px !important;
+}
+.evidencia-delete-form {
+    border-top: 1px solid var(--glass-border) !important;
+}
+.evidencia-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+.cp-evidencias {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-ev-title {
+    color: var(--naranja) !important;
+    font-size: 16px !important;
+}
+.cp-ev-card {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-ev-thumb-wrap {
+    background: rgba(0,0,0,0.2) !important;
+}
+.cp-ev-doc-icon {
+    background: rgba(0,0,0,0.2) !important;
+    color: var(--blanco-principal) !important;
+}
+.cp-ev-info strong {
+    color: var(--blanco-principal) !important;
+    font-size: 13px !important;
+}
+.cp-ev-desc {
+    color: var(--gris-texto-legible) !important;
+    font-size: 11px !important;
+}
+.cp-ev-date {
+    color: var(--gris-texto-legible) !important;
+    font-size: 10px !important;
+}
+.cp-ev-link {
+    color: var(--naranja) !important;
+    font-size: 12px !important;
+}
+.cp-ev-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+
+/* GLOBAL TYPOGRAPHY CONTRAST & IDENTITY */
+body {
+    font-size: 15px; /* Tamaño base del panel */
+    line-height: 1.6; /* Respiración visual */
+}
+
+/* Títulos principales: naranja corporativo #d4762a */
+h1, h2, h3, h4, .qa-title {
+    color: var(--naranja) !important;
+}
+
+.dashboard-header-content h1,
+.card h1,
+.card h3,
+.sidebar-header h2,
+.cp-ev-title,
+.evidencia-section h3 {
+    color: var(--naranja) !important;
+}
+
+/* Subtítulos importantes: blanco premium #f5f5f0 */
+.dashboard-header-content p, /* "Panel de control — Centro de gestión premium" */
+.sidebar-header small,     /* "Centro de Operaciones" */
+.sidebar-header .refugio-tag, /* "Logística Premium" */
+.nav-links a.active,
+label,
+.cp-card-header .cp-code,
+.cp-obs-label,
+.cp-empty h3,
+.evidencia-info strong {
+    color: var(--blanco-principal) !important;
+}
+
+/* Textos descriptivos: blanco suave legible #e8eadf */
+.card > p, /* "Datos actualizados del contenido..." */
+.status-value,
+.stat-item strong,
+.timeline-content strong, /* Nombres de clientes */
+.dash-table td,
+.cp-value,
+.cp-obs-text,
+td {
+    color: var(--blanco-secundario) !important;
+    font-size: 14px; /* Datos de tablas/listas */
+}
+
+/* Textos secundarios: gris cálido claro #c8c8c0 */
+.status-label,
+.stat-item span,
+.qa-desc,
+.timeline-time, /* Fechas de actividad */
+.cp-label,
+.timeline-content span, /* Emails de actividad */
+small,
+p,
+.login-wrapper .subtitle, /* "Panel de gestión MONTEASTUR ENVIOS" */
+.logout-msg, /* "Sesión cerrada correctamente." */
+.form-group label, /* Labels de login */
+.login-wrapper .back-link, /* "Volver a la web pública" */
+.evidencia-desc,
+.evidencia-date,
+.evidencia-link,
+.cp-ev-info strong,
+.cp-ev-desc,
+.cp-ev-date,
+.cp-ev-link,
+.cp-empty p,
+.cp-empty span {
+    color: var(--gris-texto-legible) !important;
+}
+
+/* Ajustes específicos de tamaño y peso para legibilidad */
+.timeline-content strong {
+    font-size: 16px !important; /* Nombres de clientes */
+    font-weight: 600 !important;
+}
+.timeline-time, .timeline-content span {
+    font-size: 13px !important; /* Fechas y emails */
+    font-weight: 400 !important;
+}
+
+/* ESTADOS BADGES */
+.estado-aprobada {
+    color: var(--verde-aprobada) !important;
+    background: rgba(76, 175, 130, 0.15) !important;
+    border: 1px solid rgba(76, 175, 130, 0.35) !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+}
+.estado-pendiente {
+    color: var(--naranja-pendiente) !important;
+    background: rgba(240, 168, 48, 0.15) !important;
+    border: 1px solid rgba(240, 168, 48, 0.35) !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+}
+
+/* ICONOS */
+.timeline-icon, .qa-icon, .stat-icon {
+    color: var(--naranja) !important; /* Iconos de actividad con acento naranja */
+    font-size: 1.2rem; /* Ajustar tamaño base para iconos */
+}
+
+/* ITEMS / FILAS DE ACTIVIDAD */
+.timeline-item {
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important; /* Separadores */
+}
+.timeline-item:hover {
+    background: rgba(212,118,42,0.08) !important; /* Hover sobre item */
+}
+
+/* LOGIN PANEL ADMIN ESPECÍFICOS */
+.login-wrapper .subtitle {
+    color: var(--oscuro-texto-fondo-claro) !important;
+    font-weight: 700 !important;
+    font-size: 18px !important; /* Aumentar ligeramente */
+}
+.logout-msg {
+    color: var(--oscuro-texto-fondo-claro) !important;
+    border: 1px solid rgba(46,125,50,0.18) !important; /* Borde sutil */
+    background: rgba(232,245,233,0.95) !important; /* Fondo verde pálido casi opaco */
+}
+.form-group label {
+    color: var(--oscuro-texto-fondo-claro) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.8px !important;
+    font-size: 14px !important;
+}
+.login-wrapper .back-link {
+    color: var(--naranja) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+.login-wrapper .back-link:hover {
+    text-decoration: underline !important;
+}
+
+/* OTROS AJUSTES DE COLORES PARA CONTRASTE */
+.cp-tl-step.current {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-tl-step.done {
+    color: var(--verde-aprobada) !important;
+}
+.cp-tl-icon {
+    color: var(--naranja) !important;
+}
+.cp-tl-step.done .cp-tl-icon {
+    color: var(--verde-aprobada) !important;
+}
+.cp-tl-step.current .cp-tl-icon {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-obs-label {
+    color: var(--naranja) !important;
+}
+.cp-obs {
+    border-left: 3px solid var(--naranja) !important;
+}
+
+/* BUTTONS UNIFICATION (Reafirmar) */
+.btn-save, .btn-upload, .btn-login, .btn-evidencia-upload {
+    background: linear-gradient(135deg, var(--naranja), var(--naranja-hover)) !important;
+    box-shadow: 0 4px 16px rgba(212,118,42,0.25) !important;
+    color: #ffffff !important;
+}
+
+.btn-save:hover, .btn-upload:hover, .btn-login:hover, .btn-evidencia-upload:hover {
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja)) !important;
+    box-shadow: 0 8px 24px rgba(212,118,42,0.40) !important;
+    color: #ffffff !important;
+}
+
+/* Ajustes de backgrounds para dark glassmorphism */
+.quick-action-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+}
+.quick-action-card:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.2) !important;
+}
+.stat-item {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+}
+.stat-item:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2) !important;
+}
+.status-item {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.status-item:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+}
+.timeline-icon {
+    background: rgba(255,255,255,0.08) !important; /* Fondo sutil para iconos */
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+.timeline-reserva .timeline-icon {
+    background: rgba(63,99,56,0.15) !important;
+}
+.timeline-mensaje .timeline-icon {
+    background: rgba(212,118,42,0.15) !important;
+}
+.dash-table th {
+    background: linear-gradient(135deg, rgba(63,99,56,0.9), rgba(85,124,69,0.9)) !important;
+}
+.dash-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+.dash-table tr:hover td {
+    background: rgba(212,118,42,0.06) !important;
+}
+table th {
+    background: linear-gradient(135deg, rgba(63,99,56,0.9), rgba(85,124,69,0.9)) !important;
+}
+table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+table tr:hover td {
+    background: rgba(212,118,42,0.06) !important;
+}
+.vacio {
+    background: var(--glass-bg) !important;
+    border: 2px dashed var(--glass-border) !important;
+    color: var(--texto-secundario) !important;
+}
+.upload-section {
+    background: var(--glass-bg) !important;
+    border: 2px dashed var(--glass-border) !important;
+}
+.upload-section:hover {
+    border-color: var(--naranja) !important;
+    background: rgba(212,118,42,0.05) !important;
+}
+.foto-item {
+    background: rgba(255,255,255,0.03) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.foto-item.selected {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 2px rgba(212,118,42,0.25), 0 12px 32px rgba(0,0,0,0.14) !important;
+}
+.foto-item span { /* Títulos de foto */
+    background: rgba(0,0,0,0.6) !important;
+    color: var(--blanco-principal) !important;
+}
+.foto-cat, .foto-ord {
+    background: rgba(0,0,0,0.6) !important;
+    color: var(--blanco-principal) !important;
+}
+.preview-panel {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+}
+.preview-panel-header h3 {
+    color: var(--naranja) !important;
+}
+.preview-panel-header small {
+    color: var(--texto-secundario) !important;
+}
+.preview-panel-titulo {
+    color: var(--blanco-principal) !important;
+}
+.preview-panel-desc {
+    color: var(--texto-descriptivo) !important;
+}
+.preview-panel-tag {
+    background: rgba(63,99,56,0.2) !important;
+    color: var(--verde) !important;
+}
+.preview-panel-stat strong {
+    color: var(--naranja) !important;
+}
+.preview-panel-stat span {
+    color: var(--texto-secundario) !important;
+}
+.preview-panel-empty {
+    background: var(--glass-bg) !important;
+    border: 2px dashed var(--glass-border) !important;
+    color: var(--texto-secundario) !important;
+}
+.login-wrapper {
+    background: rgba(255,255,255,0.88); /* Fondo claro para el login */
+    box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.10) !important;
+}
+.login-wrapper .subtitle {
+    color: var(--oscuro-texto-fondo-claro) !important; /* Texto oscuro */
+}
+.login-wrapper h1 {
+    color: var(--naranja) !important;
+}
+.error-msg, .logout-msg {
+    background: rgba(255,255,255,0.95) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+.form-group label {
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.form-group input {
+    background: rgba(255,255,255,0.7) !important;
+    border: 2px solid rgba(0,0,0,0.1) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.form-group input:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
+    background: #ffffff !important;
+}
+.form-group input::placeholder {
+    color: #888 !important;
+}
+.login-wrapper .back-link {
+    color: var(--naranja) !important;
+}
+.legal-editor label {
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.legal-editor textarea {
+    background: rgba(255,255,255,0.7) !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.legal-editor textarea:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
+    background: #ffffff !important;
+}
+.cp-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-card-header .cp-code {
+    color: var(--naranja) !important;
+}
+.cp-label {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-value {
+    color: var(--blanco-secundario) !important;
+}
+.cp-obs {
+    background: rgba(212,118,42,0.1) !important;
+    border-left: 3px solid var(--naranja) !important;
+}
+.cp-obs-label {
+    color: var(--naranja) !important;
+}
+.cp-obs-text {
+    color: var(--blanco-secundario) !important;
+}
+.cp-timeline {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-tl-step span {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-tl-icon {
+    color: var(--naranja) !important;
+}
+.cp-tl-step.done .cp-tl-icon {
+    color: var(--verde-aprobada) !important;
+}
+.cp-tl-step.current .cp-tl-icon {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-tl-step.current {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-tl-step.done {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-whatsapp .btn-whatsapp-sm {
+    background: linear-gradient(135deg, #25D366, #128C7E) !important;
+    color: #ffffff !important;
+}
+.cp-whatsapp .btn-whatsapp-sm:hover {
+    background: linear-gradient(135deg, #1da851, #0e7a6b) !important;
+}
+.cp-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+.cp-empty h3 {
+    color: var(--blanco-principal) !important;
+}
+.cp-empty p {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-empty-icon {
+    color: var(--naranja) !important;
+}
+.evidencia-section h3 {
+    color: var(--naranja) !important;
+}
+.evidencia-form {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.evidencia-input, .evidencia-select, .evidencia-file {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--blanco-secundario) !important;
+}
+.evidencia-input:focus, .evidencia-select:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
+    background: rgba(255,255,255,0.1) !important;
+}
+.btn-evidencia-upload {
+    background: linear-gradient(135deg, var(--naranja), var(--naranja-hover)) !important;
+    color: #ffffff !important;
+}
+.btn-evidencia-upload:hover {
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja)) !important;
+}
+.evidencia-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.evidencia-preview {
+    background: rgba(0,0,0,0.2) !important;
+}
+.evidencia-info strong {
+    color: var(--blanco-principal) !important;
+}
+.evidencia-desc {
+    color: var(--gris-texto-legible) !important;
+}
+.evidencia-date {
+    color: var(--gris-texto-legible) !important;
+}
+.evidencia-link {
+    color: var(--naranja) !important;
+}
+.evidencia-delete-form {
+    border-top: 1px solid var(--glass-border) !important;
+}
+.evidencia-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+.cp-evidencias {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-ev-title {
+    color: var(--naranja) !important;
+}
+.cp-ev-card {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-ev-thumb-wrap {
+    background: rgba(0,0,0,0.2) !important;
+}
+.cp-ev-doc-icon {
+    background: rgba(0,0,0,0.2) !important;
+}
+.cp-ev-info strong {
+    color: var(--blanco-principal) !important;
+}
+.cp-ev-desc {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-ev-date {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-ev-link {
+    color: var(--naranja) !important;
+}
+.cp-ev-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+
+/* Rest of the file remains unchanged... */
+
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -272,9 +1280,9 @@ body::after {
 }
 
 .card:hover {
-    box-shadow: 0 16px 48px rgba(0,0,0,0.16);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
     transform: translateY(-2px);
-    background: rgba(255,255,255,0.94);
+    background: rgba(26, 34, 24, 0.94);
 }
 
 .card h1 {
@@ -298,17 +1306,17 @@ body::after {
 }
 
 .stat-item {
-    background: rgba(255,255,255,0.60);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 30px 20px 26px;
-    border: 1px solid rgba(255,255,255,0.40);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     text-align: center;
     transition: all 0.35s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
 .stat-item::before {
@@ -328,10 +1336,10 @@ body::after {
 }
 
 .stat-item:hover {
-    box-shadow: 0 16px 40px rgba(0,0,0,0.10);
+    box-shadow: 0 16px 40px rgba(212, 118, 42, 0.15);
     transform: translateY(-5px);
-    background: rgba(255,255,255,0.80);
-    border-color: rgba(212,118,42,0.15);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(212, 118, 42, 0.3);
 }
 
 .stat-item span {
@@ -364,9 +1372,9 @@ body::after {
     border-radius: 20px;
     margin-bottom: 30px;
     overflow: hidden;
-    background: linear-gradient(135deg, rgba(63,99,56,0.06), rgba(212,118,42,0.04));
-    border: 1px solid rgba(255,255,255,0.4);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    background: linear-gradient(135deg, rgba(63,99,56,0.1), rgba(212,118,42,0.06));
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
 
 .dashboard-header::before {
@@ -509,17 +1517,18 @@ body::after {
     flex-direction: column;
     gap: 4px;
     padding: 18px 16px;
-    background: rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transition: all 0.3s ease;
 }
 
 .status-item:hover {
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 255, 255, 0.06);
     transform: translateY(-2px);
+    border-color: rgba(212, 118, 42, 0.2);
 }
 
 .status-dot {
@@ -1236,7 +2245,7 @@ tr:nth-child(even):hover td {
 .btn-login {
     width: 100%;
     padding: 0.85rem;
-    background: linear-gradient(135deg, var(--verde), var(--verde-oscuro));
+    background: linear-gradient(135deg, var(--naranja), #e8914a);
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -1246,12 +2255,13 @@ tr:nth-child(even):hover td {
     transition: all 0.3s ease;
     margin-top: 0.5rem;
     letter-spacing: 0.3px;
-    box-shadow: 0 4px 16px rgba(63,99,56,0.20);
+    box-shadow: 0 4px 16px rgba(212,118,42,0.25);
 }
 
 .btn-login:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(63,99,56,0.35);
+    box-shadow: 0 8px 28px rgba(212,118,42,0.40);
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja));
 }
 
 .btn-login:active {
@@ -1813,4 +2823,17 @@ html::after {
 
 .cp-eventos .cp-ev-title {
     margin-bottom: 1rem;
+}
+
+.ft-link-ct {
+    color: #d4a76a;
+    display: block;
+    font-size: 15px;
+    margin-bottom: 8px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.ft-link-ct:hover {
+    color: #e8c88a;
 }

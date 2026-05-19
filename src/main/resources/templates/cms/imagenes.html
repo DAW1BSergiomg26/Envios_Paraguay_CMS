@@ -9,24 +9,7 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>MONTEASTUR ENVIOS</h2>
-        <small>Panel de Gesti&oacute;n</small>
-        <span class="refugio-tag">Log&iacute;stica Premium</span>
-    </div>
-    <nav class="nav-links">
-        <a href="/admin/dashboard">Panel de Inicio</a>
-        <a href="/admin/reservas">Gestionar Env&iacute;os</a>
-        <a href="/admin/mensajesrecibidos">Consultas Clientes</a>
-        <a href="/admin/imagenes" class="active">Galer&iacute;a de Fotos</a>
-        <a href="/admin/textos">Textos Legales</a>
-        <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
-    </nav>
-    <form th:action="@{/logout}" method="post" class="logout-form">
-        <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
-    </form>
-</div>
+<div th:replace="~{fragments/admin-sidebar :: admin-sidebar(seccionActiva='galeria')}"></div>
 
 <div class="main-content">
     <div class="card">
@@ -34,9 +17,7 @@
         <p>Sube y gestiona las im&aacute;genes de la p&aacute;gina &quot;La Casa&quot;.</p>
 
         <div class="imagenes-layout">
-
             <div class="imagenes-main">
-
                 <div th:if="${exito}" class="toast toast-success">
                     <span class="toast-icon">✓</span>
                     <span th:text="${exito}">Imagen subida</span>
@@ -45,9 +26,7 @@
                     <span class="toast-icon">!</span>
                     <span th:text="${error}">Error</span>
                 </div>
-
-                <h3 style="color: #3f6338; margin-bottom: 15px; font-size: 18px;">Subir nueva imagen</h3>
-
+                <h3 style="color: #d4762a; margin-bottom: 15px; font-size: 18px;">Subir nueva imagen</h3>
                 <form action="#" th:action="@{/admin/imagenes}" method="post" enctype="multipart/form-data">
                     <div style="margin-bottom: 14px;">
                         <label for="titulo" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">T&iacute;tulo *</label>
@@ -82,11 +61,8 @@
                     </div>
                     <button type="submit" class="btn-upload">Subir imagen</button>
                 </form>
-
                 <hr style="margin: 28px 0; border: none; border-top: 1px solid rgba(0,0,0,0.06);">
-
-                <h3 style="color: #3f6338; margin-bottom: 15px; font-size: 18px;">Im&aacute;genes subidas</h3>
-
+                <h3 style="color: #d4762a; margin-bottom: 15px; font-size: 18px;">Im&aacute;genes subidas</h3>
                 <p th:if="${imagenes == null or imagenes.isEmpty()}" class="vacio">No hay im&aacute;genes registradas.</p>
 
                 <div class="grid-fotos" th:if="${imagenes != null and !imagenes.isEmpty()}" id="galeriaGrid">

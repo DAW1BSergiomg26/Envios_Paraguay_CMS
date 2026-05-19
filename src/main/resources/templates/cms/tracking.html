@@ -9,32 +9,14 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>MONTEASTUR ENVIOS</h2>
-        <small>Centro de Operaciones</small>
-        <span class="refugio-tag">Log&iacute;stica Premium</span>
-    </div>
-    <nav class="nav-links">
-        <a href="/admin/dashboard">Panel de Inicio</a>
-        <a href="/admin/reservas">Gestionar Reservas</a>
-        <a href="/admin/mensajesrecibidos">Mensajes Recibidos</a>
-        <a href="/admin/tracking" class="active">Seguimiento Env&iacute;os</a>
-        <a href="/admin/imagenes">Galer&iacute;a de Fotos</a>
-        <a href="/admin/textos">Textos Legales</a>
-        <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
-    </nav>
-    <form th:action="@{/logout}" method="post" class="logout-form">
-        <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
-    </form>
-</div>
+<div th:replace="~{fragments/admin-sidebar :: admin-sidebar(seccionActiva='tracking')}"></div>
 
 <div class="main-content">
 
     <div class="dashboard-header">
         <div class="dashboard-header-content">
-            <h1>Seguimiento de Env&iacute;os</h1>
-            <p>Gestiona los c&oacute;digos de seguimiento y estados de los env&iacute;os.</p>
+            <h1 style="color: #d4762a;">Seguimiento de Env&iacute;os</h1>
+            <p style="color: #ffffff;">Gestiona los c&oacute;digos de seguimiento y estados de los env&iacute;os.</p>
         </div>
     </div>
 
@@ -45,7 +27,7 @@
 
     <div class="card">
         <div class="tracking-admin-header">
-            <h3>Todos los env&iacute;os</h3>
+            <h3 style="color: #d4762a;">Todos los env&iacute;os</h3>
             <a href="/admin/tracking/nuevo" class="btn-upload">+ Nuevo env&iacute;o</a>
         </div>
 
