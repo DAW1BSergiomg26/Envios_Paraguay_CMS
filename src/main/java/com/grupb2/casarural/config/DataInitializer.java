@@ -1,7 +1,9 @@
 package com.grupb2.casarural.config;
 
+import com.grupb2.casarural.model.Cliente;
 import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.TextoLegal;
+import com.grupb2.casarural.repository.ClienteRepository;
 import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.repository.TextoLegalRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -14,14 +16,25 @@ public class DataInitializer implements CommandLineRunner {
 
     private final TextoLegalRepository repo;
     private final EnvioTrackingRepository trackingRepo;
+    private final ClienteRepository clienteRepo;
 
-    public DataInitializer(TextoLegalRepository repo, EnvioTrackingRepository trackingRepo) {
+    public DataInitializer(TextoLegalRepository repo, EnvioTrackingRepository trackingRepo,
+                           ClienteRepository clienteRepo) {
         this.repo = repo;
         this.trackingRepo = trackingRepo;
+        this.clienteRepo = clienteRepo;
     }
 
     @Override
     public void run(String... args) {
+        Cliente demo = null;
+        if (clienteRepo.findByEmail("cliente@monteastur.com").isEmpty()) {
+            demo = clienteRepo.save(new Cliente("cliente@monteastur.com", "demo2026",
+                "María González", "+34 612 345 678"));
+        } else {
+            demo = clienteRepo.findByEmail("cliente@monteastur.com").get();
+        }
+
         if (trackingRepo.findByCodigoUnico("MT-2026-0001").isEmpty()) {
             EnvioTracking e1 = new EnvioTracking("MT-2026-0001", "EN_TRANSITO",
                 "María González", "Pola de Siero, Asturias", "Asunción, Paraguay",
@@ -29,6 +42,7 @@ public class DataInitializer implements CommandLineRunner {
             e1.setFechaCreacion(LocalDateTime.of(2026, 5, 10, 9, 0));
             e1.setUltimaActualizacion(LocalDateTime.of(2026, 5, 15, 14, 30));
             e1.setObservaciones("El buque zarpó del puerto de Gijón con destino a Montevideo. Escala técnica prevista en las Islas Canarias.");
+            e1.setCliente(demo);
             trackingRepo.save(e1);
         }
         if (trackingRepo.findByCodigoUnico("MT-2026-0002").isEmpty()) {
@@ -38,6 +52,7 @@ public class DataInitializer implements CommandLineRunner {
             e2.setFechaCreacion(LocalDateTime.of(2026, 5, 8, 11, 0));
             e2.setUltimaActualizacion(LocalDateTime.of(2026, 5, 17, 10, 15));
             e2.setObservaciones("Documentación en revisión por la Dirección Nacional de Aduanas. Pendiente de pago de tasas.");
+            e2.setCliente(demo);
             trackingRepo.save(e2);
         }
         if (repo.findBySlug("aviso-legal").isEmpty()) {

@@ -197,6 +197,20 @@ public class PublicController {
         return "en/politica-cookies";
     }
 
+    @GetMapping("/en/tracking")
+    public String enTracking(Model model) {
+        model.addAttribute("envio", null);
+        model.addAttribute("buscado", false);
+        return "en/tracking";
+    }
+
+    @PostMapping("/en/tracking")
+    public String enBuscarTracking(@RequestParam String codigo, Model model) {
+        model.addAttribute("envio", trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase()).orElse(null));
+        model.addAttribute("buscado", true);
+        return "en/tracking";
+    }
+
     // -----------------------------------------------------------
     //  CALENDARIO DE DISPONIBILIDAD
     // -----------------------------------------------------------

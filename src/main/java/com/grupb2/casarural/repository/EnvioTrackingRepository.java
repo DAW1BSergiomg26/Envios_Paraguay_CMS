@@ -11,4 +11,5 @@ import java.util.Optional;
 public interface EnvioTrackingRepository extends JpaRepository<EnvioTracking, Long> {
     Optional<EnvioTracking> findByCodigoUnico(String codigoUnico);
     List<EnvioTracking> findAllByOrderByUltimaActualizacionDesc();
+    List<EnvioTracking> findByClienteIdOrderByUltimaActualizacionDesc(Long clienteId);
 }
