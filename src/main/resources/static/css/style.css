@@ -182,7 +182,57 @@ nav a:hover {
 }
 
 
-/* FOOTER PREMIUM ACCESS */
+/* ================================
+   FOOTER PREMIUM
+   ================================ */
+footer {
+    background: #2d4a28;
+    color: rgba(255,255,255,0.85);
+    padding: 50px 50px 0;
+    margin-top: auto;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+}
+
+.footer-col h3, .footer-col h4 {
+    font-size: 18px;
+    color: white;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-col p, .footer-col a {
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.footer-col p {
+    color: rgba(255,255,255,0.7);
+    margin-bottom: 8px;
+}
+
+.footer-col a {
+    display: block;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.footer-col a:hover {
+    color: white;
+    transform: translateX(4px);
+}
+
+/* Premium Footer Access */
 .footer-premium-links {
     margin-top: 15px;
     padding-top: 15px;
@@ -212,66 +262,14 @@ nav a:hover {
     fill: currentColor;
 }
 
-/* FOOTER */
-footer {
-    background: #2d4a28;
-    color: rgba(255,255,255,0.85);
-    padding: 50px 50px 0;
-    margin-top: auto;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 40px;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-bottom: 40px;
-}
-
-.footer-col h3 {
-    font-size: 24px;
-    color: white;
-    margin-bottom: 12px;
-}
-
-.footer-col h4 {
-    font-size: 18px;
-    color: white;
-    margin-bottom: 12px;
-}
-
-.footer-col p {
-    font-size: 15px;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 6px;
-}
-
-.footer-col a {
-    display: block;
-    color: rgba(255,255,255,0.75);
-    text-decoration: none;
-    font-size: 15px;
-    margin-bottom: 8px;
-    transition: all 0.3s ease;
-}
-
-.footer-col a:hover {
-    color: white;
-    text-decoration: underline;
-    transform: translateX(4px);
-}
-
 .footer-bottom {
     border-top: 1px solid rgba(255,255,255,0.15);
     padding: 20px 0;
     text-align: center;
-}
-
-.footer-bottom p {
     font-size: 14px;
     color: rgba(255,255,255,0.5);
 }
+
 
 /* SCROLL REVEAL */
 .reveal {
