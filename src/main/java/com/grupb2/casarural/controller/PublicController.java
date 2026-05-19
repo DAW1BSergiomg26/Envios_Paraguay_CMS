@@ -11,6 +11,7 @@ import com.grupb2.casarural.repository.MensajeContactoRepository;
 import com.grupb2.casarural.repository.ReservaRepository;
 import com.grupb2.casarural.repository.TextoLegalRepository;
 import com.grupb2.casarural.service.EmailService;
+import com.grupb2.casarural.service.EventoTrackingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,16 +31,19 @@ public class PublicController {
     private final TextoLegalRepository textoRepo;
     private final EnvioTrackingRepository trackingRepo;
     private final EmailService emailService;
+    private final EventoTrackingService eventoTrackingService;
 
     public PublicController(MensajeContactoRepository mensajeRepo, ReservaRepository reservaRepo,
                             ImagenRepository imagenRepo, TextoLegalRepository textoRepo,
-                            EnvioTrackingRepository trackingRepo, EmailService emailService) {
+                            EnvioTrackingRepository trackingRepo, EmailService emailService,
+                            EventoTrackingService eventoTrackingService) {
         this.mensajeRepo = mensajeRepo;
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.textoRepo = textoRepo;
         this.trackingRepo = trackingRepo;
         this.emailService = emailService;
+        this.eventoTrackingService = eventoTrackingService;
     }
 
     @GetMapping("/")
@@ -186,8 +190,10 @@ public class PublicController {
 
     @PostMapping("/tracking")
     public String buscarTracking(@RequestParam String codigo, Model model) {
-        model.addAttribute("envio", trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase()).orElse(null));
+        var optEnvio = trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase());
+        model.addAttribute("envio", optEnvio.orElse(null));
         model.addAttribute("buscado", true);
+        optEnvio.ifPresent(e -> model.addAttribute("eventos", eventoTrackingService.listarPorEnvio(e.getId())));
         return "tracking";
     }
 
@@ -206,8 +212,10 @@ public class PublicController {
 
     @PostMapping("/en/tracking")
     public String enBuscarTracking(@RequestParam String codigo, Model model) {
-        model.addAttribute("envio", trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase()).orElse(null));
+        var optEnvio = trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase());
+        model.addAttribute("envio", optEnvio.orElse(null));
         model.addAttribute("buscado", true);
+        optEnvio.ifPresent(e -> model.addAttribute("eventos", eventoTrackingService.listarPorEnvio(e.getId())));
         return "en/tracking";
     }
 

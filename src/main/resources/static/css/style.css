@@ -2856,3 +2856,100 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         #facc15 4px
     );
 }
+
+.evento-timeline-public {
+    margin: 2rem 0;
+}
+
+.evento-timeline {
+    position: relative;
+    padding-left: 2.5rem;
+}
+
+.evento-item {
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.evento-item:last-child {
+    padding-bottom: 0;
+}
+
+.evento-item:last-child .evento-line {
+    display: none;
+}
+
+.evento-dot {
+    position: absolute;
+    left: -2.5rem;
+    top: 0.35rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px currentColor, 0 2px 6px rgba(0,0,0,0.15);
+    z-index: 2;
+}
+
+.evento-line {
+    position: absolute;
+    left: -1.75rem;
+    top: 1.2rem;
+    bottom: 0;
+    width: 2px;
+    background: #ddd;
+}
+
+.evento-card {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(4px);
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: box-shadow 0.2s;
+}
+
+.evento-card:hover {
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+}
+
+.evento-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.evento-icon {
+    font-size: 1.15rem;
+}
+
+.evento-titulo {
+    font-size: 0.95rem;
+    flex: 1;
+}
+
+.evento-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    padding: 0.15em 0.7em;
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.evento-card-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 0.2rem;
+}
+
+.evento-desc {
+    margin: 0.4rem 0 0;
+    font-size: 0.85rem;
+    color: #444;
+    line-height: 1.4;
+}

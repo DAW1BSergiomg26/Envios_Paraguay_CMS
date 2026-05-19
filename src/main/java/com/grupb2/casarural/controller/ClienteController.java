@@ -3,9 +3,11 @@ package com.grupb2.casarural.controller;
 import com.grupb2.casarural.model.Cliente;
 import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.EvidenciaEnvio;
+import com.grupb2.casarural.model.EventoTracking;
 import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.service.ClienteService;
 import com.grupb2.casarural.service.EvidenciaEnvioService;
+import com.grupb2.casarural.service.EventoTrackingService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +28,15 @@ public class ClienteController {
     private final ClienteService clienteService;
     private final EnvioTrackingRepository trackingRepo;
     private final EvidenciaEnvioService evidenciaService;
+    private final EventoTrackingService eventoTrackingService;
 
     public ClienteController(ClienteService clienteService, EnvioTrackingRepository trackingRepo,
-                             EvidenciaEnvioService evidenciaService) {
+                             EvidenciaEnvioService evidenciaService,
+                             EventoTrackingService eventoTrackingService) {
         this.clienteService = clienteService;
         this.trackingRepo = trackingRepo;
         this.evidenciaService = evidenciaService;
+        this.eventoTrackingService = eventoTrackingService;
     }
 
     @GetMapping("/login")
@@ -77,12 +82,15 @@ public class ClienteController {
         Cliente cliente = opt.get();
         List<EnvioTracking> envios = trackingRepo.findByClienteIdOrderByUltimaActualizacionDesc(clienteId);
         Map<Long, List<EvidenciaEnvio>> evidenciasPorEnvio = new HashMap<>();
+        Map<Long, List<EventoTracking>> eventosPorEnvio = new HashMap<>();
         for (EnvioTracking e : envios) {
             evidenciasPorEnvio.put(e.getId(), evidenciaService.listarPorEnvio(e.getId()));
+            eventosPorEnvio.put(e.getId(), eventoTrackingService.listarPorEnvio(e.getId()));
         }
         model.addAttribute("cliente", cliente);
         model.addAttribute("envios", envios);
         model.addAttribute("evidenciasPorEnvio", evidenciasPorEnvio);
+        model.addAttribute("eventosPorEnvio", eventosPorEnvio);
         return "cliente/panel";
     }
 }

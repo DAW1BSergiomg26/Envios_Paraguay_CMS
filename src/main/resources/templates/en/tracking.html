@@ -157,6 +157,28 @@
                 </div>
             </div>
 
+            <div th:if="${eventos != null and !#lists.isEmpty(eventos)}" class="evento-timeline-public">
+                <h3 class="tracking-timeline-title">Shipment history</h3>
+                <div class="evento-timeline">
+                    <div th:each="ev : ${eventos}" class="evento-item">
+                        <div class="evento-dot" th:style="'background:' + ${ev.color}"></div>
+                        <div class="evento-line"></div>
+                        <div class="evento-card">
+                            <div class="evento-card-head">
+                                <span class="evento-icon" th:text="${ev.icono}">📦</span>
+                                <strong class="evento-titulo" th:text="${ev.titulo}">Title</strong>
+                                <span class="evento-badge" th:style="'background:' + ${ev.color}" th:text="${ev.estado}">Status</span>
+                            </div>
+                            <div class="evento-card-meta">
+                                <span class="evento-fecha" th:text="${#temporals.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}">Date</span>
+                                <span th:if="${ev.ubicacion != null}" class="evento-ubicacion" th:text="${ev.ubicacion}">Location</span>
+                            </div>
+                            <p th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" class="evento-desc" th:text="${ev.descripcion}">Description</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="tracking-whatsapp-cta">
                 <p>Any questions about your shipment?</p>
                 <a href="https://wa.me/34642687292" class="btn btn-whatsapp" target="_blank" rel="noopener">
