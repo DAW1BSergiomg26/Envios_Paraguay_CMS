@@ -3,9 +3,11 @@ package com.grupb2.casarural.controller;
 import com.grupb2.casarural.model.Cliente;
 import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.EvidenciaEnvio;
+import com.grupb2.casarural.model.NotificacionEnvio;
 import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.service.ClienteService;
 import com.grupb2.casarural.service.EvidenciaEnvioService;
+import com.grupb2.casarural.service.NotificacionEnvioService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,12 +28,15 @@ public class ClienteController {
     private final ClienteService clienteService;
     private final EnvioTrackingRepository trackingRepo;
     private final EvidenciaEnvioService evidenciaService;
+    private final NotificacionEnvioService notificacionService;
 
     public ClienteController(ClienteService clienteService, EnvioTrackingRepository trackingRepo,
-                             EvidenciaEnvioService evidenciaService) {
+                             EvidenciaEnvioService evidenciaService,
+                             NotificacionEnvioService notificacionService) {
         this.clienteService = clienteService;
         this.trackingRepo = trackingRepo;
         this.evidenciaService = evidenciaService;
+        this.notificacionService = notificacionService;
     }
 
     @GetMapping("/login")
@@ -80,9 +85,11 @@ public class ClienteController {
         for (EnvioTracking e : envios) {
             evidenciasPorEnvio.put(e.getId(), evidenciaService.listarPorEnvio(e.getId()));
         }
+        List<NotificacionEnvio> notificaciones = notificacionService.listarPorCliente(clienteId);
         model.addAttribute("cliente", cliente);
         model.addAttribute("envios", envios);
         model.addAttribute("evidenciasPorEnvio", evidenciasPorEnvio);
+        model.addAttribute("notificaciones", notificaciones);
         return "cliente/panel";
     }
 }

@@ -28,6 +28,24 @@
         </div>
     </div>
 
+    <div th:if="${notificaciones != null and !#lists.isEmpty(notificaciones)}" class="cp-notif-section">
+        <h3 class="cp-notif-title">Notificaciones recientes</h3>
+        <div class="cp-notif-list">
+            <div th:each="n : ${notificaciones}" class="cp-notif-item">
+                <div class="cp-notif-head">
+                    <strong th:text="${n.asunto}">Asunto</strong>
+                    <span class="cp-notif-date" th:text="${#temporals.format(n.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                </div>
+                <p class="cp-notif-msg" th:text="${n.mensaje}">Mensaje</p>
+                <div class="cp-notif-meta">
+                    <span th:if="${n.enviada}" class="cp-notif-status cp-notif-ok">Enviado</span>
+                    <span th:unless="${n.enviada}" class="cp-notif-status cp-notif-pend">Pendiente</span>
+                    <span th:if="${n.errorEnvio != null}" class="cp-notif-error" th:text="'Error: ' + ${n.errorEnvio}">Error</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div th:if="not ${#lists.isEmpty(envios)}" th:each="envio : ${envios}" class="cp-card">
         <div class="cp-card-header">
             <span class="cp-code" th:text="${envio.codigoUnico}">MT-2026-0001</span>

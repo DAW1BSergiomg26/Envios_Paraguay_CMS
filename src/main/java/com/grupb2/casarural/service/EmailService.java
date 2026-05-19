@@ -68,4 +68,23 @@ public class EmailService {
                 "Salida: " + r.getFechaSalida() + "\n" +
                 "Huéspedes: " + r.getNumeroHuespedes());
     }
+
+    public void enviarACliente(String asunto, String texto, String destinoEmail) {
+        if (mailSender == null) {
+            log.info("Email no configurado. Se saltó el envío a {}: {}", destinoEmail, asunto);
+            return;
+        }
+        try {
+            SimpleMailMessage msg = new SimpleMailMessage();
+            msg.setFrom(from);
+            msg.setTo(destinoEmail);
+            msg.setSubject(asunto);
+            msg.setText(texto);
+            mailSender.send(msg);
+            log.info("Email enviado a {}: {}", destinoEmail, asunto);
+        } catch (Exception e) {
+            log.warn("No se pudo enviar email a {} ({}): {}", destinoEmail, asunto, e.getMessage());
+            throw e;
+        }
+    }
 }

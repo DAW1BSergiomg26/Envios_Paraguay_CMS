@@ -90,6 +90,25 @@
         </form>
     </div>
 
+    <div th:if="${envio.id != null and notificaciones != null and !#lists.isEmpty(notificaciones)}" class="card notif-section">
+        <h3>Historial de notificaciones</h3>
+        <div class="notif-list">
+            <div th:each="n : ${notificaciones}" class="notif-item">
+                <div class="notif-item-head">
+                    <strong th:text="${n.asunto}">Asunto</strong>
+                    <span class="notif-date" th:text="${#temporals.format(n.fechaCreacion, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                </div>
+                <p class="notif-msg" th:text="${n.mensaje}">Mensaje</p>
+                <div class="notif-meta">
+                    <span>Email: <span th:text="${n.emailDestino}">cliente@email.com</span></span>
+                    <span th:if="${n.enviada}" class="notif-badge notif-badge-ok">Enviado</span>
+                    <span th:unless="${n.enviada}" class="notif-badge notif-badge-pend">Pendiente</span>
+                    <span th:if="${n.errorEnvio != null}" class="notif-badge notif-badge-err" th:text="'Error: ' + ${n.errorEnvio}">Error</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div th:if="${envio.id != null}" class="card evidencia-section">
         <h3>📷 Evidencias del env&iacute;o</h3>
 

@@ -15,6 +15,7 @@ import com.grupb2.casarural.repository.ReservaRepository;
 import com.grupb2.casarural.repository.TextoLegalRepository;
 import com.grupb2.casarural.service.EmailService;
 import com.grupb2.casarural.service.EvidenciaEnvioService;
+import com.grupb2.casarural.service.NotificacionEnvioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,11 +47,13 @@ public class AdminController {
     private final EmailService emailService;
     private final ClienteRepository clienteRepo;
     private final EvidenciaEnvioService evidenciaService;
+    private final NotificacionEnvioService notificacionService;
 
     public AdminController(ReservaRepository reservaRepo, ImagenRepository imagenRepo,
                            MensajeContactoRepository mensajeRepo, TextoLegalRepository textoRepo,
                            EnvioTrackingRepository trackingRepo, EmailService emailService,
-                           ClienteRepository clienteRepo, EvidenciaEnvioService evidenciaService) {
+                           ClienteRepository clienteRepo, EvidenciaEnvioService evidenciaService,
+                           NotificacionEnvioService notificacionService) {
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.mensajeRepo = mensajeRepo;
@@ -59,6 +62,7 @@ public class AdminController {
         this.emailService = emailService;
         this.clienteRepo = clienteRepo;
         this.evidenciaService = evidenciaService;
+        this.notificacionService = notificacionService;
     }
 
     @GetMapping("/dashboard")
@@ -213,6 +217,7 @@ public class AdminController {
         model.addAttribute("envio", trackingRepo.findById(id).orElse(null));
         model.addAttribute("clientes", clienteRepo.findAll());
         model.addAttribute("evidencias", evidenciaService.listarPorEnvio(id));
+        model.addAttribute("notificaciones", notificacionService.listarPorEnvio(id));
         return "cms/tracking-form";
     }
 
@@ -228,9 +233,11 @@ public class AdminController {
                                    @RequestParam(required = false) String observaciones,
                                    @RequestParam(required = false) Long clienteId,
                                    RedirectAttributes ra) {
+        String estadoAnterior = null;
         EnvioTracking envio;
         if (id != null) {
             envio = trackingRepo.findById(id).orElse(new EnvioTracking());
+            estadoAnterior = envio.getEstado();
             envio.setId(id);
         } else {
             envio = new EnvioTracking();
@@ -249,6 +256,9 @@ public class AdminController {
             clienteRepo.findById(clienteId).ifPresent(envio::setCliente);
         }
         trackingRepo.save(envio);
+        if (id != null && envio.getCliente() != null) {
+            notificacionService.crearNotificacion(envio, estadoAnterior);
+        }
         ra.addFlashAttribute("exito", "Envío guardado correctamente.");
         return "redirect:/admin/tracking";
     }
