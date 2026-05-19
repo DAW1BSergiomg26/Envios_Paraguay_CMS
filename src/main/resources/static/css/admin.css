@@ -1,6 +1,6 @@
 /* =============================================
    CMS ADMIN + PANEL CLIENTE - MONTEASTUR ENVIOS
-   Cinematographic Premium Theme - Revised Typography
+   Cinematographic Premium Theme - REFACTOR VISUAL FINAL
    ============================================= */
 
 :root {
@@ -9,29 +9,35 @@
     --verde-gradient: linear-gradient(135deg, #3f6338, #557c45);
     /* CORPORATE ORANGE */
     --naranja: #d4762a;
-    --naranja-hover: #e8914a;
-    /* CLEAN PREMIUM WHITE */
-    --blanco-premium: #ffffff;
-    --blanco-sec: rgba(255, 255, 255, 0.85);
+    --naranja-hover: #e8893a;
     /* TYPOGRAPHY CONTRAST COHESION */
-    --subtitulo-imp: #f5f5f0;
-    --texto-descriptivo: #e8eadf;
-    --texto-secundario: #cfd6c6;
+    --blanco-principal: #f5f5f0;
+    --blanco-secundario: #e8e8e2;
+    --gris-texto-legible: #c8c8c0;
+    --oscuro-texto-fondo-claro: #1f2a1f;
+    /* ESTADOS */
+    --verde-aprobada: #4caf82;
+    --naranja-pendiente: #f0a830;
+    --rojo-error: #e05555;
     /* REST OF VARIABLES */
     --fondo: #ece9e2;
     --texto: #222;
     --texto-sec: #555;
     --sombra: 0 8px 25px rgba(0,0,0,0.08);
     --borde: #ddd;
-    --rojo: #c0392b;
-    --verde-confirmada: #27ae60;
-    /* PREMIUM DARK GLASSMORPHISM BACKGROUND */
-    --glass-bg: rgba(20, 28, 18, 0.88);
-    --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 12px 36px rgba(0,0,0,0.4);
+    /* PREMIUM DARK GLASSMORPHISM BACKGROUND */
+    --glass-bg: rgba(20, 28, 18, 0.88); /* Fondo oscuro translúcido */
+    --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-/* GLOBAL HEADINGS & TEXTS UNIFICATION WITH CONTRAST */
+/* GLOBAL TYPOGRAPHY CONTRAST & IDENTITY */
+body {
+    font-size: 15px; /* Tamaño base del panel */
+    line-height: 1.6; /* Respiración visual */
+}
+
+/* Títulos principales: naranja corporativo #d4762a */
 h1, h2, h3, h4, .qa-title {
     color: var(--naranja) !important;
 }
@@ -39,49 +45,155 @@ h1, h2, h3, h4, .qa-title {
 .dashboard-header-content h1,
 .card h1,
 .card h3,
-.sidebar-header h2 {
+.sidebar-header h2,
+.cp-ev-title,
+.evidencia-section h3 {
     color: var(--naranja) !important;
 }
 
-.dashboard-header-content p,
-.sidebar-header small,
-.sidebar-header .refugio-tag,
+/* Subtítulos importantes: blanco premium #f5f5f0 */
+.dashboard-header-content p, /* "Panel de control — Centro de gestión premium" */
+.sidebar-header small,     /* "Centro de Operaciones" */
+.sidebar-header .refugio-tag, /* "Logística Premium" */
 .nav-links a.active,
-label {
-    color: var(--blanco-premium) !important;
+label,
+.cp-card-header .cp-code,
+.cp-obs-label,
+.cp-empty h3,
+.evidencia-info strong {
+    color: var(--blanco-principal) !important;
 }
 
-.nav-links a {
-    color: var(--texto-secundario) !important;
-}
-
-.nav-links a:hover {
-    color: var(--blanco-premium) !important;
-}
-
-.card > p,
+/* Textos descriptivos: blanco suave legible #e8eadf */
+.card > p, /* "Datos actualizados del contenido..." */
 .status-value,
 .stat-item strong,
-.timeline-content strong,
+.timeline-content strong, /* Nombres de clientes */
 .dash-table td,
 .cp-value,
 .cp-obs-text,
 td {
-    color: var(--texto-descriptivo) !important;
+    color: var(--blanco-secundario) !important;
+    font-size: 14px; /* Datos de tablas/listas */
 }
 
+/* Textos secundarios: gris cálido claro #c8c8c0 */
 .status-label,
 .stat-item span,
 .qa-desc,
-.timeline-time,
+.timeline-time, /* Fechas de actividad */
 .cp-label,
-.timeline-content span,
+.timeline-content span, /* Emails de actividad */
 small,
-p {
-    color: var(--texto-secundario) !important;
+p,
+.login-wrapper .subtitle, /* "Panel de gestión MONTEASTUR ENVIOS" */
+.logout-msg, /* "Sesión cerrada correctamente." */
+.form-group label, /* Labels de login */
+.login-wrapper .back-link, /* "Volver a la web pública" */
+.evidencia-desc,
+.evidencia-date,
+.evidencia-link,
+.cp-ev-info strong,
+.cp-ev-desc,
+.cp-ev-date,
+.cp-ev-link,
+.cp-empty p,
+.cp-empty span {
+    color: var(--gris-texto-legible) !important;
 }
 
-/* BUTTONS UNIFICATION */
+/* Ajustes específicos de tamaño y peso para legibilidad */
+.timeline-content strong {
+    font-size: 16px !important; /* Nombres de clientes */
+    font-weight: 600 !important;
+}
+.timeline-time, .timeline-content span {
+    font-size: 13px !important; /* Fechas y emails */
+    font-weight: 400 !important;
+}
+
+/* ESTADOS BADGES */
+.estado-aprobada {
+    color: var(--verde-aprobada) !important;
+    background: rgba(76, 175, 130, 0.15) !important;
+    border: 1px solid rgba(76, 175, 130, 0.35) !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+}
+.estado-pendiente {
+    color: var(--naranja-pendiente) !important;
+    background: rgba(240, 168, 48, 0.15) !important;
+    border: 1px solid rgba(240, 168, 48, 0.35) !important;
+    font-weight: 600 !important;
+    padding: 3px 10px !important;
+    border-radius: 12px !important;
+}
+
+/* ICONOS */
+.timeline-icon, .qa-icon, .stat-icon {
+    color: var(--naranja) !important; /* Iconos de actividad con acento naranja */
+    font-size: 1.2rem; /* Ajustar tamaño base para iconos */
+}
+
+/* ITEMS / FILAS DE ACTIVIDAD */
+.timeline-item {
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important; /* Separadores */
+}
+.timeline-item:hover {
+    background: rgba(212,118,42,0.08) !important; /* Hover sobre item */
+}
+
+/* LOGIN PANEL ADMIN ESPECÍFICOS */
+.login-wrapper .subtitle {
+    color: var(--oscuro-texto-fondo-claro) !important;
+    font-weight: 700 !important;
+    font-size: 18px !important; /* Aumentar ligeramente */
+}
+.logout-msg {
+    color: var(--oscuro-texto-fondo-claro) !important;
+    border: 1px solid rgba(46,125,50,0.18) !important; /* Borde sutil */
+    background: rgba(232,245,233,0.95) !important; /* Fondo verde pálido casi opaco */
+}
+.form-group label {
+    color: var(--oscuro-texto-fondo-claro) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.8px !important;
+    font-size: 14px !important;
+}
+.login-wrapper .back-link {
+    color: var(--naranja) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+.login-wrapper .back-link:hover {
+    text-decoration: underline !important;
+}
+
+/* OTROS AJUSTES DE COLORES PARA CONTRASTE */
+.cp-tl-step.current {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-tl-step.done {
+    color: var(--verde-aprobada) !important;
+}
+.cp-tl-icon {
+    color: var(--naranja) !important;
+}
+.cp-tl-step.done .cp-tl-icon {
+    color: var(--verde-aprobada) !important;
+}
+.cp-tl-step.current .cp-tl-icon {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-obs-label {
+    color: var(--naranja) !important;
+}
+.cp-obs {
+    border-left: 3px solid var(--naranja) !important;
+}
+
+/* BUTTONS UNIFICATION (Reafirmar) */
 .btn-save, .btn-upload, .btn-login, .btn-evidencia-upload {
     background: linear-gradient(135deg, var(--naranja), var(--naranja-hover)) !important;
     box-shadow: 0 4px 16px rgba(212,118,42,0.25) !important;
@@ -92,6 +204,324 @@ p {
     background: linear-gradient(135deg, var(--naranja-hover), var(--naranja)) !important;
     box-shadow: 0 8px 24px rgba(212,118,42,0.40) !important;
     color: #ffffff !important;
+}
+
+/* Ajustes de backgrounds para dark glassmorphism */
+.quick-action-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+}
+.quick-action-card:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.2) !important;
+}
+.stat-item {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2) !important;
+}
+.stat-item:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.2) !important;
+}
+.status-item {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.status-item:hover {
+    background: rgba(212,118,42,0.08) !important;
+    border-color: rgba(212,118,42,0.3) !important;
+}
+.timeline-icon {
+    background: rgba(255,255,255,0.08) !important; /* Fondo sutil para iconos */
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+}
+.timeline-reserva .timeline-icon {
+    background: rgba(63,99,56,0.15) !important;
+}
+.timeline-mensaje .timeline-icon {
+    background: rgba(212,118,42,0.15) !important;
+}
+.dash-table th {
+    background: linear-gradient(135deg, rgba(63,99,56,0.9), rgba(85,124,69,0.9)) !important;
+}
+.dash-table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+.dash-table tr:hover td {
+    background: rgba(212,118,42,0.06) !important;
+}
+table th {
+    background: linear-gradient(135deg, rgba(63,99,56,0.9), rgba(85,124,69,0.9)) !important;
+}
+table tr:nth-child(even) td {
+    background: rgba(255,255,255,0.03) !important;
+}
+table tr:hover td {
+    background: rgba(212,118,42,0.06) !important;
+}
+.vacio {
+    background: var(--glass-bg) !important;
+    border: 2px dashed var(--glass-border) !important;
+    color: var(--texto-secundario) !important;
+}
+.upload-section {
+    background: var(--glass-bg) !important;
+    border: 2px dashed var(--glass-border) !important;
+}
+.upload-section:hover {
+    border-color: var(--naranja) !important;
+    background: rgba(212,118,42,0.05) !important;
+}
+.foto-item {
+    background: rgba(255,255,255,0.03) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.foto-item.selected {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 2px rgba(212,118,42,0.25), 0 12px 32px rgba(0,0,0,0.14) !important;
+}
+.foto-item span { /* Títulos de foto */
+    background: rgba(0,0,0,0.6) !important;
+    color: var(--blanco-principal) !important;
+}
+.foto-cat, .foto-ord {
+    background: rgba(0,0,0,0.6) !important;
+    color: var(--blanco-principal) !important;
+}
+.preview-panel {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+}
+.preview-panel-header h3 {
+    color: var(--naranja) !important;
+}
+.preview-panel-header small {
+    color: var(--texto-secundario) !important;
+}
+.preview-panel-titulo {
+    color: var(--blanco-principal) !important;
+}
+.preview-panel-desc {
+    color: var(--texto-descriptivo) !important;
+}
+.preview-panel-tag {
+    background: rgba(63,99,56,0.2) !important;
+    color: var(--verde) !important;
+}
+.preview-panel-stat strong {
+    color: var(--naranja) !important;
+}
+.preview-panel-stat span {
+    color: var(--texto-secundario) !important;
+}
+.preview-panel-empty {
+    background: var(--glass-bg) !important;
+    border: 2px dashed var(--glass-border) !important;
+    color: var(--texto-secundario) !important;
+}
+.login-wrapper {
+    background: rgba(255,255,255,0.88); /* Fondo claro para el login */
+    box-shadow: 0 24px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(0,0,0,0.10) !important;
+}
+.login-wrapper .subtitle {
+    color: var(--oscuro-texto-fondo-claro) !important; /* Texto oscuro */
+}
+.login-wrapper h1 {
+    color: var(--naranja) !important;
+}
+.error-msg, .logout-msg {
+    background: rgba(255,255,255,0.95) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+.form-group label {
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.form-group input {
+    background: rgba(255,255,255,0.7) !important;
+    border: 2px solid rgba(0,0,0,0.1) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.form-group input:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
+    background: #ffffff !important;
+}
+.form-group input::placeholder {
+    color: #888 !important;
+}
+.login-wrapper .back-link {
+    color: var(--naranja) !important;
+}
+.legal-editor label {
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.legal-editor textarea {
+    background: rgba(255,255,255,0.7) !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    color: var(--oscuro-texto-fondo-claro) !important;
+}
+.legal-editor textarea:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
+    background: #ffffff !important;
+}
+.cp-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-card-header .cp-code {
+    color: var(--naranja) !important;
+}
+.cp-label {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-value {
+    color: var(--blanco-secundario) !important;
+}
+.cp-obs {
+    background: rgba(212,118,42,0.1) !important;
+    border-left: 3px solid var(--naranja) !important;
+}
+.cp-obs-label {
+    color: var(--naranja) !important;
+}
+.cp-obs-text {
+    color: var(--blanco-secundario) !important;
+}
+.cp-timeline {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-tl-step span {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-tl-icon {
+    color: var(--naranja) !important;
+}
+.cp-tl-step.done .cp-tl-icon {
+    color: var(--verde-aprobada) !important;
+}
+.cp-tl-step.current .cp-tl-icon {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-tl-step.current {
+    color: var(--naranja-pendiente) !important;
+}
+.cp-tl-step.done {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-whatsapp .btn-whatsapp-sm {
+    background: linear-gradient(135deg, #25D366, #128C7E) !important;
+    color: #ffffff !important;
+}
+.cp-whatsapp .btn-whatsapp-sm:hover {
+    background: linear-gradient(135deg, #1da851, #0e7a6b) !important;
+}
+.cp-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+.cp-empty h3 {
+    color: var(--blanco-principal) !important;
+}
+.cp-empty p {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-empty-icon {
+    color: var(--naranja) !important;
+}
+.evidencia-section h3 {
+    color: var(--naranja) !important;
+}
+.evidencia-form {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.evidencia-input, .evidencia-select, .evidencia-file {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+    color: var(--blanco-secundario) !important;
+}
+.evidencia-input:focus, .evidencia-select:focus {
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
+    background: rgba(255,255,255,0.1) !important;
+}
+.btn-evidencia-upload {
+    background: linear-gradient(135deg, var(--naranja), var(--naranja-hover)) !important;
+    color: #ffffff !important;
+}
+.btn-evidencia-upload:hover {
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja)) !important;
+}
+.evidencia-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.evidencia-preview {
+    background: rgba(0,0,0,0.2) !important;
+}
+.evidencia-info strong {
+    color: var(--blanco-principal) !important;
+}
+.evidencia-desc {
+    color: var(--gris-texto-legible) !important;
+}
+.evidencia-date {
+    color: var(--gris-texto-legible) !important;
+}
+.evidencia-link {
+    color: var(--naranja) !important;
+}
+.evidencia-delete-form {
+    border-top: 1px solid var(--glass-border) !important;
+}
+.evidencia-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+.cp-evidencias {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-ev-title {
+    color: var(--naranja) !important;
+}
+.cp-ev-card {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-ev-thumb-wrap {
+    background: rgba(0,0,0,0.2) !important;
+}
+.cp-ev-doc-icon {
+    background: rgba(0,0,0,0.2) !important;
+}
+.cp-ev-info strong {
+    color: var(--blanco-principal) !important;
+}
+.cp-ev-desc {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-ev-date {
+    color: var(--gris-texto-legible) !important;
+}
+.cp-ev-link {
+    color: var(--naranja) !important;
+}
+.cp-ev-empty {
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
 }
 
 /* Rest of the file remains unchanged... */
