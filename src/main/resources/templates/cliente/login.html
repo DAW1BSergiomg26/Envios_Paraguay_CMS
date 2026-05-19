@@ -17,7 +17,7 @@
 
     <div th:if="${error}" class="toast toast-error" th:text="${error}">Error</div>
 
-    <form method="post" action="/cliente/login">
+    <form method="post" th:action="@{/cliente/login}">
         <div class="login-field">
             <label>Email</label>
             <input type="email" name="email" placeholder="tu@email.com" required>
