@@ -1659,3 +1659,38 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     .evidencia-gallery { grid-template-columns: 1fr; }
     .cp-ev-grid { grid-template-columns: 1fr; }
 }
+
+/* ===== IDENTIDAD CULTURAL: Asturias ↔ Paraguay (Admin/Cliente) ===== */
+html::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(
+        to bottom,
+        #d62828 33.33%,
+        #f8f9fa 33.33%,
+        #f8f9fa 66.66%,
+        #1d4ed8 66.66%
+    );
+    z-index: 10000;
+    pointer-events: none;
+}
+
+html::after {
+    content: "";
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 6px;
+    background: linear-gradient(
+        to bottom,
+        #1e40af 50%,
+        #facc15 50%
+    );
+    z-index: 10000;
+    pointer-events: none;
+}
