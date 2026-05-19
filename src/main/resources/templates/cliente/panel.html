@@ -106,6 +106,29 @@
             </div>
         </div>
 
+        <div th:if="${evidenciasPorEnvio != null and evidenciasPorEnvio.get(envio.id) != null and !evidenciasPorEnvio.get(envio.id).isEmpty()}" class="cp-evidencias">
+            <h4 class="cp-ev-title">📷 Evidencias del env&iacute;o</h4>
+            <div class="cp-ev-grid">
+                <div th:each="ev : ${evidenciasPorEnvio.get(envio.id)}" class="cp-ev-card">
+                    <div th:if="${ev.tipo == 'FOTO'}" class="cp-ev-thumb-wrap">
+                        <img th:src="${ev.urlArchivo}" th:alt="${ev.titulo}" class="cp-ev-thumb">
+                    </div>
+                    <div th:if="${ev.tipo == 'DOCUMENTO'}" class="cp-ev-doc-icon">📄</div>
+                    <div class="cp-ev-info">
+                        <strong th:text="${ev.titulo}">T&iacute;tulo</strong>
+                        <span th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" th:text="${ev.descripcion}" class="cp-ev-desc"></span>
+                        <span class="cp-ev-date" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy')}">Fecha</span>
+                        <a th:href="${ev.urlArchivo}" target="_blank" class="cp-ev-link">
+                            <span th:text="${ev.tipo == 'FOTO'} ? 'Ver foto' : 'Ver documento'">Ver</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${evidenciasPorEnvio == null or evidenciasPorEnvio.get(envio.id) == null or evidenciasPorEnvio.get(envio.id).isEmpty()}" class="cp-ev-empty">
+            <span>📭 A&uacute;n no hay evidencias subidas para este env&iacute;o.</span>
+        </div>
+
         <div class="cp-whatsapp">
             <a href="https://wa.me/34642687292" target="_blank" rel="noopener" class="btn-whatsapp-sm">
                 💬 Consultar por WhatsApp
