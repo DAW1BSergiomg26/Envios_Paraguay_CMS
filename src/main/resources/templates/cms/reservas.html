@@ -13,8 +13,8 @@
 
 <div class="main-content">
     <div class="card">
-        <h1>Listado de Env&iacute;os</h1>
-        <p th:if="${#lists.size(reservas) == 0}" class="vacio">No hay env&iacute;os registrados.</p>
+        <h1 style="color: #d4762a;">Listado de Env&iacute;os</h1>
+        <p th:if="${#lists.size(reservas) == 0}" class="vacio" style="color: #3f6338; font-weight: 600;">No hay env&iacute;os registrados.</p>
         <div class="table-wrap" th:if="${#lists.size(reservas) > 0}">
             <table>
                 <thead>

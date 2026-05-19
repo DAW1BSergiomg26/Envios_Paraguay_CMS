@@ -1,28 +1,101 @@
 /* =============================================
    CMS ADMIN + PANEL CLIENTE - MONTEASTUR ENVIOS
-   Cinematographic Premium Theme
+   Cinematographic Premium Theme - Revised Typography
    ============================================= */
 
 :root {
     --verde: #3f6338;
     --verde-oscuro: #2d4a28;
     --verde-gradient: linear-gradient(135deg, #3f6338, #557c45);
+    /* CORPORATE ORANGE */
     --naranja: #d4762a;
-    --naranja-hover: #b8651f;
+    --naranja-hover: #e8914a;
+    /* CLEAN PREMIUM WHITE */
+    --blanco-premium: #ffffff;
+    --blanco-sec: rgba(255, 255, 255, 0.85);
+    /* TYPOGRAPHY CONTRAST COHESION */
+    --subtitulo-imp: #f5f5f0;
+    --texto-descriptivo: #e8eadf;
+    --texto-secundario: #cfd6c6;
+    /* REST OF VARIABLES */
     --fondo: #ece9e2;
-    --blanco: #ffffff;
     --texto: #222;
     --texto-sec: #555;
     --sombra: 0 8px 25px rgba(0,0,0,0.08);
     --borde: #ddd;
     --rojo: #c0392b;
     --verde-confirmada: #27ae60;
-    --glass-bg: rgba(255,255,255,0.88);
-    --glass-border: rgba(255,255,255,0.25);
-    --glass-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    --glow-naranja: rgba(212,118,42,0.12);
-    --glow-verde: rgba(63,99,56,0.10);
+    /* PREMIUM DARK GLASSMORPHISM BACKGROUND */
+    --glass-bg: rgba(20, 28, 18, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 12px 36px rgba(0,0,0,0.4);
 }
+
+/* GLOBAL HEADINGS & TEXTS UNIFICATION WITH CONTRAST */
+h1, h2, h3, h4, .qa-title {
+    color: var(--naranja) !important;
+}
+
+.dashboard-header-content h1,
+.card h1,
+.card h3,
+.sidebar-header h2 {
+    color: var(--naranja) !important;
+}
+
+.dashboard-header-content p,
+.sidebar-header small,
+.sidebar-header .refugio-tag,
+.nav-links a.active,
+label {
+    color: var(--blanco-premium) !important;
+}
+
+.nav-links a {
+    color: var(--texto-secundario) !important;
+}
+
+.nav-links a:hover {
+    color: var(--blanco-premium) !important;
+}
+
+.card > p,
+.status-value,
+.stat-item strong,
+.timeline-content strong,
+.dash-table td,
+.cp-value,
+.cp-obs-text,
+td {
+    color: var(--texto-descriptivo) !important;
+}
+
+.status-label,
+.stat-item span,
+.qa-desc,
+.timeline-time,
+.cp-label,
+.timeline-content span,
+small,
+p {
+    color: var(--texto-secundario) !important;
+}
+
+/* BUTTONS UNIFICATION */
+.btn-save, .btn-upload, .btn-login, .btn-evidencia-upload {
+    background: linear-gradient(135deg, var(--naranja), var(--naranja-hover)) !important;
+    box-shadow: 0 4px 16px rgba(212,118,42,0.25) !important;
+    color: #ffffff !important;
+}
+
+.btn-save:hover, .btn-upload:hover, .btn-login:hover, .btn-evidencia-upload:hover {
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja)) !important;
+    box-shadow: 0 8px 24px rgba(212,118,42,0.40) !important;
+    color: #ffffff !important;
+}
+
+/* Rest of the file remains unchanged... */
+
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -272,9 +345,9 @@ body::after {
 }
 
 .card:hover {
-    box-shadow: 0 16px 48px rgba(0,0,0,0.16);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
     transform: translateY(-2px);
-    background: rgba(255,255,255,0.94);
+    background: rgba(26, 34, 24, 0.94);
 }
 
 .card h1 {
@@ -298,17 +371,17 @@ body::after {
 }
 
 .stat-item {
-    background: rgba(255,255,255,0.60);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding: 30px 20px 26px;
-    border: 1px solid rgba(255,255,255,0.40);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 16px;
     text-align: center;
     transition: all 0.35s ease;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
 .stat-item::before {
@@ -328,10 +401,10 @@ body::after {
 }
 
 .stat-item:hover {
-    box-shadow: 0 16px 40px rgba(0,0,0,0.10);
+    box-shadow: 0 16px 40px rgba(212, 118, 42, 0.15);
     transform: translateY(-5px);
-    background: rgba(255,255,255,0.80);
-    border-color: rgba(212,118,42,0.15);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(212, 118, 42, 0.3);
 }
 
 .stat-item span {
@@ -364,9 +437,9 @@ body::after {
     border-radius: 20px;
     margin-bottom: 30px;
     overflow: hidden;
-    background: linear-gradient(135deg, rgba(63,99,56,0.06), rgba(212,118,42,0.04));
-    border: 1px solid rgba(255,255,255,0.4);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    background: linear-gradient(135deg, rgba(63,99,56,0.1), rgba(212,118,42,0.06));
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
 }
 
 .dashboard-header::before {
@@ -509,17 +582,18 @@ body::after {
     flex-direction: column;
     gap: 4px;
     padding: 18px 16px;
-    background: rgba(255,255,255,0.5);
+    background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.3);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     transition: all 0.3s ease;
 }
 
 .status-item:hover {
-    background: rgba(255,255,255,0.7);
+    background: rgba(255, 255, 255, 0.06);
     transform: translateY(-2px);
+    border-color: rgba(212, 118, 42, 0.2);
 }
 
 .status-dot {
@@ -1236,7 +1310,7 @@ tr:nth-child(even):hover td {
 .btn-login {
     width: 100%;
     padding: 0.85rem;
-    background: linear-gradient(135deg, var(--verde), var(--verde-oscuro));
+    background: linear-gradient(135deg, var(--naranja), #e8914a);
     color: #fff;
     border: none;
     border-radius: 10px;
@@ -1246,12 +1320,13 @@ tr:nth-child(even):hover td {
     transition: all 0.3s ease;
     margin-top: 0.5rem;
     letter-spacing: 0.3px;
-    box-shadow: 0 4px 16px rgba(63,99,56,0.20);
+    box-shadow: 0 4px 16px rgba(212,118,42,0.25);
 }
 
 .btn-login:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(63,99,56,0.35);
+    box-shadow: 0 8px 28px rgba(212,118,42,0.40);
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja));
 }
 
 .btn-login:active {
