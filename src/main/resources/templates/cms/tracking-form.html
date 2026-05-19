@@ -10,25 +10,7 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>MONTEASTUR ENVIOS</h2>
-        <small>Centro de Operaciones</small>
-        <span class="refugio-tag">Log&iacute;stica Premium</span>
-    </div>
-    <nav class="nav-links">
-        <a href="/admin/dashboard">Panel de Inicio</a>
-        <a href="/admin/reservas">Gestionar Reservas</a>
-        <a href="/admin/mensajesrecibidos">Mensajes Recibidos</a>
-        <a href="/admin/tracking">Seguimiento Env&iacute;os</a>
-        <a href="/admin/imagenes">Galer&iacute;a de Fotos</a>
-        <a href="/admin/textos">Textos Legales</a>
-        <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
-    </nav>
-    <form th:action="@{/logout}" method="post" class="logout-form">
-        <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
-    </form>
-</div>
+<div th:replace="~{fragments/admin-sidebar :: sidebar('tracking')}"></div>
 
 <div class="main-content">
 

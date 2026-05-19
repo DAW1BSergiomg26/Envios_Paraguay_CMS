@@ -1,0 +1,21 @@
+<th:block th:fragment="sidebar(seccionActiva)">
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>MONTEASTUR ENVIOS</h2>
+            <small>Centro de Operaciones</small>
+            <span class="refugio-tag">Log&iacute;stica Premium</span>
+        </div>
+        <nav class="nav-links">
+            <a href="/admin/dashboard" th:classappend="${seccionActiva == 'dashboard'} ? 'active' : ''">Panel de Inicio</a>
+            <a href="/admin/tracking" th:classappend="${seccionActiva == 'tracking'} ? 'active' : ''">Tracking Env&iacute;os</a>
+            <a href="/admin/reservas" th:classappend="${seccionActiva == 'reservas'} ? 'active' : ''">Solicitudes</a>
+            <a href="/admin/mensajesrecibidos" th:classappend="${seccionActiva == 'mensajes'} ? 'active' : ''">Mensajes</a>
+            <a href="/admin/imagenes" th:classappend="${seccionActiva == 'imagenes'} ? 'active' : ''">Galer&iacute;a de Fotos</a>
+            <a href="/admin/textos" th:classappend="${seccionActiva == 'textos'} ? 'active' : ''">Textos Legales</a>
+            <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
+        </nav>
+        <form th:action="@{/logout}" method="post" class="logout-form">
+            <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
+        </form>
+    </div>
+</th:block>
