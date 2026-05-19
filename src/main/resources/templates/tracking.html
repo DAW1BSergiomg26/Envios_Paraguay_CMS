@@ -13,7 +13,7 @@
             <p>Introduce tu c&oacute;digo MONTEASTUR para conocer el estado de tu env&iacute;o.</p>
         </section>
 
-        <form method="post" action="/tracking" class="tracking-premium-form">
+        <form method="post" th:action="@{/tracking}" class="tracking-premium-form">
             <div class="tracking-input-wrapper">
                 <span class="tracking-input-icon">🔍</span>
                 <input type="text" name="codigo" placeholder="Introduce tu c&oacute;digo MONTEASTUR" required class="tracking-premium-input">

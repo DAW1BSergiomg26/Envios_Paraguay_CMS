@@ -13,7 +13,7 @@
             <p>Enter your MONTEASTUR code to check the status of your shipment.</p>
         </section>
 
-        <form method="post" action="/en/tracking" class="tracking-premium-form">
+        <form method="post" th:action="@{/en/tracking}" class="tracking-premium-form">
             <div class="tracking-input-wrapper">
                 <span class="tracking-input-icon">🔍</span>
                 <input type="text" name="codigo" placeholder="Enter your MONTEASTUR code" required class="tracking-premium-input">
