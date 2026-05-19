@@ -1,6 +1,7 @@
 package com.grupb2.casarural.controller;
 
 import com.grupb2.casarural.model.Cliente;
+import com.grupb2.casarural.model.EvidenciaEnvio;
 import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.model.Imagen;
 import com.grupb2.casarural.model.MensajeContacto;
@@ -13,6 +14,7 @@ import com.grupb2.casarural.repository.MensajeContactoRepository;
 import com.grupb2.casarural.repository.ReservaRepository;
 import com.grupb2.casarural.repository.TextoLegalRepository;
 import com.grupb2.casarural.service.EmailService;
+import com.grupb2.casarural.service.EvidenciaEnvioService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,11 +45,12 @@ public class AdminController {
     private final EnvioTrackingRepository trackingRepo;
     private final EmailService emailService;
     private final ClienteRepository clienteRepo;
+    private final EvidenciaEnvioService evidenciaService;
 
     public AdminController(ReservaRepository reservaRepo, ImagenRepository imagenRepo,
                            MensajeContactoRepository mensajeRepo, TextoLegalRepository textoRepo,
                            EnvioTrackingRepository trackingRepo, EmailService emailService,
-                           ClienteRepository clienteRepo) {
+                           ClienteRepository clienteRepo, EvidenciaEnvioService evidenciaService) {
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.mensajeRepo = mensajeRepo;
@@ -55,6 +58,7 @@ public class AdminController {
         this.trackingRepo = trackingRepo;
         this.emailService = emailService;
         this.clienteRepo = clienteRepo;
+        this.evidenciaService = evidenciaService;
     }
 
     @GetMapping("/dashboard")
@@ -208,6 +212,7 @@ public class AdminController {
     public String editarTracking(@PathVariable Long id, Model model) {
         model.addAttribute("envio", trackingRepo.findById(id).orElse(null));
         model.addAttribute("clientes", clienteRepo.findAll());
+        model.addAttribute("evidencias", evidenciaService.listarPorEnvio(id));
         return "cms/tracking-form";
     }
 
@@ -266,5 +271,89 @@ public class AdminController {
             textoRepo.save(t);
         });
         return "redirect:/admin/textos";
+    }
+
+    @PostMapping("/tracking/evidencia/{envioId}")
+    public String subirEvidencia(@PathVariable Long envioId,
+                                  @RequestParam String titulo,
+                                  @RequestParam(required = false) String descripcion,
+                                  @RequestParam String tipo,
+                                  @RequestParam("archivo") MultipartFile archivo,
+                                  RedirectAttributes ra) {
+        var optEnvio = trackingRepo.findById(envioId);
+        if (optEnvio.isEmpty()) {
+            ra.addFlashAttribute("error", "Envío no encontrado.");
+            return "redirect:/admin/tracking";
+        }
+        if (archivo.isEmpty()) {
+            ra.addFlashAttribute("error", "Debes seleccionar un archivo.");
+            return "redirect:/admin/tracking/editar/" + envioId;
+        }
+        if (!"FOTO".equals(tipo) && !"DOCUMENTO".equals(tipo)) {
+            ra.addFlashAttribute("error", "Tipo de evidencia no válido.");
+            return "redirect:/admin/tracking/editar/" + envioId;
+        }
+        String originalName = archivo.getOriginalFilename();
+        if (originalName == null || !originalName.contains(".")) {
+            ra.addFlashAttribute("error", "Nombre de archivo no válido.");
+            return "redirect:/admin/tracking/editar/" + envioId;
+        }
+        String extension = originalName.substring(originalName.lastIndexOf(".")).toLowerCase();
+        String[] permitidas = {".jpg", ".jpeg", ".png", ".webp", ".pdf"};
+        boolean extensionValida = false;
+        for (String ext : permitidas) {
+            if (ext.equals(extension)) { extensionValida = true; break; }
+        }
+        if (!extensionValida) {
+            ra.addFlashAttribute("error", "Tipo de archivo no permitido. Solo se aceptan: JPG, PNG, WEBP, PDF.");
+            return "redirect:/admin/tracking/editar/" + envioId;
+        }
+        try {
+            String uploadsDir = System.getProperty("user.dir") + "/uploads/evidencias/";
+            File dir = new File(uploadsDir);
+            if (!dir.exists()) dir.mkdirs();
+
+            String uniqueName = UUID.randomUUID().toString() + extension;
+            Path rutaCompleta = Paths.get(uploadsDir + uniqueName);
+            Files.write(rutaCompleta, archivo.getBytes());
+
+            EvidenciaEnvio evidencia = new EvidenciaEnvio();
+            evidencia.setEnvioTracking(optEnvio.get());
+            evidencia.setTitulo(titulo);
+            evidencia.setDescripcion(descripcion);
+            evidencia.setTipo(tipo);
+            evidencia.setUrlArchivo("/uploads/evidencias/" + uniqueName);
+            evidenciaService.guardar(evidencia);
+
+            ra.addFlashAttribute("exito", "Evidencia subida correctamente.");
+        } catch (IOException e) {
+            ra.addFlashAttribute("error", "Error al guardar el archivo: " + e.getMessage());
+        }
+        return "redirect:/admin/tracking/editar/" + envioId;
+    }
+
+    @PostMapping("/tracking/evidencia/eliminar/{id}")
+    public String eliminarEvidencia(@PathVariable Long id,
+                                     @RequestParam Long envioId,
+                                     RedirectAttributes ra) {
+        try {
+            var opt = evidenciaService.buscar(id);
+            if (opt.isPresent()) {
+                EvidenciaEnvio ev = opt.get();
+                String url = ev.getUrlArchivo();
+                if (url != null && url.startsWith("/uploads/evidencias/")) {
+                    String fileName = url.substring("/uploads/evidencias/".length());
+                    Path filePath = Paths.get(System.getProperty("user.dir") + "/uploads/evidencias/" + fileName);
+                    try {
+                        Files.deleteIfExists(filePath);
+                    } catch (IOException ignored) {}
+                }
+                evidenciaService.eliminar(id);
+                ra.addFlashAttribute("exito", "Evidencia eliminada.");
+            }
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al eliminar: " + e.getMessage());
+        }
+        return "redirect:/admin/tracking/editar/" + envioId;
     }
 }

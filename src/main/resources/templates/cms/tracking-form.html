@@ -90,6 +90,50 @@
         </form>
     </div>
 
+    <div th:if="${envio.id != null}" class="card evidencia-section">
+        <h3>📷 Evidencias del env&iacute;o</h3>
+
+        <div th:if="${exito}" class="toast toast-success" th:text="${exito}"></div>
+        <div th:if="${error}" class="toast toast-error" th:text="${error}"></div>
+
+        <form th:action="@{/admin/tracking/evidencia/{id}(id=${envio.id})}" method="post" enctype="multipart/form-data" class="evidencia-form">
+            <div class="evidencia-form-row">
+                <input type="text" name="titulo" placeholder="T&iacute;tulo" required class="evidencia-input">
+                <input type="text" name="descripcion" placeholder="Descripci&oacute;n (opcional)" class="evidencia-input">
+                <select name="tipo" class="evidencia-select">
+                    <option value="FOTO">📷 Foto</option>
+                    <option value="DOCUMENTO">📄 Documento</option>
+                </select>
+                <input type="file" name="archivo" required class="evidencia-file">
+                <button type="submit" class="btn-evidencia-upload">Subir</button>
+            </div>
+        </form>
+
+        <div th:if="${evidencias != null and !evidencias.isEmpty()}" class="evidencia-gallery">
+            <div th:each="ev : ${evidencias}" class="evidencia-card">
+                <div class="evidencia-preview" th:if="${ev.tipo == 'FOTO'}">
+                    <img th:src="${ev.urlArchivo}" th:alt="${ev.titulo}" class="evidencia-thumb">
+                </div>
+                <div class="evidencia-preview evidencia-doc" th:if="${ev.tipo == 'DOCUMENTO'}">
+                    <span class="evidencia-doc-icon">📄</span>
+                </div>
+                <div class="evidencia-info">
+                    <strong th:text="${ev.titulo}">T&iacute;tulo</strong>
+                    <span th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" th:text="${ev.descripcion}" class="evidencia-desc"></span>
+                    <span class="evidencia-date" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                    <a th:href="${ev.urlArchivo}" target="_blank" class="evidencia-link">
+                        <span th:text="${ev.tipo == 'FOTO'} ? '📷 Ver foto' : '📄 Ver documento'">Ver</span>
+                    </a>
+                </div>
+                <form th:action="@{/admin/tracking/evidencia/eliminar/{evId}(evId=${ev.id})}" method="post" class="evidencia-delete-form" onsubmit="return confirm('Eliminar esta evidencia?')">
+                    <input type="hidden" name="envioId" th:value="${envio.id}">
+                    <button type="submit" class="btn-evidencia-delete" title="Eliminar">🗑️</button>
+                </form>
+            </div>
+        </div>
+        <p th:if="${evidencias == null or evidencias.isEmpty()}" class="evidencia-empty">A&uacute;n no hay evidencias subidas para este env&iacute;o.</p>
+    </div>
+
 </div>
 
 </body>
