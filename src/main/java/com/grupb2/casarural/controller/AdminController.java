@@ -18,6 +18,7 @@ import com.grupb2.casarural.service.EvidenciaEnvioService;
 import com.grupb2.casarural.service.EventoTrackingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,6 +49,9 @@ public class AdminController {
     private final ClienteRepository clienteRepo;
     private final EvidenciaEnvioService evidenciaService;
     private final EventoTrackingService eventoTrackingService;
+
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     public AdminController(ReservaRepository reservaRepo, ImagenRepository imagenRepo,
                            MensajeContactoRepository mensajeRepo, TextoLegalRepository textoRepo,
@@ -138,9 +142,9 @@ public class AdminController {
         }
 
         try {
-            String uploadsDir = System.getProperty("user.dir") + "/uploads/";
-            File dir = new File(uploadsDir);
-            if (!dir.exists()) dir.mkdirs();
+            String dir = uploadDir.endsWith("/") || uploadDir.endsWith("\\") ? uploadDir : uploadDir + "/";
+            File dirFile = new File(dir);
+            if (!dirFile.exists()) dirFile.mkdirs();
 
             String originalName = archivo.getOriginalFilename();
             String extension = "";
@@ -148,7 +152,7 @@ public class AdminController {
                 extension = originalName.substring(originalName.lastIndexOf("."));
             }
             String uniqueName = UUID.randomUUID().toString() + extension;
-            Path rutaCompleta = Paths.get(uploadsDir + uniqueName);
+            Path rutaCompleta = Paths.get(dir + uniqueName);
             Files.write(rutaCompleta, archivo.getBytes());
 
             String url = "/uploads/" + uniqueName;
@@ -173,7 +177,8 @@ public class AdminController {
                 String url = img.getUrl();
                 if (url != null && url.startsWith("/uploads/")) {
                     String fileName = url.substring("/uploads/".length());
-                    Path filePath = Paths.get(System.getProperty("user.dir") + "/uploads/" + fileName);
+                    String dir = uploadDir.endsWith("/") || uploadDir.endsWith("\\") ? uploadDir : uploadDir + "/";
+                    Path filePath = Paths.get(dir + fileName);
                     try {
                         Files.deleteIfExists(filePath);
                     } catch (IOException ignored) {}
