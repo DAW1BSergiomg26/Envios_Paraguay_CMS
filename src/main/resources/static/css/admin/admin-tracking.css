@@ -202,12 +202,16 @@
 .estado-EN_REPARTO:hover { box-shadow: 0 4px 20px rgba(156,39,176,0.18); }
 .estado-ENTREGADO:hover { box-shadow: 0 4px 20px rgba(39,174,96,0.18); }
 
-/* ===== TRACKING FORM PREMIUM ===== */
-.legal-editor label { color: var(--naranja) !important; }
-.tracking-admin-input, .tracking-admin-select, .tracking-admin-textarea { background: rgba(255,255,255,0.7) !important; border: 1px solid rgba(212,118,42,0.35) !important; color: var(--oscuro-texto-fondo-claro) !important; font-size: 14px !important; }
-.tracking-admin-input:focus, .tracking-admin-select:focus, .tracking-admin-textarea:focus { border-color: var(--naranja) !important; box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important; background: #ffffff !important; outline: none !important; }
-.btn-cancel-form { color: var(--naranja) !important; text-decoration: none !important; font-size: 14px !important; font-weight: 600 !important; transition: color 0.3s ease !important; }
-.btn-cancel-form:hover { color: var(--naranja-hover) !important; text-decoration: underline !important; }
+/* ===== TRACKING FORM PREMIUM (scoped override for .card context) ===== */
+.card .legal-editor label { color: #d4762a !important; font-weight: 700 !important; }
+.card .legal-editor .tracking-admin-input,
+.card .legal-editor .tracking-admin-select,
+.card .legal-editor .tracking-admin-textarea { background: rgba(255,255,255,0.85) !important; color: #1f2a1f !important; border: 1px solid rgba(212,118,42,0.45) !important; font-size: 14px !important; }
+.card .legal-editor .tracking-admin-input:focus,
+.card .legal-editor .tracking-admin-select:focus,
+.card .legal-editor .tracking-admin-textarea:focus { border-color: #d4762a !important; box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important; background: #ffffff !important; outline: none !important; }
+.card .legal-editor .tracking-form-actions a { color: #d4762a !important; text-decoration: none !important; font-weight: 600 !important; font-size: 14px !important; transition: color 0.3s ease !important; }
+.card .legal-editor .tracking-form-actions a:hover { color: #e8914a !important; text-decoration: underline !important; }
 
 /* EVENTO TIMELINE */
 .evento-section, .evento-timeline-public {

@@ -213,8 +213,13 @@ public class AdminController {
     }
 
     @GetMapping("/tracking/editar/{id}")
-    public String editarTracking(@PathVariable Long id, Model model) {
-        model.addAttribute("envio", trackingRepo.findById(id).orElse(null));
+    public String editarTracking(@PathVariable Long id, Model model, RedirectAttributes ra) {
+        EnvioTracking envio = trackingRepo.findWithClienteById(id).orElse(null);
+        if (envio == null) {
+            ra.addFlashAttribute("error", "Envío no encontrado.");
+            return "redirect:/admin/tracking";
+        }
+        model.addAttribute("envio", envio);
         model.addAttribute("clientes", clienteRepo.findAll());
         model.addAttribute("evidencias", evidenciaService.listarPorEnvio(id));
         model.addAttribute("eventos", eventoTrackingService.listarPorEnvio(id));

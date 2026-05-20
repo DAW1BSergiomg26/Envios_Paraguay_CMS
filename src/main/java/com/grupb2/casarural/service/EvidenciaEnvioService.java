@@ -27,7 +27,8 @@ public class EvidenciaEnvioService {
 
     public void toggleVisibilidad(Long id) {
         repo.findById(id).ifPresent(ev -> {
-            ev.setVisibleCliente(!ev.isVisibleCliente());
+            Boolean actual = ev.getVisibleCliente();
+            ev.setVisibleCliente(actual == null ? true : !actual);
             repo.save(ev);
         });
     }
