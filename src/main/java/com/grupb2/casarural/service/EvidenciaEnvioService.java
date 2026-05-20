@@ -21,6 +21,18 @@ public class EvidenciaEnvioService {
         return repo.findByEnvioTrackingIdOrderByFechaSubidaDesc(envioId);
     }
 
+    public List<EvidenciaEnvio> listarPorEnvioParaCliente(Long envioId) {
+        return repo.findByEnvioTrackingIdAndVisibleClienteTrueOrderByFechaSubidaDesc(envioId);
+    }
+
+    public void toggleVisibilidad(Long id) {
+        repo.findById(id).ifPresent(ev -> {
+            Boolean actual = ev.getVisibleCliente();
+            ev.setVisibleCliente(actual == null ? true : !actual);
+            repo.save(ev);
+        });
+    }
+
     public EvidenciaEnvio guardar(EvidenciaEnvio evidencia) {
         evidencia.setFechaSubida(LocalDateTime.now());
         return repo.save(evidencia);

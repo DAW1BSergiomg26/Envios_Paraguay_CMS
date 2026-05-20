@@ -1,0 +1,209 @@
+/* =============================================
+   PANEL CLIENTE - MONTEASTUR ENVIOS
+   Cinematographic Premium Theme
+   ============================================= */
+
+/* ===== TOPBAR ===== */
+.cliente-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #1a1a2e !important;
+    padding: 14px 24px;
+    border-bottom: 1px solid #2a2a4e !important;
+    color: var(--gris-texto-legible) !important;
+    font-size: 14px !important;
+}
+.ct-left strong {
+    color: var(--naranja) !important;
+}
+.ct-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.ct-user {
+    color: var(--blanco-principal) !important;
+    font-weight: 600 !important;
+}
+.ct-logout {
+    color: var(--naranja) !important;
+    text-decoration: none;
+    font-size: 13px !important;
+}
+.ct-logout:hover {
+    text-decoration: underline;
+}
+
+/* ===== CARDS ===== */
+.cp-card {
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+.cp-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #2a2a4e;
+}
+.cp-code {
+    font-family: 'Courier New', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--naranja) !important;
+    letter-spacing: 1px;
+}
+.cp-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+}
+.cp-info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.cp-label {
+    font-size: 12px !important;
+    text-transform: uppercase;
+    color: var(--gris-texto-legible) !important;
+    letter-spacing: 0.5px;
+}
+.cp-value {
+    font-size: 15px !important;
+    color: var(--blanco-secundario) !important;
+}
+
+/* ===== OBSERVACIONES ===== */
+.cp-obs {
+    margin-top: 16px;
+    padding: 12px 16px;
+    background: rgba(212,118,42,0.1) !important;
+    border-radius: 10px;
+    border-left: 3px solid var(--naranja) !important;
+}
+.cp-obs-label {
+    font-size: 13px !important;
+    color: var(--naranja) !important;
+    font-weight: 600;
+    display: block;
+    margin-bottom: 4px;
+}
+.cp-obs-text {
+    font-size: 14px !important;
+    color: var(--blanco-secundario) !important;
+    margin: 0;
+}
+
+/* ===== TIMELINE ===== */
+.cp-timeline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 20px;
+    padding: 16px 12px;
+    background: var(--glass-bg) !important;
+    border-radius: 12px;
+    overflow-x: auto;
+    border: 1px solid var(--glass-border) !important;
+}
+.cp-tl-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    color: #555;
+    position: relative;
+    min-width: 64px;
+    transition: 0.3s;
+}
+.cp-tl-step span {
+    white-space: nowrap;
+    color: var(--gris-texto-legible) !important;
+    font-size: 11px !important;
+}
+.cp-tl-icon {
+    font-size: 24px !important;
+    opacity: 0.3;
+    transition: 0.3s;
+    color: var(--naranja) !important;
+}
+.cp-tl-step.done .cp-tl-icon {
+    opacity: 0.8;
+    color: var(--verde-exito) !important;
+}
+.cp-tl-step.current .cp-tl-icon {
+    opacity: 1;
+    transform: scale(1.2);
+    color: var(--naranja-advertencia) !important;
+}
+.cp-tl-step.current {
+    color: var(--naranja-advertencia) !important;
+    font-weight: 700 !important;
+}
+.cp-tl-step.done {
+    color: var(--gris-texto-legible) !important;
+}
+
+/* ===== WHATSAPP ===== */
+.cp-whatsapp {
+    margin-top: 16px;
+    text-align: center;
+}
+.cp-whatsapp .btn-whatsapp-sm,
+.btn-whatsapp-sm {
+    display: inline-block;
+    background: linear-gradient(135deg, #25D366, #128C7E) !important;
+    color: #fff !important;
+    padding: 10px 24px;
+    border-radius: 8px;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.cp-whatsapp .btn-whatsapp-sm:hover,
+.btn-whatsapp-sm:hover {
+    background: linear-gradient(135deg, #1da851, #0e7a6b) !important;
+    transform: translateY(-2px);
+}
+
+/* ===== EMPTY STATE ===== */
+.cp-empty {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--glass-bg) !important;
+    border: 1px dashed var(--glass-border) !important;
+    color: var(--gris-texto-legible) !important;
+}
+.cp-empty-icon {
+    font-size: 48px !important;
+    margin-bottom: 12px;
+    color: var(--naranja) !important;
+}
+.cp-empty h3 {
+    color: var(--blanco-principal) !important;
+    margin: 0 0 8px;
+    font-size: 22px !important;
+}
+.cp-empty p {
+    color: var(--gris-texto-legible) !important;
+    margin: 0 0 20px;
+    font-size: 15px !important;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 600px) {
+    .cp-card-body { grid-template-columns: 1fr; }
+    .cp-timeline { gap: 2px; }
+    .cp-tl-step { min-width: 50px; font-size: 9px; }
+    .cliente-topbar { flex-direction: column; gap: 8px; text-align: center; }
+}

@@ -29,6 +29,9 @@ public class EvidenciaEnvio {
     @Column(name = "fecha_subida", nullable = false)
     private LocalDateTime fechaSubida;
 
+    @Column(name = "visible_cliente")
+    private Boolean visibleCliente = true;
+
     public EvidenciaEnvio() {}
 
     public Long getId() { return id; }
@@ -45,4 +48,6 @@ public class EvidenciaEnvio {
     public void setUrlArchivo(String urlArchivo) { this.urlArchivo = urlArchivo; }
     public LocalDateTime getFechaSubida() { return fechaSubida; }
     public void setFechaSubida(LocalDateTime fechaSubida) { this.fechaSubida = fechaSubida; }
+    public Boolean getVisibleCliente() { return visibleCliente; }
+    public void setVisibleCliente(Boolean visibleCliente) { this.visibleCliente = visibleCliente; }
 }

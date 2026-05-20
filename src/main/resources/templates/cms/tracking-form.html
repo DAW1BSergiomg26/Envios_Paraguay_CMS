@@ -124,16 +124,26 @@
                 </div>
                 <div class="evidencia-info">
                     <strong th:text="${ev.titulo}">T&iacute;tulo</strong>
+                    <div class="evidencia-status">
+                        <span th:if="${ev.visibleCliente}" class="badge-visible">Visible cliente</span>
+                        <span th:unless="${ev.visibleCliente}" class="badge-oculta">Oculta cliente</span>
+                    </div>
                     <span th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" th:text="${ev.descripcion}" class="evidencia-desc"></span>
                     <span class="evidencia-date" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy HH:mm')}">Fecha</span>
                     <a th:href="${ev.urlArchivo}" target="_blank" class="evidencia-link">
                         <span th:text="${ev.tipo == 'FOTO'} ? '📷 Ver foto' : '📄 Ver documento'">Ver</span>
                     </a>
                 </div>
-                <form th:action="@{/admin/tracking/evidencia/eliminar/{evId}(evId=${ev.id})}" method="post" class="evidencia-delete-form" onsubmit="return confirm('Eliminar esta evidencia?')">
-                    <input type="hidden" name="envioId" th:value="${envio.id}">
-                    <button type="submit" class="btn-evidencia-delete" title="Eliminar">🗑️</button>
-                </form>
+                <div class="evidencia-controls">
+                    <form th:action="@{/admin/tracking/evidencia/toggle/{evId}(evId=${ev.id})}" method="post" style="display: inline;">
+                        <input type="hidden" name="envioId" th:value="${envio.id}">
+                        <button type="submit" class="btn-toggle-evidencia" th:text="${ev.visibleCliente} ? 'Ocultar' : 'Mostrar'">Toggle</button>
+                    </form>
+                    <form th:action="@{/admin/tracking/evidencia/eliminar/{evId}(evId=${ev.id})}" method="post" class="evidencia-delete-form" onsubmit="return confirm('Eliminar esta evidencia?')">
+                        <input type="hidden" name="envioId" th:value="${envio.id}">
+                        <button type="submit" class="btn-evidencia-delete" title="Eliminar">🗑️</button>
+                    </form>
+                </div>
             </div>
         </div>
         <p th:if="${evidencias == null or evidencias.isEmpty()}" class="evidencia-empty">A&uacute;n no hay evidencias subidas para este env&iacute;o.</p>
