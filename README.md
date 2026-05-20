@@ -1,157 +1,256 @@
-# MONTEASTUR ENVIOS — Plataforma logística España-Paraguay
+# MONTEASTUR ENVIOS
+Plataforma logística España ↔ Paraguay.
 
-## Tecnologías
+Plataforma web profesional para la gestión de envíos internacionales entre España y Paraguay, con:
+- Tracking de envíos en tiempo real
+- Panel de administración completo
+- Panel de cliente seguro
+- Gestión de evidencias y documentos
+- Galería CMS para operaciones
+- Seguimiento premium con timeline visual
 
-- Java 17
-- Spring Boot 3.3.5
-- Thymeleaf
-- MySQL 8
-- Docker / Docker Compose
-- CSS propio (Bootstrap no se usa, CSS custom)
-- Actuator
-- Logback
+## Tecnologías usadas
 
-## Arranque local sin Docker
+- **Java 17** - Lenguaje de programación
+- **Spring Boot 3.3.5** - Framework backend
+- **Thymeleaf** - Motor de plantillas MVC
+- **Spring Security** - Autenticación y autorización
+- **MySQL 8** - Base de datos relacional
+- **Docker** - Contenerización
+- **Docker Compose** - Orquestación de múltiples contenedores
+- **Actuator** - Monitoreo y healthchecks
+- **Logback** - Sistema de logging profesional
+- **Maven 3.9+** - Gestión de dependencias y build
+- **CSS modular** - Estilos organizados por funcionalidad
 
-Para ejecutar la aplicación en entorno de desarrollo sin Docker:
+## Arquitectura
 
-1. Arrancar MySQL en Docker (puerto 3307 para no конфликт con posibles MySQL locales):
-   ```powershell
-   docker run -d --name mysql-dev -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=casarural mysql:8.0
-   ```
+La aplicación sigue una arquitectura **MVC (Modelo-Vista-Controlador)** claramente separada:
 
-2. Configurar variables de entorno necesarias en PowerShell:
-   ```powershell
-   $env:PORT="8895"
-   $env:SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/casarural?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
-   $env:SPRING_DATASOURCE_USERNAME="root"
-   $env:SPRING_DATASOURCE_PASSWORD="root"
-   ```
+- **Controllers**: Manejan las peticiones HTTP y retornan vistas o datos
+- **Services**: Contienen la lógica de negocio y transacciones
+- **Repositories**: Interfaz con la capa de persistencia (Spring Data JPA)
+- **Templates**: Archivos Thymeleaf en `src/main/resources/templates`
+- **Static resources**: CSS, JS e imágenes en `src/main/resources/static`
+- **Uploads**: Almacén de archivos subidos (imágenes de tracking, galería, etc.)
+- **Logs**: Archivos de registro de la aplicación
+- **Configuración externa**: Variables de entorno y archivos `.properties`
 
-3. Ejecutar la aplicación:
-   ```powershell
-   mvn spring-boot:run
-   ```
+## Estructura del proyecto
 
-4. Abrir en navegador: http://localhost:8895
+```
+src/main/
+├── java/
+│   └── com/grupb2/casarural/
+│       ├── controller/     # Controladores MVC
+│       ├── model/          # Entidades JPA
+│       ├── repository/     # Repositorios Spring Data
+│       ├── service/        # Lógica de negocio
+│       └── config/         # Configuración (Security, WebMvc, etc.)
+├── resources/
+│   ├── templates/          # Archivos Thymeleaf (.html)
+│   │   ├── cms/            # Panel administrativo
+│   │   └── en/             # Versiones en inglés
+│   └── static/
+│       ├── css/            # Hojas de estilo modulares
+│       ├── js/             # JavaScript
+│       └── img/            # Imágenes estáticas
+uploads/                    # Almacén de archivos subidos (NO se sube a Git)
+logs/                       # Archivos de log generados en tiempo de ejecución
+docker-compose.yml          # Orquestación de servicios
+Dockerfile                  # Definición de la imagen de la aplicación
+```
+
+## Requisitos
+
+- **Java 17+** (se recomienda JDK 17 LTS)
+- **Maven 3.9+** (para build y gestión de dependencias)
+- **Docker Desktop** (para contenedores)
+- **MySQL 8** (base de datos, accesible vía localhost:3307 o servicio Docker)
+- **Git** (control de versiones)
+
+## Arranque local
+
+### Paso 1: Arrancar MySQL Docker
+
+Si ya tiene el contenedor MySQL creado desde fases anteriores:
+```powershell
+docker start monteastur-mysql
+```
+
+Si necesita crear uno nuevo:
+```powershell
+docker run -d --name monteastur-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=casarural mysql:8.0
+```
+
+### Paso 2: Configurar variables de entorno (PowerShell)
+
+```powershell
+$env:PORT="8895"
+$env:DB_DDL_AUTO="update"
+$env:JPA_SHOW_SQL="true"
+$env:UPLOAD_DIR="./uploads"
+$env:ADMIN_USERNAME="admin"
+$env:ADMIN_PASSWORD="admin123"
+$env:SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/casarural?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+$env:DB_USERNAME="root"
+$env:DB_PASSWORD="root"
+```
+
+### Paso 3: Ejecutar la aplicación
+
+```powershell
+mvn spring-boot:run
+```
+
+La aplicación estará disponible en: http://localhost:8895
 
 ## Arranque con Docker Compose
 
-Para despliegue completo con todos los servicios:
+### Paso 1: Preparar variables de entorno
 
-1. Copiar el archivo de ejemplo de variables de entorno:
-   ```powershell
-   cp .env.example .env
-   ```
+```powershell
+cp .env.example .env
+```
 
-2. Editar `.env` con las credenciales y configuración adecuadas (especialmente cambiar contraseñas en producción)
+Luego edite el archivo `.env` con sus credenciales de producción (especialmente cambie las contraseñas por defecto).
 
-3. Construir y levantar los contenedores:
-   ```powershell
-   docker compose up -d --build
-   ```
+### Paso 2: Construir y levantar los contenedores
 
-4. La aplicación estará disponible en http://localhost:8080 (o el puerto definido en PORT)
+```powershell
+docker compose up -d --build
+```
+
+La aplicación estará disponible en el puerto definido en la variable `PORT` (por defecto 8080 en producción).
 
 ## Variables importantes
 
-| Variable | Descripción | Valor por defecto (dev) | Requerido en prod |
-|----------|-------------|-------------------------|-------------------|
-| PORT | Puerto del servidor | 8081 | No |
-| SPRING_PROFILES_ACTIVE | Perfil activo (dev/prod) | (vacío) | prod |
-| SPRING_DATASOURCE_URL | URL de conexión a MySQL | jdbc:mysql://localhost:3306/casarural?... | Sí |
-| DB_USERNAME | Usuario de base de datos | root | Sí |
-| DB_PASSWORD | Contraseña de base de datos | (vacía) | Sí |
-| UPLOAD_DIR | Directorio para subida de archivos | ./uploads | No |
-| ADMIN_USERNAME | Usuario del panel de admin | admin | No |
-| ADMIN_PASSWORD | Contraseña del panel de admin | admin123 | Sí (cambiar en prod) |
-| LOG_DIR | Directorio para logs | ./logs | No |
+| Variable | Descripción | Valor por defecto (dev) | Comentario |
+|----------|-------------|-------------------------|------------|
+| PORT | Puerto del servidor HTTP | 8081 | En producción suele ser 8080 |
+| DB_DDL_AUTO | Estrategia de actualización de schema | update | En producción usar `validate` |
+| JPA_SHOW_SQL | Mostrar SQL en consola | true | En producción usar `false` |
+| UPLOAD_DIR | Directorio para archivos subidos | ./uploads | En producción: `/app/uploads` (volumen Docker) |
+| ADMIN_USERNAME | Usuario de acceso al panel admin | admin | Cambiar en producción |
+| ADMIN_PASSWORD | Contraseña de acceso al panel admin | admin123 | **Obligatorio cambiar en producción** |
+| DB_USERNAME | Usuario de MySQL | root |  |
+| DB_PASSWORD | Contraseña de MySQL | (vacía) |  |
+| SPRING_PROFILES_ACTIVE | Perfil de Spring activo | (vacío) | En producción: `prod` |
+| LOG_DIR | Directorio para archivos de log | ./logs |  |
 
-## Rutas importantes
+## URLs importantes
 
+### Frontend (público)
 | Ruta | Descripción |
 |------|-------------|
-| `/` | Página principal |
+| `/` | Página de inicio |
+| `/seguimiento` | Seguimiento de envíos por código |
+| `/reservas` | Formulario y gestión de envíos |
+| `/contacto` | Formulario de contacto |
+
+### Panel de Admin
+| Ruta | Descripción |
+|------|-------------|
 | `/login` | Inicio de sesión (admin y cliente) |
-| `/admin/dashboard` | Panel de administración principal |
+| `/admin/dashboard` | Panel principal de administración |
 | `/admin/tracking` | Gestión de envíos y tracking |
-| `/admin/imagenes` | Gestión de imágenes del CMS |
+| `/admin/imagenes` | Galería y gestión de imágenes del CMS |
+
+### Panel de Cliente
+| Ruta | Descripción |
+|------|-------------|
 | `/cliente/login` | Acceso específico para clientes |
-| `/cliente/panel` | Panel de cliente tras login |
-| `/actuator/health` | Endpoint de salud de la aplicación |
-| `/actuator/info` | Información detallada de la aplicación |
+| `/cliente/panel` | Panel de cliente tras login exitoso |
 
-## Uploads
-
-- **Entorno local**: Los archivos se suben a la carpeta `uploads/` relativa al directorio de ejecución
-- **Producción (Docker)**: Se utiliza un volumen Docker montado en `/app/uploads` dentro del contenedor
-- **Importante**: Nunca subir la carpeta `uploads/` a Git (está en `.gitignore`)
-- **Backup**: Realizar copias de seguridad periódicas de esta carpeta ya que contiene las imágenes del sistema
-
-## Logs
-
-El sistema de logging utiliza Logback con la siguiente configuración:
-
-- `logs/monteastur.log`: Log general de la aplicación (nivel INFO y superior)
-- `logs/monteastur-error.log`: Solo errores y advertencias (nivel WARN y superior)
-- Rotación: Diaria (un archivo nuevo cada día)
-- Retención: 30 días (los archivos más antiguos se eliminan automáticamente)
-- El directorio de logs se puede configurar con la variable de entorno `LOG_DIR` (por defecto `./logs`)
+### Actuator (monitoreo)
+| Ruta | Descripción |
+|------|-------------|
+| `/actuator/health` | Estado de salud de la aplicación |
+| `/actuator/info` | Información de la aplicación (nombre, versión, etc.) |
 
 ## Seguridad
 
-### Checklist de seguridad para producción:
+La seguridad de la aplicación se basa en varios pilares:
 
-- [ ] Cambiar `ADMIN_PASSWORD` en producción (nunca usar el valor por defecto)
-- [ ] Nunca subir el archivo `.env` a repositorios Git (está en `.gitignore`)
-- [ ] Las contraseñas de clientes se almacenan usando BCrypt (nunca en texto plano)
-- [ ] En producción, usar `spring.jpa.hibernate.ddl-auto=validate` (no `update`)
-- [ ] Activar el perfil de producción con `SPRING_PROFILES_ACTIVE=prod`
-- [ ] Proteger las copias de seguridad de base de datos y uploads
-- [ ] En servidores reales, utilizar HTTPS con certificado válido
-- [ ] Mantener actualizadas las dependencias (especialmente Spring Boot y MySQL driver)
+- **BCrypt para clientes**: Las contraseñas de clientes se almacenan hash con BCrypt (nunca en texto plano)
+- **Admin externalizado**: Las credenciales del admin se externalizan a variables de entorno (no hay hardcoded)
+- **Variables de entorno**: Toda configuración sensible pasa por entorno (puertos, passwords, URLs)
+- **.env ignorado**: El archivo `.env` está en `.gitignore` para evitar subir credenciales a Git
+- **Uploads fuera del jar**: Los archivos subidos se almacenan en el sistema de archivos, no dentro del JAR
+- **Logs separados**: Los logs se escriben en archivos externos, rotados diariamente
+- **Actuator seguro**: Solo se exponen los endpoints `health` e `info`, y los detalles de salud requieren autenticación
 
-## Healthcheck
+## Uploads
 
-La aplicación incluye endpoints de Actuator para monitoreo:
+- **Carpeta local**: En desarrollo, los archivos se guardan en `./uploads` relativo al directorio de ejecución
+- **Persistencia**: Las imágenes de tracking, galería del CMS y evidencias se guardan permanentemente
+- **Backups recomendados**: Realizar copias de seguridad periódicas de la carpeta `uploads/` ya que contiene:
+  - Imágenes de seguimiento de envíos
+  - Galería de operaciones del CMS
+  - Evidencias y documentos adjuntos
 
-- **GET /actuator/health**
-  - Devuelve `{"status":"UP"}` cuando la aplicación está funcionando correctamente
-  - Incluye detalles de salud cuando se accede con credenciales de administrador
-  - Utilizado por Docker Compose y orchestadores para verificar disponibilidad
+## Logging
 
-- **GET /actuator/info**
-  - Muestra información de la aplicación: nombre, versión y descripción
-  - Útil para verificar qué versión está desplegada
+El sistema de logging utiliza **Logback** con la siguiente configuración:
+
+- `logs/monteastur.log`: Log general de la aplicación (nivel INFO y superior)
+- `logs/monteastur-error.log`: Solo advertencias y errores (nivel WARN y superior)
+- **Rotación**: Diaria (un nuevo archivo cada día a medianoche)
+- **Retención**: 30 días (los archivos más antiguos se eliminan automáticamente)
+- El directorio de logs se puede configurar con la variable de entorno `LOG_DIR` (por defecto `./logs`)
+
+## Healthchecks
+
+El endpoint de healthcheck está disponible en:
+
+**GET /actuator/health**
+
+Debe devolver:
+```json
+{"status":"UP"}
+```
+
+Este endpoint es utilizado por Docker Compose y orquestadores para verificar que la aplicación está funcionando correctamente.
 
 ## Backup básico
 
-### Base de datos:
+### Base de datos MySQL:
 ```powershell
-docker exec monteastur-mysql mysqldump -u root -p casarrural > backup-casarural.sql
+docker exec monteastur-mysql mysqldump -u root -p casarural > backup-casarural.sql
 ```
-*(Nota: usar la contraseña definida en MYSQL_ROOT_PASSWORD del archivo .env)*
+*(Nota: se le pedirá la contraseña de root definida en MYSQL_ROOT_PASSWORD)*
 
-### Uploads:
+### Carpeta de uploads:
 ```powershell
-tar -czf backup-uploads.tar.gz uploads/
+tar -czf uploads-backup.tar.gz uploads/
 ```
-*(En producción, respaldar el volumen Docker correspondiente a `/app/uploads`)*
+*(En producción, respaldar el volumen Docker que se monta en `/app/uploads`)*
 
-## Checklist antes de producción
+## Checklist de producción
 
 Antes de desplegar en un entorno de producción, verificar:
 
 - [ ] **Build OK**: `mvn clean package -DskipTests` finaliza sin errores
-- [ ] **Docker compose OK**: `docker compose up -d` levanta todos los servicios correctamente
-- [ ] **Health UP**: `http://<dominio>/actuator/health` devuelve `{"status":"UP"}`
-- [ ] **Login admin OK**: Acceso con las credenciales configuradas en producción
-- [ ] **Login cliente OK**: Los clientes pueden autenticarse correctamente
-- [ ] **Uploads OK**: Las imágenes se suben y se muestran correctamente
-- [ ] **Logs OK**: Se generan archivos en `logs/` sin errores de permisos
-- [ ] **Backup probado**: Se puede restaurar tanto la base de datos como los uploads
-- [ ] **Variables .env configuradas**: Todas las variables necesarias están definidas y son apropiadas para entorno
+- [ ] **Docker OK**: `docker compose up -d` levanta todos los servicios correctamente (MySQL y app)
+- [ ] **Health UP**: `http://<dominio>:<puerto>/actuator/health` devuelve `{"status":"UP"}`
+- [ ] **Uploads OK**: Las imágenes se suben, se almacenan y se muestran correctamente en la interfaz
+- [ ] **Login admin OK**: Acceso al panel admin con las credenciales configuradas en producción
+- [ ] **Login cliente OK**: Los clientes pueden autenticarse y acceder a su panel
+- [ ] **Logs OK**: Se generan archivos en `logs/` sin errores de permisos y con rotación diaria
+- [ ] **Backups probados**: Se puede restaurar tanto la base de datos como los uploads desde backup
+- [ ] **Variables entorno configuradas**: Todas las variables necesarias en `.env` son apropiadas para entorno de producción
+
+## Roadmap futuro
+
+- **API REST**: Exposición de servicios para integración con sistemas externos
+- **JWT**: Autenticación basada en tokens para APIs y aplicaciones móviles
+- **Emails automáticos**: Notificaciones por email en cambios de estado de envíos
+- **WhatsApp API**: Envío de notificaciones y actualizaciones vía WhatsApp
+- **WebSockets tracking**: Actualizaciones en tiempo real del tracking sin recargar la página
+- **App móvil**: Aplicación nativa para clientes y operadores
+- **Roles avanzados**: Sistema de permisos más granular (operador, supervisor, auditor)
+- **Dashboard analytics**: Gráficos y métricas de rendimiento del negocio
 
 ---
 
-> **Nota**: Este documento está pensado como guía de arranque y operaciones básicas. Para consultas técnicas avanzadas, referirse al código fuente y comentarios en el mismo.
+> **Nota profesional**: Este documento está pensado como guía de referencia para desarrolladores, DevOps y equipos de operaciones. Para consultas técnicas específicas, referirse al código fuente y los comentarios en el mismo.
