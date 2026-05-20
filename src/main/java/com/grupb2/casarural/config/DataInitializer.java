@@ -6,6 +6,7 @@ import com.grupb2.casarural.model.TextoLegal;
 import com.grupb2.casarural.repository.ClienteRepository;
 import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.repository.TextoLegalRepository;
+import com.grupb2.casarural.service.ClienteService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -17,19 +18,21 @@ public class DataInitializer implements CommandLineRunner {
     private final TextoLegalRepository repo;
     private final EnvioTrackingRepository trackingRepo;
     private final ClienteRepository clienteRepo;
+    private final ClienteService clienteService;
 
     public DataInitializer(TextoLegalRepository repo, EnvioTrackingRepository trackingRepo,
-                           ClienteRepository clienteRepo) {
+                           ClienteRepository clienteRepo, ClienteService clienteService) {
         this.repo = repo;
         this.trackingRepo = trackingRepo;
         this.clienteRepo = clienteRepo;
+        this.clienteService = clienteService;
     }
 
     @Override
     public void run(String... args) {
         Cliente demo = null;
         if (clienteRepo.findByEmail("cliente@monteastur.com").isEmpty()) {
-            demo = clienteRepo.save(new Cliente("cliente@monteastur.com", "demo2026",
+            demo = clienteService.guardar(new Cliente("cliente@monteastur.com", "demo2026",
                 "María González", "+34 612 345 678"));
         } else {
             demo = clienteRepo.findByEmail("cliente@monteastur.com").get();
