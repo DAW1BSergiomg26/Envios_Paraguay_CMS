@@ -345,6 +345,17 @@ public class AdminController {
         return "redirect:/admin/tracking/editar/" + envioId;
     }
 
+    @PostMapping("/tracking/evidencia/toggle/{id}")
+    public String toggleEvidencia(@PathVariable Long id, @RequestParam Long envioId, RedirectAttributes ra) {
+        try {
+            evidenciaService.toggleVisibilidad(id);
+            ra.addFlashAttribute("exito", "Visibilidad actualizada.");
+        } catch (Exception e) {
+            ra.addFlashAttribute("error", "Error al cambiar visibilidad: " + e.getMessage());
+        }
+        return "redirect:/admin/tracking/editar/" + envioId;
+    }
+
     @PostMapping("/tracking/evidencia/eliminar/{id}")
     public String eliminarEvidencia(@PathVariable Long id,
                                      @RequestParam Long envioId,

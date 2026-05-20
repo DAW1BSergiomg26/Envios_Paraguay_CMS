@@ -2633,6 +2633,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 .evidencia-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
 .evidencia-card { background: #16162a; border: 1px solid #2a2a4e; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
+.evidencia-controls { padding: 8px; display: flex; gap: 8px; justify-content: center; }
+.badge-visible { font-size: 10px; background: rgba(76, 175, 130, 0.2); color: #4caf82; padding: 2px 8px; border-radius: 10px; }
+.badge-oculta { font-size: 10px; background: rgba(212, 118, 42, 0.2); color: #d4762a; padding: 2px 8px; border-radius: 10px; }
+.btn-toggle-evidencia { font-size: 11px; padding: 4px 8px; border-radius: 6px; border: 1px solid #2a2a4e; background: #1e1e32; color: #fff; cursor: pointer; transition: 0.3s; }
+.btn-toggle-evidencia:hover { background: #2a2a4e; }
 .evidencia-preview { height: 120px; background: #0e0e1a; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .evidencia-thumb { width: 100%; height: 100%; object-fit: cover; }
 .evidencia-doc { font-size: 40px; }
