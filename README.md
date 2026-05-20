@@ -1,326 +1,256 @@
 # MONTEASTUR ENVIOS
+Plataforma logística España ↔ Paraguay.
 
-> Plataforma web premium de logística internacional para transporte y gestión de aduanas España ↔ Paraguay.  
-> Desarrollada con Spring Boot, Thymeleaf y MySQL.
+Plataforma web profesional para la gestión de envíos internacionales entre España y Paraguay, con:
+- Tracking de envíos en tiempo real
+- Panel de administración completo
+- Panel de cliente seguro
+- Gestión de evidencias y documentos
+- Galería CMS para operaciones
+- Seguimiento premium con timeline visual
 
----
+## Tecnologías usadas
 
-![Java](https://img.shields.io/badge/Java-24-orange?style=for-the-badge)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-green?style=for-the-badge)
-![Thymeleaf](https://img.shields.io/badge/Thymeleaf-MVC-darkgreen?style=for-the-badge)
-![MySQL](https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge)
-![Responsive](https://img.shields.io/badge/Responsive-Yes-success?style=for-the-badge)
-![Git Flow](https://img.shields.io/badge/Git_Flow-Active-blueviolet?style=for-the-badge)
+- **Java 17** - Lenguaje de programación
+- **Spring Boot 3.3.5** - Framework backend
+- **Thymeleaf** - Motor de plantillas MVC
+- **Spring Security** - Autenticación y autorización
+- **MySQL 8** - Base de datos relacional
+- **Docker** - Contenerización
+- **Docker Compose** - Orquestación de múltiples contenedores
+- **Actuator** - Monitoreo y healthchecks
+- **Logback** - Sistema de logging profesional
+- **Maven 3.9+** - Gestión de dependencias y build
+- **CSS modular** - Estilos organizados por funcionalidad
 
----
+## Arquitectura
 
-## Descripción
+La aplicación sigue una arquitectura **MVC (Modelo-Vista-Controlador)** claramente separada:
 
-**MONTEASTUR ENVIOS** es una plataforma web profesional para la gestión de envíos internacionales entre España y Paraguay. El proyecto combina una experiencia visual cinematográfica con una arquitectura MVC sólida, ofreciendo tanto una web pública premium como un centro de operaciones logístico para administración.
-
-### Capacidades reales del proyecto
-
-- Web pública bilingüe (ES/EN) con diseño glassmorphism
-- Hero cinematográfico con imágenes reales de operaciones
-- Sección de tracking visual premium con timeline logístico
-- CMS administrativo con dashboard de operaciones
-- Gestión de envíos, consultas y galería multimedia
-- Páginas de servicios, operaciones reales y contacto
-- Imágenes reales integradas (carga, entrega, branding)
-- Sistema de autenticación y panel de control
-
----
-
-## Funcionalidades
-
-### Web pública
-- Hero con imagen real de operaciones y overlay cinematográfico
-- Timeline visual "Seguimiento de tu envío" con 6 estados logísticos
-- Sección "Cómo funciona" con 4 pasos
-- Página de servicios con 4 cards premium
-- Página de operaciones con 6 cards logísticos y galería de envíos reales
-- Sección "Nuestros envíos reales" con grid cinematográfico de operaciones
-- Brand banner con imagen de marca
-- Formulario de envío y contacto
-- Lightbox para galería multimedia
-- Partículas ambientales y scroll reveal animations
-
-### CMS administrativo
-- Login seguro con Spring Security
-- Dashboard transformado en "Centro de Operaciones"
-- Panel de inicio con estadísticas de envíos, consultas e imágenes
-- Card de "Operaciones activas" con 6 indicadores logísticos y badges de estado
-- Gestión de envíos (aprobar, cancelar, eliminar)
-- Gestión de consultas de clientes
-- Gestión de imágenes con previsualización
-- Editor de textos legales
-- Bitácora de actividad logística
-
-### Tracking visual
-- 6 estados logísticos: Preparando carga → Recogida realizada → Gestión de aduanas → En tránsito → Llegada a destino → Entregado
-- Cards glassmorphism con glow naranja/verde
-- Línea de progreso con gradiente
-- Badges de estado (En curso, Pendiente, Completado)
-- Responsive: 3 columnas → 2 → 1
-
-### Operaciones reales
-- 6 categorías de operaciones: Carga y embalaje, Mudanzas internacionales, Vehículos y maquinaria, Gestión de aduanas, Entrega puerta a puerta, Seguimiento personalizado
-- Cards con imágenes reales y placeholders premium para las pendientes
-- Gradientes cinematográficos como fondo de placeholder
-- Overlay oscuro con badges naranja
-
----
-
-## Tecnologías
-
-| Tecnología | Versión | Uso |
-|---|---|---|
-| Java | 24 | Backend |
-| Spring Boot | 3.3 | Framework principal |
-| Spring Security | — | Autenticación y seguridad |
-| Spring Data JPA | — | Persistencia |
-| Thymeleaf | 3 | Motor de plantillas MVC |
-| MySQL | 8 | Base de datos |
-| Maven | — | Gestión de dependencias |
-| HTML5 | — | Estructura semántica |
-| CSS3 | — | Glassmorphism, animaciones, responsive |
-| JavaScript | vanilla | Interactividad, lightbox, partículas |
-| Git + GitHub | — | Control de versiones y Git Flow |
-
----
+- **Controllers**: Manejan las peticiones HTTP y retornan vistas o datos
+- **Services**: Contienen la lógica de negocio y transacciones
+- **Repositories**: Interfaz con la capa de persistencia (Spring Data JPA)
+- **Templates**: Archivos Thymeleaf en `src/main/resources/templates`
+- **Static resources**: CSS, JS e imágenes en `src/main/resources/static`
+- **Uploads**: Almacén de archivos subidos (imágenes de tracking, galería, etc.)
+- **Logs**: Archivos de registro de la aplicación
+- **Configuración externa**: Variables de entorno y archivos `.properties`
 
 ## Estructura del proyecto
 
-```text
+```
 src/main/
-├── java/com/grupb2/casarural/
-│   ├── controller/       → Controladores MVC
-│   ├── model/            → Entidades JPA
-│   ├── repository/       → Repositorios
-│   ├── service/          → Lógica de negocio
-│   └── security/         → Configuración Spring Security
-│
+├── java/
+│   └── com/grupb2/casarural/
+│       ├── controller/     # Controladores MVC
+│       ├── model/          # Entidades JPA
+│       ├── repository/     # Repositorios Spring Data
+│       ├── service/        # Lógica de negocio
+│       └── config/         # Configuración (Security, WebMvc, etc.)
 ├── resources/
-│   ├── static/
-│   │   ├── css/
-│   │   │   ├── style.css     → Estilos web pública (2400+ líneas)
-│   │   │   └── admin.css     → Estilos CMS administrativo (1500+ líneas)
-│   │   ├── js/app.js         → Scripts de interacción
-│   │   └── img/
-│   │       └── monteastur/
-│   │           ├── hero/            → hero-monteastur.jpg, quienes_somos.mp4
-│   │           ├── operaciones/     → operaciones-carga.jpg, operaciones-entrega.jpg
-│   │           └── branding/        → banner-monteastur.jpg
-│   │
-│   └── templates/
-│       ├── home.html               → Página principal ES
-│       ├── lacasa.html             → Servicios ES
-│       ├── reservas.html           → Envíos ES
-│       ├── operaciones.html        → Operaciones ES
-│       ├── contacto.html           → Contacto ES
-│       ├── login.html              → Inicio de sesión
-│       ├── en/                     → Versiones EN
-│       ├── cms/                    → Panel administrativo
-│       │   ├── dashboard.html      → Centro de Operaciones
-│       │   ├── reservas.html       → Gestión de envíos
-│       │   ├── mensajesrecibidos   → Consultas
-│       │   ├── imagenes.html       → Galería
-│       │   └── textos.html         → Textos legales
-│       └── fragments/
-│           ├── header.html         → Head + nav ES
-│           ├── header-en.html      → Head + nav EN
-│           ├── footer.html         → Footer ES
-│           └── footer-en.html      → Footer EN
-└── resources/application.properties → Configuración
+│   ├── templates/          # Archivos Thymeleaf (.html)
+│   │   ├── cms/            # Panel administrativo
+│   │   └── en/             # Versiones en inglés
+│   └── static/
+│       ├── css/            # Hojas de estilo modulares
+│       ├── js/             # JavaScript
+│       └── img/            # Imágenes estáticas
+uploads/                    # Almacén de archivos subidos (NO se sube a Git)
+logs/                       # Archivos de log generados en tiempo de ejecución
+docker-compose.yml          # Orquestación de servicios
+Dockerfile                  # Definición de la imagen de la aplicación
 ```
 
----
+## Requisitos
 
-## Diseño premium
+- **Java 17+** (se recomienda JDK 17 LTS)
+- **Maven 3.9+** (para build y gestión de dependencias)
+- **Docker Desktop** (para contenedores)
+- **MySQL 8** (base de datos, accesible vía localhost:3307 o servicio Docker)
+- **Git** (control de versiones)
 
-### Glassmorphism
-Fondo blanco semitransparente con `backdrop-filter: blur()` en cards, dashboard, formularios y navegación. Efecto de vidrio esmerilado con bordes sutiles.
+## Arranque local
 
-### UX cinematográfica
-- Hero con gradiente oscuro + imagen real + overlays de luz
-- Scroll reveal animations progresivas
-- Partículas ambientales flotantes
-- Transiciones suaves en todos los elementos interactivos
-- Sombras profundas y glow effects
-- Timeline visual conectar con línea gradiente
+### Paso 1: Arrancar MySQL Docker
 
-### Paleta de colores
-- Verde institucional: `#3f6338` (marca MONTEASTUR)
-- Naranja acento: `#d4762a` (CTAs y badges)
-- Fondos oscuros: degradados verde oscuro `#1a2218` → `#0d1a0d`
-- Glass: blanco 88-94% opacidad con backdrop blur
+Si ya tiene el contenedor MySQL creado desde fases anteriores:
+```powershell
+docker start monteastur-mysql
+```
 
----
+Si necesita crear uno nuevo:
+```powershell
+docker run -d --name monteastur-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=casarural mysql:8.0
+```
 
-## Responsive
+### Paso 2: Configurar variables de entorno (PowerShell)
 
-| Dispositivo | Breakpoint | Adaptaciones |
-|---|---|---|
-| Desktop | > 900 px | Layout completo, hero 70vh, grid 3 columnas |
-| Tablet | ≤ 900 px | Grids a 2 columnas, hero 50vh, sidebar colapsada |
-| Móvil | ≤ 480 px | Grids a 1 columna, hero 40vh, nav compacto, cards en fila |
+```powershell
+$env:PORT="8895"
+$env:DB_DDL_AUTO="update"
+$env:JPA_SHOW_SQL="true"
+$env:UPLOAD_DIR="./uploads"
+$env:ADMIN_USERNAME="admin"
+$env:ADMIN_PASSWORD="admin123"
+$env:SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/casarural?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+$env:DB_USERNAME="root"
+$env:DB_PASSWORD="root"
+```
 
----
+### Paso 3: Ejecutar la aplicación
 
-## SEO
+```powershell
+mvn spring-boot:run
+```
 
-- Meta description por página (ES/EN)
-- Open Graph tags (og:title, og:description, og:image)
-- Favicon desde branding real
-- Títulos descriptivos por sección
-- URLs amigables y estructura semántica HTML5
-- Etiquetas `alt` en imágenes
+La aplicación estará disponible en: http://localhost:8895
 
----
+## Arranque con Docker Compose
+
+### Paso 1: Preparar variables de entorno
+
+```powershell
+cp .env.example .env
+```
+
+Luego edite el archivo `.env` con sus credenciales de producción (especialmente cambie las contraseñas por defecto).
+
+### Paso 2: Construir y levantar los contenedores
+
+```powershell
+docker compose up -d --build
+```
+
+La aplicación estará disponible en el puerto definido en la variable `PORT` (por defecto 8080 en producción).
+
+## Variables importantes
+
+| Variable | Descripción | Valor por defecto (dev) | Comentario |
+|----------|-------------|-------------------------|------------|
+| PORT | Puerto del servidor HTTP | 8081 | En producción suele ser 8080 |
+| DB_DDL_AUTO | Estrategia de actualización de schema | update | En producción usar `validate` |
+| JPA_SHOW_SQL | Mostrar SQL en consola | true | En producción usar `false` |
+| UPLOAD_DIR | Directorio para archivos subidos | ./uploads | En producción: `/app/uploads` (volumen Docker) |
+| ADMIN_USERNAME | Usuario de acceso al panel admin | admin | Cambiar en producción |
+| ADMIN_PASSWORD | Contraseña de acceso al panel admin | admin123 | **Obligatorio cambiar en producción** |
+| DB_USERNAME | Usuario de MySQL | root |  |
+| DB_PASSWORD | Contraseña de MySQL | (vacía) |  |
+| SPRING_PROFILES_ACTIVE | Perfil de Spring activo | (vacío) | En producción: `prod` |
+| LOG_DIR | Directorio para archivos de log | ./logs |  |
+
+## URLs importantes
+
+### Frontend (público)
+| Ruta | Descripción |
+|------|-------------|
+| `/` | Página de inicio |
+| `/seguimiento` | Seguimiento de envíos por código |
+| `/reservas` | Formulario y gestión de envíos |
+| `/contacto` | Formulario de contacto |
+
+### Panel de Admin
+| Ruta | Descripción |
+|------|-------------|
+| `/login` | Inicio de sesión (admin y cliente) |
+| `/admin/dashboard` | Panel principal de administración |
+| `/admin/tracking` | Gestión de envíos y tracking |
+| `/admin/imagenes` | Galería y gestión de imágenes del CMS |
+
+### Panel de Cliente
+| Ruta | Descripción |
+|------|-------------|
+| `/cliente/login` | Acceso específico para clientes |
+| `/cliente/panel` | Panel de cliente tras login exitoso |
+
+### Actuator (monitoreo)
+| Ruta | Descripción |
+|------|-------------|
+| `/actuator/health` | Estado de salud de la aplicación |
+| `/actuator/info` | Información de la aplicación (nombre, versión, etc.) |
 
 ## Seguridad
 
-- Spring Security con autenticación por formulario
-- Sesión protegida con logout
-- CSRF implícito en formularios Thymeleaf
-- Panel admin solo accesible tras autenticación
-- Contraseñas hasheadas en base de datos
-- Datos de contacto protegidos (sin emails personales en web pública)
+La seguridad de la aplicación se basa en varios pilares:
 
----
+- **BCrypt para clientes**: Las contraseñas de clientes se almacenan hash con BCrypt (nunca en texto plano)
+- **Admin externalizado**: Las credenciales del admin se externalizan a variables de entorno (no hay hardcoded)
+- **Variables de entorno**: Toda configuración sensible pasa por entorno (puertos, passwords, URLs)
+- **.env ignorado**: El archivo `.env` está en `.gitignore` para evitar subir credenciales a Git
+- **Uploads fuera del jar**: Los archivos subidos se almacenan en el sistema de archivos, no dentro del JAR
+- **Logs separados**: Los logs se escriben en archivos externos, rotados diariamente
+- **Actuator seguro**: Solo se exponen los endpoints `health` e `info`, y los detalles de salud requieren autenticación
 
-## Assets reales
+## Uploads
 
-| Archivo | Ruta | Uso |
-|---|---|---|
-| `hero-monteastur.jpg` | `img/monteastur/hero/` | Fondo hero principal |
-| `quienes_somos.mp4` | `img/monteastur/hero/` | Video corporativo |
-| `operaciones-carga.jpg` | `img/monteastur/operaciones/` | Card carga real |
-| `operaciones-entrega.jpg` | `img/monteastur/operaciones/` | Card entrega real |
-| `banner-monteastur.jpg` | `img/monteastur/branding/` | Banner marca + favicon + OG |
+- **Carpeta local**: En desarrollo, los archivos se guardan en `./uploads` relativo al directorio de ejecución
+- **Persistencia**: Las imágenes de tracking, galería del CMS y evidencias se guardan permanentemente
+- **Backups recomendados**: Realizar copias de seguridad periódicas de la carpeta `uploads/` ya que contiene:
+  - Imágenes de seguimiento de envíos
+  - Galería de operaciones del CMS
+  - Evidencias y documentos adjuntos
 
----
+## Logging
 
-## Instalación
+El sistema de logging utiliza **Logback** con la siguiente configuración:
 
-### Requisitos
-- Java 24+
-- Maven 3.9+
-- MySQL 8+
+- `logs/monteastur.log`: Log general de la aplicación (nivel INFO y superior)
+- `logs/monteastur-error.log`: Solo advertencias y errores (nivel WARN y superior)
+- **Rotación**: Diaria (un nuevo archivo cada día a medianoche)
+- **Retención**: 30 días (los archivos más antiguos se eliminan automáticamente)
+- El directorio de logs se puede configurar con la variable de entorno `LOG_DIR` (por defecto `./logs`)
 
-### Pasos
+## Healthchecks
 
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/DAW1BSergiomg26/Envios_Paraguay_CMS.git
-cd Envios_Paraguay_CMS
+El endpoint de healthcheck está disponible en:
 
-# 2. Configurar base de datos MySQL
-# Crear base de datos 'casarural' y configurar application.properties
+**GET /actuator/health**
 
-# 3. Compilar y empaquetar
-mvn clean package
-
-# 4. Ejecutar
-java -jar target/casarural-0.0.1-SNAPSHOT.jar
-
-# 5. Abrir en navegador
-# http://localhost:8089
+Debe devolver:
+```json
+{"status":"UP"}
 ```
 
----
+Este endpoint es utilizado por Docker Compose y orquestadores para verificar que la aplicación está funcionando correctamente.
 
-## Rutas principales
+## Backup básico
 
-| Ruta | Descripción |
-|---|---|
-| `/` | Inicio ES |
-| `/en` | Home EN |
-| `/casa` | Servicios ES |
-| `/en/casa` | Services EN |
-| `/reservas` | Envíos ES |
-| `/en/reservas` | Shipments EN |
-| `/operaciones` | Operaciones ES |
-| `/en/operaciones` | Operations EN |
-| `/contacto` | Contacto ES |
-| `/en/contacto` | Contact EN |
-| `/login` | Inicio de sesión admin |
-| `/admin/dashboard` | Centro de Operaciones |
-| `/admin/reservas` | Gestión de envíos |
-| `/admin/mensajesrecibidos` | Consultas clientes |
-| `/admin/imagenes` | Galería de fotos |
-| `/admin/textos` | Textos legales |
-
----
-
-## Git Flow
-
-```text
-main
-└── develop
-    ├── feature/nivel-dios-ui
-    ├── feature/transformacion-envios-paraguay
-    ├── feature/operaciones-reales
-    ├── feature/assets-reales-monteastur
-    └── feature/pulido-final-monteastur
+### Base de datos MySQL:
+```powershell
+docker exec monteastur-mysql mysqldump -u root -p casarural > backup-casarural.sql
 ```
+*(Nota: se le pedirá la contraseña de root definida en MYSQL_ROOT_PASSWORD)*
 
-- `main`: Rama de producción
-- `develop`: Rama de integración continua
-- `feature/*`: Ramas de funcionalidad (merge con `--no-ff`)
-- Tags: `v1.0-monteastur-demo`
+### Carpeta de uploads:
+```powershell
+tar -czf uploads-backup.tar.gz uploads/
+```
+*(En producción, respaldar el volumen Docker que se monta en `/app/uploads`)*
 
----
+## Checklist de producción
 
-## Versión actual
+Antes de desplegar en un entorno de producción, verificar:
 
-**v1.0-monteastur-demo** — Demo funcional para presentación al cliente.
+- [ ] **Build OK**: `mvn clean package -DskipTests` finaliza sin errores
+- [ ] **Docker OK**: `docker compose up -d` levanta todos los servicios correctamente (MySQL y app)
+- [ ] **Health UP**: `http://<dominio>:<puerto>/actuator/health` devuelve `{"status":"UP"}`
+- [ ] **Uploads OK**: Las imágenes se suben, se almacenan y se muestran correctamente en la interfaz
+- [ ] **Login admin OK**: Acceso al panel admin con las credenciales configuradas en producción
+- [ ] **Login cliente OK**: Los clientes pueden autenticarse y acceder a su panel
+- [ ] **Logs OK**: Se generan archivos en `logs/` sin errores de permisos y con rotación diaria
+- [ ] **Backups probados**: Se puede restaurar tanto la base de datos como los uploads desde backup
+- [ ] **Variables entorno configuradas**: Todas las variables necesarias en `.env` son apropiadas para entorno de producción
 
-### Implementado
-- Transformación completa de Casa Rural a MONTEASTUR ENVIOS
-- Rebranding visual y textual (headers, footers, páginas)
-- Hero cinematográfico con imagen real
-- Sección "Cómo funciona" con timeline 4 pasos
-- Tracking visual premium con 6 estados
-- Página de operaciones con 6 cards logísticos
-- Dashboard transformado a Centro de Operaciones
-- Imágenes reales integradas (hero, carga, entrega, branding)
-- SEO, Open Graph y favicon
-- Build funcional (JAR 61 MB)
+## Roadmap futuro
 
-### Pendiente
-- Imágenes reales para mudanzas, vehículos, carga pesada y aduanas
-- Integración de video corporativo
-- Logo oficial en PNG con fondo transparente
-- Despliegue en producción
-- Funcionalidades backend avanzadas (tracking real, notificaciones)
-
----
-
-## Futuras mejoras
-
-- Tracking en tiempo real con número de seguimiento
-- Notificaciones automáticas al cliente por email/WhatsApp
-- Calculadora de precios online
-- Mapa interactivo de rutas España ↔ Paraguay
-- Panel de estadísticas avanzadas con gráficos
-- API REST para integración con operadores logísticos
-- Subida masiva de imágenes de operaciones
-- Vídeo de fondo en hero
-- Página "Quiénes somos" con video corporativo
+- **API REST**: Exposición de servicios para integración con sistemas externos
+- **JWT**: Autenticación basada en tokens para APIs y aplicaciones móviles
+- **Emails automáticos**: Notificaciones por email en cambios de estado de envíos
+- **WhatsApp API**: Envío de notificaciones y actualizaciones vía WhatsApp
+- **WebSockets tracking**: Actualizaciones en tiempo real del tracking sin recargar la página
+- **App móvil**: Aplicación nativa para clientes y operadores
+- **Roles avanzados**: Sistema de permisos más granular (operador, supervisor, auditor)
+- **Dashboard analytics**: Gráficos y métricas de rendimiento del negocio
 
 ---
 
-## Contacto MONTEASTUR
-
-**MONTEASTUR ENVIOS**  
-Pola de Siero, Asturias — Asunción, Paraguay
-
-- Teléfono: [+34 642 687 292](tel:+34642687292)
-- Email: [monteastur@hotmail.es](mailto:monteastur@hotmail.es)
-- WhatsApp: [wa.me/34642687292](https://wa.me/34642687292)
-
----
-
-> © 2026 MONTEASTUR ENVIOS. Todos los derechos reservados.  
-> Proyecto desarrollado como parte del Curso DAW1B — IES Monte Naranco.
+> **Nota profesional**: Este documento está pensado como guía de referencia para desarrolladores, DevOps y equipos de operaciones. Para consultas técnicas específicas, referirse al código fuente y los comentarios en el mismo.
