@@ -84,7 +84,7 @@ public class ClienteController {
         Map<Long, List<EvidenciaEnvio>> evidenciasPorEnvio = new HashMap<>();
         Map<Long, List<EventoTracking>> eventosPorEnvio = new HashMap<>();
         for (EnvioTracking e : envios) {
-            evidenciasPorEnvio.put(e.getId(), evidenciaService.listarPorEnvio(e.getId()));
+            evidenciasPorEnvio.put(e.getId(), evidenciaService.listarPorEnvioParaCliente(e.getId()));
             eventosPorEnvio.put(e.getId(), eventoTrackingService.listarPorEnvio(e.getId()));
         }
         model.addAttribute("cliente", cliente);
