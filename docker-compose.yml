@@ -1,0 +1,53 @@
+# =============================================
+# MONTEASTUR ENVIOS — Docker Compose (prod)
+# =============================================
+# Uso:
+#   1. cp .env.example .env  y ajusta credenciales
+#   2. docker compose up -d
+#   3. http://localhost:8080
+# =============================================
+
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: monteastur-mysql
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  app:
+    build: .
+    container_name: monteastur-app
+    env_file: .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+      DB_USERNAME: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      UPLOAD_DIR: ${UPLOAD_DIR:-/app/uploads}
+    ports:
+      - "${PORT:-8080}:8080"
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+  uploads_data:
