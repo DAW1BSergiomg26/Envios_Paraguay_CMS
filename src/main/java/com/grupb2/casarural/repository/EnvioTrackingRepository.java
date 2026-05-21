@@ -16,4 +16,7 @@ public interface EnvioTrackingRepository extends JpaRepository<EnvioTracking, Lo
 
     @EntityGraph(attributePaths = "cliente")
     Optional<EnvioTracking> findWithClienteById(Long id);
+
+    @EntityGraph(attributePaths = "cliente")
+    Optional<EnvioTracking> findWithClienteByCodigoUnico(String codigoUnico);
 }
