@@ -306,23 +306,67 @@ Requiere sesión de administrador (Spring Security, login en `/login`). Reutiliz
 
 **GET /api/v1/admin/envios**
 
+Lista paginada de todos los envíos con filtros y ordenación.
+
 ```bash
-curl http://localhost:8895/api/v1/admin/envios
+# Paginación básica
+curl "http://localhost:8895/api/v1/admin/envios?page=0&size=5"
+
+# Filtro por estado
+curl "http://localhost:8895/api/v1/admin/envios?estado=EN_TRANSITO"
+
+# Búsqueda por código (coincidencia parcial)
+curl "http://localhost:8895/api/v1/admin/envios?codigo=MT-2026"
+
+# Ordenación por fecha descendente
+curl "http://localhost:8895/api/v1/admin/envios?sort=ultimaActualizacion,desc"
+
+# Combinación de filtros
+curl "http://localhost:8895/api/v1/admin/envios?page=0&size=10&estado=EN_TRANSITO&sort=ultimaActualizacion,desc"
 ```
+
+| Parámetro | Tipo | Default | Descripción |
+|-----------|------|---------|-------------|
+| `page` | int | 0 | Número de página (zero-based) |
+| `size` | int | 20 | Elementos por página |
+| `estado` | string | — | Filtro exacto por estado (RECIBIDO, EN_TRANSITO, ENTREGADO, etc.) |
+| `codigo` | string | — | Búsqueda parcial por código único |
+| `sort` | string | `ultimaActualizacion,desc` | Campo y dirección de ordenación |
 
 Respuesta 200:
 ```json
-[
-  {
-    "codigoUnico": "MT-2026-0001",
-    "estado": "EN_TRANSITO",
-    "destinatario": "María González",
-    "origen": "Asturias, España",
-    "destino": "Asunción, Paraguay",
-    "ultimaActualizacion": "2026-05-20T14:30:00"
-  }
-]
+{
+  "content": [
+    {
+      "codigoUnico": "MT-2026-0001",
+      "estado": "EN_TRANSITO",
+      "destinatario": "María González",
+      "origen": "Asturias, España",
+      "destino": "Asunción, Paraguay",
+      "ultimaActualizacion": "2026-05-20T14:30:00"
+    }
+  ],
+  "totalElements": 25,
+  "totalPages": 3,
+  "size": 10,
+  "number": 0,
+  "sort": {
+    "sorted": true,
+    "unsorted": false,
+    "empty": false
+  },
+  "first": true,
+  "last": false,
+  "empty": false
+}
 ```
+
+**Ventajas de la paginación:**
+- Escalabilidad: consultas optimizadas con LIMIT/OFFSET en base de datos
+- Dashboards grandes: carga progresiva sin bloquear la interfaz
+- Apps móviles: respuestas ligeras con tamaños de página reducidos
+- Tablas dinámicas: integración directa con tablas DataTables, AG Grid, etc.
+- Optimización backend: evita cargar miles de registros en memoria
 
 **GET /api/v1/admin/envios/{codigo}**
 
