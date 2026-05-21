@@ -5,13 +5,15 @@ import com.grupb2.casarural.model.EnvioTracking;
 import com.grupb2.casarural.repository.EnvioTrackingRepository;
 import com.grupb2.casarural.service.EvidenciaEnvioService;
 import com.grupb2.casarural.service.EventoTrackingService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,9 +33,19 @@ public class AdminApiController {
     }
 
     @GetMapping("/envios")
-    public ResponseEntity<List<AdminEnvioResumenDto>> listarEnvios() {
-        List<AdminEnvioResumenDto> dtos = trackingRepo.findAllByOrderByUltimaActualizacionDesc()
-                .stream().map(e -> {
+    public ResponseEntity<Page<AdminEnvioResumenDto>> listarEnvios(
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) String codigo,
+            Pageable pageable) {
+        Specification<EnvioTracking> spec = Specification.where(null);
+        if (estado != null && !estado.isBlank()) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("estado"), estado.trim().toUpperCase()));
+        }
+        if (codigo != null && !codigo.isBlank()) {
+            spec = spec.and((root, query, cb) -> cb.like(root.get("codigoUnico"), "%" + codigo.trim().toUpperCase() + "%"));
+        }
+        Page<AdminEnvioResumenDto> page = trackingRepo.findAll(spec, pageable)
+                .map(e -> {
                     AdminEnvioResumenDto dto = new AdminEnvioResumenDto();
                     dto.setCodigoUnico(e.getCodigoUnico());
                     dto.setEstado(e.getEstado());
@@ -42,8 +54,8 @@ public class AdminApiController {
                     dto.setDestino(e.getDestino());
                     dto.setUltimaActualizacion(e.getUltimaActualizacion());
                     return dto;
-                }).collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+                });
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/envios/{codigo}")
