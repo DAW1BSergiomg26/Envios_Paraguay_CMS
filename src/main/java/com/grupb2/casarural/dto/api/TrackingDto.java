@@ -14,6 +14,8 @@ public class TrackingDto {
     private LocalDateTime ultimaActualizacion;
     private List<EventoDto> eventos;
     private List<EvidenciaDto> evidencias;
+    private String clienteNombre;
+    private String clienteEmail;
 
     // Getters y Setters
     public String getCodigoUnico() { return codigoUnico; }
@@ -36,4 +38,8 @@ public class TrackingDto {
     public void setEventos(List<EventoDto> eventos) { this.eventos = eventos; }
     public List<EvidenciaDto> getEvidencias() { return evidencias; }
     public void setEvidencias(List<EvidenciaDto> evidencias) { this.evidencias = evidencias; }
+    public String getClienteNombre() { return clienteNombre; }
+    public void setClienteNombre(String clienteNombre) { this.clienteNombre = clienteNombre; }
+    public String getClienteEmail() { return clienteEmail; }
+    public void setClienteEmail(String clienteEmail) { this.clienteEmail = clienteEmail; }
 }
