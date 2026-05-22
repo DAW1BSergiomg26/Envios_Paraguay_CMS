@@ -29,6 +29,10 @@ export function getAdminEnvioDetalle(codigo) {
   return api.get(`/admin/envios/${codigo}`);
 }
 
+export function putAdminEnvioEstado(codigo, estado) {
+  return api.put(`/admin/envios/${codigo}/estado`, { estado });
+}
+
 export async function getCsrfToken() {
   const res = await fetch('/login', { credentials: 'include' });
   const html = await res.text();

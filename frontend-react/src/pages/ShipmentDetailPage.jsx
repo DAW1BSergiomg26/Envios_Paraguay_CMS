@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getAdminEnvioDetalle } from '../services/api';
 import usePolling from '../hooks/usePolling';
 import RefreshIndicator from '../components/RefreshIndicator';
+import UpdateEstadoPanel from '../components/UpdateEstadoPanel';
 import { parseLocalDateTime } from '../services/dateUtils';
 import StatusBadge from '../components/StatusBadge';
 import Timeline from '../components/Timeline';
@@ -155,6 +156,8 @@ export default function ShipmentDetailPage() {
           })}
         </p>
       </div>
+
+      <UpdateEstadoPanel codigo={envio.codigoUnico} estadoActual={envio.estado} onUpdated={refreshNow} />
 
       <section>
         <h2 className="section-title">Información del envío</h2>
