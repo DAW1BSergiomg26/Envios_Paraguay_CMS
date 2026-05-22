@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import InstallPWAButton from '../components/InstallPWAButton';
+import PushNotificationButton from '../components/PushNotificationButton';
 
 export default function MainLayout() {
   const { user, logout } = useAuth();
@@ -20,6 +21,7 @@ export default function MainLayout() {
           </span>
           <div className="navbar-right">
             <InstallPWAButton />
+            <PushNotificationButton />
             <span className="navbar-user">{user.username}</span>
             <button className="btn-logout" onClick={handleLogout}>
               Cerrar sesión

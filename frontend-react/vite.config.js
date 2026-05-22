@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      strategies: 'injectManifest',
+      srcDir: 'public',
+      filename: 'sw.js',
       includeAssets: ['favicon.svg', 'icons/*.svg'],
       manifest: {
         name: 'Monteastur Envios',
@@ -49,6 +52,10 @@ export default defineConfig({
             label: 'Panel de administración Monteastur'
           }
         ]
+      },
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],

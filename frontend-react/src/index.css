@@ -190,14 +190,49 @@ body {
   height: 16px;
 }
 
-.btn-install-pwa__spinner {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid #3b82f640;
-  border-top-color: #3b82f6;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
+.btn-push {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #2a2d3a;
+  color: #9ca3af;
+  padding: 0.35rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-push:hover:not(:disabled) {
+  border-color: #3b82f6;
+  color: #e1e5ee;
+}
+
+.btn-push--active {
+  border-color: #3b82f6;
+  color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.btn-push__icon {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-push-test {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  color: #6b7280;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.7rem;
+  margin-left: 0.25rem;
+}
+
+.push-container {
+  display: flex;
+  align-items: center;
 }
 
 /* === Dashboard header === */
