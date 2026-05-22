@@ -1,0 +1,41 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  base: process.env.VITE_BASE || '/',
+  plugins: [react()],
+  server: {
+    port: 5173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8895',
+        changeOrigin: true,
+        secure: false
+      },
+      '/actuator': {
+        target: 'http://localhost:8895',
+        changeOrigin: true,
+        secure: false
+      },
+      '/login': {
+        target: 'http://localhost:8895',
+        changeOrigin: true,
+        secure: false
+      },
+      '/logout': {
+        target: 'http://localhost:8895',
+        changeOrigin: true,
+        secure: false
+      },
+      '/uploads': {
+        target: 'http://localhost:8895',
+        changeOrigin: true,
+        secure: false
+      }
+    }
+  },
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true
+  }
+})

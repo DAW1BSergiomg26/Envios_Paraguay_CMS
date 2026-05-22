@@ -22,6 +22,10 @@ Plataforma web profesional para la gestión de envíos internacionales entre Esp
 - **Logback** - Sistema de logging profesional
 - **Maven 3.9+** - Gestión de dependencias y build
 - **CSS modular** - Estilos organizados por funcionalidad
+- **React 19** - Dashboard moderno SPA para administración
+- **Vite 8** - Bundler y dev server del frontend React
+- **Axios** - Cliente HTTP para el SPA React
+- **Recharts** - Librería de gráficos para analytics dashboard
 
 ## Arquitectura
 
@@ -162,6 +166,12 @@ La aplicación estará disponible en el puerto definido en la variable `PORT` (p
 | `/cliente/login` | Acceso específico para clientes |
 | `/cliente/panel` | Panel de cliente tras login exitoso |
 
+### React Dashboard (SPA)
+| Ruta | Descripción |
+|------|-------------|
+| `/react-dashboard` | Dashboard React SPA de administración |
+| `/react-dashboard/dashboard/envio/:codigo` | Detalle de envío con timeline y evidencias |
+
 ### Actuator (monitoreo)
 | Ruta | Descripción |
 |------|-------------|
@@ -170,7 +180,7 @@ La aplicación estará disponible en el puerto definido en la variable `PORT` (p
 
 ## Seguridad
 
-La seguridad de la aplicación se basa en varios pilares:
+### Pilares generales
 
 - **BCrypt para clientes**: Las contraseñas de clientes se almacenan hash con BCrypt (nunca en texto plano)
 - **Admin externalizado**: Las credenciales del admin se externalizan a variables de entorno (no hay hardcoded)
@@ -179,6 +189,79 @@ La seguridad de la aplicación se basa en varios pilares:
 - **Uploads fuera del jar**: Los archivos subidos se almacenan en el sistema de archivos, no dentro del JAR
 - **Logs separados**: Los logs se escriben en archivos externos, rotados diariamente
 - **Actuator seguro**: Solo se exponen los endpoints `health` e `info`, y los detalles de salud requieren autenticación
+
+### Seguridad SPA + API REST
+
+La aplicación implementa una **arquitectura híbrida** donde el frontend React SPA convive con el frontend Thymeleaf tradicional, compartiendo el mismo backend Spring Security.
+
+#### Mecanismo de autenticación
+
+El SPA React **no utiliza JWT**. En su lugar, reutiliza la sesión de Spring Security mediante cookie **JSESSIONID** (HttpOnly, Secure en producción). Esto evita la complejidad de gestión de tokens manteniendo la seguridad.
+
+#### Flujo de autenticación
+
+```
+React SPA (cliente navegador)
+       │
+       │ (1) GET /login → recibe formulario con CSRF token
+       ▼
+Spring Security (servidor)
+       │
+       │ (2) POST /login + _csrf + credentials
+       │     → valida usuario/contraseña
+       ▼
+JSESSIONID cookie (HttpOnly, no accesible desde JavaScript)
+       │
+       │ (3) SPA navega al dashboard
+       │     → GET /api/v1/admin/envios?page=0&size=1
+       │     → el navegador envía JSESSIONID automáticamente
+       ▼
+API REST autenticada (200 JSON con datos)
+```
+
+1. El usuario accede a `/login-react` en el SPA
+2. El SPA hace `GET /login` (a Spring Boot vía proxy de Vite) para obtener el token CSRF del formulario HTML
+3. Extrae el token CSRF del HTML parseado
+4. Envía `POST /login` con `username`, `password` y `_csrf`
+5. Spring Security valida, crea la sesión y devuelve la cookie `JSESSIONID` (HttpOnly)
+6. El SPA redirige al dashboard; todas las peticiones a la API REST llevan la cookie automáticamente
+
+#### CSRF: deshabilitado para APIs, activo para Thymeleaf
+
+| Contexto | CSRF | Motivo |
+|----------|------|--------|
+| Formularios Thymeleaf | ✅ Activo | Protección estándar contra CSRF en formularios HTML |
+| APIs `/api/**` | ❌ Deshabilitado | La sesión ya está protegida por cookie HttpOnly; el SPA no puede leer JSESSIONID desde JavaScript. Sin CSRF token se evitan errores 403 en operaciones PUT/POST desde el SPA sin sacrificar seguridad real, ya que un atacante no puede leer la cookie JSESSIONID ni fabricar una sesión válida. |
+
+**Decisión técnica documentada en**: `SecurityConfig.java` (javadoc de clase y comentarios en `filterChain`).
+
+#### Cookie de sesión
+
+- **HttpOnly**: `true` — no accesible desde JavaScript (`document.cookie`)
+- **Secure**: `true` en producción (`application-prod.properties`)
+- **SameSite**: Lax (default Spring Security) — evita envío en peticiones cross-site
+- **CSRF token**: no necesario en APIs porque la cookie HttpOnly ya autentica cada petición
+
+#### Protección de rutas
+
+| Ruta | Protección |
+|------|------------|
+| `/` (home) | Pública |
+| `/seguimiento` | Pública |
+| `/api/v1/tracking/**` | Pública |
+| `/api/v1/cliente/**` | Sesión requerida (403 si no autenticado) |
+| `/admin/**` | Spring Security (redirect a `/login` si no autenticado) |
+| `/api/v1/admin/**` | Spring Security (redirect a `/login` si no autenticado) |
+| `/react-dashboard/**` | Pública (el SPA protege internamente con `ProtectedRoute`) |
+
+#### Seguridad del SPA React
+
+- **No almacena credenciales**: la sesión vive en el servidor, no en localStorage ni sessionStorage
+- **No expone tokens**: no hay JWT que puedan ser interceptados por XSS
+- **Logout**: `POST /logout` con CSRF invalida la sesión del lado del servidor
+- **ProtectedRoute**: componente React que redirige a `/login-react` si no hay sesión activa
+- **AuthContext**: verifica la sesión al montar la aplicación (`GET /api/v1/admin/envios?page=0&size=1`)
+- **Interceptores Axios**: detectan respuestas HTML (login page) y muestran error "Necesitas iniciar sesión como admin"
 
 ## Uploads
 
@@ -408,7 +491,7 @@ Respuesta 404:
 
 ### Nota de arquitectura
 
-El backend implementa un modelo híbrido **MVC + REST API**. El frontend Thymeleaf sigue activo y es completamente funcional. La API REST `/api/v1/` está diseñada para ser consumida por aplicaciones móviles, integraciones con sistemas externos y futuros frontends SPA. Ambas capas comparten los mismos servicios, repositorios y entidades JPA, garantizando consistencia en la lógica de negocio.
+El backend implementa un modelo híbrido **MVC + REST API + SPA**. El frontend Thymeleaf sigue activo y es completamente funcional. El dashboard React SPA se sirve desde `/react-dashboard` y se comunica con la API REST `/api/v1/admin/` usando la misma sesión Spring Security. La API REST `/api/v1/` también está diseñada para ser consumida por aplicaciones móviles e integraciones con sistemas externos. Todas las capas comparten los mismos servicios, repositorios y entidades JPA, garantizando consistencia en la lógica de negocio.
 
 ## Backup básico
 
@@ -440,14 +523,26 @@ Antes de desplegar en un entorno de producción, verificar:
 
 ## Roadmap futuro
 
-- **API REST**: Exposición de servicios para integración con sistemas externos
-- **JWT**: Autenticación basada en tokens para APIs y aplicaciones móviles
+### Funcionalidades
+
 - **Emails automáticos**: Notificaciones por email en cambios de estado de envíos
 - **WhatsApp API**: Envío de notificaciones y actualizaciones vía WhatsApp
 - **WebSockets tracking**: Actualizaciones en tiempo real del tracking sin recargar la página
 - **App móvil**: Aplicación nativa para clientes y operadores
 - **Roles avanzados**: Sistema de permisos más granular (operador, supervisor, auditor)
-- **Dashboard analytics**: Gráficos y métricas de rendimiento del negocio
+- **Exportar datos**: CSV, Excel y PDF desde el dashboard React
+- **Notificaciones push**: Alertas en el navegador para cambios de estado
+
+### Roadmap Seguridad
+
+- **JWT para APIs**: Autenticación stateless basada en tokens para apps móviles e integraciones externas
+- **Refresh tokens**: Rotación segura de tokens sin reautenticar al usuario
+- **Roles granulares**: Permisos por acción (lectura, escritura, borrado) en lugar de roles planos
+- **Rate limiting**: Protección contra abuso de API y fuerza bruta con bucket4j o Spring Cloud Gateway
+- **Audit logs**: Trazabilidad completa de todas las operaciones sobre envíos (quién, cuándo, qué cambió)
+- **HTTPS reverse proxy**: Terminación TLS en Nginx/Caddy con HSTS y cabeceras de seguridad
+- **Content Security Policy**: Cabeceras CSP para prevenir XSS en el SPA
+- **OWASP Top 10**: Auditoría periódica contra las vulnerabilidades más críticas
 
 ---
 

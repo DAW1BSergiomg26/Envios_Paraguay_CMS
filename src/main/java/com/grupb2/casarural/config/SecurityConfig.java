@@ -12,6 +12,22 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+/**
+ * Configuraci�n de seguridad para la arquitectura h�brida MVC + SPA.
+ *
+ * La aplicaci�n convive con dos frontends:
+ * - Thymeleaf (MVC tradicional): formularios con protecci�n CSRF activa
+ * - React SPA (dashboard moderno): sesi�n mediante cookie JSESSIONID
+ *
+ * Estrategia CSRF:
+ * - Habilitado para Thymeleaf (protege formularios HTML contra ataques CSRF)
+ * - Deshabilitado para /api/** (sesi�n autenticada v�a HttpOnly cookie;
+ *   el navegador env�a JSESSIONID autom�ticamente en cada petici�n,
+ *   incluyendo PUT/POST desde el SPA. No hay formulario HTML que pueda
+ *   ser explotado, y el SPA no puede leer la cookie JSESSIONID)
+ *
+ * @see <a href="https://docs.spring.io/spring-security/reference/servlet/exploits/csrf.html">Spring Security CSRF</a>
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -25,18 +41,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+            // Rutas protegidas: admin MVC y API REST admin requieren autenticaci�n
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**", "/api/v1/admin/**").authenticated()
                 .anyRequest().permitAll()
             )
+            // Login basado en formulario Spring Security (Thymeleaf)
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/admin/dashboard")
                 .permitAll()
             )
+            // Logout est�ndar con redirecci�n
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
                 .permitAll()
+            )
+            // CSRF: deshabilitado solo para API REST (ver JavaDoc de la clase)
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**")
             );
         return http.build();
     }
