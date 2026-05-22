@@ -1,0 +1,181 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f0f2f5;
+  color: #1a1a2e;
+  line-height: 1.5;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.dashboard-header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.status--connected {
+  background: #27ae60;
+  color: #fff;
+}
+
+.status--error {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.status--checking {
+  background: #f39c12;
+  color: #fff;
+}
+
+.error-banner {
+  margin: 1rem 2rem;
+  padding: 0.8rem 1.2rem;
+  background: #fdecea;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+}
+
+.error-banner--login {
+  background: #fff8e1;
+  border-color: #ffe082;
+  color: #6d4c00;
+}
+
+.error-banner--login strong {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.error-banner--login ol {
+  margin: 0.5rem 0 0 1.2rem;
+  font-size: 0.85rem;
+}
+
+.error-banner--login a {
+  color: #1565c0;
+  text-decoration: underline;
+}
+
+.summary {
+  display: flex;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.2rem 1.5rem;
+  min-width: 180px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.card strong {
+  display: block;
+  font-size: 1.8rem;
+  color: #1a1a2e;
+}
+
+.card span {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.table-section {
+  padding: 0 2rem 2rem;
+}
+
+.table-section h2 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.envios-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.envios-table th {
+  text-align: left;
+  padding: 0.8rem 1rem;
+  background: #f8f9fa;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: #555;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.envios-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge--recibido {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.badge--en_transito {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.badge--en_aduanas {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.badge--en_reparto {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.badge--entregado {
+  background: #e8f5e9;
+  color: #1b5e20;
+}
