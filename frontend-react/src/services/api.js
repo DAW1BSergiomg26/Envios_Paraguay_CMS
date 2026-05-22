@@ -25,4 +25,48 @@ export function getAdminEnvios(params = {}) {
   return api.get('/admin/envios', { params });
 }
 
+export async function getCsrfToken() {
+  const res = await fetch('/login', { credentials: 'include' });
+  const html = await res.text();
+  const match = html.match(/name="_csrf".*?value="([^"]+)"/);
+  return match ? match[1] : null;
+}
+
+export async function loginUser(username, password) {
+  const token = await getCsrfToken();
+  if (!token) return false;
+  const body = new URLSearchParams({ username, password, _csrf: token });
+  await fetch('/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body,
+    credentials: 'include',
+    redirect: 'manual'
+  });
+  return checkSession();
+}
+
+export async function logoutUser() {
+  const token = await getCsrfToken();
+  if (token) {
+    const body = new URLSearchParams({ _csrf: token });
+    await fetch('/logout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body,
+      credentials: 'include',
+      redirect: 'manual'
+    });
+  }
+}
+
+export async function checkSession() {
+  try {
+    await api.get('/admin/envios?page=0&size=1');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 export default api;
