@@ -10,6 +10,7 @@ import Pagination from '../components/Pagination';
 import SearchBar from '../components/SearchBar';
 import StatusFilter from '../components/StatusFilter';
 import EmptyState from '../components/EmptyState';
+import ExportButtons from '../components/ExportButtons';
 import { SkeletonRow, SkeletonCard } from '../components/SkeletonLoader';
 
 const PAGE_SIZE = 10;
@@ -112,6 +113,7 @@ export default function AdminDashboard() {
       <section className="toolbar">
         <SearchBar value={codigo} onChange={handleSearch} placeholder="Buscar por código de tracking…" />
         <StatusFilter value={estado} onChange={handleEstado} />
+        <ExportButtons envios={envios} />
       </section>
 
       <section className="table-section">

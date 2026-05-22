@@ -221,6 +221,68 @@ body {
   color: #e1e5ee;
 }
 
+/* === Export buttons === */
+.export-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid #2a2d3a;
+  background: #1a1d27;
+  color: #9ca3af;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.export-btn:hover:not(:disabled) {
+  border-color: #3b82f6;
+  color: #e1e5ee;
+  background: #1e2030;
+}
+
+.export-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.export-btn__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.export-btn__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #3b82f6;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: export-spin 0.6s linear infinite;
+}
+
+@keyframes export-spin {
+  to { transform: rotate(360deg); }
+}
+
+.export-btn--csv:hover:not(:disabled) {
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.export-btn--xlsx:hover:not(:disabled) {
+  border-color: #22d3ee;
+  color: #22d3ee;
+}
+
 /* === Table section === */
 .table-section {
   padding: 0 2rem 2rem;
