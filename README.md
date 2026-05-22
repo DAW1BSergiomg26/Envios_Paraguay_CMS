@@ -212,6 +212,204 @@ Debe devolver:
 
 Este endpoint es utilizado por Docker Compose y orquestadores para verificar que la aplicación está funcionando correctamente.
 
+## API REST v1
+
+La aplicación expone una API REST pública bajo `/api/v1/` para integración con sistemas externos, apps móviles y futuros frontends SPA.
+
+La API convive con el frontend Thymeleaf actual. No requiere autenticación para los endpoints públicos de tracking; los endpoints de cliente y admin reutilizan la sesión existente (Spring Security para admin, sesión HTTP para cliente).
+
+### API Pública — Tracking
+
+No requiere autenticación.
+
+**GET /api/v1/tracking/{codigo}**
+
+```bash
+curl http://localhost:8895/api/v1/tracking/MT-2026-0001
+```
+
+Respuesta 200:
+```json
+{
+  "codigoUnico": "MT-2026-0001",
+  "estado": "EN_TRANSITO",
+  "destinatario": "María González",
+  "origen": "Asturias, España",
+  "destino": "Asunción, Paraguay",
+  "peso": "15 kg",
+  "contenido": "Ropa y alimentos",
+  "ultimaActualizacion": "2026-05-20T14:30:00"
+}
+```
+
+Respuesta 404:
+```json
+{
+  "timestamp": "2026-05-21T02:00:00Z",
+  "status": 404,
+  "error": "Tracking no encontrado"
+}
+```
+
+### API Cliente — Envíos propios
+
+Requiere sesión de cliente activa (login en `/cliente/login`). Reutiliza la misma cookie de sesión.
+
+**GET /api/v1/cliente/envios**
+
+```bash
+curl http://localhost:8895/api/v1/cliente/envios
+```
+
+Respuesta 200:
+```json
+[
+  {
+    "codigo": "MT-2026-0001",
+    "estado": "EN_TRANSITO",
+    "origen": "Asturias, España",
+    "destino": "Asunción, Paraguay",
+    "ultimaActualizacion": "2026-05-20T14:30:00"
+  }
+]
+```
+
+**GET /api/v1/cliente/envios/{codigo}**
+
+```bash
+curl http://localhost:8895/api/v1/cliente/envios/MT-2026-0001
+```
+
+Respuesta 200: Ídem TrackingDto completo con eventos y evidencias visibles.
+
+Respuesta 403 (envío ajeno o sin sesión):
+```json
+{
+  "timestamp": "2026-05-21T02:00:00Z",
+  "status": 403,
+  "error": "Acceso denegado"
+}
+```
+
+Respuesta 404:
+```json
+{
+  "timestamp": "2026-05-21T02:00:00Z",
+  "status": 404,
+  "error": "Tracking no encontrado"
+}
+```
+
+### API Admin — Gestión de envíos
+
+Requiere sesión de administrador (Spring Security, login en `/login`). Reutiliza la misma cookie de sesión.
+
+**GET /api/v1/admin/envios**
+
+Lista paginada de todos los envíos con filtros y ordenación.
+
+```bash
+# Paginación básica
+curl "http://localhost:8895/api/v1/admin/envios?page=0&size=5"
+
+# Filtro por estado
+curl "http://localhost:8895/api/v1/admin/envios?estado=EN_TRANSITO"
+
+# Búsqueda por código (coincidencia parcial)
+curl "http://localhost:8895/api/v1/admin/envios?codigo=MT-2026"
+
+# Ordenación por fecha descendente
+curl "http://localhost:8895/api/v1/admin/envios?sort=ultimaActualizacion,desc"
+
+# Combinación de filtros
+curl "http://localhost:8895/api/v1/admin/envios?page=0&size=10&estado=EN_TRANSITO&sort=ultimaActualizacion,desc"
+```
+
+| Parámetro | Tipo | Default | Descripción |
+|-----------|------|---------|-------------|
+| `page` | int | 0 | Número de página (zero-based) |
+| `size` | int | 20 | Elementos por página |
+| `estado` | string | — | Filtro exacto por estado (RECIBIDO, EN_TRANSITO, ENTREGADO, etc.) |
+| `codigo` | string | — | Búsqueda parcial por código único |
+| `sort` | string | `ultimaActualizacion,desc` | Campo y dirección de ordenación |
+
+Respuesta 200:
+```json
+{
+  "content": [
+    {
+      "codigoUnico": "MT-2026-0001",
+      "estado": "EN_TRANSITO",
+      "destinatario": "María González",
+      "origen": "Asturias, España",
+      "destino": "Asunción, Paraguay",
+      "ultimaActualizacion": "2026-05-20T14:30:00"
+    }
+  ],
+  "totalElements": 25,
+  "totalPages": 3,
+  "size": 10,
+  "number": 0,
+  "sort": {
+    "sorted": true,
+    "unsorted": false,
+    "empty": false
+  },
+  "first": true,
+  "last": false,
+  "empty": false
+}
+```
+
+**Ventajas de la paginación:**
+- Escalabilidad: consultas optimizadas con LIMIT/OFFSET en base de datos
+- Dashboards grandes: carga progresiva sin bloquear la interfaz
+- Apps móviles: respuestas ligeras con tamaños de página reducidos
+- Tablas dinámicas: integración directa con tablas DataTables, AG Grid, etc.
+- Optimización backend: evita cargar miles de registros en memoria
+
+**GET /api/v1/admin/envios/{codigo}**
+
+```bash
+curl http://localhost:8895/api/v1/admin/envios/MT-2026-0001
+```
+
+Respuesta 200: TrackingDto completo con datos del cliente, eventos del timeline y todas las evidencias.
+
+**PUT /api/v1/admin/envios/{codigo}/estado**
+
+Actualiza el estado del envío y crea automáticamente un evento de tracking en el timeline.
+
+```bash
+curl -X PUT http://localhost:8895/api/v1/admin/envios/MT-2026-0001/estado \
+  -H "Content-Type: application/json" \
+  -d '{"estado":"EN_TRANSITO"}'
+```
+
+Respuesta 200: TrackingDto completo actualizado.
+
+Respuesta 404:
+```json
+{
+  "timestamp": "2026-05-21T02:00:00Z",
+  "status": 404,
+  "error": "Tracking no encontrado"
+}
+```
+
+### Códigos de estado HTTP
+
+| Código | Descripción |
+|--------|-------------|
+| 200 OK | Petición exitosa |
+| 403 Forbidden | Acceso denegado (sesión no válida o envío ajeno) |
+| 404 Not Found | Recurso no encontrado |
+| 500 Internal Server Error | Error interno del servidor |
+
+### Nota de arquitectura
+
+El backend implementa un modelo híbrido **MVC + REST API**. El frontend Thymeleaf sigue activo y es completamente funcional. La API REST `/api/v1/` está diseñada para ser consumida por aplicaciones móviles, integraciones con sistemas externos y futuros frontends SPA. Ambas capas comparten los mismos servicios, repositorios y entidades JPA, garantizando consistencia en la lógica de negocio.
+
 ## Backup básico
 
 ### Base de datos MySQL:
