@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAdminEnvioDetalle } from '../services/api';
+import usePolling from '../hooks/usePolling';
+import RefreshIndicator from '../components/RefreshIndicator';
 import { parseLocalDateTime } from '../services/dateUtils';
 import StatusBadge from '../components/StatusBadge';
 import Timeline from '../components/Timeline';
 import EvidenciasGrid from '../components/EvidenciasGrid';
+
+const POLL_INTERVAL = 20000;
 
 function DetailSkeleton() {
   return (
@@ -61,12 +65,23 @@ export default function ShipmentDetailPage() {
   const [envio, setEnvio] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const estadoRef = useRef(null);
+
+  const refreshFn = useCallback(async () => {
+    const res = await getAdminEnvioDetalle(codigo);
+    setEnvio(res.data);
+  }, [codigo]);
+
+  const { polling, lastUpdated, refreshNow, refreshError } = usePolling(refreshFn, POLL_INTERVAL, !loading && !error);
 
   useEffect(() => {
     setLoading(true);
     setError(null);
     getAdminEnvioDetalle(codigo)
-      .then(res => setEnvio(res.data))
+      .then(res => {
+        setEnvio(res.data);
+        estadoRef.current = res.data.estado;
+      })
       .catch(err => {
         if (err.response?.status === 404) {
           setError('404');
@@ -116,6 +131,7 @@ export default function ShipmentDetailPage() {
     <div className="detail-page">
       <div className="detail-topbar">
         <button className="btn-back" onClick={() => navigate('/')}>← Volver al dashboard</button>
+        <RefreshIndicator lastUpdated={lastUpdated} polling={polling} refreshError={refreshError} onRefresh={refreshNow} />
       </div>
 
       <div className="detail-hero">

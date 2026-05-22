@@ -1,6 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAdminEnvios } from '../services/api';
+import usePolling from '../hooks/usePolling';
+import RefreshIndicator from '../components/RefreshIndicator';
+import AnalyticsSection from '../components/AnalyticsSection';
 import StatsCard from '../components/StatsCard';
 import StatusBadge from '../components/StatusBadge';
 import Pagination from '../components/Pagination';
@@ -10,6 +13,7 @@ import EmptyState from '../components/EmptyState';
 import { SkeletonRow, SkeletonCard } from '../components/SkeletonLoader';
 
 const PAGE_SIZE = 10;
+const POLL_INTERVAL = 15000;
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -21,9 +25,17 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
   const [estado, setEstado] = useState('');
   const [codigo, setCodigo] = useState('');
+  const [sessionOk, setSessionOk] = useState(true);
+
+  const pageRef = useRef(page);
+  const estadoRef = useRef(estado);
+  const codigoRef = useRef(codigo);
+
+  useEffect(() => { pageRef.current = page; }, [page]);
+  useEffect(() => { estadoRef.current = estado; }, [estado]);
+  useEffect(() => { codigoRef.current = codigo; }, [codigo]);
 
   const fetchEnvios = useCallback(async (p, e, c) => {
-    setLoading(true);
     setError(null);
     try {
       const params = { page: p, size: PAGE_SIZE };
@@ -33,14 +45,26 @@ export default function AdminDashboard() {
       setEnvios(res.data.content || []);
       setTotal(res.data.totalElements || 0);
       setTotalPages(res.data.totalPages || 0);
+      setSessionOk(true);
     } catch (err) {
-      setError(err.message || 'Error de conexión');
-    } finally {
-      setLoading(false);
+      const msg = err.message || 'Error de conexión';
+      if (msg.toLowerCase().includes('sesión') || msg.toLowerCase().includes('login') || msg.toLowerCase().includes('denegado')) {
+        setSessionOk(false);
+      }
+      setError(msg);
     }
   }, []);
 
-  useEffect(() => { fetchEnvios(page, estado, codigo); }, [page, estado, codigo, fetchEnvios]);
+  const refreshFn = useCallback(() => fetchEnvios(pageRef.current, estadoRef.current, codigoRef.current), [fetchEnvios]);
+
+  const { polling, lastUpdated, refreshNow, refreshError } = usePolling(refreshFn, POLL_INTERVAL, sessionOk);
+
+  useEffect(() => {
+    if (page === 0 && estado === '' && codigo === '') {
+      setLoading(true);
+    }
+    fetchEnvios(page, estado, codigo).finally(() => setLoading(false));
+  }, [page, estado, codigo, fetchEnvios]);
 
   const handleSearch = useCallback((v) => { setCodigo(v); setPage(0); }, []);
   const handleEstado = useCallback((v) => { setEstado(v); setPage(0); }, []);
@@ -54,11 +78,7 @@ export default function AdminDashboard() {
     { label: 'Pendientes', value: envios.filter(e => e.estado === 'RECIBIDO').length, icon: '📋', color: '#6b7280' }
   ];
 
-  const needsLogin = error && (
-    error.toLowerCase().includes('sesión') ||
-    error.toLowerCase().includes('login') ||
-    error.toLowerCase().includes('denegado')
-  );
+  const needsLogin = !sessionOk;
 
   return (
     <div className="dashboard">
@@ -67,6 +87,7 @@ export default function AdminDashboard() {
           <h1>Panel de Envíos</h1>
           <p className="dashboard-subtitle">Gestión de tracking internacional España ↔ Paraguay</p>
         </div>
+        <RefreshIndicator lastUpdated={lastUpdated} polling={polling} refreshError={refreshError} onRefresh={refreshNow} />
       </header>
 
       {error && needsLogin && (
@@ -85,6 +106,8 @@ export default function AdminDashboard() {
           : stats.map((s, i) => <StatsCard key={i} {...s} />)
         }
       </section>
+
+      <AnalyticsSection envios={envios} loading={loading} />
 
       <section className="toolbar">
         <SearchBar value={codigo} onChange={handleSearch} placeholder="Buscar por código de tracking…" />
