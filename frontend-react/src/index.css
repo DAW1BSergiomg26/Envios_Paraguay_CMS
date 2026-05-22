@@ -1624,6 +1624,57 @@ body {
   border: 1px solid #4a2222;
 }
 
+/* === Offline Banner === */
+.offline-banner {
+  background: #2d1b1b;
+  border-bottom: 1px solid #4a2222;
+  color: #fca5a5;
+  padding: 0.75rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 56px;
+  z-index: 999;
+}
+
+.offline-banner__content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.offline-banner__icon {
+  font-size: 1.5rem;
+}
+
+.offline-banner__title {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.offline-banner__subtitle {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.offline-banner__retry {
+  background: rgba(252, 165, 165, 0.1);
+  border: 1px solid #fca5a5;
+  color: #fca5a5;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.offline-banner__retry:hover {
+  background: #fca5a5;
+  color: #2d1b1b;
+}
+
 /* === Responsive === */
 
 /* 1200px — tablet landscape / small desktop */

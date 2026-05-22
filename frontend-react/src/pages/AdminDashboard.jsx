@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { getAdminEnvios } from '../services/api';
 import usePolling from '../hooks/usePolling';
 import { useToast } from '../context/NotificationContext';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import { saveDashboardCache, getDashboardCache } from '../services/offlineCache';
 import RefreshIndicator from '../components/RefreshIndicator';
 import AnalyticsSection from '../components/AnalyticsSection';
 import StatsCard from '../components/StatsCard';
@@ -14,6 +16,7 @@ import DateRangeFilter from '../components/DateRangeFilter';
 import ActiveFilters from '../components/ActiveFilters';
 import ExportButtons from '../components/ExportButtons';
 import EmptyState from '../components/EmptyState';
+import OfflineBanner from '../components/OfflineBanner';
 import { SkeletonRow, SkeletonCard } from '../components/SkeletonLoader';
 
 const PAGE_SIZE = 10;
@@ -21,7 +24,7 @@ const POLL_INTERVAL = 15000;
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const { showError: showErrToast, showWarning, showSuccess } = useToast();
+  const { showError: showErrToast, showWarning, showSuccess, showInfo } = useToast();
   const [envios, setEnvios] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
@@ -64,16 +67,27 @@ export default function AdminDashboard() {
       setTotal(res.data.totalElements || 0);
       setTotalPages(res.data.totalPages || 0);
       setSessionOk(true);
+      if (p === 0 && !est.length && !q && !fd && !fh) {
+        saveDashboardCache(res.data);
+      }
     } catch (err) {
       const msg = err.message || 'Error de conexión';
       if (msg.toLowerCase().includes('sesión') || msg.toLowerCase().includes('login') || msg.toLowerCase().includes('denegado')) {
         setSessionOk(false);
       } else {
-        showErrToast(msg);
+        const cached = getDashboardCache();
+        if (cached) {
+          setEnvios(cached.data.content || []);
+          setTotal(cached.data.totalElements || 0);
+          setTotalPages(cached.data.totalPages || 0);
+          showInfo('Mostrando datos offline');
+        } else {
+          showErrToast(msg);
+        }
       }
       setError(msg);
     }
-  }, [buildParams, showErrToast]);
+  }, [buildParams, showErrToast, showInfo]);
 
   const refreshFn = useCallback(async () => {
     await fetchEnvios(pageRef.current, estadosRef.current, queryRef.current, fechaDesdeRef.current, fechaHastaRef.current);
@@ -126,10 +140,12 @@ export default function AdminDashboard() {
     { label: 'Pendientes', value: envios.filter(e => e.estado === 'RECIBIDO').length, icon: '📋', color: '#6b7280' }
   ];
 
+  const isOnline = useOnlineStatus();
   const needsLogin = !sessionOk;
 
   return (
     <div className="dashboard">
+      <OfflineBanner isOnline={isOnline} />
       <header className="dashboard-header">
         <div>
           <h1>Panel de Envíos</h1>
