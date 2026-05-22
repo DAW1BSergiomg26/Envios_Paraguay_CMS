@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAdminEnvios } from '../services/api';
 import StatsCard from '../components/StatsCard';
 import StatusBadge from '../components/StatusBadge';
@@ -11,6 +12,7 @@ import { SkeletonRow, SkeletonCard } from '../components/SkeletonLoader';
 const PAGE_SIZE = 10;
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [envios, setEnvios] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(0);
@@ -118,7 +120,7 @@ export default function AdminDashboard() {
               </thead>
               <tbody>
                 {envios.map(e => (
-                  <tr key={e.codigoUnico} className="envio-row">
+                  <tr key={e.codigoUnico} className="envio-row" onClick={() => navigate(`/dashboard/envio/${e.codigoUnico}`)}>
                     <td className="cell-code">{e.codigoUnico}</td>
                     <td><StatusBadge estado={e.estado} /></td>
                     <td>{e.destinatario}</td>

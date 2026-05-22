@@ -270,11 +270,16 @@ body {
 }
 
 .envio-row {
+  cursor: pointer;
   transition: background 0.15s;
 }
 
 .envio-row:hover {
   background: #1e212c;
+}
+
+.envio-row:active {
+  background: #252836;
 }
 
 .envio-row:last-child td {
@@ -530,4 +535,379 @@ body {
 .btn-login:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+/* === Detail page === */
+.detail-page {
+  padding: 1.5rem 2rem 2rem;
+}
+
+.detail-topbar {
+  margin-bottom: 1rem;
+}
+
+.btn-back {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  color: #9ca3af;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: all 0.15s;
+}
+
+.btn-back:hover {
+  border-color: #3b82f6;
+  color: #e1e5ee;
+}
+
+.detail-hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #2a2d3a;
+}
+
+.detail-hero-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.detail-code {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f1f5f9;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  letter-spacing: 0.02em;
+}
+
+.detail-hero-sub {
+  font-size: 0.82rem;
+  color: #6b7280;
+  align-self: flex-end;
+}
+
+.detail-status-badge-lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem 0.4rem 0.75rem;
+  border-radius: 24px;
+  border: 1px solid;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-status-icon {
+  font-size: 1.1rem;
+}
+
+.section-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e1e5ee;
+  margin-bottom: 0.75rem;
+  margin-top: 2rem;
+}
+
+.section-title:first-of-type {
+  margin-top: 0;
+}
+
+.detail-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+}
+
+.info-card-icon {
+  font-size: 1.2rem;
+  margin-bottom: 0.1rem;
+}
+
+.info-card-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #6b7280;
+}
+
+.info-card-value {
+  font-size: 0.88rem;
+  color: #e1e5ee;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+/* === Timeline === */
+.timeline {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.timeline-item {
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-line {
+  position: absolute;
+  left: -1.75rem;
+  top: 1.25rem;
+  bottom: 0;
+  width: 2px;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -2.4rem;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timeline-icon {
+  font-size: 0.85rem;
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.timeline-date {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.timeline-tag {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  border: 1px solid transparent;
+}
+
+.timeline-desc {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  line-height: 1.4;
+  margin-top: 0.1rem;
+}
+
+/* === Evidencias === */
+.evidencias-section {
+  margin-top: 0;
+}
+
+.evidencias-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.evidencia-card {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.evidencia-card:hover {
+  border-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+.evidencia-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background: #14161e;
+}
+
+.evidencia-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.evidencia-card:hover .evidencia-image {
+  transform: scale(1.05);
+}
+
+.evidencia-info {
+  padding: 0.6rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.evidencia-title {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #e1e5ee;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.evidencia-desc {
+  font-size: 0.72rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === Evidencia Modal === */
+.evidencia-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 2rem;
+}
+
+.evidencia-modal {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 800px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.evidencia-modal-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.evidencia-modal-img {
+  width: 100%;
+  max-height: 60vh;
+  object-fit: contain;
+  background: #0f1117;
+}
+
+.evidencia-modal-info {
+  padding: 1rem 1.2rem;
+}
+
+.evidencia-modal-info strong {
+  font-size: 0.9rem;
+  color: #e1e5ee;
+}
+
+.evidencia-modal-info p {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-top: 0.2rem;
+}
+
+/* === Detail error === */
+.detail-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.detail-error h2 {
+  font-size: 1.3rem;
+  color: #f1f5f9;
+  margin-top: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.detail-error p {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.detail-error .btn-back {
+  padding: 0.55rem 1.5rem;
+}
+
+/* === Detail skeleton === */
+.detail-skeleton {
+  display: flex;
+  flex-direction: column;
+}
+
+/* === Responsive detail === */
+@media (max-width: 768px) {
+  .detail-hero {
+    flex-direction: column;
+  }
+  .detail-hero-sub {
+    align-self: flex-start;
+  }
+  .detail-cards-grid {
+    grid-template-columns: 1fr;
+  }
+  .evidencias-grid {
+    grid-template-columns: 1fr;
+  }
+  .detail-page {
+    padding: 1rem;
+  }
 }
