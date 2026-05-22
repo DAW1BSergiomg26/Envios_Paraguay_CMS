@@ -159,6 +159,47 @@ body {
   color: #e1e5ee;
 }
 
+.btn-install-pwa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid #3b82f6;
+  color: #93bbfd;
+  padding: 0.3rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-install-pwa:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: #60a5fa;
+  color: #b3d4ff;
+}
+
+.btn-install-pwa:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-install-pwa__icon {
+  width: 16px;
+  height: 16px;
+}
+
+.btn-install-pwa__spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #3b82f640;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
 /* === Dashboard header === */
 .dashboard-header {
   display: flex;
@@ -1616,6 +1657,14 @@ body {
   .navbar-user {
     display: none;
   }
+  .btn-install-pwa {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.55rem;
+  }
+  .btn-install-pwa__icon {
+    width: 14px;
+    height: 14px;
+  }
   .dashboard-header {
     padding: 1.25rem 1rem 0.75rem;
     flex-direction: column;
@@ -1839,6 +1888,14 @@ body {
   .btn-logout {
     padding: 0.25rem 0.55rem;
     font-size: 0.72rem;
+  }
+  .btn-install-pwa {
+    font-size: 0.68rem;
+    padding: 0.2rem 0.45rem;
+  }
+  .btn-install-pwa__icon {
+    width: 12px;
+    height: 12px;
   }
   .dashboard-header {
     padding: 1rem 0.75rem 0.5rem;

@@ -1,5 +1,6 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import InstallPWAButton from '../components/InstallPWAButton';
 
 export default function MainLayout() {
   const { user, logout } = useAuth();
@@ -18,6 +19,7 @@ export default function MainLayout() {
             Monteastur
           </span>
           <div className="navbar-right">
+            <InstallPWAButton />
             <span className="navbar-user">{user.username}</span>
             <button className="btn-logout" onClick={handleLogout}>
               Cerrar sesión
