@@ -22,7 +22,7 @@ api.interceptors.response.use(
 );
 
 export function getAdminEnvios(params = {}) {
-  return api.get('/admin/envios', { params });
+  return api.get('/admin/envios', { params, paramsSerializer: { indexes: null } });
 }
 
 export function getAdminEnvioDetalle(codigo) {

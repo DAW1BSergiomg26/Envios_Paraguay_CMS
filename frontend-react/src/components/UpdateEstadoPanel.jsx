@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { putAdminEnvioEstado } from '../services/api';
+import { useToast } from '../context/NotificationContext';
 
 const ESTADOS = [
   { value: 'RECIBIDO', label: 'Recibido', color: '#6b7280' },
@@ -14,6 +15,7 @@ export default function UpdateEstadoPanel({ codigo, estadoActual, onUpdated }) {
   const [selected, setSelected] = useState('');
   const [updating, setUpdating] = useState(false);
   const [feedback, setFeedback] = useState(null);
+  const { showSuccess, showError: showErrToast } = useToast();
 
   const handleUpdate = async () => {
     if (!selected || selected === estadoActual) return;
@@ -22,11 +24,13 @@ export default function UpdateEstadoPanel({ codigo, estadoActual, onUpdated }) {
     try {
       const res = await putAdminEnvioEstado(codigo, selected);
       setFeedback({ type: 'success', message: 'Estado actualizado correctamente' });
+      showSuccess('Estado actualizado correctamente');
       setSelected('');
       if (onUpdated) onUpdated(res.data);
     } catch (err) {
       const msg = err.response?.data?.error || err.message || 'Error al actualizar';
       setFeedback({ type: 'error', message: msg });
+      showErrToast(msg);
     } finally {
       setUpdating(false);
     }

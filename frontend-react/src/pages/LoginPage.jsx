@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/NotificationContext';
 
 export default function LoginPage() {
   const [username, setUsername] = useState('');
@@ -8,6 +9,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const { login } = useAuth();
+  const { showSuccess, showError: showErrToast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from || '/';
@@ -18,10 +20,16 @@ export default function LoginPage() {
     setSubmitting(true);
     try {
       const ok = await login(username, password);
-      if (ok) navigate(from, { replace: true });
-      else setError('Credenciales incorrectas');
+      if (ok) {
+        showSuccess('Sesión iniciada correctamente');
+        navigate(from, { replace: true });
+      } else {
+        setError('Credenciales incorrectas');
+        showErrToast('Credenciales incorrectas');
+      }
     } catch {
       setError('Error de conexión con el servidor');
+      showErrToast('Error de conexión con el servidor');
     } finally {
       setSubmitting(false);
     }

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getAdminEnvioDetalle } from '../services/api';
 import usePolling from '../hooks/usePolling';
+import { useToast } from '../context/NotificationContext';
 import RefreshIndicator from '../components/RefreshIndicator';
 import UpdateEstadoPanel from '../components/UpdateEstadoPanel';
 import { parseLocalDateTime } from '../services/dateUtils';
@@ -63,6 +64,7 @@ const STATUS_COLORS = {
 export default function ShipmentDetailPage() {
   const { codigo } = useParams();
   const navigate = useNavigate();
+  const { showSuccess, showError: showErrToast } = useToast();
   const [envio, setEnvio] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -73,7 +75,12 @@ export default function ShipmentDetailPage() {
     setEnvio(res.data);
   }, [codigo]);
 
-  const { polling, lastUpdated, refreshNow, refreshError } = usePolling(refreshFn, POLL_INTERVAL, !loading && !error);
+  const { polling, lastUpdated, refreshNow: baseRefresh, refreshError } = usePolling(refreshFn, POLL_INTERVAL, !loading && !error);
+
+  const refreshNow = useCallback(async () => {
+    await baseRefresh();
+    showSuccess('Datos actualizados');
+  }, [baseRefresh, showSuccess]);
 
   useEffect(() => {
     setLoading(true);
@@ -87,11 +94,13 @@ export default function ShipmentDetailPage() {
         if (err.response?.status === 404) {
           setError('404');
         } else {
-          setError(err.message || 'Error de conexión');
+          const msg = err.message || 'Error de conexión';
+          setError(msg);
+          showErrToast(msg);
         }
       })
       .finally(() => setLoading(false));
-  }, [codigo]);
+  }, [codigo, showErrToast]);
 
   if (loading) {
     return (

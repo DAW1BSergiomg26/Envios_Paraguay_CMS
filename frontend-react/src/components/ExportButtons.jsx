@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { exportToCSV, exportToExcel } from '../services/exportUtils';
+import { useToast } from '../context/NotificationContext';
 
 export default function ExportButtons({ envios }) {
   const [exporting, setExporting] = useState(null);
+  const { showSuccess, showError: showErrToast } = useToast();
 
   const handleExport = async (format) => {
     setExporting(format);
@@ -10,11 +12,13 @@ export default function ExportButtons({ envios }) {
     try {
       if (format === 'csv') {
         exportToCSV(envios);
+        showSuccess(`${envios.length} envíos exportados a CSV`);
       } else {
         exportToExcel(envios);
+        showSuccess(`${envios.length} envíos exportados a Excel`);
       }
     } catch (err) {
-      console.error('Export error:', err);
+      showErrToast('Error al exportar');
     } finally {
       setExporting(null);
     }

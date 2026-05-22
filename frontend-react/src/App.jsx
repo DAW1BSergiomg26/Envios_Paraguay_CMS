@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { ToastProvider } from './context/NotificationContext';
+import ToastContainer from './components/ToastContainer';
 import MainLayout from './layouts/MainLayout';
 import AdminDashboard from './pages/AdminDashboard';
 import ShipmentDetailPage from './pages/ShipmentDetailPage';
@@ -10,7 +12,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <Routes>
+        <ToastProvider>
+          <ToastContainer />
+          <Routes>
           <Route path="/login-react" element={<LoginPage />} />
           <Route element={<MainLayout />}>
             <Route path="/" element={
@@ -22,6 +26,7 @@ export default function App() {
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        </ToastProvider>
       </AuthProvider>
     </BrowserRouter>
   );
