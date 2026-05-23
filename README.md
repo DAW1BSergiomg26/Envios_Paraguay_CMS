@@ -1,6 +1,12 @@
 # MONTEASTUR ENVIOS
 Plataforma logística España ↔ Paraguay.
 
+[![CI](https://github.com/DAW1BSergiomg26/Envios_Paraguay_CMS/actions/workflows/ci.yml/badge.svg)](https://github.com/DAW1BSergiomg26/Envios_Paraguay_CMS/actions/workflows/ci.yml)
+[![Java](https://img.shields.io/badge/Java-17-%23ED8B00?logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.3.5-%236DB33F?logo=spring&logoColor=white)](https://spring.io/projects/spring-boot)
+[![React](https://img.shields.io/badge/React-19-%2361DAFB?logo=react&logoColor=white)](https://react.dev/)
+[![Docker](https://img.shields.io/badge/Docker-%232496ED?logo=docker&logoColor=white)](https://docker.com/)
+
 Plataforma web profesional para la gestión de envíos internacionales entre España y Paraguay, con:
 - Tracking de envíos en tiempo real
 - Panel de administración completo
@@ -697,6 +703,20 @@ Antes de desplegar en un entorno de producción, verificar:
 | PWA no instala | Sin HTTPS o manifest incorrecto | Usar HTTPS; verificar console para errores |
 | Push notifications no funcionan | Permiso bloqueado o sin HTTPS | HTTPS requerido; resetear permiso en navegador |
 | Offline no funciona | Service Worker no registrado | Hard refresh (Ctrl+Shift+R) y recargar |
+
+## CI/CD
+
+El proyecto usa [GitHub Actions](https://github.com/DAW1BSergiomg26/Envios_Paraguay_CMS/actions) para integración continua. El pipeline se ejecuta automáticamente en cada push a `develop` o `feature/*`, y en cada PR hacia `develop`.
+
+### Jobs
+
+| Job | Comando | Artefacto |
+|-----|---------|-----------|
+| `backend-build` | `mvn clean package -DskipTests` | `backend-jar` (target/*.jar) |
+| `frontend-build` | `npm install` → `npm run build` | `frontend-dist` (frontend-react/dist) |
+| `docker-build` | `docker compose build` | — |
+
+Los artefactos generados (`backend-jar`, `frontend-dist`) están disponibles para descarga en la página de cada ejecución en GitHub Actions.
 
 ## Roadmap futuro
 

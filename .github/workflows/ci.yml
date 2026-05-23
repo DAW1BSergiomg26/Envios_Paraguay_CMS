@@ -43,6 +43,12 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn clean package -DskipTests
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: target/*.jar
+          if-no-files-found: error
 
   frontend-build:
     name: Frontend Build
@@ -61,6 +67,12 @@ jobs:
       - name: Build frontend
         working-directory: frontend-react
         run: npm run build
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend-react/dist
+          if-no-files-found: error
 
   docker-build:
     name: Docker Build
