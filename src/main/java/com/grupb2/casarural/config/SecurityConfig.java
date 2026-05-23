@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 /**
  * Configuraci�n de seguridad para la arquitectura h�brida MVC + SPA.
@@ -52,10 +53,23 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/admin/dashboard")
                 .permitAll()
             )
-            // Logout est�ndar con redirecci�n
+            // Logout con limpieza de sesi�n y cookie
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .permitAll()
+            )
+            // Protecci�n contra fijaci�n de sesi�n
+            .sessionManagement(session -> session
+                .sessionFixation().changeSessionId()
+            )
+            // Headers de seguridad
+            .headers(headers -> headers
+                .frameOptions(frame -> frame.deny())
+                .referrerPolicy(referrer -> referrer
+                    .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
+                )
             )
             // CSRF: deshabilitado solo para API REST (ver JavaDoc de la clase)
             .csrf(csrf -> csrf
