@@ -4,7 +4,7 @@
 # Uso:
 #   1. cp .env.example .env  y ajusta credenciales
 #   2. docker compose up -d
-#   3. http://localhost:8080
+#   3. http://localhost
 # =============================================
 
 services:
@@ -61,6 +61,37 @@ services:
       - backend
     mem_limit: 512m
 
+  nginx:
+    image: nginx:alpine
+    container_name: monteastur-nginx
+    ports:
+      - "${NGINX_PORT:-80}:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - certbot_www:/var/www/certbot
+    depends_on:
+      - app
+    networks:
+      - backend
+    restart: unless-stopped
+    mem_limit: 64m
+
+  # Certbot para SSL (ejecutar solo para obtener/renovar certificados)
+  #   docker compose --profile certbot run --rm certbot certonly --webroot -w /var/www/certbot -d monteastur.com
+  certbot:
+    image: certbot/certbot
+    container_name: monteastur-certbot
+    profiles:
+      - certbot
+    volumes:
+      - ./nginx/ssl:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    depends_on:
+      - nginx
+
 networks:
   backend:
     driver: bridge
@@ -69,3 +100,4 @@ volumes:
   mysql_data:
   uploads_data:
   logs_data:
+  certbot_www:
