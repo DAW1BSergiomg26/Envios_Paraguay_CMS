@@ -718,6 +718,52 @@ El proyecto usa [GitHub Actions](https://github.com/DAW1BSergiomg26/Envios_Parag
 
 Los artefactos generados (`backend-jar`, `frontend-dist`) están disponibles para descarga en la página de cada ejecución en GitHub Actions.
 
+## CD Automático VPS
+
+### Flujo de deploy
+
+Cada push a `develop` dispara el pipeline de deploy automático (`.github/workflows/deploy.yml`):
+
+```
+Git push develop
+       ↓
+  GitHub Actions
+       ↓
+  pre-deploy-check (Dockerfile, compose, .env.example)
+       ↓
+  deploy-vps (SSH → VPS)
+       ↓
+  git pull → docker compose up -d --build → image prune
+```
+
+La conexión SSH se realiza con clave privada — no se usan contraseñas.
+
+### Secrets requeridos
+
+| Secret | Descripción |
+|--------|-------------|
+| `VPS_HOST` | IP o dominio del VPS |
+| `VPS_USER` | Usuario SSH (ej: `root` o `deploy`) |
+| `VPS_SSH_KEY` | Clave privada SSH completa (incluyendo `-----BEGIN OPENSSH PRIVATE KEY-----`) |
+
+Configurar en GitHub: **Settings → Secrets and variables → Actions**.
+
+### Seguridad
+
+- La clave SSH se almacena cifrada en GitHub Secrets, nunca en el repo
+- El deploy solo se ejecuta en pushes a `develop` (no en PRs ni branches `feature/*`)
+- `set -e` en los comandos remotos — si algo falla, el deploy se detiene
+- Las credenciales de la base de datos y admin se configuran en el `.env` del VPS, no en GitHub
+
+### Rollback manual
+
+```bash
+ssh user@vps
+cd /opt/monteastur
+git checkout <commit-anterior>
+docker compose up -d --build
+```
+
 ## Roadmap futuro
 
 ### Funcionalidades
