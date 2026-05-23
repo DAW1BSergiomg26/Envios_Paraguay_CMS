@@ -6,17 +6,43 @@
 # Compose:      docker compose up -d
 # =============================================
 
-# ---- Stage 1: Build ----
+# ---- Stage 1: Build frontend ----
+FROM node:20-alpine AS frontend
+WORKDIR /frontend
+COPY frontend-react/package.json frontend-react/package-lock.json ./
+RUN npm install
+COPY frontend-react/ .
+ENV VITE_START_URL=/login-react
+RUN npm run build
+
+# ---- Stage 2: Build backend ----
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /build
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 COPY src ./src
+COPY --from=frontend /frontend/dist ./src/main/resources/static/
 RUN mvn package -DskipTests -q
 
-# ---- Stage 2: Runtime ----
+# ---- Stage 3: Runtime ----
 FROM eclipse-temurin:17-jre
+
+# OCI labels
+LABEL org.opencontainers.image.title="Monteastur Envios"
+LABEL org.opencontainers.image.description="Plataforma log\u00EDstica Espa\u00F1a \u2194 Paraguay"
+LABEL org.opencontainers.image.version="3.2"
+LABEL org.opencontainers.image.authors="Grupo B2"
+LABEL org.opencontainers.image.vendor="Monteastur"
+LABEL org.opencontainers.image.created=""
+
+# Create non-root user and writable directories
+RUN useradd -m appuser && \
+    mkdir -p /app/uploads /app/logs && \
+    chown -R appuser:appuser /app
+
+USER appuser
 WORKDIR /app
+
 COPY --from=build /build/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
