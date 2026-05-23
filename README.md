@@ -861,6 +861,55 @@ El stack incluye **Uptime Kuma** como monitor interno de uptime:
 
 **Uptime Kuma** permite crear monitores de tipo HTTP, SSL, DNS, Docker, y más, con notificaciones multicanal (Telegram, Discord, Slack, email). Para configuración detallada, ver `docs/UPTIME_MONITORING.md`.
 
+## Testing
+
+El backend usa **JUnit 5 + Mockito** para testing automatizado.
+
+### Stack de testing
+
+| Herramienta | Uso |
+|------------|-----|
+| **JUnit 5 (Jupiter)** | Framework de testing |
+| **Mockito** | Mocking de dependencias |
+| **Spring Boot Test** | Contexto de aplicación para tests de integración |
+| **MockMvc** | Testing de controladores HTTP |
+
+### Tests incluidos
+
+| Clase | Tipo | Dependencias |
+|-------|------|-------------|
+| `TrackingApiControllerTest` | `@WebMvcTest` | Mock de `EnvioTrackingRepository` |
+| `ReservaServiceTest` | `@ExtendWith(MockitoExtension.class)` | Mock de `ReservaRepository` |
+| `PushSubscriptionControllerTest` | `@WebMvcTest` | Sin dependencias externas |
+| `SecurityConfigTest` | `@WebMvcTest` + `@Import(SecurityConfig.class)` | Verifica rutas públicas y protegidas |
+
+### Ejecutar tests
+
+```bash
+# Todos los tests
+mvn test
+
+# Test específico
+mvn test -Dtest=TrackingApiControllerTest
+
+# Build completo (test + package)
+mvn clean package
+```
+
+### Cobertura actual
+
+| Capa | Tests | Cobertura aproximada |
+|------|-------|---------------------|
+| Controladores API | 5 tests | Tracking público, Push subscribe/unsubscribe |
+| Servicios | 3 tests | Crear reserva, buscar por ID |
+| Seguridad | 3 tests | Rutas públicas accesibles, admin protegido |
+| **Total** | **11 tests** | Funcionalidades críticas cubiertas |
+
+### CI
+
+Los tests se ejecutan automáticamente en GitHub Actions antes del empaquetado:
+`mvn clean package` (sin `-DskipTests`).
+
 ## Roadmap futuro
 
 ### Funcionalidades
