@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+      - feature/**
+  pull_request:
+    branches:
+      - develop
+
+env:
+  MYSQL_ROOT_PASSWORD: ci_root_pass
+  MYSQL_DATABASE: casarural_ci
+  MYSQL_USER: ci_user
+  MYSQL_PASSWORD: ci_user_pass
+  SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/casarural_ci?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  DB_DDL_AUTO: validate
+  JPA_SHOW_SQL: false
+  THYMELEAF_CACHE: true
+  UPLOAD_DIR: /app/uploads
+  SMTP_HOST: ""
+  SMTP_PORT: 587
+  SMTP_USERNAME: ""
+  SMTP_PASSWORD: ""
+  SMTP_FROM: ci@monteastur.com
+  SMTP_TO: ci@monteastur.com
+  ADMIN_USERNAME: ci_admin
+  ADMIN_PASSWORD: ci_admin_pass
+
+jobs:
+
+  backend-build:
+    name: Backend Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: maven
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-jar
+          path: target/*.jar
+          if-no-files-found: error
+
+  frontend-build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: frontend-react/package-lock.json
+      - name: Install dependencies
+        working-directory: frontend-react
+        run: npm install
+      - name: Build frontend
+        working-directory: frontend-react
+        run: npm run build
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend-react/dist
+          if-no-files-found: error
+
+  docker-build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create .env for CI
+        run: |
+          echo "PORT=8080" >> .env
+          echo "NGINX_PORT=80" >> .env
+          echo "MYSQL_ROOT_PASSWORD=${{ env.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "MYSQL_DATABASE=${{ env.MYSQL_DATABASE }}" >> .env
+          echo "MYSQL_USER=${{ env.MYSQL_USER }}" >> .env
+          echo "MYSQL_PASSWORD=${{ env.MYSQL_PASSWORD }}" >> .env
+          echo "SPRING_DATASOURCE_URL=${{ env.SPRING_DATASOURCE_URL }}" >> .env
+          echo "DB_USERNAME=${{ env.MYSQL_USER }}" >> .env
+          echo "DB_PASSWORD=${{ env.MYSQL_PASSWORD }}" >> .env
+          echo "DB_DDL_AUTO=${{ env.DB_DDL_AUTO }}" >> .env
+          echo "JPA_SHOW_SQL=${{ env.JPA_SHOW_SQL }}" >> .env
+          echo "THYMELEAF_CACHE=${{ env.THYMELEAF_CACHE }}" >> .env
+          echo "UPLOAD_DIR=${{ env.UPLOAD_DIR }}" >> .env
+          echo "SMTP_HOST=" >> .env
+          echo "SMTP_PORT=${{ env.SMTP_PORT }}" >> .env
+          echo "SMTP_USERNAME=" >> .env
+          echo "SMTP_PASSWORD=" >> .env
+          echo "SMTP_FROM=${{ env.SMTP_FROM }}" >> .env
+          echo "SMTP_TO=${{ env.SMTP_TO }}" >> .env
+          echo "ADMIN_USERNAME=${{ env.ADMIN_USERNAME }}" >> .env
+          echo "ADMIN_PASSWORD=${{ env.ADMIN_PASSWORD }}" >> .env
+      - name: Validate Docker Compose
+        run: docker compose config
+      - name: Build Docker images
+        run: docker compose build
