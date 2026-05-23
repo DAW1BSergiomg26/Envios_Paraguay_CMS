@@ -9,6 +9,25 @@ on:
     branches:
       - develop
 
+env:
+  MYSQL_ROOT_PASSWORD: ci_root_pass
+  MYSQL_DATABASE: casarural_ci
+  MYSQL_USER: ci_user
+  MYSQL_PASSWORD: ci_user_pass
+  SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/casarural_ci?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  DB_DDL_AUTO: validate
+  JPA_SHOW_SQL: false
+  THYMELEAF_CACHE: true
+  UPLOAD_DIR: /app/uploads
+  SMTP_HOST: ""
+  SMTP_PORT: 587
+  SMTP_USERNAME: ""
+  SMTP_PASSWORD: ""
+  SMTP_FROM: ci@monteastur.com
+  SMTP_TO: ci@monteastur.com
+  ADMIN_USERNAME: ci_admin
+  ADMIN_PASSWORD: ci_admin_pass
+
 jobs:
 
   backend-build:
@@ -28,9 +47,6 @@ jobs:
   frontend-build:
     name: Frontend Build
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: frontend-react
     steps:
       - uses: actions/checkout@v4
       - name: Set up Node 20
@@ -40,8 +56,10 @@ jobs:
           cache: npm
           cache-dependency-path: frontend-react/package-lock.json
       - name: Install dependencies
-        run: npm ci
+        working-directory: frontend-react
+        run: npm install
       - name: Build frontend
+        working-directory: frontend-react
         run: npm run build
 
   docker-build:
@@ -49,6 +67,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Create .env for CI
+        run: |
+          echo "PORT=8080" >> .env
+          echo "NGINX_PORT=80" >> .env
+          echo "MYSQL_ROOT_PASSWORD=${{ env.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "MYSQL_DATABASE=${{ env.MYSQL_DATABASE }}" >> .env
+          echo "MYSQL_USER=${{ env.MYSQL_USER }}" >> .env
+          echo "MYSQL_PASSWORD=${{ env.MYSQL_PASSWORD }}" >> .env
+          echo "SPRING_DATASOURCE_URL=${{ env.SPRING_DATASOURCE_URL }}" >> .env
+          echo "DB_USERNAME=${{ env.MYSQL_USER }}" >> .env
+          echo "DB_PASSWORD=${{ env.MYSQL_PASSWORD }}" >> .env
+          echo "DB_DDL_AUTO=${{ env.DB_DDL_AUTO }}" >> .env
+          echo "JPA_SHOW_SQL=${{ env.JPA_SHOW_SQL }}" >> .env
+          echo "THYMELEAF_CACHE=${{ env.THYMELEAF_CACHE }}" >> .env
+          echo "UPLOAD_DIR=${{ env.UPLOAD_DIR }}" >> .env
+          echo "SMTP_HOST=" >> .env
+          echo "SMTP_PORT=${{ env.SMTP_PORT }}" >> .env
+          echo "SMTP_USERNAME=" >> .env
+          echo "SMTP_PASSWORD=" >> .env
+          echo "SMTP_FROM=${{ env.SMTP_FROM }}" >> .env
+          echo "SMTP_TO=${{ env.SMTP_TO }}" >> .env
+          echo "ADMIN_USERNAME=${{ env.ADMIN_USERNAME }}" >> .env
+          echo "ADMIN_PASSWORD=${{ env.ADMIN_PASSWORD }}" >> .env
       - name: Validate Docker Compose
         run: docker compose config
       - name: Build Docker images
