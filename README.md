@@ -26,6 +26,9 @@ Plataforma web profesional para la gestión de envíos internacionales entre Esp
 - **Vite 8** - Bundler y dev server del frontend React
 - **Axios** - Cliente HTTP para el SPA React
 - **Recharts** - Librería de gráficos para analytics dashboard
+- **Nginx** - Reverse proxy, SSL termination, compression
+- **Let's Encrypt / Certbot** - Certificados SSL automáticos
+- **PWA** - Service Worker, manifest, push notifications, offline mode
 
 ## Arquitectura
 
@@ -39,6 +42,44 @@ La aplicación sigue una arquitectura **MVC (Modelo-Vista-Controlador)** clarame
 - **Uploads**: Almacén de archivos subidos (imágenes de tracking, galería, etc.)
 - **Logs**: Archivos de registro de la aplicación
 - **Configuración externa**: Variables de entorno y archivos `.properties`
+
+### Diagrama de arquitectura
+
+```
+Navegador Web (usuario)
+       │
+       ▼
+┌──────────────────────────────────────────────────┐
+│                  Nginx (proxy)                    │
+│  :80 (HTTP) / :443 (HTTPS)                       │
+│  ─ Security headers (HSTS, CSP, XFO)             │
+│  ─ Gzip compression                              │
+│  ─ Reverse proxy a Spring Boot                   │
+└──────────────────────┬───────────────────────────┘
+                       │ proxy_pass http://app:8080
+                       ▼
+┌──────────────────────────────────────────────────┐
+│           Spring Boot (Tomcat)                   │
+│  ─ Thymeleaf MVC templates                       │
+│  ─ React SPA dashboard (/react-dashboard)        │
+│  ─ REST API (/api/v1/)                           │
+│  ─ Spring Security + Session-based auth          │
+│  ─ Health / Actuator                             │
+└──────┬──────────────────────────────┬────────────┘
+       │                              │
+       ▼                              ▼
+┌──────────────┐           ┌──────────────────┐
+│   MySQL 8    │           │  Uploads (vol)    │
+│  base datos  │           │  /app/uploads     │
+│  persistente │           │  evidencias, etc  │
+└──────────────┘           └──────────────────┘
+       │                              │
+       ▼                              ▼
+┌──────────────┐           ┌──────────────────┐
+│ mysql_data   │           │  uploads_data    │
+│ (vol Docker) │           │  (vol Docker)    │
+└──────────────┘           └──────────────────┘
+```
 
 ## Estructura del proyecto
 
@@ -63,7 +104,43 @@ uploads/                    # Almacén de archivos subidos (NO se sube a Git)
 logs/                       # Archivos de log generados en tiempo de ejecución
 docker-compose.yml          # Orquestación de servicios
 Dockerfile                  # Definición de la imagen de la aplicación
+nginx/                      # Configuración Nginx reverse proxy
+scripts/                    # Scripts de backup y restore
+docs/                       # Guías de producción y despliegue
+backup/                     # Backups de BD y uploads
 ```
+
+## Docker producción
+
+### Contenedores
+
+| Contenedor          | Imagen                 | Puerto expuesto     | Función                          |
+|---------------------|------------------------|---------------------|----------------------------------|
+| `monteastur-nginx`  | `nginx:alpine`        | 80 / 443            | Reverse proxy, SSL, compression  |
+| `monteastur-app`    | `monteastur-app`      | 8080 (interno)      | Spring Boot + React SPA          |
+| `monteastur-mysql`  | `mysql:8.0`           | — (interno)         | Base de datos                    |
+
+### Volúmenes persistentes
+
+| Volumen                   | Mount point          | Contenido                  |
+|---------------------------|----------------------|----------------------------|
+| `mysql_data`              | `/var/lib/mysql`     | Datos de MySQL             |
+| `uploads_data`            | `/app/uploads`       | Imágenes subidas           |
+| `logs_data`               | `/app/logs`          | Logs de la aplicación      |
+| `certbot_www`             | `/var/www/certbot`   | Desafíos Let's Encrypt     |
+
+### Nginx Reverse Proxy
+
+Nginx actúa como puerta de entrada única, añadiendo:
+
+- **Terminación SSL** (cuando se configura HTTPS)
+- **Security headers**: HSTS, CSP, X-Frame-Options, Permissions-Policy
+- **Compresión gzip** de assets estáticos
+- **Proxy pass** a Spring Boot en `http://app:8080`
+- **Límite de tamaño** de subida: 10MB
+- **Preparado para WebSocket** (futuro)
+
+Configuración en `nginx/conf.d/monteastur.conf`.
 
 ## Requisitos
 
@@ -141,6 +218,7 @@ La aplicación estará disponible en el puerto definido en la variable `PORT` (p
 | DB_PASSWORD | Contraseña de MySQL | (vacía) |  |
 | SPRING_PROFILES_ACTIVE | Perfil de Spring activo | (vacío) | En producción: `prod` |
 | LOG_DIR | Directorio para archivos de log | ./logs |  |
+| NGINX_PORT | Puerto del proxy Nginx | 80 | Requiere sudo en Linux si < 1024 |
 
 ## URLs importantes
 
@@ -281,6 +359,48 @@ El sistema de logging utiliza **Logback** con la siguiente configuración:
 - **Rotación**: Diaria (un nuevo archivo cada día a medianoche)
 - **Retención**: 30 días (los archivos más antiguos se eliminan automáticamente)
 - El directorio de logs se puede configurar con la variable de entorno `LOG_DIR` (por defecto `./logs`)
+
+## PWA (Progressive Web App)
+
+El dashboard React SPA es una **PWA instalable** con las siguientes capacidades:
+
+- **Instalable**: El usuario puede instalar la app en el dispositivo (manifest.webmanifest con iconos SVG 192/512)
+- **Service Worker**: Registrado con Workbox, precache de 12 entradas (~980KB)
+- **Offline fallback**: El SW sirve la app incluso sin conexión (navigateFallback)
+- **Push Notifications**: Suscripción y recepción de notificaciones push en el navegador
+
+### Cómo instalar
+
+1. Abrir el dashboard en Chrome/Edge (https://dominio/react-dashboard)
+2. Click en el icono de instalación en la barra del navegador
+3. O usar el botón "Instalar App" en el navbar del dashboard
+
+## Push Notifications
+
+El sistema incluye notificaciones push nativas del navegador:
+
+- **Backend**: `POST /api/v1/push/subscribe` (guarda suscripción)
+- **Frontend**: Hook `usePushNotifications.js` (solicita permiso, suscribe/desuscribe)
+- **Service Worker**: Manejador de eventos `push` y `notificationclick`
+- **Demo**: Endpoint de prueba `POST /api/v1/push/test`
+
+### Estados del botón
+
+- 🔔 Activo — notificaciones habilitadas
+- 🔕 Inactivo — no suscrito (click para activar)
+- 🚫 Bloqueado — permiso denegado en el navegador
+
+## Offline Mode
+
+La aplicación funciona parcialmente sin conexión:
+
+- **OfflineBanner**: Banner sticky que indica "Estás sin conexión"
+- **Cache de datos**: Dashboard y detalle de envíos cacheados en localStorage
+- **Cola offline**: Cambios de estado encolados cuando no hay conexión
+  - Se procesan automáticamente al recuperar conexión
+  - Deduplicación por código + estado
+  - Toast de confirmación al sincronizar
+- **Indicador visual**: "Mostrando datos offline" cuando se usa cache
 
 ## Healthchecks
 
@@ -493,33 +613,90 @@ Respuesta 404:
 
 El backend implementa un modelo híbrido **MVC + REST API + SPA**. El frontend Thymeleaf sigue activo y es completamente funcional. El dashboard React SPA se sirve desde `/react-dashboard` y se comunica con la API REST `/api/v1/admin/` usando la misma sesión Spring Security. La API REST `/api/v1/` también está diseñada para ser consumida por aplicaciones móviles e integraciones con sistemas externos. Todas las capas comparten los mismos servicios, repositorios y entidades JPA, garantizando consistencia en la lógica de negocio.
 
-## Backup básico
+## Backup & Restore
 
-### Base de datos MySQL:
-```powershell
-docker exec monteastur-mysql mysqldump -u root -p casarural > backup-casarural.sql
-```
-*(Nota: se le pedirá la contraseña de root definida en MYSQL_ROOT_PASSWORD)*
+Ver guía completa en [`docs/BACKUP_RECOVERY.md`](docs/BACKUP_RECOVERY.md).
 
-### Carpeta de uploads:
-```powershell
-tar -czf uploads-backup.tar.gz uploads/
+### Scripts disponibles
+
+```bash
+# Backup base de datos (Linux)
+./scripts/backup-db.sh              # → backup/db/YYYY-MM-DD_HH-mm.sql.gz
+
+# Restore base de datos (Linux)
+./scripts/restore-db.sh backup/db/2026-05-23_14-00.sql.gz
+
+# Backup uploads (Linux)
+./scripts/backup-uploads.sh         # → backup/uploads/YYYY-MM-DD_HH-mm.tar.gz
+
+# Restore uploads (Linux) — crea backup previo automático
+./scripts/restore-uploads.sh backup/uploads/2026-05-23_14-00.tar.gz
 ```
-*(En producción, respaldar el volumen Docker que se monta en `/app/uploads`)*
+
+Versiones PowerShell para Windows disponibles en `scripts/*.ps1`.
+
+### Automatización (cron)
+
+```cron
+0 3 * * * /opt/monteastur/scripts/backup-db.sh
+0 4 * * * /opt/monteastur/scripts/backup-uploads.sh
+0 5 * * * find /opt/monteastur/backup -name "*.sql.gz" -mtime +30 -delete
+```
+
+## Deploy rápido (VPS)
+
+```bash
+# En el VPS Ubuntu 22.04:
+apt update && apt install -y docker.io docker-compose-v2 git curl
+cd /opt && git clone <repo-url> monteastur && cd monteastur
+cp .env.example .env && nano .env     # Configurar credenciales
+docker compose build && docker compose up -d
+curl http://localhost/actuator/health  # Debe responder {"status":"UP"}
+```
+
+Ver guía completa en [`docs/VPS_DEPLOY_GUIDE.md`](docs/VPS_DEPLOY_GUIDE.md).
+
+## HTTPS
+
+Para producción con SSL, seguir [`docs/HTTPS_SETUP.md`](docs/HTTPS_SETUP.md):
+
+```bash
+docker compose --profile certbot run --rm certbot certonly \
+  --webroot -w /var/www/certbot -d monteastur.com -d www.monteastur.com
+# Descomentar bloque HTTPS en nginx/conf.d/monteastur.conf
+docker compose restart nginx
+```
 
 ## Checklist de producción
 
 Antes de desplegar en un entorno de producción, verificar:
 
 - [ ] **Build OK**: `mvn clean package -DskipTests` finaliza sin errores
-- [ ] **Docker OK**: `docker compose up -d` levanta todos los servicios correctamente (MySQL y app)
-- [ ] **Health UP**: `http://<dominio>:<puerto>/actuator/health` devuelve `{"status":"UP"}`
-- [ ] **Uploads OK**: Las imágenes se suben, se almacenan y se muestran correctamente en la interfaz
-- [ ] **Login admin OK**: Acceso al panel admin con las credenciales configuradas en producción
+- [ ] **Docker OK**: `docker compose up -d` levanta todos los servicios correctamente
+- [ ] **Health UP**: `curl http://localhost/actuator/health` → `{"status":"UP"}`
+- [ ] **Uploads OK**: Las imágenes se suben, se almacenan y se muestran correctamente
+- [ ] **Login admin OK**: Acceso al panel admin con credenciales de producción
 - [ ] **Login cliente OK**: Los clientes pueden autenticarse y acceder a su panel
-- [ ] **Logs OK**: Se generan archivos en `logs/` sin errores de permisos y con rotación diaria
-- [ ] **Backups probados**: Se puede restaurar tanto la base de datos como los uploads desde backup
-- [ ] **Variables entorno configuradas**: Todas las variables necesarias en `.env` son apropiadas para entorno de producción
+- [ ] **Logs OK**: Se generan archivos en logs/ sin errores de permisos
+- [ ] **Backups probados**: Se puede restaurar BD y uploads desde backup
+- [ ] **Variables entorno**: Todas las variables en `.env` configuradas correctamente
+- [ ] **Security headers**: `curl -I http://localhost` muestra HSTS, CSP, XFO
+- [ ] **Nginx proxy**: Nginx sirve en puerto 80/443, proxy a app:8080
+- [ ] **PWA instalable**: Manifest y Service Worker funcionando
+- [ ] **Offline mode**: Dashboard funciona con datos cacheados sin conexión
+
+## Troubleshooting
+
+| Problema | Causa probable | Solución |
+|----------|---------------|----------|
+| App no arranca (container restart loop) | Schema BD no existe (`DDL_AUTO=validate`) | Temporalmente `DB_DDL_AUTO=update`, luego revertir |
+| Error 502 Bad Gateway | Nginx no alcanza app | `docker ps` para verificar app está running |
+| Error 403 en API | Sesión no válida o CSRF | Login en `/login` primero; CSRF deshabilitado para `/api/**` |
+| Uploads no se ven | Ruta incorrecta o permisos | `docker exec monteastur-app ls -la /app/uploads` |
+| Puerto 80 ocupado | Otro servicio (IIS, Apache) | Cambiar `NGINX_PORT` en `.env` |
+| PWA no instala | Sin HTTPS o manifest incorrecto | Usar HTTPS; verificar console para errores |
+| Push notifications no funcionan | Permiso bloqueado o sin HTTPS | HTTPS requerido; resetear permiso en navegador |
+| Offline no funciona | Service Worker no registrado | Hard refresh (Ctrl+Shift+R) y recargar |
 
 ## Roadmap futuro
 
