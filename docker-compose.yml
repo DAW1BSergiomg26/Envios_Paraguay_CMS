@@ -127,6 +127,18 @@ services:
       - backend
     mem_limit: 128m
 
+  uptime-kuma:
+    image: louislam/uptime-kuma:1
+    container_name: monteastur-uptime-kuma
+    ports:
+      - "${UPTIME_KUMA_PORT:-3001}:3001"
+    volumes:
+      - uptime_kuma_data:/app/data
+    restart: unless-stopped
+    networks:
+      - backend
+    mem_limit: 256m
+
 networks:
   backend:
     driver: bridge
@@ -138,3 +150,4 @@ volumes:
   certbot_www:
   prometheus_data:
   grafana_data:
+  uptime_kuma_data:

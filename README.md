@@ -850,6 +850,17 @@ Las alertas se evalúan cada 30s. Cuando se activan, se agrupan por nombre y sev
 
 Las reglas de alerta y contact points se recargan automáticamente al reiniciar Grafana.
 
+### Uptime Monitoring
+
+El stack incluye **Uptime Kuma** como monitor interno de uptime:
+
+| Componente | Rol | Acceso |
+|-----------|-----|--------|
+| **Uptime Kuma** | Monitor de uptime auto-hospedado | `http://localhost:3001` |
+| **Healthchecks.io** | Heartbeat externo (documentado) | `https://healthchecks.io` |
+
+**Uptime Kuma** permite crear monitores de tipo HTTP, SSL, DNS, Docker, y más, con notificaciones multicanal (Telegram, Discord, Slack, email). Para configuración detallada, ver `docs/UPTIME_MONITORING.md`.
+
 ## Roadmap futuro
 
 ### Funcionalidades
