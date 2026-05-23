@@ -910,6 +910,47 @@ mvn clean package
 Los tests se ejecutan automáticamente en GitHub Actions antes del empaquetado:
 `mvn clean package` (sin `-DskipTests`).
 
+### Frontend Testing
+
+El frontend React usa **Vitest + React Testing Library** para testing de componentes.
+
+| Herramienta | Uso |
+|------------|-----|
+| **Vitest** | Test runner compatible con Vite |
+| **@testing-library/react** | Renderizado e interacción con componentes |
+| **@testing-library/jest-dom** | Matchers personalizados para el DOM |
+| **@testing-library/user-event** | Simulación realista de eventos de usuario |
+| **jsdom** | Entorno DOM simulado para tests |
+
+#### Tests incluidos
+
+| Componente | Tests | Qué prueba |
+|-----------|-------|-----------|
+| `LoginPage` | 4 | Renderiza formulario, login exitoso navega, login fallido muestra error |
+| `StatsCard` | 2 | Renderiza label/valor, soporta icono y color |
+| `StatusBadge` | 3 | Formatea estado, renderiza EN_TRANSITO, ENTREGADO, N/A |
+| `EmptyState` | 2 | Mensaje por defecto, mensaje personalizado |
+| `SearchBar` | 4 | Placeholder, debounce 300ms, botón clear |
+| **Total** | **15** | |
+
+#### Ejecutar tests
+
+```bash
+cd frontend-react
+
+# Todos los tests (una vez)
+npm test
+
+# Modo watch (desarrollo)
+npm run test:watch
+
+# Con cobertura
+npm run test:coverage
+```
+
+En CI, los tests se ejecutan automáticamente antes del build:
+`npm test -- --run`
+
 ## Roadmap futuro
 
 ### Funcionalidades
