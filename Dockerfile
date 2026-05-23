@@ -16,7 +16,23 @@ RUN mvn package -DskipTests -q
 
 # ---- Stage 2: Runtime ----
 FROM eclipse-temurin:17-jre
+
+# OCI labels
+LABEL org.opencontainers.image.title="Monteastur Envios"
+LABEL org.opencontainers.image.description="Plataforma log\u00EDstica Espa\u00F1a \u2194 Paraguay"
+LABEL org.opencontainers.image.version="3.2"
+LABEL org.opencontainers.image.authors="Grupo B2"
+LABEL org.opencontainers.image.vendor="Monteastur"
+LABEL org.opencontainers.image.created=""
+
+# Create non-root user and writable directories
+RUN useradd -m appuser && \
+    mkdir -p /app/uploads /app/logs && \
+    chown -R appuser:appuser /app
+
+USER appuser
 WORKDIR /app
+
 COPY --from=build /build/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
