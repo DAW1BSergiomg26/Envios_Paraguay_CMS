@@ -20,7 +20,7 @@ export default defineConfig({
         background_color: '#0f1117',
         display: 'standalone',
         display_override: ['standalone', 'minimal-ui'],
-        start_url: process.env.VITE_BASE || '/',
+        start_url: process.env.VITE_START_URL || '/',
         scope: process.env.VITE_BASE || '/',
         orientation: 'portrait-primary',
         lang: 'es',

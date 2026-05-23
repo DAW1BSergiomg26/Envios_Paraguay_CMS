@@ -6,15 +6,25 @@
 # Compose:      docker compose up -d
 # =============================================
 
-# ---- Stage 1: Build ----
+# ---- Stage 1: Build frontend ----
+FROM node:20-alpine AS frontend
+WORKDIR /frontend
+COPY frontend-react/package.json frontend-react/package-lock.json ./
+RUN npm install
+COPY frontend-react/ .
+ENV VITE_START_URL=/login-react
+RUN npm run build
+
+# ---- Stage 2: Build backend ----
 FROM maven:3.9-eclipse-temurin-17 AS build
 WORKDIR /build
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 COPY src ./src
+COPY --from=frontend /frontend/dist ./src/main/resources/static/
 RUN mvn package -DskipTests -q
 
-# ---- Stage 2: Runtime ----
+# ---- Stage 3: Runtime ----
 FROM eclipse-temurin:17-jre
 
 # OCI labels
