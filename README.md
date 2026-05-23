@@ -802,7 +802,24 @@ http://localhost:9090
 http://localhost:3000
 ```
 
-Tras iniciar sesión en Grafana, el datasource Prometheus ya está configurado automáticamente. Solo queda importar o crear dashboards en la sección Dashboards.
+Tras iniciar sesión en Grafana, el datasource Prometheus ya está configurado automáticamente.
+
+### Dashboard Grafana
+
+El dashboard **Monteastur Envios** se importa automáticamente al iniciar Grafana — sin configuración manual.
+
+| Sección del dashboard | Paneles |
+|----------------------|---------|
+| **Estado** | App Status (UP/DOWN), Uptime, CPU Usage, Threads, Active Sessions, Log Errors |
+| **Memoria** | Heap Used, Heap Max, Heap Usage %, Non-Heap Used |
+| **JVM** | JVM Memory (time series usado/max/committed), Garbage Collection rate |
+| **HTTP** | Requests/min, Latencia media, 4xx/min, 5xx/min |
+
+Los paneles de state (Stat) muestran el valor actual; los de time series (gráficos) mantienen el histórico según el rango temporal seleccionado.
+
+Para validar que Prometheus recibe datos correctamente:
+- Abrir `http://localhost:9090/targets` — debe mostrar `app:8080` como `UP`
+- Abrir `http://localhost:9090/graph` — ejecutar `up{application="monteastur-envios"}`
 
 ## Roadmap futuro
 
