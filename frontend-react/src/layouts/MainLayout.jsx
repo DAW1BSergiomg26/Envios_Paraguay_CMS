@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import { useOfflineSync } from '../hooks/useOfflineSync';
 import InstallPWAButton from '../components/InstallPWAButton';
 import PushNotificationButton from '../components/PushNotificationButton';
 import OfflineBanner from '../components/OfflineBanner';
@@ -9,6 +10,8 @@ export default function MainLayout() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const isOnline = useOnlineStatus();
+  
+  useOfflineSync();
 
   const handleLogout = async () => {
     await logout();
