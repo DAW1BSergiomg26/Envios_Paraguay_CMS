@@ -764,6 +764,103 @@ git checkout <commit-anterior>
 docker compose up -d --build
 ```
 
+## Monitoring + Observability
+
+El stack de monitorización usa Spring Boot Actuator + Prometheus + Grafana.
+
+### Endpoints
+
+| URL | Descripción |
+|-----|-------------|
+| `http://localhost:8080/actuator/health` | Healthcheck |
+| `http://localhost:8080/actuator/info` | Info app |
+| `http://localhost:8080/actuator/prometheus` | Métricas Prometheus (formato texto) |
+
+### Servicios Docker
+
+| Servicio | Puerto por defecto | Descripción |
+|----------|--------------------|-------------|
+| Prometheus | `9090` | Recolecta métricas cada 15s desde `app:8080/actuator/prometheus` |
+| Grafana | `3000` | Dashboards visuales con datasource Prometheus auto-configurado |
+
+### Métricas disponibles (vía Prometheus)
+
+- **JVM**: memoria heap/no-heap, garbage collection, threads, clases cargadas
+- **System**: CPU, uptime, file descriptors
+- **HTTP**: request count, duration, active requests
+- **Tomcat**: sessions, threads activos, errores
+- **Logback**: contador por nivel de log
+- **Actuator health**: estado de componentes (DB, ping, disk space)
+
+### Acceso
+
+```bash
+# Prometheus
+http://localhost:9090
+
+# Grafana (login: admin / contraseña de .env)
+http://localhost:3000
+```
+
+Tras iniciar sesión en Grafana, el datasource Prometheus ya está configurado automáticamente.
+
+### Dashboard Grafana
+
+El dashboard **Monteastur Envios** se importa automáticamente al iniciar Grafana — sin configuración manual.
+
+| Sección del dashboard | Paneles |
+|----------------------|---------|
+| **Estado** | App Status (UP/DOWN), Uptime, CPU Usage, Threads, Active Sessions, Log Errors |
+| **Memoria** | Heap Used, Heap Max, Heap Usage %, Non-Heap Used |
+| **JVM** | JVM Memory (time series usado/max/committed), Garbage Collection rate |
+| **HTTP** | Requests/min, Latencia media, 4xx/min, 5xx/min |
+
+Los paneles de state (Stat) muestran el valor actual; los de time series (gráficos) mantienen el histórico según el rango temporal seleccionado.
+
+Para validar que Prometheus recibe datos correctamente:
+- Abrir `http://localhost:9090/targets` — debe mostrar `app:8080` como `UP`
+- Abrir `http://localhost:9090/graph` — ejecutar `up{application="monteastur-envios"}`
+
+### Alertas Grafana
+
+Se provisionan automáticamente 5 alertas básicas:
+
+| Alerta | Condición | Severidad | Tiempo |
+|--------|-----------|-----------|--------|
+| **App Down** | `up == 0` | 🔴 critical | 1 min |
+| **High CPU** | `cpu > 90%` | 🟡 warning | 5 min |
+| **High Heap** | `heap > 90%` | 🟡 warning | 5 min |
+| **High 5xx Rate** | `5xx > 5/min` | 🔴 critical | 5 min |
+| **Prometheus Target Down** | `up == 0` | 🔴 critical | 1 min |
+
+Las alertas se evalúan cada 30s. Cuando se activan, se agrupan por nombre y severidad cada 5 minutos.
+
+**Para notificaciones reales en producción:**
+
+1. Configurar SMTP en el servicio Grafana de `docker-compose.yml`:
+   ```yaml
+   environment:
+     GF_SMTP_ENABLED: "true"
+     GF_SMTP_HOST: "smtp.tudominio.com:587"
+     GF_SMTP_USER: "tu@email.com"
+     GF_SMTP_PASSWORD: "tu_password"
+   ```
+2. Editar `monitoring/grafana/provisioning/alerting/contactpoints.yml` con el email real
+3. _(Opcional)_ Añadir contact point tipo Slack o webhook en el mismo archivo
+
+Las reglas de alerta y contact points se recargan automáticamente al reiniciar Grafana.
+
+### Uptime Monitoring
+
+El stack incluye **Uptime Kuma** como monitor interno de uptime:
+
+| Componente | Rol | Acceso |
+|-----------|-----|--------|
+| **Uptime Kuma** | Monitor de uptime auto-hospedado | `http://localhost:3001` |
+| **Healthchecks.io** | Heartbeat externo (documentado) | `https://healthchecks.io` |
+
+**Uptime Kuma** permite crear monitores de tipo HTTP, SSL, DNS, Docker, y más, con notificaciones multicanal (Telegram, Discord, Slack, email). Para configuración detallada, ver `docs/UPTIME_MONITORING.md`.
+
 ## Roadmap futuro
 
 ### Funcionalidades
