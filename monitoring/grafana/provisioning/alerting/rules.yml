@@ -1,0 +1,128 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: monteastur-critical
+    folder: Monteastur
+    interval: 30s
+    rules:
+
+      - uid: app_down
+        title: "App Down"
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300000
+              to: 0
+            datasourceUid: monteastur-prometheus
+            model:
+              expr: up{application="monteastur-envios"} == 0
+              intervalMs: 10000
+              maxDataPoints: 100
+              refId: A
+        no_data_state: Alerting
+        exec_err_state: Alerting
+        for: 1m
+        annotations:
+          summary: "Monteastur app is DOWN"
+          description: "App has been unreachable for more than 1 minute"
+        labels:
+          severity: critical
+
+      - uid: high_cpu
+        title: "High CPU Usage"
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600000
+              to: 0
+            datasourceUid: monteastur-prometheus
+            model:
+              expr: process_cpu_usage{application="monteastur-envios"} > 0.90
+              intervalMs: 10000
+              maxDataPoints: 100
+              refId: A
+        no_data_state: OK
+        exec_err_state: Alerting
+        for: 5m
+        annotations:
+          summary: "CPU usage above 90% for 5 minutes"
+          description: "Current value: {{ $values.A.Value }}"
+        labels:
+          severity: warning
+
+      - uid: high_heap
+        title: "High Heap Memory"
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600000
+              to: 0
+            datasourceUid: monteastur-prometheus
+            model:
+              expr: |
+                sum(jvm_memory_used_bytes{area="heap",application="monteastur-envios"})
+                * 100
+                /
+                sum(jvm_memory_max_bytes{area="heap",application="monteastur-envios"})
+                > 90
+              intervalMs: 10000
+              maxDataPoints: 100
+              refId: A
+        no_data_state: OK
+        exec_err_state: Alerting
+        for: 5m
+        annotations:
+          summary: "Heap usage above 90% for 5 minutes"
+          description: "Current usage: {{ $values.A.Value }}%"
+        labels:
+          severity: warning
+
+      - uid: high_5xx
+        title: "High 5xx Error Rate"
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600000
+              to: 0
+            datasourceUid: monteastur-prometheus
+            model:
+              expr: sum(rate(http_server_requests_seconds_count{status=~"5..",application="monteastur-envios"}[1m])) > 0.0833
+              intervalMs: 10000
+              maxDataPoints: 100
+              refId: A
+        no_data_state: OK
+        exec_err_state: Alerting
+        for: 5m
+        annotations:
+          summary: "HTTP 5xx rate above 5/min for 5 minutes"
+          description: "Current rate: {{ $values.A.Value }} req/s"
+        labels:
+          severity: critical
+
+      - uid: prometheus_down
+        title: "Prometheus Target Down"
+        condition: A
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300000
+              to: 0
+            datasourceUid: monteastur-prometheus
+            model:
+              expr: up{job="monteastur-app"} == 0
+              intervalMs: 10000
+              maxDataPoints: 100
+              refId: A
+        no_data_state: Alerting
+        exec_err_state: Alerting
+        for: 1m
+        annotations:
+          summary: "Prometheus target monteastur-app is DOWN"
+          description: "Target {{ $labels.instance }} has been unreachable for more than 1 minute"
+        labels:
+          severity: critical

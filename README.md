@@ -821,6 +821,35 @@ Para validar que Prometheus recibe datos correctamente:
 - Abrir `http://localhost:9090/targets` — debe mostrar `app:8080` como `UP`
 - Abrir `http://localhost:9090/graph` — ejecutar `up{application="monteastur-envios"}`
 
+### Alertas Grafana
+
+Se provisionan automáticamente 5 alertas básicas:
+
+| Alerta | Condición | Severidad | Tiempo |
+|--------|-----------|-----------|--------|
+| **App Down** | `up == 0` | 🔴 critical | 1 min |
+| **High CPU** | `cpu > 90%` | 🟡 warning | 5 min |
+| **High Heap** | `heap > 90%` | 🟡 warning | 5 min |
+| **High 5xx Rate** | `5xx > 5/min` | 🔴 critical | 5 min |
+| **Prometheus Target Down** | `up == 0` | 🔴 critical | 1 min |
+
+Las alertas se evalúan cada 30s. Cuando se activan, se agrupan por nombre y severidad cada 5 minutos.
+
+**Para notificaciones reales en producción:**
+
+1. Configurar SMTP en el servicio Grafana de `docker-compose.yml`:
+   ```yaml
+   environment:
+     GF_SMTP_ENABLED: "true"
+     GF_SMTP_HOST: "smtp.tudominio.com:587"
+     GF_SMTP_USER: "tu@email.com"
+     GF_SMTP_PASSWORD: "tu_password"
+   ```
+2. Editar `monitoring/grafana/provisioning/alerting/contactpoints.yml` con el email real
+3. _(Opcional)_ Añadir contact point tipo Slack o webhook en el mismo archivo
+
+Las reglas de alerta y contact points se recargan automáticamente al reiniciar Grafana.
+
 ## Roadmap futuro
 
 ### Funcionalidades
