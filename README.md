@@ -764,6 +764,46 @@ git checkout <commit-anterior>
 docker compose up -d --build
 ```
 
+## Monitoring + Observability
+
+El stack de monitorización usa Spring Boot Actuator + Prometheus + Grafana.
+
+### Endpoints
+
+| URL | Descripción |
+|-----|-------------|
+| `http://localhost:8080/actuator/health` | Healthcheck |
+| `http://localhost:8080/actuator/info` | Info app |
+| `http://localhost:8080/actuator/prometheus` | Métricas Prometheus (formato texto) |
+
+### Servicios Docker
+
+| Servicio | Puerto por defecto | Descripción |
+|----------|--------------------|-------------|
+| Prometheus | `9090` | Recolecta métricas cada 15s desde `app:8080/actuator/prometheus` |
+| Grafana | `3000` | Dashboards visuales con datasource Prometheus auto-configurado |
+
+### Métricas disponibles (vía Prometheus)
+
+- **JVM**: memoria heap/no-heap, garbage collection, threads, clases cargadas
+- **System**: CPU, uptime, file descriptors
+- **HTTP**: request count, duration, active requests
+- **Tomcat**: sessions, threads activos, errores
+- **Logback**: contador por nivel de log
+- **Actuator health**: estado de componentes (DB, ping, disk space)
+
+### Acceso
+
+```bash
+# Prometheus
+http://localhost:9090
+
+# Grafana (login: admin / contraseña de .env)
+http://localhost:3000
+```
+
+Tras iniciar sesión en Grafana, el datasource Prometheus ya está configurado automáticamente. Solo queda importar o crear dashboards en la sección Dashboards.
+
 ## Roadmap futuro
 
 ### Funcionalidades
