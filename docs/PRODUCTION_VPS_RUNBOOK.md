@@ -754,8 +754,10 @@ Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) para g
 
 > **Documentos relacionados:**
 > - [`LIVE_DEPLOY_PLAN.md`](LIVE_DEPLOY_PLAN.md) — Plan operativo completo para el deploy real online (15 pasos, costes, rollback)
+> - [`DOMAIN_DNS_SSL_SETUP.md`](DOMAIN_DNS_SSL_SETUP.md) — Guía completa de dominio, DNS y HTTPS
 > - [`VPS_HARDENING_CHECKLIST.md`](VPS_HARDENING_CHECKLIST.md) — Checklist completo de hardening (SSH, UFW, fail2ban, updates, Docker, backups, monitoring, SSL)
 > - [`FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) — Checklist paso a paso para el primer despliegue real
+> - [`nginx/conf.d/production-example.conf`](../nginx/conf.d/production-example.conf) — Ejemplo configuración nginx producción
 > - [`scripts/server-healthcheck.sh`](../scripts/server-healthcheck.sh) — Script de healthcheck rápido
 >
 > **Mantenido por:** Equipo Monteastur Envios

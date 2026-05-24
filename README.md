@@ -903,16 +903,69 @@ docker compose up -d --build
 
 Ver [`docs/LIVE_DEPLOY_PLAN.md`](docs/LIVE_DEPLOY_PLAN.md) para los 15 pasos detallados.
 
-## HTTPS
+## Dominio + HTTPS
 
-Para producción con SSL, seguir [`docs/HTTPS_SETUP.md`](docs/HTTPS_SETUP.md):
+Guía completa en [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md).
+Ejemplo de configuración nginx en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf).
+
+### Flujo resumido
+
+```
+ 1. Comprar dominio (Namecheap / Cloudflare Registrar)
+ 2. Configurar registro A → IP del VPS (TTL 300)
+ 3. Verificar propagación: dig +short monteastur.com
+ 4. Obtener certificado SSL con Let's Encrypt
+ 5. Copiar certificados a nginx/ssl/
+ 6. Activar HTTPS en nginx (descomentar bloque SSL)
+ 7. Verificar: curl -I https://monteastur.com
+ 8. Configurar renovación automática (cron)
+```
+
+### DNS
+
+| Registro | Tipo | Valor | TTL |
+|----------|------|-------|-----|
+| `@` | A | IP del VPS | 300→3600 |
+| `www` | A | IP del VPS | 300→3600 |
+
+Subdominios opcionales: `grafana`, `uptime`, `app`.
+
+### HTTPS
 
 ```bash
+# Obtener certificado
 docker compose --profile certbot run --rm certbot certonly \
-  --webroot -w /var/www/certbot -d monteastur.com -d www.monteastur.com
-# Descomentar bloque HTTPS en nginx/conf.d/monteastur.conf
+  --webroot -w /var/www/certbot \
+  -d monteastur.com -d www.monteastur.com \
+  --email admin@monteastur.com \
+  --agree-tos --no-eff-email
+
+# Copiar a nginx y recargar
+cp /etc/letsencrypt/live/monteastur.com/fullchain.pem nginx/ssl/
+cp /etc/letsencrypt/live/monteastur.com/privkey.pem nginx/ssl/
 docker compose restart nginx
 ```
+
+### Nginx
+
+Configuración de ejemplo completa en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf):
+- HTTP → HTTPS redirect
+- SSL termination
+- Security headers (HSTS, CSP, XFO)
+- Gzip compression
+- Proxy pass a Spring Boot
+- WebSocket ready
+
+### Troubleshooting rápido
+
+| Problema | Solución |
+|----------|----------|
+| DNS no propaga | `dig @8.8.8.8 monteastur.com`, esperar TTL |
+| Certbot falla | Verificar puerto 80 abierto y DNS propagado |
+| Mixed Content | Todos los assets deben servirse por HTTPS |
+| Redirect loop | Cloudflare en modo "Full (strict)" |
+
+Ver [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md) para guía completa y troubleshooting detallado.
 
 ## Checklist de producción
 
