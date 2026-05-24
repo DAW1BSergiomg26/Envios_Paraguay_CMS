@@ -798,11 +798,19 @@ El stack de monitorización usa Spring Boot Actuator + Prometheus + Grafana.
 # Prometheus
 http://localhost:9090
 
-# Grafana (login: admin / contraseña de .env)
+# Grafana (login: admin / admin123)
 http://localhost:3000
 ```
 
 Tras iniciar sesión en Grafana, el datasource Prometheus ya está configurado automáticamente.
+
+> Si las credenciales antiguas persisten (volumen con datos previos):
+> ```bash
+> docker compose down
+> docker volume rm envios_paraguay_cms_grafana_data
+> docker compose up -d
+> ```
+> Esto borra la base de datos interna de Grafana (paneles importados, usuarios, config). Los dashboards y datasources provisionados se recargan automáticamente.
 
 ### Dashboard Grafana
 
