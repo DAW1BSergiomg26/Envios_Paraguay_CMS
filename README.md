@@ -649,18 +649,209 @@ Versiones PowerShell para Windows disponibles en `scripts/*.ps1`.
 0 5 * * * find /opt/monteastur/backup -name "*.sql.gz" -mtime +30 -delete
 ```
 
-## Deploy rápido (VPS)
+## Producción VPS
+
+Guía completa en [`docs/PRODUCTION_VPS_RUNBOOK.md`](docs/PRODUCTION_VPS_RUNBOOK.md).
+
+### Comandos rápidos
 
 ```bash
-# En el VPS Ubuntu 22.04:
-apt update && apt install -y docker.io docker-compose-v2 git curl
-cd /opt && git clone <repo-url> monteastur && cd monteastur
-cp .env.example .env && nano .env     # Configurar credenciales
-docker compose build && docker compose up -d
-curl http://localhost/actuator/health  # Debe responder {"status":"UP"}
+# Bootstrap del VPS (como root)
+sudo ./scripts/vps-bootstrap.sh
+
+# Deploy (como usuario deploy en /opt/monteastur)
+./scripts/deploy-prod.sh
+
+# Rollback a tag específica
+./scripts/rollback-prod.sh v14.0-e2e-ready
+
+# Backup manual
+./scripts/backup-db.sh
+./scripts/backup-uploads.sh
+
+# Restore
+./scripts/restore-db.sh backup/db/<archivo>.sql.gz
+./scripts/restore-uploads.sh backup/uploads/<archivo>.tar.gz
+
+# Verificar estado
+curl -f http://localhost/actuator/health
+docker ps
 ```
 
-Ver guía completa en [`docs/VPS_DEPLOY_GUIDE.md`](docs/VPS_DEPLOY_GUIDE.md).
+### Estructura en VPS
+
+```
+/opt/monteastur/
+├── docker-compose.yml
+├── .env                  # Credenciales (NO en Git)
+├── scripts/              # Deploy, rollback, backup, restore
+├── docs/                 # Runbook y guías
+├── backup/
+│   ├── db/               # Backups MySQL (.sql.gz)
+│   └── uploads/          # Backups uploads (.tar.gz)
+├── logs/                 # Logs de la aplicación
+├── nginx/conf.d/         # Configuración proxy y SSL
+└── monitoring/           # Prometheus, Grafana
+```
+
+### Scripts disponibles
+
+| Script | Función |
+|--------|---------|
+| `scripts/vps-bootstrap.sh` | Instala Docker, Docker Compose, crea directorios, configura UFW |
+| `scripts/deploy-prod.sh` | Git pull, build, up -d, image prune, healthcheck |
+| `scripts/rollback-prod.sh <tag>` | Git checkout a tag, rebuild, healthcheck |
+| `scripts/backup-db.sh` | Backup MySQL → `backup/db/` |
+| `scripts/backup-uploads.sh` | Backup uploads → `backup/uploads/` |
+| `scripts/restore-db.sh` | Restore MySQL desde backup |
+| `scripts/restore-uploads.sh` | Restore uploads desde backup |
+
+### Healthchecks
+
+```bash
+curl http://localhost/actuator/health        # {"status":"UP"}
+curl http://localhost/actuator/info          # Info app
+curl http://localhost:9090/targets           # Prometheus targets
+```
+
+### Rollback rápido
+
+```bash
+./scripts/rollback-prod.sh v14.0-e2e-ready
+```
+
+### GitHub Actions — Deploy manual
+
+El workflow [`deploy-prod.yml`](.github/workflows/deploy-prod.yml) permite desplegar a producción manualmente desde GitHub Actions.
+
+**Cómo ejecutar:**
+
+1. Ir a **GitHub → Actions → Deploy Production**
+2. Click **Run workflow**
+3. Seleccionar branch `develop`
+4. Escribir `deploy` en el campo de confirmación
+5. Click **Run workflow**
+
+**Jobs:**
+
+| Job | Descripción |
+|-----|-------------|
+| `pre-deploy-check` | Valida `docker compose config`, ejecuta `mvn test`, `npm test`, `npm run build` |
+| `deploy-production` | SSH al VPS, git pull, `./scripts/deploy-prod.sh` |
+| `notify-failure` | Muestra instrucciones de rollback si falla |
+
+**Protecciones:**
+- Solo ejecutable desde branch `develop`
+- Requiere confirmación explícita escribiendo "deploy"
+- `fail-fast` configurado
+- Timeout de 15min (validación) + 20min (deploy)
+
+**Secrets requeridos en GitHub:**
+
+| Secret | Descripción |
+|--------|-------------|
+| `VPS_HOST` | IP o dominio del VPS |
+| `VPS_USER` | Usuario SSH (ej: `deploy`) |
+| `VPS_SSH_KEY` | Clave privada SSH (formato PEM/OpenSSH) |
+| `VPS_PORT` | Puerto SSH (opcional, default 22) |
+
+### Monitoring
+
+| Servicio | Puerto | Acceso |
+|----------|--------|--------|
+| Prometheus | 9090 | `http://<vps>:9090` |
+| Grafana | 3000 | `http://<vps>:3000` (admin / pass desde .env) |
+| Uptime Kuma | 3001 | `http://<vps>:3001` |
+
+Para más detalles ver [`docs/PRODUCTION_VPS_RUNBOOK.md`](docs/PRODUCTION_VPS_RUNBOOK.md) y [`docs/PRODUCTION_VPS_RUNBOOK.md#14-configurar-github-secrets-para-cd`](docs/PRODUCTION_VPS_RUNBOOK.md#14-configurar-github-secrets-para-cd).
+
+## Hardening VPS
+
+Guía completa en [`docs/VPS_HARDENING_CHECKLIST.md`](docs/VPS_HARDENING_CHECKLIST.md).
+
+### Scripts disponibles
+
+| Script | Función |
+|--------|---------|
+| `scripts/server-healthcheck.sh` | Reporta uptime, disco, RAM, Docker, healthcheck |
+| `scripts/backup-db.sh` | Backup MySQL → `backup/db/` |
+| `scripts/backup-uploads.sh` | Backup uploads → `backup/uploads/` |
+
+### Resumen de hardening
+
+| Medida | Estado |
+|--------|--------|
+| SSH: sin root, sin contraseñas | ✅ Documentado |
+| UFW: puertos mínimos (22, 80, 443) | ✅ Documentado + script |
+| fail2ban: protección fuerza bruta | ✅ Documentado |
+| unattended-upgrades: seguridad auto | ✅ Documentado |
+| Docker: restart, healthchecks, límites | ✅ Implementado |
+| Backups: BD, uploads, .env | ✅ Scripts listos |
+| Monitoring: Prometheus, Grafana, Kuma | ✅ Implementado |
+| SSL: Let's Encrypt + renovación auto | ✅ Documentado |
+| Security headers: CSP, HSTS, XFO | ✅ Implementado |
+
+### Healthcheck rápido
+
+```bash
+./scripts/server-healthcheck.sh
+```
+
+### Backups automáticos (cron)
+
+```cron
+0 3 * * * /opt/monteastur/scripts/backup-db.sh
+0 4 * * * /opt/monteastur/scripts/backup-uploads.sh
+```
+
+## Primer Deploy VPS
+
+Guía completa en [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](docs/FIRST_VPS_DEPLOY_CHECKLIST.md).
+
+### Proveedor recomendado
+
+| Proveedor | Plan | vCPU | RAM | SSD | Precio/mes |
+|-----------|------|------|-----|-----|------------|
+| **Hetzner** | CX22 | 2 | 4 GB | 40 GB | **~€4.50** |
+
+Alternativa económica: Contabo Cloud S (~€6.99/mes, 4 vCPU, 8 GB RAM, 200 GB SSD).
+
+### Coste mensual estimado
+
+| Concepto | Coste |
+|----------|-------|
+| VPS Hetzner CX22 | ~€4.50 |
+| Dominio .com | ~€0.83/mes (~€10/año) |
+| SSL, Monitoring, Uptime | €0 (auto-hospedado) |
+| **Total** | **~€5.33/mes** |
+
+### Orden de ejecución (45 min estimado)
+
+```
+ 1. Contratar VPS + anotar IP     (10 min)
+ 2. Bootstrap + clonar repo       ( 5 min)
+ 3. Crear deploy + configurar SSH  ( 5 min)
+ 4. Configurar .env                ( 5 min)
+ 5. Generar SSH key CD             ( 2 min)
+ 6. docker compose up              (10 min)
+ 7. DNS + HTTPS                    (10 min + propagación)
+ 8. GitHub Secrets                 ( 5 min)
+ 9. Workflow manual                ( 5 min)
+10. Validaciones finales           ( 5 min)
+```
+
+### Resumen checklist
+
+- [ ] VPS contratado (Hetzner CX22 recomendado)
+- [ ] DNS apuntando al VPS (registro A)
+- [ ] `.env` configurado con credenciales seguras
+- [ ] GitHub Secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
+- [ ] HTTPS con Let's Encrypt funcionando
+- [ ] `docker ps` → 6/6 containers UP
+- [ ] `curl -f /actuator/health` → `{"status":"UP"}`
+- [ ] Workflow manual ejecutado desde GitHub Actions
+
+Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](docs/FIRST_VPS_DEPLOY_CHECKLIST.md) para guía completa.
 
 ## HTTPS
 
@@ -745,6 +936,7 @@ La conexión SSH se realiza con clave privada — no se usan contraseñas.
 | `VPS_HOST` | IP o dominio del VPS |
 | `VPS_USER` | Usuario SSH (ej: `root` o `deploy`) |
 | `VPS_SSH_KEY` | Clave privada SSH completa (incluyendo `-----BEGIN OPENSSH PRIVATE KEY-----`) |
+| `VPS_PORT` | Puerto SSH (opcional, default `22`) |
 
 Configurar en GitHub: **Settings → Secrets and variables → Actions**.
 
