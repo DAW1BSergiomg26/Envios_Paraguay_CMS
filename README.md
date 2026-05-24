@@ -884,7 +884,36 @@ Guías completas y comandos exactos para el primer despliegue real en VPS.
 | Dominio .com | ~€0.83/mes |
 | SSL / Monitoring / CI/CD | €0 |
 | **Total** | **~€5.33/mes (~€69/año)** |
-| **Total** | **~€5.33/mes** (~€65/año) |
+
+## Compra VPS y dominio
+
+Guías detalladas para la contratación real de infraestructura.
+
+| Guía | Contenido |
+|------|-----------|
+| [`docs/HETZNER_VPS_PURCHASE_GUIDE.md`](docs/HETZNER_VPS_PURCHASE_GUIDE.md) | Crear cuenta, verificación, crear servidor CX22, qué NO elegir, primer login, checklist |
+| [`docs/DOMAIN_PURCHASE_GUIDE.md`](docs/DOMAIN_PURCHASE_GUIDE.md) | Proveedores, recomendación Cloudflare, qué dominio elegir, DNS, Cloudflare proxy, checklist |
+| [`docs/REAL_DEPLOY_TIMELINE.md`](docs/REAL_DEPLOY_TIMELINE.md) | Plan 3 días, tiempos, costes, puntos críticos, riesgos, cuándo abortar |
+
+### Recomendación final
+
+| Recurso | Proveedor | Plan | Coste |
+|---------|-----------|------|-------|
+| VPS | **Hetzner Cloud** | CX22 (2 vCPU, 4GB, 40GB SSD) | ~€4.50/mes |
+| Dominio | **Cloudflare Registrar** | monteastur.com (WHOIS privado incluido) | ~€9.15/año |
+| DNS | Cloudflare DNS | Anycast + proxy DDoS | €0 |
+| SSL | Let's Encrypt | Automático con renovación | €0 |
+| Monitoring | Prometheus + Grafana + Uptime Kuma | En Docker compose | €0 |
+
+### Timeline rápido
+
+```
+DÍA 1: Comprar VPS + dominio (~40 min + ~24h verificación Hetzner)
+DÍA 2: Bootstrap + Docker + DNS + HTTPS (~1h + espera DNS)
+DÍA 3: Monitoring + Backups + GitHub Actions + Smoke tests (~1h)
+```
+
+Ver [`docs/REAL_DEPLOY_TIMELINE.md`](docs/REAL_DEPLOY_TIMELINE.md) para detalles.
 
 ### Comandos principales
 
