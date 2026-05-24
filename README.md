@@ -720,6 +720,41 @@ curl http://localhost:9090/targets           # Prometheus targets
 ./scripts/rollback-prod.sh v14.0-e2e-ready
 ```
 
+### GitHub Actions — Deploy manual
+
+El workflow [`deploy-prod.yml`](.github/workflows/deploy-prod.yml) permite desplegar a producción manualmente desde GitHub Actions.
+
+**Cómo ejecutar:**
+
+1. Ir a **GitHub → Actions → Deploy Production**
+2. Click **Run workflow**
+3. Seleccionar branch `develop`
+4. Escribir `deploy` en el campo de confirmación
+5. Click **Run workflow**
+
+**Jobs:**
+
+| Job | Descripción |
+|-----|-------------|
+| `pre-deploy-check` | Valida `docker compose config`, ejecuta `mvn test`, `npm test`, `npm run build` |
+| `deploy-production` | SSH al VPS, git pull, `./scripts/deploy-prod.sh` |
+| `notify-failure` | Muestra instrucciones de rollback si falla |
+
+**Protecciones:**
+- Solo ejecutable desde branch `develop`
+- Requiere confirmación explícita escribiendo "deploy"
+- `fail-fast` configurado
+- Timeout de 15min (validación) + 20min (deploy)
+
+**Secrets requeridos en GitHub:**
+
+| Secret | Descripción |
+|--------|-------------|
+| `VPS_HOST` | IP o dominio del VPS |
+| `VPS_USER` | Usuario SSH (ej: `deploy`) |
+| `VPS_SSH_KEY` | Clave privada SSH (formato PEM/OpenSSH) |
+| `VPS_PORT` | Puerto SSH (opcional, default 22) |
+
 ### Monitoring
 
 | Servicio | Puerto | Acceso |
@@ -728,7 +763,7 @@ curl http://localhost:9090/targets           # Prometheus targets
 | Grafana | 3000 | `http://<vps>:3000` (admin / pass desde .env) |
 | Uptime Kuma | 3001 | `http://<vps>:3001` |
 
-Para más detalles ver [`docs/PRODUCTION_VPS_RUNBOOK.md`](docs/PRODUCTION_VPS_RUNBOOK.md).
+Para más detalles ver [`docs/PRODUCTION_VPS_RUNBOOK.md`](docs/PRODUCTION_VPS_RUNBOOK.md) y [`docs/PRODUCTION_VPS_RUNBOOK.md#14-configurar-github-secrets-para-cd`](docs/PRODUCTION_VPS_RUNBOOK.md#14-configurar-github-secrets-para-cd).
 
 ## HTTPS
 
@@ -813,6 +848,7 @@ La conexión SSH se realiza con clave privada — no se usan contraseñas.
 | `VPS_HOST` | IP o dominio del VPS |
 | `VPS_USER` | Usuario SSH (ej: `root` o `deploy`) |
 | `VPS_SSH_KEY` | Clave privada SSH completa (incluyendo `-----BEGIN OPENSSH PRIVATE KEY-----`) |
+| `VPS_PORT` | Puerto SSH (opcional, default `22`) |
 
 Configurar en GitHub: **Settings → Secrets and variables → Actions**.
 

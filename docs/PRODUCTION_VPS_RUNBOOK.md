@@ -488,6 +488,18 @@ crontab -e
 
 ## 14. Configurar GitHub Secrets para CD
 
+### Workflow disponible
+
+El proyecto incluye el workflow [`deploy-prod.yml`](../.github/workflows/deploy-prod.yml) para desplegar a producción manualmente desde GitHub Actions.
+
+**Características:**
+- Solo ejecutable desde branch `develop`
+- Requiere confirmación explícita escribiendo "deploy"
+- Pre-validación: `docker compose config` + `mvn test` + `npm test` + `npm run build`
+- Deploy vía SSH usando `appleboy/ssh-action`
+- Timeout de 15min (validación) + 20min (deploy)
+- Notificación de fallo con instrucciones de rollback
+
 ### Secrets requeridos
 
 Ir a: **GitHub → Settings → Secrets and variables → Actions**
@@ -497,26 +509,68 @@ Ir a: **GitHub → Settings → Secrets and variables → Actions**
 | `VPS_HOST` | `monteastur.com` o IP | IP/dominio del VPS |
 | `VPS_USER` | `deploy` | Usuario SSH en el VPS |
 | `VPS_SSH_KEY` | `-----BEGIN OPENSSH PRIVATE KEY-----\n...` | Clave privada SSH (formato PEM/OpenSSH) |
+| `VPS_PORT` | `22` | Puerto SSH (opcional, default 22) |
 
-### Generar clave SSH para CD
+### Generar clave SSH para GitHub Actions
 
 ```bash
-# En el VPS (como usuario deploy)
+# 1. Conectar al VPS como usuario deploy
+ssh deploy@<VPS_IP>
+
+# 2. Generar clave SSH dedicada para GitHub Actions
 ssh-keygen -t ed25519 -f ~/.ssh/github-actions -N ""
-cat ~/.ssh/github-actions.pub >> ~/.ssh/authorized_keys
-```
 
-```bash
-# Mostrar clave privada (copiar a GitHub Secret)
+# 3. Autorizar la clave pública
+cat ~/.ssh/github-actions.pub >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+# 4. Mostrar la clave privada (copiar al portapapeles)
 cat ~/.ssh/github-actions
 ```
 
-### Verificar CD
+> La salida del paso 4 es el valor para `VPS_SSH_KEY`. Incluye las líneas `-----BEGIN OPENSSH PRIVATE KEY-----` y `-----END OPENSSH PRIVATE KEY-----`.
+
+### Añadir secrets a GitHub
+
+1. Ir a **GitHub → Repositorio → Settings → Secrets and variables → Actions**
+2. Click **New repository secret**
+3. Añadir cada secret:
+
+| Secret | Valor |
+|--------|-------|
+| `VPS_HOST` | IP pública del VPS (ej: `203.0.113.10`) |
+| `VPS_USER` | `deploy` |
+| `VPS_SSH_KEY` | Contenido completo de `~/.ssh/github-actions` (desde `-----BEGIN` hasta `-----END`) |
+| `VPS_PORT` | `22` (dejar por defecto) |
+
+### Probar conexión SSH localmente (antes del deploy)
 
 ```bash
-# Hacer push a develop → GitHub Actions ejecuta deploy automático
-git push origin develop
+# Verificar que la clave funciona
+ssh -i ~/.ssh/github-actions deploy@<VPS_IP>
+
+# Verificar permisos del directorio
+ls -la /opt/monteastur
+
+# Verificar que el script deploy-prod.sh existe
+ls -la /opt/monteastur/scripts/deploy-prod.sh
+
+# Verificar .env existe
+test -f /opt/monteastur/.env && echo "OK" || echo "MISSING"
 ```
+
+### Ejecutar workflow manualmente
+
+1. Ir a **GitHub → Actions → Deploy Production**
+2. Click **Run workflow**
+3. Seleccionar branch: `develop`
+4. Confirmar escribiendo `deploy` en el campo
+5. Click **Run workflow**
+
+El workflow ejecutará:
+1. **pre-deploy-check**: valida Docker Compose, corre tests backend y frontend, build frontend
+2. **deploy-production** (si validación pasó): SSH al VPS, git pull, `./scripts/deploy-prod.sh`
+3. **notify-failure** (si falló): muestra en logs las instrucciones de rollback
 
 ---
 
@@ -567,6 +621,12 @@ docker compose up -d --build
 | MySQL no arranca | Permisos/volumen corrupto | `docker logs monteastur-mysql`; `docker compose down && docker compose up -d` |
 | Prometheus no recibe datos | Target caído | `curl http://localhost:9090/targets`; verificar `app:8080` UP |
 | Grafana no carga dashboards | Volumen con datos previos | `docker compose down -v grafana && docker compose up -d` (borra BD interna) |
+| SSH: Permission denied | Clave pública no autorizada | Verificar `cat ~/.ssh/id_ed25519.pub >> ~/.ssh/authorized_keys` y `chmod 600 ~/.ssh/authorized_keys` |
+| SSH: Connection refused | Puerto 22 bloqueado | `ufw status` verificar regla; `systemctl status sshd` |
+| SSH: Host key changed | VPS reinstalado | `ssh-keygen -R <VPS_IP>` para limpiar clave anterior |
+| Deploy: Script not found | Repositorio no clonado | `ls /opt/monteastur/scripts/` debe mostrar `deploy-prod.sh`; si no, clonar repo |
+| Deploy: .env missing | .env no creado | `cp .env.example .env && nano .env` con credenciales de producción |
+| Deploy: git pull conflict | Cambios locales sin commit | `git stash` o `git reset --hard origin/develop` (cuidado: pierde cambios locales) |
 
 ---
 
@@ -581,6 +641,9 @@ docker compose up -d --build
 - [ ] `docker compose build` → sin errores
 - [ ] `.env.example` actualizado con todas las variables
 - [ ] Scripts con `chmod +x`
+- [ ] `.github/workflows/deploy-prod.yml` sintaxis YAML válida
+- [ ] GitHub Secrets configurados: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
+- [ ] Conexión SSH manual probada: `ssh deploy@<VPS_IP>`
 
 ### Post-despliegue
 
