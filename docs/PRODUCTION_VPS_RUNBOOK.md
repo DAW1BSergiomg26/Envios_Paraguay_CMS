@@ -26,6 +26,7 @@
 15. [Rollback manual](#15-rollback-manual)
 16. [Troubleshooting](#16-troubleshooting)
 17. [Checklist de producción](#17-checklist-de-producción)
+18. [Primer deploy real](#18-primer-deploy-real)
 
 ---
 
@@ -685,8 +686,74 @@ docker compose up -d --build
 
 ---
 
+## 18. Primer deploy real
+
+### Tiempos estimados
+
+| Paso | Duración |
+|------|----------|
+| Contratar VPS (Hetzner CX22) | ~10 min |
+| Bootstrap + clonar repo | ~5 min |
+| Crear usuario deploy + SSH | ~5 min |
+| Configurar .env | ~5 min |
+| Generar SSH key GitHub Actions | ~2 min |
+| Primer docker compose up | ~10 min |
+| DNS + HTTPS | ~10 min + propagación |
+| GitHub Secrets | ~5 min |
+| Workflow manual | ~5 min |
+| Validaciones finales | ~5 min |
+| **Total** | **~45 min efectivos** |
+
+### Riesgos comunes del primer deploy
+
+| Riesgo | Probabilidad | Mitigación |
+|--------|-------------|------------|
+| DNS no propagado | Alta (esperar 5-15 min) | Usar IP directamente para healthchecks |
+| Certificado SSL falla por DNS | Alta | Verificar `dig` antes de certbot |
+| Puerto 80 ocupado | Media | `lsof -i :80`; detener Apache si existe |
+| `.env` con credenciales débiles | Media | Usar generador: `openssl rand -base64 32` |
+| Docker build lento (1ª vez) | Alta | Build previo local; usar caché |
+| SSH key formato incorrecto | Media | Asegurar incluir `-----BEGIN` y `-----END` |
+| Contenedor mysql no healthy | Media | Esperar 30s; verificar `docker logs` |
+| Grafana login falla | Baja | Default `admin` / `admin123` (cambiar en .env) |
+
+### Errores típicos DNS/SSL
+
+```bash
+# Error: Certbot "DNS problem: NXDOMAIN"
+# → Los registros DNS no están configurados o no se propagaron
+dig monteastur.com  # Debe devolver IP del VPS
+
+# Error: Certbot "Connection refused" en puerto 80
+# → Nginx no está escuchando en 80 o UFW lo bloquea
+curl -I http://monteastur.com  # Debe responder
+sudo ufw status                # 80/tcp debe estar ALLOW
+
+# Error: "SSL: CERTIFICATE_VERIFY_FAILED"
+# → Certificado no válido o caducado
+echo | openssl s_client -connect monteastur.com:443
+
+# Error: "502 Bad Gateway" después de SSL
+# → Nginx configurado con HTTPS pero proxy_pass no funciona
+docker ps  # monteastur-app debe estar UP
+```
+
+### Coste estimado del primer mes
+
+| Concepto | Coste |
+|----------|-------|
+| VPS Hetzner CX22 | €4.50 |
+| Dominio (prorrateado ~€10/año) | €0.83 |
+| SSL / Monitoring / Uptime | €0 |
+| **Total** | **~€5.33** |
+
+Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) para guía paso a paso completa.
+
+---
+
 > **Documentos relacionados:**
 > - [`VPS_HARDENING_CHECKLIST.md`](VPS_HARDENING_CHECKLIST.md) — Checklist completo de hardening (SSH, UFW, fail2ban, updates, Docker, backups, monitoring, SSL)
+> - [`FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) — Checklist paso a paso para el primer despliegue real
 > - [`scripts/server-healthcheck.sh`](../scripts/server-healthcheck.sh) — Script de healthcheck rápido
 >
 > **Mantenido por:** Equipo Monteastur Envios

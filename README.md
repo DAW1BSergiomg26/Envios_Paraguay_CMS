@@ -804,6 +804,55 @@ Guía completa en [`docs/VPS_HARDENING_CHECKLIST.md`](docs/VPS_HARDENING_CHECKLI
 0 4 * * * /opt/monteastur/scripts/backup-uploads.sh
 ```
 
+## Primer Deploy VPS
+
+Guía completa en [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](docs/FIRST_VPS_DEPLOY_CHECKLIST.md).
+
+### Proveedor recomendado
+
+| Proveedor | Plan | vCPU | RAM | SSD | Precio/mes |
+|-----------|------|------|-----|-----|------------|
+| **Hetzner** | CX22 | 2 | 4 GB | 40 GB | **~€4.50** |
+
+Alternativa económica: Contabo Cloud S (~€6.99/mes, 4 vCPU, 8 GB RAM, 200 GB SSD).
+
+### Coste mensual estimado
+
+| Concepto | Coste |
+|----------|-------|
+| VPS Hetzner CX22 | ~€4.50 |
+| Dominio .com | ~€0.83/mes (~€10/año) |
+| SSL, Monitoring, Uptime | €0 (auto-hospedado) |
+| **Total** | **~€5.33/mes** |
+
+### Orden de ejecución (45 min estimado)
+
+```
+ 1. Contratar VPS + anotar IP     (10 min)
+ 2. Bootstrap + clonar repo       ( 5 min)
+ 3. Crear deploy + configurar SSH  ( 5 min)
+ 4. Configurar .env                ( 5 min)
+ 5. Generar SSH key CD             ( 2 min)
+ 6. docker compose up              (10 min)
+ 7. DNS + HTTPS                    (10 min + propagación)
+ 8. GitHub Secrets                 ( 5 min)
+ 9. Workflow manual                ( 5 min)
+10. Validaciones finales           ( 5 min)
+```
+
+### Resumen checklist
+
+- [ ] VPS contratado (Hetzner CX22 recomendado)
+- [ ] DNS apuntando al VPS (registro A)
+- [ ] `.env` configurado con credenciales seguras
+- [ ] GitHub Secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
+- [ ] HTTPS con Let's Encrypt funcionando
+- [ ] `docker ps` → 6/6 containers UP
+- [ ] `curl -f /actuator/health` → `{"status":"UP"}`
+- [ ] Workflow manual ejecutado desde GitHub Actions
+
+Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](docs/FIRST_VPS_DEPLOY_CHECKLIST.md) para guía completa.
+
 ## HTTPS
 
 Para producción con SSL, seguir [`docs/HTTPS_SETUP.md`](docs/HTTPS_SETUP.md):
