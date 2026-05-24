@@ -1022,6 +1022,64 @@ Configuración de ejemplo completa en [`nginx/conf.d/production-example.conf`](n
 
 Ver [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md) para guía completa y troubleshooting detallado.
 
+## Deploy checklist final
+
+Checklist operativa completa en [`docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md`](docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md).
+Smoke tests en [`docs/SMOKE_TESTS_PRODUCTION.md`](docs/SMOKE_TESTS_PRODUCTION.md).
+
+### Orden rápido
+
+```
+PRE-DEPLOY (30 min)
+├── VPS contratado + Ubuntu actualizado
+├── usuario deploy + SSH + UFW + fail2ban
+├── dominio + DNS propagado
+├── GitHub Secrets configurados
+└── .env con credenciales seguras
+
+DEPLOY (45 min)
+├── docker compose build + up -d
+├── verificar 6/6 containers UP
+├── healthcheck → {"status":"UP"}
+├── HTTPS con Let's Encrypt
+├── workflow manual desde GitHub Actions
+└── crontab + renovaciones
+
+POST-DEPLOY (20 min)
+├── smoke tests (11 tests, 15 min)
+├── web + login + API + monitoring
+├── backups probados
+├── rollback probado
+└── checklist 24h
+```
+
+### Smoke tests (11 tests, ~15 min)
+
+| # | Test | Prioridad |
+|---|------|-----------|
+| 1 | Healthcheck endpoint `{"status":"UP"}` | 🔴 Alta |
+| 2 | Home page carga con security headers | 🔴 Alta |
+| 3 | Tracking público funciona | 🔴 Alta |
+| 4 | Login admin correcto | 🔴 Alta |
+| 5 | Login cliente correcto | 🔴 Alta |
+| 6 | Dashboard React SPA sin page errors | 🟡 Media |
+| 7 | Upload/subida de imágenes | 🟡 Media |
+| 8 | Monitoring (Prometheus, Grafana, Kuma) | 🟡 Media |
+| 9 | PWA instalable | 🟢 Baja |
+| 10 | SSL Labs grade A+ | 🟢 Baja |
+| 11 | Mobile responsive | 🟢 Baja |
+
+> **Criterio:** Todos los 🔴 deben pasar. Si alguno falla, no considerar deploy exitoso.
+
+### Rollback rápido
+
+```bash
+# Si algo falla durante el deploy
+cd /opt/monteastur && ./scripts/rollback-prod.sh v14.0-e2e-ready
+```
+
+Ver [`docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md`](docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md) para checklist completa y plan de contingencia.
+
 ## Checklist de producción
 
 Antes de desplegar en un entorno de producción, verificar:

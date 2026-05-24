@@ -753,6 +753,8 @@ Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) para g
 ---
 
 > **Documentos relacionados:**
+> - [`FINAL_PRODUCTION_DEPLOY_CHECKLIST.md`](FINAL_PRODUCTION_DEPLOY_CHECKLIST.md) — Checklist operativa final con pre-deploy, deploy, post-deploy, contingencia y 24h
+> - [`SMOKE_TESTS_PRODUCTION.md`](SMOKE_TESTS_PRODUCTION.md) — 11 tests manuales post-deploy (alta/media/baja prioridad)
 > - [`LIVE_DEPLOY_PLAN.md`](LIVE_DEPLOY_PLAN.md) — Plan operativo completo para el deploy real online (15 pasos, costes, rollback)
 > - [`GITHUB_SECRETS_SSH_SETUP.md`](GITHUB_SECRETS_SSH_SETUP.md) — Guía completa de GitHub Secrets y SSH
 > - [`DOMAIN_DNS_SSL_SETUP.md`](DOMAIN_DNS_SSL_SETUP.md) — Guía completa de dominio, DNS y HTTPS
