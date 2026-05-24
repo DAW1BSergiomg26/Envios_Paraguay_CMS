@@ -27,6 +27,7 @@
 16. [Troubleshooting](#16-troubleshooting)
 17. [Checklist de producción](#17-checklist-de-producción)
 18. [Primer deploy real](#18-primer-deploy-real)
+19. [Plan de deploy online](LIVE_DEPLOY_PLAN.md)
 
 ---
 
@@ -752,6 +753,7 @@ Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) para g
 ---
 
 > **Documentos relacionados:**
+> - [`LIVE_DEPLOY_PLAN.md`](LIVE_DEPLOY_PLAN.md) — Plan operativo completo para el deploy real online (15 pasos, costes, rollback)
 > - [`VPS_HARDENING_CHECKLIST.md`](VPS_HARDENING_CHECKLIST.md) — Checklist completo de hardening (SSH, UFW, fail2ban, updates, Docker, backups, monitoring, SSL)
 > - [`FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) — Checklist paso a paso para el primer despliegue real
 > - [`scripts/server-healthcheck.sh`](../scripts/server-healthcheck.sh) — Script de healthcheck rápido
