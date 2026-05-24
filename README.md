@@ -861,6 +861,96 @@ El stack incluye **Uptime Kuma** como monitor interno de uptime:
 
 **Uptime Kuma** permite crear monitores de tipo HTTP, SSL, DNS, Docker, y más, con notificaciones multicanal (Telegram, Discord, Slack, email). Para configuración detallada, ver `docs/UPTIME_MONITORING.md`.
 
+## Testing
+
+El backend usa **JUnit 5 + Mockito** para testing automatizado.
+
+### Stack de testing
+
+| Herramienta | Uso |
+|------------|-----|
+| **JUnit 5 (Jupiter)** | Framework de testing |
+| **Mockito** | Mocking de dependencias |
+| **Spring Boot Test** | Contexto de aplicación para tests de integración |
+| **MockMvc** | Testing de controladores HTTP |
+
+### Tests incluidos
+
+| Clase | Tipo | Dependencias |
+|-------|------|-------------|
+| `TrackingApiControllerTest` | `@WebMvcTest` | Mock de `EnvioTrackingRepository` |
+| `ReservaServiceTest` | `@ExtendWith(MockitoExtension.class)` | Mock de `ReservaRepository` |
+| `PushSubscriptionControllerTest` | `@WebMvcTest` | Sin dependencias externas |
+| `SecurityConfigTest` | `@WebMvcTest` + `@Import(SecurityConfig.class)` | Verifica rutas públicas y protegidas |
+
+### Ejecutar tests
+
+```bash
+# Todos los tests
+mvn test
+
+# Test específico
+mvn test -Dtest=TrackingApiControllerTest
+
+# Build completo (test + package)
+mvn clean package
+```
+
+### Cobertura actual
+
+| Capa | Tests | Cobertura aproximada |
+|------|-------|---------------------|
+| Controladores API | 5 tests | Tracking público, Push subscribe/unsubscribe |
+| Servicios | 3 tests | Crear reserva, buscar por ID |
+| Seguridad | 3 tests | Rutas públicas accesibles, admin protegido |
+| **Total** | **11 tests** | Funcionalidades críticas cubiertas |
+
+### CI
+
+Los tests se ejecutan automáticamente en GitHub Actions antes del empaquetado:
+`mvn clean package` (sin `-DskipTests`).
+
+### Frontend Testing
+
+El frontend React usa **Vitest + React Testing Library** para testing de componentes.
+
+| Herramienta | Uso |
+|------------|-----|
+| **Vitest** | Test runner compatible con Vite |
+| **@testing-library/react** | Renderizado e interacción con componentes |
+| **@testing-library/jest-dom** | Matchers personalizados para el DOM |
+| **@testing-library/user-event** | Simulación realista de eventos de usuario |
+| **jsdom** | Entorno DOM simulado para tests |
+
+#### Tests incluidos
+
+| Componente | Tests | Qué prueba |
+|-----------|-------|-----------|
+| `LoginPage` | 4 | Renderiza formulario, login exitoso navega, login fallido muestra error |
+| `StatsCard` | 2 | Renderiza label/valor, soporta icono y color |
+| `StatusBadge` | 3 | Formatea estado, renderiza EN_TRANSITO, ENTREGADO, N/A |
+| `EmptyState` | 2 | Mensaje por defecto, mensaje personalizado |
+| `SearchBar` | 4 | Placeholder, debounce 300ms, botón clear |
+| **Total** | **15** | |
+
+#### Ejecutar tests
+
+```bash
+cd frontend-react
+
+# Todos los tests (una vez)
+npm test
+
+# Modo watch (desarrollo)
+npm run test:watch
+
+# Con cobertura
+npm run test:coverage
+```
+
+En CI, los tests se ejecutan automáticamente antes del build:
+`npm test -- --run`
+
 ## Roadmap futuro
 
 ### Funcionalidades
