@@ -853,31 +853,67 @@ Alternativa económica: Contabo Cloud S (~€6.99/mes, 4 vCPU, 8 GB RAM, 200 GB 
 
 Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](docs/FIRST_VPS_DEPLOY_CHECKLIST.md) para guía completa.
 
-## Deploy real online
+## VPS real online
 
-Plan operativo completo en [`docs/LIVE_DEPLOY_PLAN.md`](docs/LIVE_DEPLOY_PLAN.md).
+Guías completas y comandos exactos para el primer despliegue real en VPS.
 
-### Resumen rápido
+### Documentos operativos
 
-| Paso | Comando/Acción |
-|------|----------------|
-| 1. Comprar VPS | Hetzner CX22 (Ubuntu 22.04) |
-| 2. Bootstrap | `sudo ./scripts/vps-bootstrap.sh` |
-| 3. .env | `cp .env.example .env && nano .env` |
-| 4. Docker | `docker compose up -d --build` |
-| 5. DNS | Registro A → IP del VPS |
-| 6. HTTPS | `docker compose --profile certbot run --rm certbot certonly ...` |
-| 7. GitHub Secrets | `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY` |
-| 8. Deploy | GitHub Actions → Deploy Production |
+| Guía | Contenido |
+|------|-----------|
+| [`docs/VPS_REAL_EXECUTION_GUIDE.md`](docs/VPS_REAL_EXECUTION_GUIDE.md) | Guía completa: compra, SSH, bootstrap, Docker, HTTPS, deploy, rollback |
+| [`docs/PRODUCTION_ENV_GUIDE.md`](docs/PRODUCTION_ENV_GUIDE.md) | Cómo configurar `.env`, generar passwords, DDL_AUTO, seguridad |
+| [`docs/FIRST_REAL_DEPLOY_COMMANDS.md`](docs/FIRST_REAL_DEPLOY_COMMANDS.md) | Comandos exactos por bloque (A-H): local, VPS, DNS, HTTPS, smoke tests, rollback |
+| [`.env.production.example`](.env.production.example) | Plantilla `.env` completa para producción |
 
-### Coste estimado
+### Flujo rápido
+
+```
+1. Comprar VPS Hetzner CX22 (Ubuntu 24.04)      coste ~€4.50/mes
+2. Seguir VPS_REAL_EXECUTION_GUIDE.md               ~60 min
+3. Configurar .env con PRODUCTION_ENV_GUIDE.md       ~15 min
+4. Ejecutar comandos FIRST_REAL_DEPLOY_COMMANDS.md   ~45 min
+5. Smoke tests y checklist final                     ~30 min
+```
+
+### Coste estimado total
 
 | Concepto | Coste |
 |----------|-------|
 | VPS Hetzner CX22 | ~€4.50/mes |
 | Dominio .com | ~€0.83/mes |
 | SSL / Monitoring / CI/CD | €0 |
-| **Total** | **~€5.33/mes** (~€65/año) |
+| **Total** | **~€5.33/mes (~€69/año)** |
+
+## Compra VPS y dominio
+
+Guías detalladas para la contratación real de infraestructura.
+
+| Guía | Contenido |
+|------|-----------|
+| [`docs/HETZNER_VPS_PURCHASE_GUIDE.md`](docs/HETZNER_VPS_PURCHASE_GUIDE.md) | Crear cuenta, verificación, crear servidor CX22, qué NO elegir, primer login, checklist |
+| [`docs/DOMAIN_PURCHASE_GUIDE.md`](docs/DOMAIN_PURCHASE_GUIDE.md) | Proveedores, recomendación Cloudflare, qué dominio elegir, DNS, Cloudflare proxy, checklist |
+| [`docs/REAL_DEPLOY_TIMELINE.md`](docs/REAL_DEPLOY_TIMELINE.md) | Plan 3 días, tiempos, costes, puntos críticos, riesgos, cuándo abortar |
+
+### Recomendación final
+
+| Recurso | Proveedor | Plan | Coste |
+|---------|-----------|------|-------|
+| VPS | **Hetzner Cloud** | CX22 (2 vCPU, 4GB, 40GB SSD) | ~€4.50/mes |
+| Dominio | **Cloudflare Registrar** | monteastur.com (WHOIS privado incluido) | ~€9.15/año |
+| DNS | Cloudflare DNS | Anycast + proxy DDoS | €0 |
+| SSL | Let's Encrypt | Automático con renovación | €0 |
+| Monitoring | Prometheus + Grafana + Uptime Kuma | En Docker compose | €0 |
+
+### Timeline rápido
+
+```
+DÍA 1: Comprar VPS + dominio (~40 min + ~24h verificación Hetzner)
+DÍA 2: Bootstrap + Docker + DNS + HTTPS (~1h + espera DNS)
+DÍA 3: Monitoring + Backups + GitHub Actions + Smoke tests (~1h)
+```
+
+Ver [`docs/REAL_DEPLOY_TIMELINE.md`](docs/REAL_DEPLOY_TIMELINE.md) para detalles.
 
 ### Comandos principales
 
