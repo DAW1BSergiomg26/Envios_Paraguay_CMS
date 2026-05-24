@@ -77,6 +77,52 @@ jobs:
           path: frontend-react/dist
           if-no-files-found: error
 
+  e2e-tests:
+    name: E2E Tests (manual)
+    runs-on: ubuntu-latest
+    if: false
+    needs: [docker-build]
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: ci_root_pass
+          MYSQL_DATABASE: casarural_ci
+          MYSQL_USER: ci_user
+          MYSQL_PASSWORD: ci_user_pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: temurin
+          cache: maven
+      - name: Start Spring Boot
+        run: |
+          mvn spring-boot:run -Dspring-boot.run.profiles=prod &
+          sleep 30
+        env:
+          ADMIN_USERNAME: ci_admin
+          ADMIN_PASSWORD: ci_admin_pass
+      - name: Install Playwright
+        working-directory: frontend-react
+        run: npx playwright install --with-deps chromium
+      - name: Run E2E tests
+        working-directory: frontend-react
+        run: npm run e2e
+        env:
+          E2E_BASE_URL: http://localhost:8080
+          E2E_ADMIN_USER: ci_admin
+          E2E_ADMIN_PASS: ci_admin_pass
+
   docker-build:
     name: Docker Build
     runs-on: ubuntu-latest

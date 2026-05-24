@@ -959,6 +959,52 @@ npm run test:coverage
 En CI, los tests se ejecutan automáticamente antes del build:
 `npm test -- --run`
 
+### E2E Testing
+
+El proyecto usa **Playwright** para pruebas E2E (End-to-End) en navegador real.
+
+| Herramienta | Uso |
+|------------|-----|
+| **Playwright** | Automatización de navegador Chromium |
+| **@playwright/test** | Test runner con reporter HTML |
+
+#### Tests E2E incluidos
+
+| Archivo | Tests | Qué prueba |
+|---------|-------|-----------|
+| `e2e/home.spec.js` | 2 | Página principal carga sin errores, contenido visible |
+| `e2e/login.spec.js` | 3 | Formulario login renderizado, login admin exitoso, login fallido muestra error |
+| `e2e/dashboard.spec.js` | 2 | Dashboard carga tras login, tabla de envíos visible |
+| `e2e/tracking.spec.js` | 2 | Página de búsqueda tracking, código inexistente muestra error |
+| **Total** | **9** | |
+
+#### Requisitos
+
+- App corriendo (Docker: `docker compose up -d` o Vite: `npm run dev`)
+- URL configurable vía `E2E_BASE_URL` (default: `http://localhost:8090`)
+
+#### Ejecutar tests
+
+```bash
+cd frontend-react
+
+# Instalar navegador (solo primera vez)
+npx playwright install chromium
+
+# Todos los tests E2E (headless)
+npm run e2e
+
+# Con UI interactiva
+npm run e2e:ui
+
+# Con navegador visible
+npm run e2e:headed
+```
+
+#### CI
+
+Los tests E2E tienen un job definido en `ci.yml` pero está deshabilitado por defecto (`if: false`) porque requiere base de datos MySQL y Spring Boot corriendo. Para habilitarlo en CI, cambiar `if: false` a `if: true` en el workflow.
+
 ## Roadmap futuro
 
 ### Funcionalidades
