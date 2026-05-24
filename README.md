@@ -903,6 +903,61 @@ docker compose up -d --build
 
 Ver [`docs/LIVE_DEPLOY_PLAN.md`](docs/LIVE_DEPLOY_PLAN.md) para los 15 pasos detallados.
 
+## GitHub Secrets + SSH
+
+Guía completa en [`docs/GITHUB_SECRETS_SSH_SETUP.md`](docs/GITHUB_SECRETS_SSH_SETUP.md).
+Script de verificación: [`scripts/check-ssh-connection.sh`](scripts/check-ssh-connection.sh).
+
+### Secrets necesarios
+
+| Secret | Descripción | Ejemplo |
+|--------|-------------|---------|
+| `VPS_HOST` | IP o dominio del VPS | `203.0.113.10` |
+| `VPS_USER` | Usuario SSH | `deploy` |
+| `VPS_SSH_KEY` | Clave privada (multilínea) | `-----BEGIN OPENSSH...` |
+| `VPS_PORT` | Puerto SSH (opcional) | `22` |
+
+### Orden recomendado
+
+```bash
+# 1. Generar clave SSH dedicada
+ssh-keygen -t ed25519 -C "github-actions@monteastur" -f ~/.ssh/github-actions-monteastur
+
+# 2. Copiar clave pública al VPS
+ssh-copy-id -i ~/.ssh/github-actions-monteastur.pub deploy@<VPS_IP>
+
+# 3. Mostrar clave privada y copiarla a GitHub Secrets
+cat ~/.ssh/github-actions-monteastur
+
+# 4. Verificar conexión
+./scripts/check-ssh-connection.sh
+
+# 5. Probar workflow en GitHub Actions
+# GitHub → Actions → Deploy Production → Run workflow
+```
+
+### Verificación rápida
+
+```bash
+# Probar conexión SSH local
+VPS_HOST=<VPS_IP> ./scripts/check-ssh-connection.sh
+
+# Verificar desde local
+ssh -i ~/.ssh/github-actions-monteastur deploy@<VPS_IP> "echo OK && docker ps"
+```
+
+### Troubleshooting básico
+
+| Problema | Solución |
+|----------|----------|
+| Permission denied | `ssh-copy-id` para añadir clave pública al VPS |
+| bad permissions | `chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys` en VPS |
+| Connection refused | `sudo ufw status` verificar puerto 22; `systemctl status sshd` |
+| Host key changed | `ssh-keygen -R <VPS_IP>` para limpiar cache |
+| fail2ban bloqueó | `sudo fail2ban-client set sshd unbanip <IP>` en VPS |
+
+Ver [`docs/GITHUB_SECRETS_SSH_SETUP.md`](docs/GITHUB_SECRETS_SSH_SETUP.md) para guía completa.
+
 ## Dominio + HTTPS
 
 Guía completa en [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md).
