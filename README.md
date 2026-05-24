@@ -765,6 +765,45 @@ El workflow [`deploy-prod.yml`](.github/workflows/deploy-prod.yml) permite despl
 
 Para más detalles ver [`docs/PRODUCTION_VPS_RUNBOOK.md`](docs/PRODUCTION_VPS_RUNBOOK.md) y [`docs/PRODUCTION_VPS_RUNBOOK.md#14-configurar-github-secrets-para-cd`](docs/PRODUCTION_VPS_RUNBOOK.md#14-configurar-github-secrets-para-cd).
 
+## Hardening VPS
+
+Guía completa en [`docs/VPS_HARDENING_CHECKLIST.md`](docs/VPS_HARDENING_CHECKLIST.md).
+
+### Scripts disponibles
+
+| Script | Función |
+|--------|---------|
+| `scripts/server-healthcheck.sh` | Reporta uptime, disco, RAM, Docker, healthcheck |
+| `scripts/backup-db.sh` | Backup MySQL → `backup/db/` |
+| `scripts/backup-uploads.sh` | Backup uploads → `backup/uploads/` |
+
+### Resumen de hardening
+
+| Medida | Estado |
+|--------|--------|
+| SSH: sin root, sin contraseñas | ✅ Documentado |
+| UFW: puertos mínimos (22, 80, 443) | ✅ Documentado + script |
+| fail2ban: protección fuerza bruta | ✅ Documentado |
+| unattended-upgrades: seguridad auto | ✅ Documentado |
+| Docker: restart, healthchecks, límites | ✅ Implementado |
+| Backups: BD, uploads, .env | ✅ Scripts listos |
+| Monitoring: Prometheus, Grafana, Kuma | ✅ Implementado |
+| SSL: Let's Encrypt + renovación auto | ✅ Documentado |
+| Security headers: CSP, HSTS, XFO | ✅ Implementado |
+
+### Healthcheck rápido
+
+```bash
+./scripts/server-healthcheck.sh
+```
+
+### Backups automáticos (cron)
+
+```cron
+0 3 * * * /opt/monteastur/scripts/backup-db.sh
+0 4 * * * /opt/monteastur/scripts/backup-uploads.sh
+```
+
 ## HTTPS
 
 Para producción con SSL, seguir [`docs/HTTPS_SETUP.md`](docs/HTTPS_SETUP.md):

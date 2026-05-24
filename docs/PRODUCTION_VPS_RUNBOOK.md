@@ -670,6 +670,8 @@ docker compose up -d --build
 - [ ] `PermitRootLogin no`
 - [ ] `PasswordAuthentication no`
 - [ ] UFW activo con reglas mínimas
+- [ ] fail2ban instalado y activo
+- [ ] unattended-upgrades configurado
 - [ ] Clave SSH para CD configurada
 - [ ] `.env` no está en Git (`.gitignore`)
 - [ ] Contraseñas producidas con generador seguro
@@ -677,8 +679,15 @@ docker compose up -d --build
 - [ ] Cookie de sesión HttpOnly + Secure
 - [ ] HSTS habilitado (HTTPS)
 - [ ] CSP configurada
+- [ ] `server-healthcheck.sh` ejecutable y funcional
+
+> Para hardening detallado ver [`VPS_HARDENING_CHECKLIST.md`](VPS_HARDENING_CHECKLIST.md).
 
 ---
 
-> **Documento mantenido por:** Equipo Monteastur Envios
+> **Documentos relacionados:**
+> - [`VPS_HARDENING_CHECKLIST.md`](VPS_HARDENING_CHECKLIST.md) — Checklist completo de hardening (SSH, UFW, fail2ban, updates, Docker, backups, monitoring, SSL)
+> - [`scripts/server-healthcheck.sh`](../scripts/server-healthcheck.sh) — Script de healthcheck rápido
+>
+> **Mantenido por:** Equipo Monteastur Envios
 > **Próxima revisión:** 2026-06-24
