@@ -853,16 +853,232 @@ Alternativa económica: Contabo Cloud S (~€6.99/mes, 4 vCPU, 8 GB RAM, 200 GB 
 
 Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](docs/FIRST_VPS_DEPLOY_CHECKLIST.md) para guía completa.
 
-## HTTPS
+## Deploy real online
 
-Para producción con SSL, seguir [`docs/HTTPS_SETUP.md`](docs/HTTPS_SETUP.md):
+Plan operativo completo en [`docs/LIVE_DEPLOY_PLAN.md`](docs/LIVE_DEPLOY_PLAN.md).
+
+### Resumen rápido
+
+| Paso | Comando/Acción |
+|------|----------------|
+| 1. Comprar VPS | Hetzner CX22 (Ubuntu 22.04) |
+| 2. Bootstrap | `sudo ./scripts/vps-bootstrap.sh` |
+| 3. .env | `cp .env.example .env && nano .env` |
+| 4. Docker | `docker compose up -d --build` |
+| 5. DNS | Registro A → IP del VPS |
+| 6. HTTPS | `docker compose --profile certbot run --rm certbot certonly ...` |
+| 7. GitHub Secrets | `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY` |
+| 8. Deploy | GitHub Actions → Deploy Production |
+
+### Coste estimado
+
+| Concepto | Coste |
+|----------|-------|
+| VPS Hetzner CX22 | ~€4.50/mes |
+| Dominio .com | ~€0.83/mes |
+| SSL / Monitoring / CI/CD | €0 |
+| **Total** | **~€5.33/mes** (~€65/año) |
+
+### Comandos principales
 
 ```bash
+# Bootstrap VPS
+ssh root@<VPS_IP>
+sudo ./scripts/vps-bootstrap.sh
+
+# Primer deploy manual en VPS
+ssh deploy@<VPS_IP>
+cd /opt/monteastur
+docker compose up -d --build
+
+# Workflow automático
+# GitHub → Actions → Deploy Production → Run workflow
+
+# Healthcheck
+./scripts/server-healthcheck.sh
+
+# Rollback
+./scripts/rollback-prod.sh v14.0-e2e-ready
+```
+
+Ver [`docs/LIVE_DEPLOY_PLAN.md`](docs/LIVE_DEPLOY_PLAN.md) para los 15 pasos detallados.
+
+## GitHub Secrets + SSH
+
+Guía completa en [`docs/GITHUB_SECRETS_SSH_SETUP.md`](docs/GITHUB_SECRETS_SSH_SETUP.md).
+Script de verificación: [`scripts/check-ssh-connection.sh`](scripts/check-ssh-connection.sh).
+
+### Secrets necesarios
+
+| Secret | Descripción | Ejemplo |
+|--------|-------------|---------|
+| `VPS_HOST` | IP o dominio del VPS | `203.0.113.10` |
+| `VPS_USER` | Usuario SSH | `deploy` |
+| `VPS_SSH_KEY` | Clave privada (multilínea) | `-----BEGIN OPENSSH...` |
+| `VPS_PORT` | Puerto SSH (opcional) | `22` |
+
+### Orden recomendado
+
+```bash
+# 1. Generar clave SSH dedicada
+ssh-keygen -t ed25519 -C "github-actions@monteastur" -f ~/.ssh/github-actions-monteastur
+
+# 2. Copiar clave pública al VPS
+ssh-copy-id -i ~/.ssh/github-actions-monteastur.pub deploy@<VPS_IP>
+
+# 3. Mostrar clave privada y copiarla a GitHub Secrets
+cat ~/.ssh/github-actions-monteastur
+
+# 4. Verificar conexión
+./scripts/check-ssh-connection.sh
+
+# 5. Probar workflow en GitHub Actions
+# GitHub → Actions → Deploy Production → Run workflow
+```
+
+### Verificación rápida
+
+```bash
+# Probar conexión SSH local
+VPS_HOST=<VPS_IP> ./scripts/check-ssh-connection.sh
+
+# Verificar desde local
+ssh -i ~/.ssh/github-actions-monteastur deploy@<VPS_IP> "echo OK && docker ps"
+```
+
+### Troubleshooting básico
+
+| Problema | Solución |
+|----------|----------|
+| Permission denied | `ssh-copy-id` para añadir clave pública al VPS |
+| bad permissions | `chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys` en VPS |
+| Connection refused | `sudo ufw status` verificar puerto 22; `systemctl status sshd` |
+| Host key changed | `ssh-keygen -R <VPS_IP>` para limpiar cache |
+| fail2ban bloqueó | `sudo fail2ban-client set sshd unbanip <IP>` en VPS |
+
+Ver [`docs/GITHUB_SECRETS_SSH_SETUP.md`](docs/GITHUB_SECRETS_SSH_SETUP.md) para guía completa.
+
+## Dominio + HTTPS
+
+Guía completa en [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md).
+Ejemplo de configuración nginx en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf).
+
+### Flujo resumido
+
+```
+ 1. Comprar dominio (Namecheap / Cloudflare Registrar)
+ 2. Configurar registro A → IP del VPS (TTL 300)
+ 3. Verificar propagación: dig +short monteastur.com
+ 4. Obtener certificado SSL con Let's Encrypt
+ 5. Copiar certificados a nginx/ssl/
+ 6. Activar HTTPS en nginx (descomentar bloque SSL)
+ 7. Verificar: curl -I https://monteastur.com
+ 8. Configurar renovación automática (cron)
+```
+
+### DNS
+
+| Registro | Tipo | Valor | TTL |
+|----------|------|-------|-----|
+| `@` | A | IP del VPS | 300→3600 |
+| `www` | A | IP del VPS | 300→3600 |
+
+Subdominios opcionales: `grafana`, `uptime`, `app`.
+
+### HTTPS
+
+```bash
+# Obtener certificado
 docker compose --profile certbot run --rm certbot certonly \
-  --webroot -w /var/www/certbot -d monteastur.com -d www.monteastur.com
-# Descomentar bloque HTTPS en nginx/conf.d/monteastur.conf
+  --webroot -w /var/www/certbot \
+  -d monteastur.com -d www.monteastur.com \
+  --email admin@monteastur.com \
+  --agree-tos --no-eff-email
+
+# Copiar a nginx y recargar
+cp /etc/letsencrypt/live/monteastur.com/fullchain.pem nginx/ssl/
+cp /etc/letsencrypt/live/monteastur.com/privkey.pem nginx/ssl/
 docker compose restart nginx
 ```
+
+### Nginx
+
+Configuración de ejemplo completa en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf):
+- HTTP → HTTPS redirect
+- SSL termination
+- Security headers (HSTS, CSP, XFO)
+- Gzip compression
+- Proxy pass a Spring Boot
+- WebSocket ready
+
+### Troubleshooting rápido
+
+| Problema | Solución |
+|----------|----------|
+| DNS no propaga | `dig @8.8.8.8 monteastur.com`, esperar TTL |
+| Certbot falla | Verificar puerto 80 abierto y DNS propagado |
+| Mixed Content | Todos los assets deben servirse por HTTPS |
+| Redirect loop | Cloudflare en modo "Full (strict)" |
+
+Ver [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md) para guía completa y troubleshooting detallado.
+
+## Deploy checklist final
+
+Checklist operativa completa en [`docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md`](docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md).
+Smoke tests en [`docs/SMOKE_TESTS_PRODUCTION.md`](docs/SMOKE_TESTS_PRODUCTION.md).
+
+### Orden rápido
+
+```
+PRE-DEPLOY (30 min)
+├── VPS contratado + Ubuntu actualizado
+├── usuario deploy + SSH + UFW + fail2ban
+├── dominio + DNS propagado
+├── GitHub Secrets configurados
+└── .env con credenciales seguras
+
+DEPLOY (45 min)
+├── docker compose build + up -d
+├── verificar 6/6 containers UP
+├── healthcheck → {"status":"UP"}
+├── HTTPS con Let's Encrypt
+├── workflow manual desde GitHub Actions
+└── crontab + renovaciones
+
+POST-DEPLOY (20 min)
+├── smoke tests (11 tests, 15 min)
+├── web + login + API + monitoring
+├── backups probados
+├── rollback probado
+└── checklist 24h
+```
+
+### Smoke tests (11 tests, ~15 min)
+
+| # | Test | Prioridad |
+|---|------|-----------|
+| 1 | Healthcheck endpoint `{"status":"UP"}` | 🔴 Alta |
+| 2 | Home page carga con security headers | 🔴 Alta |
+| 3 | Tracking público funciona | 🔴 Alta |
+| 4 | Login admin correcto | 🔴 Alta |
+| 5 | Login cliente correcto | 🔴 Alta |
+| 6 | Dashboard React SPA sin page errors | 🟡 Media |
+| 7 | Upload/subida de imágenes | 🟡 Media |
+| 8 | Monitoring (Prometheus, Grafana, Kuma) | 🟡 Media |
+| 9 | PWA instalable | 🟢 Baja |
+| 10 | SSL Labs grade A+ | 🟢 Baja |
+| 11 | Mobile responsive | 🟢 Baja |
+
+> **Criterio:** Todos los 🔴 deben pasar. Si alguno falla, no considerar deploy exitoso.
+
+### Rollback rápido
+
+```bash
+# Si algo falla durante el deploy
+cd /opt/monteastur && ./scripts/rollback-prod.sh v14.0-e2e-ready
+```
+
+Ver [`docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md`](docs/FINAL_PRODUCTION_DEPLOY_CHECKLIST.md) para checklist completa y plan de contingencia.
 
 ## Checklist de producción
 
