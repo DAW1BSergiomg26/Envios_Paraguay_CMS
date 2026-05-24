@@ -48,8 +48,7 @@ export async function loginUser(username, password) {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body,
-    credentials: 'include',
-    redirect: 'manual'
+    credentials: 'include'
   });
   return checkSession();
 }
@@ -62,16 +61,17 @@ export async function logoutUser() {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body,
-      credentials: 'include',
-      redirect: 'manual'
+      credentials: 'include'
     });
   }
 }
 
 export async function checkSession() {
   try {
-    await api.get('/admin/envios?page=0&size=1');
-    return true;
+    const res = await api.get('/admin/envios?page=0&size=1');
+    // Axios follows 3xx redirects to /login (200 HTML). A valid session
+    // returns JSON; an invalid one returns the login page (string HTML).
+    return typeof res.data === 'object' && res.data !== null;
   } catch {
     return false;
   }
