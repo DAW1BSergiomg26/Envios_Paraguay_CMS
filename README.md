@@ -649,18 +649,86 @@ Versiones PowerShell para Windows disponibles en `scripts/*.ps1`.
 0 5 * * * find /opt/monteastur/backup -name "*.sql.gz" -mtime +30 -delete
 ```
 
-## Deploy rápido (VPS)
+## Producción VPS
+
+Guía completa en [`docs/PRODUCTION_VPS_RUNBOOK.md`](docs/PRODUCTION_VPS_RUNBOOK.md).
+
+### Comandos rápidos
 
 ```bash
-# En el VPS Ubuntu 22.04:
-apt update && apt install -y docker.io docker-compose-v2 git curl
-cd /opt && git clone <repo-url> monteastur && cd monteastur
-cp .env.example .env && nano .env     # Configurar credenciales
-docker compose build && docker compose up -d
-curl http://localhost/actuator/health  # Debe responder {"status":"UP"}
+# Bootstrap del VPS (como root)
+sudo ./scripts/vps-bootstrap.sh
+
+# Deploy (como usuario deploy en /opt/monteastur)
+./scripts/deploy-prod.sh
+
+# Rollback a tag específica
+./scripts/rollback-prod.sh v14.0-e2e-ready
+
+# Backup manual
+./scripts/backup-db.sh
+./scripts/backup-uploads.sh
+
+# Restore
+./scripts/restore-db.sh backup/db/<archivo>.sql.gz
+./scripts/restore-uploads.sh backup/uploads/<archivo>.tar.gz
+
+# Verificar estado
+curl -f http://localhost/actuator/health
+docker ps
 ```
 
-Ver guía completa en [`docs/VPS_DEPLOY_GUIDE.md`](docs/VPS_DEPLOY_GUIDE.md).
+### Estructura en VPS
+
+```
+/opt/monteastur/
+├── docker-compose.yml
+├── .env                  # Credenciales (NO en Git)
+├── scripts/              # Deploy, rollback, backup, restore
+├── docs/                 # Runbook y guías
+├── backup/
+│   ├── db/               # Backups MySQL (.sql.gz)
+│   └── uploads/          # Backups uploads (.tar.gz)
+├── logs/                 # Logs de la aplicación
+├── nginx/conf.d/         # Configuración proxy y SSL
+└── monitoring/           # Prometheus, Grafana
+```
+
+### Scripts disponibles
+
+| Script | Función |
+|--------|---------|
+| `scripts/vps-bootstrap.sh` | Instala Docker, Docker Compose, crea directorios, configura UFW |
+| `scripts/deploy-prod.sh` | Git pull, build, up -d, image prune, healthcheck |
+| `scripts/rollback-prod.sh <tag>` | Git checkout a tag, rebuild, healthcheck |
+| `scripts/backup-db.sh` | Backup MySQL → `backup/db/` |
+| `scripts/backup-uploads.sh` | Backup uploads → `backup/uploads/` |
+| `scripts/restore-db.sh` | Restore MySQL desde backup |
+| `scripts/restore-uploads.sh` | Restore uploads desde backup |
+
+### Healthchecks
+
+```bash
+curl http://localhost/actuator/health        # {"status":"UP"}
+curl http://localhost/actuator/info          # Info app
+curl http://localhost:9090/targets           # Prometheus targets
+```
+
+### Rollback rápido
+
+```bash
+./scripts/rollback-prod.sh v14.0-e2e-ready
+```
+
+### Monitoring
+
+| Servicio | Puerto | Acceso |
+|----------|--------|--------|
+| Prometheus | 9090 | `http://<vps>:9090` |
+| Grafana | 3000 | `http://<vps>:3000` (admin / pass desde .env) |
+| Uptime Kuma | 3001 | `http://<vps>:3001` |
+
+Para más detalles ver [`docs/PRODUCTION_VPS_RUNBOOK.md`](docs/PRODUCTION_VPS_RUNBOOK.md).
 
 ## HTTPS
 
