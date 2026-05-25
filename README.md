@@ -1134,6 +1134,47 @@ Antes de desplegar en un entorno de producción, verificar:
 - [ ] **PWA instalable**: Manifest y Service Worker funcionando
 - [ ] **Offline mode**: Dashboard funciona con datos cacheados sin conexión
 
+## Primer deploy real
+
+Checklist maestra y scripts para ejecutar el primer deploy real de MonteAstur en un VPS público.
+
+### Documentos
+
+| Documento | Contenido |
+|-----------|-----------|
+| [`docs/FIRST_REAL_DEPLOY_MASTER_CHECKLIST.md`](docs/FIRST_REAL_DEPLOY_MASTER_CHECKLIST.md) | Checklist maestra 16 fases (A-P): compra VPS, dominio, DNS, SSH, bootstrap, Docker, HTTPS, secrets, deploy, smoke tests, monitoring, backup, rollback |
+| [`docs/REAL_DEPLOY_DECISION_LOG.md`](docs/REAL_DEPLOY_DECISION_LOG.md) | Decisiones técnicas, proveedor, costes, riesgos, qué se deja para después |
+
+### Scripts nuevos
+
+| Script | Función |
+|--------|---------|
+| `scripts/production-smoke-test.sh` | Smoke tests post-deploy: healthcheck, home, login-react, tracking. `BASE_URL=https://dominio ./scripts/production-smoke-test.sh` |
+| `scripts/production-post-deploy-check.sh` | Verificación post-deploy: docker ps, healthcheck, disco, RAM, logs, Prometheus/Grafana/Kuma |
+
+### Orden recomendado
+
+```
+ 1. Seguir docs/FIRST_REAL_DEPLOY_MASTER_CHECKLIST.md (fases A-P)
+ 2. Ejecutar: ./scripts/production-smoke-test.sh
+ 3. Ejecutar: ./scripts/production-post-deploy-check.sh
+ 4. Verificar docs/REAL_DEPLOY_DECISION_LOG.md para contexto
+ 5. Checklist 24h (fase P de la master checklist)
+```
+
+### Comandos rápidos
+
+```bash
+# Smoke tests
+BASE_URL=https://monteastur.com ./scripts/production-smoke-test.sh
+
+# Post-deploy check
+./scripts/production-post-deploy-check.sh
+
+# Healthcheck rápido
+curl -f https://monteastur.com/actuator/health
+```
+
 ## Troubleshooting
 
 | Problema | Causa probable | Solución |
