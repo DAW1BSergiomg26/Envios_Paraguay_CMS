@@ -172,6 +172,22 @@ Configuración en `nginx/conf.d/`:
 
 > **IMPORTANTE:** Estas credenciales son SOLO para desarrollo local. En producción, generar contraseñas seguras con `openssl rand -base64 32` y configurarlas vía variables de entorno.
 
+### Demo Data
+
+Cuando `APP_DEMO_DATA=true` (valor por defecto en `.env` local), al iniciar la aplicación se cargan automáticamente:
+
+- **Cliente demo**: `cliente@monteastur.com` / `demo2026` (María González)
+- **4 envíos demo**: MT-2026-0001 a MT-2026-0004, con historial de eventos, estados variados (en tránsito, aduana, reparto, entregado)
+- **4 mensajes de contacto**: para que `/admin/mensajesrecibidos` tenga contenido
+- **4 reservas/solicitudes**: con estados pendiente, confirmada y cancelada
+- **4 imágenes demo**: registros placeholder en la galería (sin archivos físicos)
+- **Textos legales**: aviso legal y política de cookies
+
+> **Persistencia de datos:**
+> - `docker compose down` — borra contenedores **sin** borrar datos (volúmenes intactos)
+> - `docker compose down -v` — borra contenedores **y** volúmenes (incluyendo MySQL). Al arrancar de nuevo, `APP_DEMO_DATA=true` repuebla automáticamente todos los datos demo
+> - Si se añaden datos reales durante el desarrollo, evitar `docker compose down -v` para no perderlos
+
 ### Paso 1: Arrancar MySQL Docker
 
 Si ya tiene el contenedor MySQL creado desde fases anteriores:
