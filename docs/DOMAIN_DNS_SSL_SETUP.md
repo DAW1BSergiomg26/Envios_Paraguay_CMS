@@ -139,7 +139,7 @@ sudo ufw status | grep 80
 # → 80/tcp ALLOW
 
 # 4. Nginx debe tener location para .well-known
-# (ya configurado en monteastur.conf y production-example.conf)
+# (ya configurado en local.conf, monteastur.conf y examples/production-example.conf)
 ```
 
 ### Obtener certificado
@@ -253,7 +253,7 @@ Internet (HTTPS 443)
 └──────────────────────────────────────────────────┘
 ```
 
-### Configuración completa (ver `production-example.conf`)
+### Configuración completa (ver `examples/production-example.conf`)
 
 | Elemento | Descripción |
 |----------|-------------|
@@ -439,7 +439,7 @@ echo | openssl s_client -connect monteastur.com:443 2>/dev/null | openssl x509 -
 ---
 
 > **Documentos relacionados:**
-> - [`nginx/conf.d/production-example.conf`](../nginx/conf.d/production-example.conf) — Ejemplo de configuración nginx
+> - [`nginx/examples/production-example.conf`](../nginx/examples/production-example.conf) — Ejemplo de configuración nginx
 > - [`nginx/conf.d/monteastur.conf`](../nginx/conf.d/monteastur.conf) — Configuración activa
 > - [`docs/HTTPS_SETUP.md`](HTTPS_SETUP.md) — Setup HTTPS existente
 > - [`docs/LIVE_DEPLOY_PLAN.md`](LIVE_DEPLOY_PLAN.md) — Plan de deploy completo

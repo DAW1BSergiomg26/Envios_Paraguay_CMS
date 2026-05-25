@@ -146,7 +146,10 @@ Nginx actúa como puerta de entrada única, añadiendo:
 - **Límite de tamaño** de subida: 10MB
 - **Preparado para WebSocket** (futuro)
 
-Configuración en `nginx/conf.d/monteastur.conf`.
+Configuración en `nginx/conf.d/`:
+- **`local.conf`**: HTTP sin SSL, `server_name localhost`. Usada en desarrollo local.
+- **`monteastur.conf`**: HTTP con security headers, `server_name _` (catch-all). Usada en producción antes de SSL.
+- **`examples/production-example.conf`**: Plantilla completa HTTPS para producción (no se carga automáticamente, copiar a `conf.d/` cuando se tengan certificados).
 
 ## Requisitos
 
@@ -997,7 +1000,7 @@ Ver [`docs/GITHUB_SECRETS_SSH_SETUP.md`](docs/GITHUB_SECRETS_SSH_SETUP.md) para 
 ## Dominio + HTTPS
 
 Guía completa en [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md).
-Ejemplo de configuración nginx en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf).
+Ejemplo de configuración nginx en [`nginx/examples/production-example.conf`](nginx/examples/production-example.conf).
 
 ### Flujo resumido
 
@@ -1039,7 +1042,7 @@ docker compose restart nginx
 
 ### Nginx
 
-Configuración de ejemplo completa en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf):
+Configuración de ejemplo completa en [`nginx/examples/production-example.conf`](nginx/examples/production-example.conf):
 - HTTP → HTTPS redirect
 - SSL termination
 - Security headers (HSTS, CSP, XFO)
