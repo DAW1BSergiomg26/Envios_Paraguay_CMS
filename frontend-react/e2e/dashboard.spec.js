@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 
 const ADMIN_USER = process.env.E2E_ADMIN_USER || 'admin'
-const ADMIN_PASS = process.env.E2E_ADMIN_PASS || 'test_admin'
+const ADMIN_PASS = process.env.E2E_ADMIN_PASS || 'admin123'
 
 test.describe('Dashboard admin', () => {
 

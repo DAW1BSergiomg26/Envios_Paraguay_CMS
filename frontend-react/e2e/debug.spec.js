@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 import { writeFileSync } from 'fs'
 
 const ADMIN_USER = process.env.E2E_ADMIN_USER || 'admin'
-const ADMIN_PASS = process.env.E2E_ADMIN_PASS || 'test_admin'
+const ADMIN_PASS = process.env.E2E_ADMIN_PASS || 'admin123'
 
 test('debug login flow', async ({ page }) => {
   const errors = []
