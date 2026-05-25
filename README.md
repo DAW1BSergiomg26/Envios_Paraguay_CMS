@@ -92,7 +92,7 @@ Navegador Web (usuario)
 ```
 src/main/
 ├── java/
-│   └── com/grupb2/casarural/
+│   └── com/monteastur/envios/
 │       ├── controller/     # Controladores MVC
 │       ├── model/          # Entidades JPA
 │       ├── repository/     # Repositorios Spring Data
