@@ -305,6 +305,33 @@ Documentación generada tras la auditoría de seguridad y configuración previa 
 
 Ejecutan: `git status`, `docker compose config`, `mvn test`, `npm run test:unit`, `npm run build`, `docker compose ps`, healthcheck.
 
+## Release v20 pre-deploy
+
+Documentación de cierre de la release pre-deploy:
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`docs/RELEASE_V20_READY.md`](docs/RELEASE_V20_READY.md) | Resumen técnico: features, tests, Docker, hardening, credenciales, advertencias, checklist final |
+| [`docs/VPS_REAL_NEXT_ACTIONS.md`](docs/VPS_REAL_NEXT_ACTIONS.md) | Pasos concretos para VPS: comprar VPS/dominio, DNS, bootstrap, .env, Docker, SSL, GitHub Secrets, smoke tests, monitoring |
+
+### Comandos merge y tag
+
+```bash
+git checkout develop
+git merge --no-ff feature/fase-20-hardening-deploy-real -m "merge: integrar hardening pre-deploy"
+git push origin develop
+
+git tag -a v20.0-pre-deploy -m "v20.0 — Pre-deploy: hardening + E2E + CI + docs"
+git push origin v20.0-pre-deploy
+
+git checkout main
+git merge --no-ff develop -m "release: v20.0 pre-deploy"
+git push origin main
+
+git tag -a v20.0 -m "v20.0 — Primer deploy real"
+git push origin v20.0
+```
+
 ## Variables importantes
 
 | Variable | Descripción | Valor por defecto (dev) | Comentario |
