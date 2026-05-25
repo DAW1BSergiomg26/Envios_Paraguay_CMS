@@ -127,8 +127,8 @@
 
 | Riesgo | Impacto | Prioridad |
 |--------|---------|-----------|
-| Naming legacy CasaRural | Confusión en branding | Media |
-| package com.grupb2.casarural legacy | Refactor costoso | Baja |
+| Naming legacy CasaRural | ✅ Resuelto en Fase 19.2 | — |
+| package com.grupb2.casarural legacy | ✅ Refactorizado a com.monteastur.envios | — |
 | admin123 / demo2026 en producción | Seguridad | **ALTA** |
 | E2E requiere stack activo | CI/CD parcial | Media |
 | npm audit vulnerabilities | Dependencias | Media |
@@ -149,4 +149,4 @@
 3. Asegurar que `APP_DEMO_DATA=false` en producción (ya configurado en `application-prod.properties`)
 4. Verificar variables de entorno en el VPS
 
-**Siguiente fase recomendada:** Fase 19.2 — Refactor naming (CasaRural → Monteastur)
+**Siguiente fase recomendada:** Fase 19.3 — Habilitar E2E en CI

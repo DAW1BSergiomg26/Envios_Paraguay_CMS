@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.grupb2</groupId>
-    <artifactId>casarural</artifactId>
+    <artifactId>envios-paraguay-cms</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>CasaRural</name>
+    <name>Monteastur Envios</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

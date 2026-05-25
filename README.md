@@ -92,7 +92,7 @@ Navegador Web (usuario)
 ```
 src/main/
 ├── java/
-│   └── com/grupb2/casarural/
+│   └── com/monteastur/envios/
 │       ├── controller/     # Controladores MVC
 │       ├── model/          # Entidades JPA
 │       ├── repository/     # Repositorios Spring Data
@@ -249,6 +249,38 @@ Documentación generada tras la auditoría técnica previa al primer despliegue 
 | [`docs/PREPRODUCTION_AUDIT_REPORT.md`](docs/PREPRODUCTION_AUDIT_REPORT.md) | Auditoría completa: servicios, rutas, tests, seguridad, riesgos y decisión final |
 | [`docs/KNOWN_ISSUES_PREPROD.md`](docs/KNOWN_ISSUES_PREPROD.md) | Issues conocidos con impacto, prioridad y solución propuesta |
 | [`docs/LOCAL_DEV_COMMANDS.md`](docs/LOCAL_DEV_COMMANDS.md) | Comandos rápidos para desarrollo local (docker, logs, troubleshooting) |
+
+## E2E + CI real
+
+### Local E2E (un comando)
+
+```powershell
+.\scripts\run-e2e-local.ps1
+```
+
+```bash
+./scripts/run-e2e-local.sh
+```
+
+### Manual sin script
+
+```powershell
+cd frontend-react
+$env:E2E_BASE_URL="http://localhost:8090"
+npm run test:e2e
+```
+
+### CI
+
+El job E2E en GitHub Actions está activado solo manualmente (`workflow_dispatch`). Para ejecutarlo:
+
+1. Ir a **GitHub → Actions → CI → Run workflow**
+2. Seleccionar branch
+3. Click **Run workflow**
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`docs/E2E_CI_GUIDE.md`](docs/E2E_CI_GUIDE.md) | Guía completa: cómo ejecutar, interpretar fallos, troubleshooting, activar en CI |
 
 ## Variables importantes
 
