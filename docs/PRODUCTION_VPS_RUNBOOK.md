@@ -760,7 +760,7 @@ Ver [`docs/FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) para g
 > - [`DOMAIN_DNS_SSL_SETUP.md`](DOMAIN_DNS_SSL_SETUP.md) — Guía completa de dominio, DNS y HTTPS
 > - [`VPS_HARDENING_CHECKLIST.md`](VPS_HARDENING_CHECKLIST.md) — Checklist completo de hardening (SSH, UFW, fail2ban, updates, Docker, backups, monitoring, SSL)
 > - [`FIRST_VPS_DEPLOY_CHECKLIST.md`](FIRST_VPS_DEPLOY_CHECKLIST.md) — Checklist paso a paso para el primer despliegue real
-> - [`nginx/conf.d/production-example.conf`](../nginx/conf.d/production-example.conf) — Ejemplo configuración nginx producción
+> - [`nginx/examples/production-example.conf`](../nginx/examples/production-example.conf) — Ejemplo configuración nginx producción
 > - [`scripts/server-healthcheck.sh`](../scripts/server-healthcheck.sh) — Script de healthcheck rápido
 > - [`scripts/check-ssh-connection.sh`](../scripts/check-ssh-connection.sh) — Script para verificar conexión SSH
 >

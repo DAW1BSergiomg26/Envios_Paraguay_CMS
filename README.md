@@ -146,7 +146,10 @@ Nginx actúa como puerta de entrada única, añadiendo:
 - **Límite de tamaño** de subida: 10MB
 - **Preparado para WebSocket** (futuro)
 
-Configuración en `nginx/conf.d/monteastur.conf`.
+Configuración en `nginx/conf.d/`:
+- **`local.conf`**: HTTP sin SSL, `server_name localhost`. Usada en desarrollo local.
+- **`monteastur.conf`**: HTTP con security headers, `server_name _` (catch-all). Usada en producción antes de SSL.
+- **`examples/production-example.conf`**: Plantilla completa HTTPS para producción (no se carga automáticamente, copiar a `conf.d/` cuando se tengan certificados).
 
 ## Requisitos
 
@@ -157,6 +160,33 @@ Configuración en `nginx/conf.d/monteastur.conf`.
 - **Git** (control de versiones)
 
 ## Arranque local
+
+## Credenciales desarrollo local
+
+| Rol | URL login | Usuario | Contraseña |
+|-----|-----------|---------|------------|
+| Admin (Spring Security) | `http://localhost:8090/login` | `admin` | `admin123` |
+| Cliente (custom session) | `http://localhost:8090/cliente/login` | email: `cliente@monteastur.com` | `demo2026` |
+| React SPA | `http://localhost:8090/login-react` | `admin` | `admin123` |
+| Grafana | `http://localhost:3001` | `admin` | `admin123` |
+
+> **IMPORTANTE:** Estas credenciales son SOLO para desarrollo local. En producción, generar contraseñas seguras con `openssl rand -base64 32` y configurarlas vía variables de entorno.
+
+### Demo Data
+
+Cuando `APP_DEMO_DATA=true` (valor por defecto en `.env` local), al iniciar la aplicación se cargan automáticamente:
+
+- **Cliente demo**: `cliente@monteastur.com` / `demo2026` (María González)
+- **4 envíos demo**: MT-2026-0001 a MT-2026-0004, con historial de eventos, estados variados (en tránsito, aduana, reparto, entregado)
+- **4 mensajes de contacto**: para que `/admin/mensajesrecibidos` tenga contenido
+- **4 reservas/solicitudes**: con estados pendiente, confirmada y cancelada
+- **4 imágenes demo**: SVG estáticos en `/img/demo-gallery/` (oficinas, flota, almacén, puerto). Las subidas reales siguen usando `/uploads/`
+- **Textos legales**: aviso legal y política de cookies
+
+> **Persistencia de datos:**
+> - `docker compose down` — borra contenedores **sin** borrar datos (volúmenes intactos)
+> - `docker compose down -v` — borra contenedores **y** volúmenes (incluyendo MySQL). Al arrancar de nuevo, `APP_DEMO_DATA=true` repuebla automáticamente todos los datos demo
+> - Si se añaden datos reales durante el desarrollo, evitar `docker compose down -v` para no perderlos
 
 ### Paso 1: Arrancar MySQL Docker
 
@@ -997,7 +1027,7 @@ Ver [`docs/GITHUB_SECRETS_SSH_SETUP.md`](docs/GITHUB_SECRETS_SSH_SETUP.md) para 
 ## Dominio + HTTPS
 
 Guía completa en [`docs/DOMAIN_DNS_SSL_SETUP.md`](docs/DOMAIN_DNS_SSL_SETUP.md).
-Ejemplo de configuración nginx en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf).
+Ejemplo de configuración nginx en [`nginx/examples/production-example.conf`](nginx/examples/production-example.conf).
 
 ### Flujo resumido
 
@@ -1039,7 +1069,7 @@ docker compose restart nginx
 
 ### Nginx
 
-Configuración de ejemplo completa en [`nginx/conf.d/production-example.conf`](nginx/conf.d/production-example.conf):
+Configuración de ejemplo completa en [`nginx/examples/production-example.conf`](nginx/examples/production-example.conf):
 - HTTP → HTTPS redirect
 - SSL termination
 - Security headers (HSTS, CSP, XFO)
@@ -1133,6 +1163,47 @@ Antes de desplegar en un entorno de producción, verificar:
 - [ ] **Nginx proxy**: Nginx sirve en puerto 80/443, proxy a app:8080
 - [ ] **PWA instalable**: Manifest y Service Worker funcionando
 - [ ] **Offline mode**: Dashboard funciona con datos cacheados sin conexión
+
+## Primer deploy real
+
+Checklist maestra y scripts para ejecutar el primer deploy real de MonteAstur en un VPS público.
+
+### Documentos
+
+| Documento | Contenido |
+|-----------|-----------|
+| [`docs/FIRST_REAL_DEPLOY_MASTER_CHECKLIST.md`](docs/FIRST_REAL_DEPLOY_MASTER_CHECKLIST.md) | Checklist maestra 16 fases (A-P): compra VPS, dominio, DNS, SSH, bootstrap, Docker, HTTPS, secrets, deploy, smoke tests, monitoring, backup, rollback |
+| [`docs/REAL_DEPLOY_DECISION_LOG.md`](docs/REAL_DEPLOY_DECISION_LOG.md) | Decisiones técnicas, proveedor, costes, riesgos, qué se deja para después |
+
+### Scripts nuevos
+
+| Script | Función |
+|--------|---------|
+| `scripts/production-smoke-test.sh` | Smoke tests post-deploy: healthcheck, home, login-react, tracking. `BASE_URL=https://dominio ./scripts/production-smoke-test.sh` |
+| `scripts/production-post-deploy-check.sh` | Verificación post-deploy: docker ps, healthcheck, disco, RAM, logs, Prometheus/Grafana/Kuma |
+
+### Orden recomendado
+
+```
+ 1. Seguir docs/FIRST_REAL_DEPLOY_MASTER_CHECKLIST.md (fases A-P)
+ 2. Ejecutar: ./scripts/production-smoke-test.sh
+ 3. Ejecutar: ./scripts/production-post-deploy-check.sh
+ 4. Verificar docs/REAL_DEPLOY_DECISION_LOG.md para contexto
+ 5. Checklist 24h (fase P de la master checklist)
+```
+
+### Comandos rápidos
+
+```bash
+# Smoke tests
+BASE_URL=https://monteastur.com ./scripts/production-smoke-test.sh
+
+# Post-deploy check
+./scripts/production-post-deploy-check.sh
+
+# Healthcheck rápido
+curl -f https://monteastur.com/actuator/health
+```
 
 ## Troubleshooting
 

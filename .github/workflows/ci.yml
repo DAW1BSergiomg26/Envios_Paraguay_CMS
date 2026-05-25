@@ -64,9 +64,9 @@ jobs:
       - name: Install dependencies
         working-directory: frontend-react
         run: npm install
-      - name: Run frontend tests
+      - name: Run unit tests (Vitest)
         working-directory: frontend-react
-        run: npm test -- --run
+        run: npm run test:unit
       - name: Build frontend
         working-directory: frontend-react
         run: npm run build
@@ -78,7 +78,7 @@ jobs:
           if-no-files-found: error
 
   e2e-tests:
-    name: E2E Tests (manual)
+    name: E2E Tests (Playwright, manual)
     runs-on: ubuntu-latest
     if: false
     needs: [docker-build]
@@ -112,12 +112,12 @@ jobs:
         env:
           ADMIN_USERNAME: ci_admin
           ADMIN_PASSWORD: ci_admin_pass
-      - name: Install Playwright
+      - name: Install Playwright + Chromium
         working-directory: frontend-react
         run: npx playwright install --with-deps chromium
-      - name: Run E2E tests
+      - name: Run E2E tests (Playwright)
         working-directory: frontend-react
-        run: npm run e2e
+        run: npm run test:e2e
         env:
           E2E_BASE_URL: http://localhost:8080
           E2E_ADMIN_USER: ci_admin

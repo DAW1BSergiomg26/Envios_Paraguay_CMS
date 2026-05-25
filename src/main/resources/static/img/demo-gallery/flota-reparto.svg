@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34495e"/>
+      <stop offset="100%" stop-color="#2c3e50"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="#f0f4f8"/>
+  <rect x="0" y="350" width="800" height="150" fill="url(#road)"/>
+  <rect x="0" y="355" width="800" height="3" fill="#f1c40f" opacity="0.6"/>
+  <rect x="0" y="460" width="800" height="3" fill="white" opacity="0.3"/>
+  <rect x="20" y="250" width="180" height="100" fill="#e74c3c" rx="6"/>
+  <rect x="30" y="260" width="70" height="50" fill="#ecf0f1" rx="2"/>
+  <rect x="110" y="260" width="70" height="50" fill="#ecf0f1" rx="2"/>
+  <circle cx="70" cy="370" r="28" fill="#2c3e50"/>
+  <circle cx="70" cy="370" r="18" fill="#7f8c8d"/>
+  <circle cx="150" cy="370" r="28" fill="#2c3e50"/>
+  <circle cx="150" cy="370" r="18" fill="#7f8c8d"/>
+  <text x="110" y="310" text-anchor="middle" fill="#ecf0f1" font-family="Arial" font-size="11" font-weight="bold">MONTEASTUR</text>
+  <text x="110" y="325" text-anchor="middle" fill="#f1c40f" font-family="Arial" font-size="8">ENVIOS</text>
+  <rect x="240" y="260" width="200" height="90" fill="#2980b9" rx="6"/>
+  <rect x="250" y="270" width="80" height="50" fill="#ecf0f1" rx="2"/>
+  <rect x="340" y="270" width="80" height="50" fill="#ecf0f1" rx="2"/>
+  <circle cx="290" cy="370" r="28" fill="#2c3e50"/>
+  <circle cx="290" cy="370" r="18" fill="#7f8c8d"/>
+  <circle cx="380" cy="370" r="28" fill="#2c3e50"/>
+  <circle cx="380" cy="370" r="18" fill="#7f8c8d"/>
+  <text x="340" y="310" text-anchor="middle" fill="#ecf0f1" font-family="Arial" font-size="11" font-weight="bold">MONTEASTUR</text>
+  <text x="340" y="325" text-anchor="middle" fill="#f1c40f" font-family="Arial" font-size="8">ENVIOS</text>
+  <rect x="500" y="270" width="180" height="80" fill="#2ecc71" rx="6"/>
+  <rect x="510" y="278" width="65" height="45" fill="#ecf0f1" rx="2"/>
+  <rect x="585" y="278" width="65" height="45" fill="#ecf0f1" rx="2"/>
+  <circle cx="530" cy="370" r="25" fill="#2c3e50"/>
+  <circle cx="530" cy="370" r="16" fill="#7f8c8d"/>
+  <circle cx="620" cy="370" r="25" fill="#2c3e50"/>
+  <circle cx="620" cy="370" r="16" fill="#7f8c8d"/>
+  <text x="590" y="315" text-anchor="middle" fill="white" font-family="Arial" font-size="11" font-weight="bold">MONTEASTUR</text>
+  <text x="590" y="330" text-anchor="middle" fill="#1a5276" font-family="Arial" font-size="8">ENVIOS</text>
+  <rect x="100" y="395" width="200" height="50" fill="white" rx="6" opacity="0.9"/>
+  <text x="200" y="425" text-anchor="middle" fill="#2c3e50" font-family="Arial" font-size="14" font-weight="bold">Flota de Reparto Local</text>
+  <rect x="500" y="395" width="200" height="50" fill="white" rx="6" opacity="0.9"/>
+  <text x="600" y="425" text-anchor="middle" fill="#2c3e50" font-family="Arial" font-size="14" font-weight="bold">15 vehículos activos</text>
+  <text x="400" y="490" text-anchor="middle" fill="#7f8c8d" font-family="Arial" font-size="12">Flota de reparto Monteastur Envios</text>
+</svg>

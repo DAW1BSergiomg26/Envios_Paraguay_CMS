@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="ocean" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2980b9"/>
+      <stop offset="100%" stop-color="#1a5276"/>
+    </linearGradient>
+    <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#2c3e50"/>
+      <stop offset="100%" stop-color="#1a252f"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="#f0f4f8"/>
+  <rect x="0" y="0" width="800" height="200" fill="#e8f4fd"/>
+  <circle cx="680" cy="50" r="35" fill="#f1c40f" opacity="0.9"/>
+  <circle cx="680" cy="50" r="25" fill="#f9e547"/>
+  <rect x="0" y="180" width="800" height="220" fill="url(#ocean)"/>
+  <rect x="0" y="180" width="800" height="4" fill="#1a5276" opacity="0.4"/>
+  <rect x="0" y="190" width="800" height="3" fill="#3498db" opacity="0.3"/>
+  <rect x="0" y="400" width="800" height="100" fill="#7f8c8d"/>
+  <rect x="0" y="400" width="800" height="8" fill="#5d6d7e"/>
+  <rect x="50" y="330" width="200" height="70" fill="url(#hull)" rx="4"/>
+  <rect x="60" y="305" width="180" height="30" fill="#ecf0f1" rx="3"/>
+  <rect x="130" y="270" width="30" height="35" fill="#e74c3c" rx="2"/>
+  <text x="145" y="290" text-anchor="middle" fill="white" font-family="Arial" font-size="8" font-weight="bold">M</text>
+  <rect x="230" y="340" width="300" height="60" fill="url(#hull)" rx="4"/>
+  <rect x="240" y="310" width="280" height="35" fill="#ecf0f1" rx="3"/>
+  <rect x="340" y="270" width="40" height="40" fill="#e74c3c" rx="2"/>
+  <rect x="200" y="200" width="30" height="130" fill="#5d6d7e" rx="2"/>
+  <rect x="380" y="200" width="30" height="110" fill="#5d6d7e" rx="2"/>
+  <rect x="200" y="195" width="210" height="10" fill="#2c3e50" rx="2"/>
+  <rect x="200" y="205" width="10" height="40" fill="#f1c40f" opacity="0.7"/>
+  <rect x="350" y="205" width="10" height="40" fill="#f1c40f" opacity="0.7"/>
+  <text x="390" y="340" text-anchor="middle" fill="#ecf0f1" font-family="Arial" font-size="14" font-weight="bold">MSC OLIVIA</text>
+  <rect x="600" y="320" width="150" height="80" fill="#7f8c8d" rx="2"/>
+  <rect x="610" y="300" width="60" height="25" fill="#e67e22" rx="2"/>
+  <text x="640" y="317" text-anchor="middle" fill="white" font-family="Arial" font-size="10" font-weight="bold">GRUA 1</text>
+  <rect x="590" y="260" width="8" height="60" fill="#f1c40f"/>
+  <rect x="590" y="258" width="40" height="6" fill="#f1c40f" rx="2"/>
+  <line x1="590" y1="264" x2="560" y2="264" stroke="#f1c40f" stroke-width="3"/>
+  <rect x="555" y="258" width="6" height="25" fill="#f1c40f"/>
+  <rect x="100" y="420" width="200" height="60" fill="white" rx="6" opacity="0.9"/>
+  <text x="200" y="448" text-anchor="middle" fill="#2c3e50" font-family="Arial" font-size="14" font-weight="bold">Puerto de Gijón</text>
+  <text x="200" y="465" text-anchor="middle" fill="#7f8c8d" font-family="Arial" font-size="12">Salida de mercancía internacional</text>
+  <rect x="500" y="420" width="200" height="60" fill="white" rx="6" opacity="0.9"/>
+  <text x="600" y="445" text-anchor="middle" fill="#2c3e50" font-family="Arial" font-size="12" font-weight="bold">Puerto del Musel</text>
+  <text x="600" y="462" text-anchor="middle" fill="#7f8c8d" font-family="Arial" font-size="11">Tráfico: 120 contenedores/semana</text>
+  <text x="400" y="490" text-anchor="middle" fill="#95a5a6" font-family="Arial" font-size="12">Puerto de Gijón — Operativa portuaria Monteastur Envios</text>
+</svg>
