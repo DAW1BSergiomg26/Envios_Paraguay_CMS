@@ -240,6 +240,16 @@ docker compose up -d --build
 
 La aplicación estará disponible en el puerto definido en la variable `PORT` (por defecto 8080 en producción).
 
+## Preproducción local
+
+Documentación generada tras la auditoría técnica previa al primer despliegue real:
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`docs/PREPRODUCTION_AUDIT_REPORT.md`](docs/PREPRODUCTION_AUDIT_REPORT.md) | Auditoría completa: servicios, rutas, tests, seguridad, riesgos y decisión final |
+| [`docs/KNOWN_ISSUES_PREPROD.md`](docs/KNOWN_ISSUES_PREPROD.md) | Issues conocidos con impacto, prioridad y solución propuesta |
+| [`docs/LOCAL_DEV_COMMANDS.md`](docs/LOCAL_DEV_COMMANDS.md) | Comandos rápidos para desarrollo local (docker, logs, troubleshooting) |
+
 ## Variables importantes
 
 | Variable | Descripción | Valor por defecto (dev) | Comentario |
