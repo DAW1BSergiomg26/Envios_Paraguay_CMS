@@ -180,7 +180,7 @@ Cuando `APP_DEMO_DATA=true` (valor por defecto en `.env` local), al iniciar la a
 - **4 envíos demo**: MT-2026-0001 a MT-2026-0004, con historial de eventos, estados variados (en tránsito, aduana, reparto, entregado)
 - **4 mensajes de contacto**: para que `/admin/mensajesrecibidos` tenga contenido
 - **4 reservas/solicitudes**: con estados pendiente, confirmada y cancelada
-- **4 imágenes demo**: registros placeholder en la galería (sin archivos físicos)
+- **4 imágenes demo**: SVG estáticos en `/img/demo-gallery/` (oficinas, flota, almacén, puerto). Las subidas reales siguen usando `/uploads/`
 - **Textos legales**: aviso legal y política de cookies
 
 > **Persistencia de datos:**

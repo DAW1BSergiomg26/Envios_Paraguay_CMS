@@ -277,13 +277,13 @@ public class DataInitializer implements CommandLineRunner {
     private void crearImagenes() {
         if (imagenRepo.count() == 0) {
             imagenRepo.save(new Imagen("Oficinas Centrales", "Nuestras instalaciones en Pola de Siero",
-                "/images/demo/oficinas.jpg", "instalaciones", 1));
+                "/img/demo-gallery/oficinas-centrales.svg", "instalaciones", 1));
             imagenRepo.save(new Imagen("Flota de reparto", "Veh\u00edculos de reparto local",
-                "/images/demo/flota.jpg", "flota", 2));
+                "/img/demo-gallery/flota-reparto.svg", "flota", 2));
             imagenRepo.save(new Imagen("Almac\u00e9n log\u00edstico", "Centro de distribuci\u00f3n en Gij\u00f3n",
-                "/images/demo/almacen.jpg", "instalaciones", 3));
+                "/img/demo-gallery/almacen-logistico.svg", "instalaciones", 3));
             imagenRepo.save(new Imagen("Puerto de Gij\u00f3n", "Operativa portuaria para env\u00edos internacionales",
-                "/images/demo/puerto.jpg", "operativa", 4));
+                "/img/demo-gallery/puerto-gijon.svg", "operativa", 4));
         }
     }
 
