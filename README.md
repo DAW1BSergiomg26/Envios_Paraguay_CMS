@@ -282,6 +282,29 @@ El job E2E en GitHub Actions está activado solo manualmente (`workflow_dispatch
 |-----------|-------------|
 | [`docs/E2E_CI_GUIDE.md`](docs/E2E_CI_GUIDE.md) | Guía completa: cómo ejecutar, interpretar fallos, troubleshooting, activar en CI |
 
+## Hardening final pre-deploy
+
+Documentación generada tras la auditoría de seguridad y configuración previa al primer despliegue real:
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`docs/HARDENING_FINAL_REPORT.md`](docs/HARDENING_FINAL_REPORT.md) | Informe completo: Spring Security, configuración prod, Docker, Nginx, plantillas .env, riesgos y decisión final |
+| [`docs/DEPLOY_REAL_READY_CHECKLIST.md`](docs/DEPLOY_REAL_READY_CHECKLIST.md) | Checklist final: tests, Docker, Nginx, demo data off, secretos, SSL, backups, rollback, monitoring, smoke tests |
+
+### Scripts de verificación pre-deploy
+
+```powershell
+.\scripts\predeploy-check.ps1           # Windows (sin E2E)
+.\scripts\predeploy-check.ps1 -RunE2E   # Windows (con E2E si Docker está UP)
+```
+
+```bash
+./scripts/predeploy-check.sh            # Linux/WSL (sin E2E)
+./scripts/predeploy-check.sh --e2e      # Linux/WSL (con E2E si Docker está UP)
+```
+
+Ejecutan: `git status`, `docker compose config`, `mvn test`, `npm run test:unit`, `npm run build`, `docker compose ps`, healthcheck.
+
 ## Variables importantes
 
 | Variable | Descripción | Valor por defecto (dev) | Comentario |
