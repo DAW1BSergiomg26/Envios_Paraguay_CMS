@@ -161,6 +161,17 @@ Configuración en `nginx/conf.d/`:
 
 ## Arranque local
 
+## Credenciales desarrollo local
+
+| Rol | URL login | Usuario | Contraseña |
+|-----|-----------|---------|------------|
+| Admin (Spring Security) | `http://localhost:8090/login` | `admin` | `admin123` |
+| Cliente (custom session) | `http://localhost:8090/cliente/login` | email: `cliente@monteastur.com` | `demo2026` |
+| React SPA | `http://localhost:8090/login-react` | `admin` | `admin123` |
+| Grafana | `http://localhost:3001` | `admin` | `admin123` |
+
+> **IMPORTANTE:** Estas credenciales son SOLO para desarrollo local. En producción, generar contraseñas seguras con `openssl rand -base64 32` y configurarlas vía variables de entorno.
+
 ### Paso 1: Arrancar MySQL Docker
 
 Si ya tiene el contenedor MySQL creado desde fases anteriores:
