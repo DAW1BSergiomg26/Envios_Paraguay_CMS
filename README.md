@@ -332,6 +332,66 @@ git tag -a v20.0 -m "v20.0 — Primer deploy real"
 git push origin v20.0
 ```
 
+## Fase 21 — Primer deploy VPS
+
+Plan operativo completo para ejecutar el primer despliegue real en VPS usando la release `v20.0-pre-deploy` como base estable.
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`docs/VPS_DEPLOY_EXECUTION_PLAN.md`](docs/VPS_DEPLOY_EXECUTION_PLAN.md) | Plan de ejecución: release base, proveedor, dominio, DNS, orden de fases, checklists, rollback |
+| [`docs/VPS_DEPLOY_DAY_RUNBOOK.md`](docs/VPS_DEPLOY_DAY_RUNBOOK.md) | Runbook de día de deploy: paso a paso desde café hasta monitoring, con checkpoints y cuándo parar |
+| [`docs/PRODUCTION_SECRETS_TEMPLATE.md`](docs/PRODUCTION_SECRETS_TEMPLATE.md) | Plantilla de secretos SIN valores reales: .env, GitHub Actions, generación, buenas prácticas |
+| [`docs/FIRST_DEPLOY_RISK_REGISTER.md`](docs/FIRST_DEPLOY_RISK_REGISTER.md) | Registro de 18 riesgos: probabilidad, impacto, mitigación, rollback, matriz, plan de contingencia |
+
+### Tiempo estimado
+
+| Fase | Duración |
+|------|----------|
+| Preparación (VPS + dominio + DNS) | 30 min |
+| Bootstrap VPS | 20 min |
+| Docker + primer arranque | 30 min |
+| SSL (Let's Encrypt) | 15 min |
+| GitHub Actions | 10 min |
+| Smoke tests | 15 min |
+| Hardening (fail2ban, backups) | 15 min |
+| **Total** | **~2h 15min** |
+
+### Riesgos principales antes del deploy
+
+| Riesgo | Mitigación |
+|--------|------------|
+| DNS no propaga | Configurar antes, TTL=300, verificar con `dig @8.8.8.8` |
+| SSL falla | `--dry-run` primero, puerto 80 abierto, DNS propagado |
+| MySQL schema | `DB_DDL_AUTO=update` en primer arranque, luego `validate` |
+| Docker build lento | Build local verificado; `--no-cache` si es necesario |
+| Puertos ocupados | Verificar con `netstat` antes de arrancar |
+
+Ver [`docs/FIRST_DEPLOY_RISK_REGISTER.md`](docs/FIRST_DEPLOY_RISK_REGISTER.md) para registro completo (18 riesgos).
+
+## Demo gratis preventa
+
+Preparación del proyecto para demostraciones en vivo sin coste mensual, antes de contratar VPS.
+
+| Documento | Descripción |
+|-----------|-------------|
+| [`docs/FREE_DEMO_DEPLOY_OPTIONS.md`](docs/FREE_DEMO_DEPLOY_OPTIONS.md) | Comparativa de 8 opciones gratis: Cloudflare Tunnel, Render, Railway, Fly.io, Vercel, Netlify, GitHub Pages, Local+vídeo |
+| [`docs/RECOMMENDED_FREE_DEMO_PLAN.md`](docs/RECOMMENDED_FREE_DEMO_PLAN.md) | Recomendación final: Cloudflare Tunnel para demos en vivo, Render+Neon.tech como alternativa 24/7 |
+| [`docs/CLOUDFLARE_TUNNEL_DEMO_GUIDE.md`](docs/CLOUDFLARE_TUNNEL_DEMO_GUIDE.md) | Guía paso a paso para exponer Docker local con Cloudflare Tunnel: instalación, uso, riesgos, troubleshooting |
+| [`docs/DEMO_SALES_PRESENTATION_SCRIPT.md`](docs/DEMO_SALES_PRESENTATION_SCRIPT.md) | Guión de presentación: tracking público, panel admin, panel cliente, SPA React, seguridad, tecnología, propuesta de valor |
+| [`docs/PROJECT_FREEZE_V20.md`](docs/PROJECT_FREEZE_V20.md) | Estado congelado de la release v20.0-pre-deploy: qué incluye, qué no tocar, cómo levantar, cómo verificar |
+
+### Recomendación rápida
+
+```bash
+# Demo en vivo con cliente (sin coste, <5 min setup)
+cloudflared tunnel --url http://localhost:8090
+# Compartir URL https://<aleatorio>.trycloudflare.com
+```
+
+### Próximo paso
+
+Si el cliente queda interesado → [`docs/VPS_DEPLOY_EXECUTION_PLAN.md`](docs/VPS_DEPLOY_EXECUTION_PLAN.md) para contratar VPS (~€5/mes).
+
 ## Variables importantes
 
 | Variable | Descripción | Valor por defecto (dev) | Comentario |
