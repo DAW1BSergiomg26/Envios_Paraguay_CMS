@@ -1,9 +1,6 @@
 name: CD Deploy VPS
 
 on:
-  push:
-    branches:
-      - develop
   workflow_dispatch:
 
 jobs:
@@ -46,7 +43,7 @@ jobs:
     name: Deploy to VPS
     needs: pre-deploy-check
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop'
+    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.2
@@ -57,10 +54,10 @@ jobs:
           port: 22
           script: |
             set -e
-            echo "=== Deploying Monteastur Envios ==="
+            echo "=== Manual deploy Monteastur Envios ==="
             cd /opt/monteastur
             git pull
             docker compose pull
             docker compose up -d --build
             docker image prune -f
-            echo "=== Deploy complete ==="
+            echo "=== Manual deploy complete ==="
