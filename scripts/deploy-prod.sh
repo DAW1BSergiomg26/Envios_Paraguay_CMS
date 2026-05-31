@@ -6,7 +6,7 @@ set -euo pipefail
 # =============================================
 # Uso: ./scripts/deploy-prod.sh
 #
-# Pull, build, up, prune, healthcheck.
+# Pull, build, up, prune, healthcheck y post-deploy check.
 # =============================================
 
 # Colors
@@ -79,10 +79,16 @@ for i in 1 2 3 4 5; do
         warn "Healthcheck aún no responde (intento $i/5). Esperando 5s..."
         sleep 5
     else
-        warn "Healthcheck no respondió después de 5 intentos."
-        warn "Verificar: docker logs monteastur-app --tail 30"
+        error "Healthcheck no respondió después de 5 intentos. Verificar: docker logs monteastur-app --tail 30"
     fi
 done
+
+# --- Post-deploy check ---
+echo ""
+info "============================================"
+info "Ejecutando post-deploy check completo..."
+info "============================================"
+"$SCRIPT_DIR/production-post-deploy-check.sh"
 
 echo ""
 info "============================================"
