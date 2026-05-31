@@ -1,6 +1,8 @@
 package com.monteastur.envios.controller.api;
 
 import com.monteastur.envios.dto.api.PushSubscriptionRequest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
@@ -11,6 +13,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PushSubscriptionController {
 
     private final Map<String, Object> subscriptions = new ConcurrentHashMap<>();
+
+    @Value("${spring.profiles.active:default}")
+    private String activeProfile;
 
     @PostMapping("/subscribe")
     public ResponseEntity<?> subscribe(@RequestBody PushSubscriptionRequest req) {
@@ -28,6 +33,10 @@ public class PushSubscriptionController {
 
     @PostMapping("/test")
     public ResponseEntity<?> testPush() {
+        if (activeProfile != null && activeProfile.contains("prod")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("error", "Push test endpoint disabled in production"));
+        }
         System.out.println("Simulating push notification for " + subscriptions.size() + " subscribers");
         // In a real PWA/Push server, we would send the payload here.
         // Simulated response for demo purposes.
