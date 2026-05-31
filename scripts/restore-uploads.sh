@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <backup-file.tar.gz>"
@@ -11,6 +11,11 @@ BACKUP_FILE="$1"
 
 if [ ! -f "$BACKUP_FILE" ]; then
     echo "Error: file not found: $BACKUP_FILE"
+    exit 1
+fi
+
+if ! docker ps --format '{{.Names}}' | grep -qx 'monteastur-app'; then
+    echo "Error: container monteastur-app is not running"
     exit 1
 fi
 
