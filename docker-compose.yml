@@ -96,7 +96,7 @@ services:
     image: prom/prometheus:v3.2.1
     container_name: monteastur-prometheus
     ports:
-      - "${PROMETHEUS_PORT:-9090}:9090"
+      - "127.0.0.1:${PROMETHEUS_PORT:-9090}:9090"
     volumes:
       - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
@@ -114,7 +114,7 @@ services:
     image: grafana/grafana:11.5.2
     container_name: monteastur-grafana
     ports:
-      - "${GRAFANA_PORT:-3000}:3000"
+      - "127.0.0.1:${GRAFANA_PORT:-3000}:3000"
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - grafana_data:/var/lib/grafana
@@ -131,7 +131,7 @@ services:
     image: louislam/uptime-kuma:1
     container_name: monteastur-uptime-kuma
     ports:
-      - "${UPTIME_KUMA_PORT:-3001}:3001"
+      - "127.0.0.1:${UPTIME_KUMA_PORT:-3001}:3001"
     volumes:
       - uptime_kuma_data:/app/data
     restart: unless-stopped
