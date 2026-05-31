@@ -31,11 +31,15 @@ if [ -z "${MYSQL_ROOT_PASSWORD:-}" ] || [ -z "${MYSQL_DATABASE:-}" ]; then
     exit 1
 fi
 
+if ! docker ps --format '{{.Names}}' | grep -qx 'monteastur-mysql'; then
+    echo "Error: container monteastur-mysql is not running"
+    exit 1
+fi
+
 mkdir -p "$BACKUP_DIR"
 
 PRE_RESTORE_TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 PRE_RESTORE_FILE="$BACKUP_DIR/_pre-restore-${PRE_RESTORE_TIMESTAMP}.sql"
-
 
 echo "Creating pre-restore database backup for '$MYSQL_DATABASE'..."
 docker exec monteastur-mysql mysqldump -u root -p"$MYSQL_ROOT_PASSWORD" "$MYSQL_DATABASE" > "$PRE_RESTORE_FILE"
