@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
@@ -13,8 +13,13 @@ fi
 
 source "$ENV_FILE"
 
-if [ -z "$MYSQL_ROOT_PASSWORD" ] || [ -z "$MYSQL_DATABASE" ]; then
+if [ -z "${MYSQL_ROOT_PASSWORD:-}" ] || [ -z "${MYSQL_DATABASE:-}" ]; then
     echo "Error: MYSQL_ROOT_PASSWORD or MYSQL_DATABASE not set"
+    exit 1
+fi
+
+if ! docker ps --format '{{.Names}}' | grep -qx 'monteastur-mysql'; then
+    echo "Error: container monteastur-mysql is not running"
     exit 1
 fi
 
