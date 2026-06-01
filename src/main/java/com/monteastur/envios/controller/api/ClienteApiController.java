@@ -7,10 +7,17 @@ import com.monteastur.envios.service.ClienteService;
 import com.monteastur.envios.service.EvidenciaEnvioService;
 import com.monteastur.envios.service.EventoTrackingService;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +30,9 @@ public class ClienteApiController {
     private final ClienteService clienteService;
     private final EvidenciaEnvioService evidenciaService;
     private final EventoTrackingService eventoTrackingService;
+
+    @Value("${app.upload.dir}")
+    private String uploadDir;
 
     public ClienteApiController(EnvioTrackingRepository trackingRepo,
                                  ClienteService clienteService,
@@ -92,10 +102,67 @@ public class ClienteApiController {
             evDto.setTitulo(ev.getTitulo());
             evDto.setDescripcion(ev.getDescripcion());
             evDto.setTipo(ev.getTipo());
-            evDto.setUrlArchivo(ev.getUrlArchivo());
+            evDto.setUrlArchivo("/api/v1/cliente/evidencias/" + ev.getId() + "/archivo");
             evDto.setVisibleCliente(ev.getVisibleCliente());
             return evDto;
         }).collect(Collectors.toList()));
         return ResponseEntity.ok(dto);
+    }
+
+    @GetMapping("/evidencias/{id}/archivo")
+    public ResponseEntity<?> descargarEvidencia(@PathVariable Long id, HttpSession session) {
+        Long clienteId = (Long) session.getAttribute("clienteId");
+        if (clienteId == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
+        }
+
+        var opt = evidenciaService.buscar(id);
+        if (opt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorDto(Instant.now().toString(), 404, "Evidencia no encontrada"));
+        }
+
+        var evidencia = opt.get();
+        if (!Boolean.TRUE.equals(evidencia.getVisibleCliente())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
+        }
+
+        var envio = evidencia.getEnvioTracking();
+        if (envio == null || envio.getCliente() == null || !envio.getCliente().getId().equals(clienteId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
+        }
+
+        String urlArchivo = evidencia.getUrlArchivo();
+        if (urlArchivo == null || !urlArchivo.startsWith("/uploads/evidencias/")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorDto(Instant.now().toString(), 404, "Archivo no encontrado"));
+        }
+
+        String fileName = urlArchivo.substring("/uploads/evidencias/".length());
+        if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorDto(Instant.now().toString(), 403, "Nombre de archivo no permitido"));
+        }
+
+        String baseDir = uploadDir.endsWith("/") || uploadDir.endsWith("\\") ? uploadDir : uploadDir + "/";
+        Path filePath = Paths.get(baseDir, "evidencias", fileName).normalize();
+
+        try {
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists() || !resource.isReadable()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ErrorDto(Instant.now().toString(), 404, "Archivo no encontrado"));
+            }
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
+                    .body(resource);
+        } catch (MalformedURLException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorDto(Instant.now().toString(), 404, "Archivo no encontrado"));
+        }
     }
 }
