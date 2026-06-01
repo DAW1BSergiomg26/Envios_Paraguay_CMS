@@ -173,7 +173,6 @@ public class AdminController {
             var opt = imagenRepo.findById(id);
             if (opt.isPresent()) {
                 Imagen img = opt.get();
-                // Delete file from filesystem
                 String url = img.getUrl();
                 if (url != null && url.startsWith("/uploads/")) {
                     String fileName = url.substring("/uploads/".length());
@@ -332,7 +331,8 @@ public class AdminController {
             return "redirect:/admin/tracking/editar/" + envioId;
         }
         try {
-            String uploadsDir = System.getProperty("user.dir") + "/uploads/evidencias/";
+            String baseDir = uploadDir.endsWith("/") || uploadDir.endsWith("\\") ? uploadDir : uploadDir + "/";
+            String uploadsDir = baseDir + "evidencias/";
             File dir = new File(uploadsDir);
             if (!dir.exists()) dir.mkdirs();
 
@@ -377,7 +377,8 @@ public class AdminController {
                 String url = ev.getUrlArchivo();
                 if (url != null && url.startsWith("/uploads/evidencias/")) {
                     String fileName = url.substring("/uploads/evidencias/".length());
-                    Path filePath = Paths.get(System.getProperty("user.dir") + "/uploads/evidencias/" + fileName);
+                    String baseDir = uploadDir.endsWith("/") || uploadDir.endsWith("\\") ? uploadDir : uploadDir + "/";
+                    Path filePath = Paths.get(baseDir + "evidencias/" + fileName);
                     try {
                         Files.deleteIfExists(filePath);
                     } catch (IOException ignored) {}
