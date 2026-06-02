@@ -107,6 +107,11 @@ public class PublicController {
         return "contacto";
     }
 
+    @GetMapping("/operaciones")
+    public String operaciones() {
+        return "operaciones";
+    }
+
     @GetMapping("/aviso-legal")
     public String avisoLegal(Model model) {
         model.addAttribute("texto", textoRepo.findBySlug("aviso-legal").orElse(null));
@@ -173,6 +178,11 @@ public class PublicController {
         emailService.notificarContacto(nombre, email, mensaje);
         model.addAttribute("mensajeEnviado", true);
         return "en/contacto";
+    }
+
+    @GetMapping("/en/operaciones")
+    public String enOperaciones() {
+        return "en/operaciones";
     }
 
     @GetMapping("/en/aviso-legal")
@@ -306,4 +316,6 @@ public class PublicController {
         return calendarios;
     }
 }
+
+
 
