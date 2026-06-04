@@ -1,0 +1,235 @@
+/* ================================
+   TRACKING LOGISTICO - MONTEASTUR
+   Estilo logistico premium adaptado a marca propia
+   ================================ */
+
+:root {
+    --tracking-logistic-yellow: #ffd44a;
+    --tracking-logistic-orange: #e98432;
+    --tracking-logistic-red: #b91c1c;
+    --tracking-logistic-green: #2d4a28;
+    --tracking-logistic-dark: #172114;
+    --tracking-logistic-paper: #fff8e1;
+}
+
+.tracking-hero-premium {
+    max-width: 900px;
+    border-radius: 18px;
+    background:
+        linear-gradient(135deg, rgba(255, 212, 74, 0.34), rgba(255, 248, 225, 0.96) 42%, rgba(255, 255, 255, 0.80)),
+        radial-gradient(circle at top right, rgba(185, 28, 28, 0.10), transparent 42%);
+    border: 2px solid rgba(255, 212, 74, 0.72);
+    box-shadow: 0 22px 55px rgba(69, 47, 18, 0.14);
+}
+
+.tracking-hero-premium::after {
+    inset: auto 28px 0;
+    height: 7px;
+    border-radius: 0;
+    background: linear-gradient(90deg, var(--tracking-logistic-red) 0 22%, var(--tracking-logistic-yellow) 22% 74%, var(--tracking-logistic-green) 74% 100%);
+    opacity: 1;
+}
+
+.tracking-hero-pill,
+.tracking-help-kicker,
+.tracking-result-kicker {
+    background: var(--tracking-logistic-yellow);
+    color: var(--tracking-logistic-dark);
+    border-radius: 4px;
+    box-shadow: inset 4px 0 0 var(--tracking-logistic-red);
+}
+
+.tracking-hero-premium h2 {
+    color: var(--tracking-logistic-dark);
+    letter-spacing: -0.055em;
+}
+
+.tracking-form-glass {
+    max-width: 760px;
+    border-radius: 12px;
+    background: #fff;
+    border: 2px solid rgba(255, 212, 74, 0.78);
+    box-shadow: 0 18px 44px rgba(69, 47, 18, 0.13);
+}
+
+.btn-tracking-search {
+    border-radius: 8px !important;
+    background: linear-gradient(135deg, var(--tracking-logistic-orange), #ef9b42) !important;
+    color: #fff !important;
+    box-shadow: 0 10px 22px rgba(233, 132, 50, 0.25);
+}
+
+.tracking-help-card {
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(69, 47, 18, 0.08);
+    box-shadow: 0 14px 34px rgba(69, 47, 18, 0.10);
+}
+
+.tracking-help-card::before {
+    height: 6px;
+    background: linear-gradient(90deg, var(--tracking-logistic-red), var(--tracking-logistic-yellow), var(--tracking-logistic-green));
+}
+
+.tracking-help-main {
+    background:
+        linear-gradient(135deg, rgba(45, 74, 40, 0.96), rgba(28, 43, 23, 0.98)),
+        linear-gradient(90deg, var(--tracking-logistic-red), var(--tracking-logistic-yellow));
+    border: 2px solid rgba(255, 212, 74, 0.42);
+}
+
+.tracking-help-icon,
+.tracking-trust-strip span {
+    border-radius: 8px;
+    background: var(--tracking-logistic-paper);
+    box-shadow: inset 4px 0 0 var(--tracking-logistic-orange);
+}
+
+.tracking-trust-strip div {
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid rgba(255, 212, 74, 0.68);
+    box-shadow: 0 12px 26px rgba(69, 47, 18, 0.08);
+}
+
+.tracking-result-premium {
+    max-width: 920px;
+    margin: 0 auto;
+    border-radius: 16px;
+    background: #fff;
+    border: 2px solid rgba(255, 212, 74, 0.72);
+    box-shadow: 0 24px 60px rgba(69, 47, 18, 0.14);
+}
+
+.tracking-result-header-premium {
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--tracking-logistic-yellow), #fff0a6 56%, #fff7cc);
+    color: var(--tracking-logistic-dark);
+    border-left: 8px solid var(--tracking-logistic-red);
+    box-shadow: inset 0 -1px 0 rgba(45, 74, 40, 0.12);
+}
+
+.tracking-result-header-premium h3 {
+    color: var(--tracking-logistic-dark);
+    font-size: 28px;
+    letter-spacing: -0.035em;
+}
+
+.tracking-result-kicker {
+    background: rgba(255, 255, 255, 0.65);
+    color: var(--tracking-logistic-dark);
+}
+
+.tracking-result-support {
+    border-radius: 6px;
+    background: var(--tracking-logistic-green);
+    color: white;
+}
+
+.tracking-mini-resume .tr-item {
+    border-radius: 10px;
+    background: #fffaf0;
+    border: 1px solid rgba(255, 212, 74, 0.65);
+    box-shadow: 0 8px 20px rgba(69, 47, 18, 0.06);
+}
+
+.tr-badge {
+    border-radius: 6px !important;
+    background: var(--tracking-logistic-yellow) !important;
+    color: var(--tracking-logistic-dark) !important;
+    border: 1px solid rgba(185, 28, 28, 0.16);
+    font-weight: 900;
+}
+
+.tracking-route {
+    padding: 18px 20px;
+    border-radius: 12px;
+    background: #fff8dd;
+    border: 1px solid rgba(255, 212, 74, 0.75);
+}
+
+.route-dot {
+    border-radius: 6px !important;
+    background: #fff !important;
+    border: 1px solid rgba(69, 47, 18, 0.10);
+    box-shadow: 0 8px 18px rgba(69, 47, 18, 0.08);
+}
+
+.route-line-glow {
+    background: linear-gradient(90deg, var(--tracking-logistic-red), var(--tracking-logistic-yellow), var(--tracking-logistic-green)) !important;
+}
+
+.tracking-info-item {
+    border-radius: 10px !important;
+    background: #fff !important;
+    border: 1px solid rgba(69, 47, 18, 0.08) !important;
+    box-shadow: 0 8px 22px rgba(69, 47, 18, 0.06);
+}
+
+.tracking-observaciones {
+    border-left: 6px solid var(--tracking-logistic-orange) !important;
+    border-radius: 10px !important;
+    background: #fff8e1 !important;
+}
+
+.tracking-timeline-premium {
+    margin-top: 28px;
+    padding: 24px;
+    border-radius: 14px;
+    background: #fffdf6;
+    border: 1px solid rgba(255, 212, 74, 0.66);
+}
+
+.tracking-timeline-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--tracking-logistic-dark);
+}
+
+.tracking-timeline-title::before {
+    content: "🚚";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: var(--tracking-logistic-yellow);
+}
+
+.tl-step-icon {
+    border-radius: 8px !important;
+    background: #fff !important;
+    border: 2px solid rgba(255, 212, 74, 0.82) !important;
+    box-shadow: 0 8px 18px rgba(69, 47, 18, 0.08);
+}
+
+.tl-step.completed .tl-step-icon,
+.tl-step.active .tl-step-icon {
+    background: var(--tracking-logistic-yellow) !important;
+    border-color: var(--tracking-logistic-orange) !important;
+}
+
+.tl-step.active .tl-step-content strong {
+    color: var(--tracking-logistic-red);
+}
+
+.tl-step-label {
+    border-radius: 4px !important;
+    background: #fff0a6 !important;
+    color: var(--tracking-logistic-dark) !important;
+    font-weight: 900;
+}
+
+.evento-card {
+    border-radius: 10px !important;
+    border: 1px solid rgba(255, 212, 74, 0.72) !important;
+    box-shadow: 0 10px 24px rgba(69, 47, 18, 0.08);
+}
+
+.tracking-final-cta-premium {
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255, 212, 74, 0.34), rgba(255, 248, 225, 0.95));
+    border: 2px solid rgba(255, 212, 74, 0.72);
+}
