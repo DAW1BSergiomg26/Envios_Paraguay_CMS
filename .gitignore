@@ -10,6 +10,9 @@ uploads/
 logs/
 .env
 
+# Documentacion generada localmente
+docs/estructura.txt
+
 # Playwright artifacts
 frontend-react/test-results/
 frontend-react/playwright-report/
