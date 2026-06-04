@@ -8,32 +8,82 @@
     <header th:replace="~{fragments/header :: header}"></header>
 
     <main>
-        <section class="pagina-titulo">
+        <section class="pagina-titulo tracking-hero-premium">
+            <span class="tracking-hero-pill">Asturias &harr; Paraguay</span>
             <h2>Seguimiento de tu env&iacute;o</h2>
-            <p>Introduce tu c&oacute;digo MONTEASTUR para conocer el estado de tu env&iacute;o.</p>
+            <p>Introduce tu c&oacute;digo MONTEASTUR y consulta el estado actualizado de tu paquete con una vista clara, segura y sencilla.</p>
         </section>
 
-        <form method="post" th:action="@{/tracking}" class="tracking-premium-form">
+        <form method="post" th:action="@{/tracking}" class="tracking-premium-form tracking-form-glass">
             <div class="tracking-input-wrapper">
                 <span class="tracking-input-icon">🔍</span>
-                <input type="text" name="codigo" placeholder="Introduce tu c&oacute;digo MONTEASTUR" required class="tracking-premium-input">
+                <input type="text" name="codigo" placeholder="Introduce tu c&oacute;digo MONTEASTUR" required class="tracking-premium-input" autocomplete="off">
             </div>
             <button type="submit" class="btn btn-tracking-search">
-                <span>Buscar</span>
+                <span>Buscar env&iacute;o</span>
                 <span class="btn-search-arrow">→</span>
             </button>
         </form>
 
+        <section class="tracking-help-premium" aria-label="Ayuda para seguimiento">
+            <div class="tracking-help-card tracking-help-main">
+                <span class="tracking-help-kicker">Gu&iacute;a r&aacute;pida</span>
+                <h3>&iquest;C&oacute;mo funciona el seguimiento?</h3>
+                <p>Us&aacute; el c&oacute;digo que recibiste al registrar tu env&iacute;o. La p&aacute;gina te mostrar&aacute; el estado actual, la ubicaci&oacute;n y el historial de movimientos disponibles.</p>
+            </div>
+            <div class="tracking-help-card">
+                <span class="tracking-help-icon">📦</span>
+                <strong>1. C&oacute;digo</strong>
+                <p>Ingres&aacute; tu c&oacute;digo MONTEASTUR sin espacios extra.</p>
+            </div>
+            <div class="tracking-help-card">
+                <span class="tracking-help-icon">🚢</span>
+                <strong>2. Estado</strong>
+                <p>Revis&aacute; si est&aacute; recibido, en tr&aacute;nsito, aduana o reparto.</p>
+            </div>
+            <div class="tracking-help-card">
+                <span class="tracking-help-icon">💬</span>
+                <strong>3. Ayuda</strong>
+                <p>Si ten&eacute;s dudas, escribinos por WhatsApp y te ayudamos.</p>
+            </div>
+        </section>
+
+        <section class="tracking-trust-strip" aria-label="Confianza de seguimiento">
+            <div>
+                <span>✅</span>
+                <strong>Seguimiento claro</strong>
+                <small>Estado actualizado del env&iacute;o</small>
+            </div>
+            <div>
+                <span>🛃</span>
+                <strong>Control de aduanas</strong>
+                <small>Origen, tr&aacute;nsito y destino</small>
+            </div>
+            <div>
+                <span>🇵🇾</span>
+                <strong>Ruta Paraguay</strong>
+                <small>Entrega local coordinada</small>
+            </div>
+        </section>
+
         <div th:if="${buscado and envio == null}" class="tracking-not-found-premium">
             <div class="tnf-icon">🔍</div>
             <h3>No encontramos ning&uacute;n env&iacute;o con ese c&oacute;digo.</h3>
-            <p>Verific&aacute; el c&oacute;digo e intent&aacute; de nuevo, o consultanos por WhatsApp.</p>
+            <p>Verific&aacute; el c&oacute;digo e intent&aacute; de nuevo. Si el env&iacute;o es reciente, puede que todav&iacute;a estemos cargando la informaci&oacute;n.</p>
             <a href="https://wa.me/34642687292" class="btn btn-whatsapp" target="_blank" rel="noopener">
                 <span class="wa-icon">💬</span> Consultar por WhatsApp
             </a>
         </div>
 
         <div th:if="${envio != null}" class="tracking-result-premium">
+            <div class="tracking-result-header-premium">
+                <div>
+                    <span class="tracking-result-kicker">Resultado encontrado</span>
+                    <h3>Tu env&iacute;o est&aacute; registrado en MONTEASTUR</h3>
+                </div>
+                <a href="https://wa.me/34642687292" class="tracking-result-support" target="_blank" rel="noopener">💬 Soporte</a>
+            </div>
+
             <div class="tracking-mini-resume">
                 <div class="tr-item">
                     <span class="tr-label">C&oacute;digo</span>
@@ -179,8 +229,9 @@
                 </div>
             </div>
 
-            <div class="tracking-whatsapp-cta">
-                <p>¿Ten&eacute;s dudas sobre tu env&iacute;o?</p>
+            <div class="tracking-whatsapp-cta tracking-final-cta-premium">
+                <p>&iquest;Ten&eacute;s dudas sobre tu env&iacute;o?</p>
+                <span>Estamos para ayudarte con una atenci&oacute;n cercana entre Asturias y Paraguay.</span>
                 <a href="https://wa.me/34642687292" class="btn btn-whatsapp" target="_blank" rel="noopener">
                     <span class="wa-icon">💬</span> Consultar por WhatsApp
                 </a>
