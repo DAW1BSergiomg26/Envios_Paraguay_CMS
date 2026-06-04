@@ -8,15 +8,16 @@
     <header th:replace="~{fragments/header-en :: header}"></header>
 
     <main>
-        <section class="pagina-titulo">
+        <section class="pagina-titulo tracking-hero-premium">
+            <span class="tracking-hero-pill">Asturias &harr; Paraguay</span>
             <h2>Shipment tracking</h2>
-            <p>Enter your MONTEASTUR code to check the status of your shipment.</p>
+            <p>Enter your MONTEASTUR code and check your package status with a clear, safe and simple tracking view.</p>
         </section>
 
-        <form method="post" th:action="@{/en/tracking}" class="tracking-premium-form">
+        <form method="post" th:action="@{/en/tracking}" class="tracking-premium-form tracking-form-glass">
             <div class="tracking-input-wrapper">
                 <span class="tracking-input-icon">🔍</span>
-                <input type="text" name="codigo" placeholder="Enter your MONTEASTUR code" required class="tracking-premium-input">
+                <input type="text" name="codigo" placeholder="Enter your MONTEASTUR code" required class="tracking-premium-input" autocomplete="off">
             </div>
             <button type="submit" class="btn btn-tracking-search">
                 <span>Track shipment</span>
@@ -24,16 +25,65 @@
             </button>
         </form>
 
+        <section class="tracking-help-premium" aria-label="Tracking help">
+            <div class="tracking-help-card tracking-help-main">
+                <span class="tracking-help-kicker">Quick guide</span>
+                <h3>How does tracking work?</h3>
+                <p>Use the code you received when your shipment was registered. This page will show the current status, location and available movement history.</p>
+            </div>
+            <div class="tracking-help-card">
+                <span class="tracking-help-icon">📦</span>
+                <strong>1. Code</strong>
+                <p>Enter your MONTEASTUR code without extra spaces.</p>
+            </div>
+            <div class="tracking-help-card">
+                <span class="tracking-help-icon">🚢</span>
+                <strong>2. Status</strong>
+                <p>Check if it is received, in transit, customs or delivery.</p>
+            </div>
+            <div class="tracking-help-card">
+                <span class="tracking-help-icon">💬</span>
+                <strong>3. Support</strong>
+                <p>If you have questions, contact us on WhatsApp and we will help you.</p>
+            </div>
+        </section>
+
+        <section class="tracking-trust-strip" aria-label="Tracking trust">
+            <div>
+                <span>✅</span>
+                <strong>Clear tracking</strong>
+                <small>Updated shipment status</small>
+            </div>
+            <div>
+                <span>🛃</span>
+                <strong>Customs control</strong>
+                <small>Origin, transit and destination</small>
+            </div>
+            <div>
+                <span>🇵🇾</span>
+                <strong>Paraguay route</strong>
+                <small>Coordinated local delivery</small>
+            </div>
+        </section>
+
         <div th:if="${buscado and envio == null}" class="tracking-not-found-premium">
             <div class="tnf-icon">🔍</div>
             <h3>We couldn&rsquo;t find any shipment with that code.</h3>
-            <p>Check the code or contact us on WhatsApp.</p>
+            <p>Check the code and try again. If your shipment was created recently, the information may still be loading.</p>
             <a href="https://wa.me/34642687292" class="btn btn-whatsapp" target="_blank" rel="noopener">
                 <span class="wa-icon">💬</span> Contact on WhatsApp
             </a>
         </div>
 
         <div th:if="${envio != null}" class="tracking-result-premium">
+            <div class="tracking-result-header-premium">
+                <div>
+                    <span class="tracking-result-kicker">Shipment found</span>
+                    <h3>Your shipment is registered in MONTEASTUR</h3>
+                </div>
+                <a href="https://wa.me/34642687292" class="tracking-result-support" target="_blank" rel="noopener">💬 Support</a>
+            </div>
+
             <div class="tracking-mini-resume">
                 <div class="tr-item">
                     <span class="tr-label">Code</span>
@@ -179,8 +229,9 @@
                 </div>
             </div>
 
-            <div class="tracking-whatsapp-cta">
+            <div class="tracking-whatsapp-cta tracking-final-cta-premium">
                 <p>Any questions about your shipment?</p>
+                <span>We are here to help you with close support between Asturias and Paraguay.</span>
                 <a href="https://wa.me/34642687292" class="btn btn-whatsapp" target="_blank" rel="noopener">
                     <span class="wa-icon">💬</span> Contact on WhatsApp
                 </a>
