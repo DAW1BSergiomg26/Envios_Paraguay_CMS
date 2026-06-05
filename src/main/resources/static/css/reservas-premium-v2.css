@@ -1,0 +1,169 @@
+/* ================================
+   RESERVAS PREMIUM V2 - EXTRAS
+   Ruta visual, metricas y estimador
+   ================================ */
+
+.reservas-route-premium {
+    max-width: 980px;
+    margin: -6px auto 18px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(255, 248, 225, 0.94), rgba(255, 255, 255, 0.96));
+    border: 2px solid rgba(255, 212, 74, 0.68);
+    box-shadow: 0 18px 42px rgba(69, 47, 18, 0.10);
+}
+
+.reservas-route-line {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+.reservas-route-node {
+    display: grid;
+    place-items: center;
+    gap: 7px;
+    padding: 12px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid rgba(255, 212, 74, 0.72);
+    text-align: center;
+    color: #172114;
+    font-weight: 900;
+}
+
+.reservas-route-node span {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #fff8e1;
+    box-shadow: inset 4px 0 0 #e98432;
+    font-size: 20px;
+}
+
+.reservas-route-node small {
+    color: #6d675f;
+    font-weight: 800;
+}
+
+.reservas-route-dash {
+    height: 4px;
+    min-width: 70px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #b91c1c, #ffd44a, #2d4a28);
+    opacity: 0.75;
+}
+
+.reservas-metrics-premium {
+    max-width: 980px;
+    margin: 0 auto 20px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.reservas-metric-card {
+    padding: 18px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid rgba(255, 212, 74, 0.72);
+    box-shadow: 0 14px 34px rgba(69, 47, 18, 0.10);
+    display: grid;
+    gap: 6px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reservas-metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 20px 42px rgba(69, 47, 18, 0.14);
+}
+
+.reservas-metric-card strong {
+    color: #172114;
+    font-size: 24px;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+}
+
+.reservas-metric-card span {
+    color: #6d675f;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.reservas-estimator-premium {
+    grid-column: 1 / -1;
+    margin-top: 2px;
+    padding: 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(255, 212, 74, 0.20), rgba(255, 248, 225, 0.96));
+    border: 1px solid rgba(255, 212, 74, 0.78);
+}
+
+.reservas-estimator-premium h4 {
+    margin: 0 0 10px;
+    color: #172114;
+    font-size: 16px;
+    font-weight: 950;
+}
+
+.reservas-estimator-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.reservas-estimator-grid div {
+    padding: 12px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid rgba(69, 47, 18, 0.08);
+}
+
+.reservas-estimator-grid strong {
+    display: block;
+    color: #172114;
+    font-size: 13px;
+    font-weight: 950;
+}
+
+.reservas-estimator-grid span {
+    display: block;
+    margin-top: 4px;
+    color: #e98432;
+    font-size: 15px;
+    font-weight: 950;
+}
+
+.reserva-success-code {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px auto 16px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #fff8e1;
+    border: 1px solid rgba(255, 212, 74, 0.78);
+    color: #172114;
+    font-weight: 950;
+    letter-spacing: 0.04em;
+}
+
+@media (max-width: 900px) {
+    .reservas-route-line,
+    .reservas-metrics-premium,
+    .reservas-estimator-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .reservas-route-dash {
+        width: 4px;
+        min-width: 4px;
+        height: 28px;
+        justify-self: center;
+    }
+}
