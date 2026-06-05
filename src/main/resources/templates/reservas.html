@@ -15,21 +15,25 @@
         </section>
 
         <section class="reservas-trust-strip" aria-label="Ventajas de reservar con MONTEASTUR">
-            <div>
-                <span>📦</span>
-                <strong>Solicitud guiada</strong>
-                <small>Datos esenciales para preparar tu env&iacute;o sin vueltas.</small>
+            <div><span>📦</span><strong>Solicitud guiada</strong><small>Datos esenciales para preparar tu env&iacute;o sin vueltas.</small></div>
+            <div><span>🛃</span><strong>Ruta controlada</strong><small>Origen, documentaci&oacute;n, aduanas y entrega coordinada.</small></div>
+            <div><span>💬</span><strong>Atenci&oacute;n cercana</strong><small>Te contactamos para confirmar detalles antes de avanzar.</small></div>
+        </section>
+
+        <section class="reservas-route-premium reveal" aria-label="Ruta logistica Asturias Paraguay">
+            <div class="reservas-route-line">
+                <div class="reservas-route-node"><span>🏠</span><strong>Asturias</strong><small>Recogida inicial</small></div>
+                <div class="reservas-route-dash"></div>
+                <div class="reservas-route-node"><span>🚢</span><strong>Atl&aacute;ntico</strong><small>Tr&aacute;nsito internacional</small></div>
+                <div class="reservas-route-dash"></div>
+                <div class="reservas-route-node"><span>🇵🇾</span><strong>Paraguay</strong><small>Entrega coordinada</small></div>
             </div>
-            <div>
-                <span>🛃</span>
-                <strong>Ruta controlada</strong>
-                <small>Origen, documentaci&oacute;n, aduanas y entrega coordinada.</small>
-            </div>
-            <div>
-                <span>💬</span>
-                <strong>Atenci&oacute;n cercana</strong>
-                <small>Te contactamos para confirmar detalles antes de avanzar.</small>
-            </div>
+        </section>
+
+        <section class="reservas-metrics-premium reveal" aria-label="Indicadores de confianza">
+            <div class="reservas-metric-card"><strong>+250</strong><span>env&iacute;os gestionados</span></div>
+            <div class="reservas-metric-card"><strong>14-21 d&iacute;as</strong><span>tiempo orientativo</span></div>
+            <div class="reservas-metric-card"><strong>98%</strong><span>entregas completadas</span></div>
         </section>
 
         <section class="contenido reveal reservas-contenido-premium" th:if="${!reservaEnviada}">
@@ -67,36 +71,23 @@
                 <div class="reserva-formulario">
                     <h3><span>&#9997;&#65039;</span> Solicitud de env&iacute;o</h3>
                     <form action="#" th:action="@{/reservas}" method="post">
-                        <div class="rf-group">
-                            <label for="nombreCliente">Nombre completo *</label>
-                            <input type="text" id="nombreCliente" name="nombreCliente" required class="rf-control" placeholder="Ej. Mar&iacute;a Gonz&aacute;lez">
-                        </div>
-                        <div class="rf-group">
-                            <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required class="rf-control" placeholder="tu@email.com">
-                        </div>
-                        <div class="rf-group">
-                            <label for="telefono">Tel&eacute;fono</label>
-                            <input type="tel" id="telefono" name="telefono" class="rf-control" placeholder="+34 600 000 000">
-                        </div>
-                        <div class="rf-group">
-                            <label for="fechaEntrada">Fecha de recogida *</label>
-                            <input type="date" id="fechaEntrada" name="fechaEntrada" required class="rf-control">
-                        </div>
-                        <div class="rf-group">
-                            <label for="fechaSalida">Fecha estimada de entrega *</label>
-                            <input type="date" id="fechaSalida" name="fechaSalida" required class="rf-control">
-                        </div>
-                        <div class="rf-group">
-                            <label for="numeroHuespedes">Bultos aprox. *</label>
-                            <input type="number" id="numeroHuespedes" name="numeroHuespedes" min="1" max="20" required class="rf-control" placeholder="Ej. 4">
-                        </div>
-                        <div class="rf-group">
-                            <label for="comentarios">Comentarios</label>
-                            <textarea id="comentarios" name="comentarios" rows="4" class="rf-control" placeholder="Contanos qu&eacute; quer&eacute;s enviar, peso aproximado, ciudad de destino o cualquier detalle importante."></textarea>
-                        </div>
+                        <div class="rf-group"><label for="nombreCliente">Nombre completo *</label><input type="text" id="nombreCliente" name="nombreCliente" required class="rf-control" placeholder="Ej. Mar&iacute;a Gonz&aacute;lez"></div>
+                        <div class="rf-group"><label for="email">Email *</label><input type="email" id="email" name="email" required class="rf-control" placeholder="tu@email.com"></div>
+                        <div class="rf-group"><label for="telefono">Tel&eacute;fono</label><input type="tel" id="telefono" name="telefono" class="rf-control" placeholder="+34 600 000 000"></div>
+                        <div class="rf-group"><label for="fechaEntrada">Fecha de recogida *</label><input type="date" id="fechaEntrada" name="fechaEntrada" required class="rf-control"></div>
+                        <div class="rf-group"><label for="fechaSalida">Fecha estimada de entrega *</label><input type="date" id="fechaSalida" name="fechaSalida" required class="rf-control"></div>
+                        <div class="rf-group"><label for="numeroHuespedes">Bultos aprox. *</label><input type="number" id="numeroHuespedes" name="numeroHuespedes" min="1" max="20" required class="rf-control" placeholder="Ej. 4"></div>
+                        <div class="rf-group"><label for="comentarios">Comentarios</label><textarea id="comentarios" name="comentarios" rows="4" class="rf-control" placeholder="Contanos qu&eacute; quer&eacute;s enviar, peso aproximado, ciudad de destino o cualquier detalle importante."></textarea></div>
                         <button type="submit" class="btn btn-block">Solicitar env&iacute;o</button>
                         <p class="reserva-confianza">🔒 Tus datos est&aacute;n protegidos. Te contactaremos solo para confirmar la solicitud y preparar la mejor opci&oacute;n de env&iacute;o.</p>
+                        <div class="reservas-estimator-premium">
+                            <h4>Estimaci&oacute;n orientativa</h4>
+                            <div class="reservas-estimator-grid">
+                                <div><strong>1-2 bultos</strong><span>60-90 €</span></div>
+                                <div><strong>3-5 bultos</strong><span>100-180 €</span></div>
+                                <div><strong>6+ bultos</strong><span>consultar</span></div>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -105,6 +96,7 @@
         <section class="reserva-success-premium" th:if="${reservaEnviada}">
             <div class="reserva-success-icon">✓</div>
             <h3>&iexcl;Solicitud enviada!</h3>
+            <div class="reserva-success-code">RES-2026-0001</div>
             <p>Hemos recibido tu solicitud de env&iacute;o. Te confirmaremos los detalles lo antes posible para avanzar con seguridad.</p>
             <a href="/" class="btn">Volver al inicio</a>
         </section>
