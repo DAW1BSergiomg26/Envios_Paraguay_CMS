@@ -1,47 +1,83 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments/header :: head('Servicios')}"></head>
+<head th:replace="~{fragments/header :: head('La Casa')}"></head>
 
 <body>
 
     <header th:replace="~{fragments/header :: header}"></header>
 
     <main>
-        <section class="pagina-titulo reveal">
-            <h2>Servicios</h2>
-            <p>Log&iacute;stica profesional para mercanc&iacute;a, veh&iacute;culos y carga pesada a Paraguay.</p>
+        <section class="casa-hero-premium reveal">
+            <span class="casa-hero-pill">Asturias &harr; Paraguay</span>
+            <h2>La casa que conecta dos tierras</h2>
+            <p>MONTEASTUR ENVIOS coordina mercanc&iacute;a, veh&iacute;culos, maquinaria y carga especial desde Asturias hacia Paraguay con atenci&oacute;n cercana, documentaci&oacute;n controlada y seguimiento claro.</p>
         </section>
 
-        <section class="contenido reveal">
-            <p>En MONTEASTUR ENVIOS gestionamos el transporte y la gesti&oacute;n de aduanas de tu mercanc&iacute;a a Paraguay. Trabajamos con veh&iacute;culos, maquinaria y todo tipo de carga pesada, ofreciendo un servicio personalizado con seguimiento en cada etapa.</p>
-            <p>Coordinamos la recogida en Pola de Siero, gestionamos la documentaci&oacute;n aduanera y seleccionamos la mejor ruta para tu carga. Te mantenemos informado en todo momento.</p>
+        <section class="casa-trust-strip reveal" aria-label="Confianza MONTEASTUR">
+            <div><span>📦</span><strong>Carga cuidada</strong><small>Organizamos cada env&iacute;o con datos claros, fechas aproximadas y control de documentaci&oacute;n.</small></div>
+            <div><span>🚚</span><strong>Ruta coordinada</strong><small>Desde Pola de Siero hasta Paraguay, buscamos la opci&oacute;n m&aacute;s segura y conveniente.</small></div>
+            <div><span>🤝</span><strong>Atenci&oacute;n cercana</strong><small>Te acompa&ntilde;amos antes, durante y despu&eacute;s del env&iacute;o para que no camines a ciegas.</small></div>
+        </section>
 
-            <div class="casa-caracteristicas">
+        <section class="casa-route-premium reveal" aria-label="Ruta Asturias Paraguay">
+            <div class="casa-route-line">
+                <div class="casa-route-node"><span>🏠</span><strong>Asturias</strong><small>Recogida y preparaci&oacute;n</small></div>
+                <div class="casa-route-dash"></div>
+                <div class="casa-route-node"><span>🚢</span><strong>Ruta atl&aacute;ntica</strong><small>Tr&aacute;nsito y aduanas</small></div>
+                <div class="casa-route-dash"></div>
+                <div class="casa-route-node"><span>PY</span><strong>Paraguay</strong><small>Entrega coordinada</small></div>
+            </div>
+        </section>
+
+        <section class="casa-metrics-premium reveal" aria-label="Datos de servicio">
+            <div class="casa-metric-card"><strong>+250</strong><span>env&iacute;os y consultas gestionadas</span></div>
+            <div class="casa-metric-card"><strong>14-21 d&iacute;as</strong><span>referencia orientativa de tr&aacute;nsito</span></div>
+            <div class="casa-metric-card"><strong>98%</strong><span>entregas coordinadas sin incidencias graves</span></div>
+        </section>
+
+        <section class="contenido reveal casa-premium-wrap">
+            <div class="casa-story-card">
+                <h3>Una log&iacute;stica cercana, seria y humana</h3>
+                <p>En MONTEASTUR ENVIOS gestionamos el transporte y la documentaci&oacute;n de mercanc&iacute;a hacia Paraguay. Trabajamos con veh&iacute;culos, maquinaria, repuestos y carga general, cuidando cada detalle desde la recogida hasta la entrega.</p>
+                <p>Coordinamos la recogida en Pola de Siero, revisamos la informaci&oacute;n necesaria, gestionamos tr&aacute;mites aduaneros y buscamos una ruta clara para que tu carga viaje con orden, seguridad y seguimiento.</p>
+            </div>
+
+            <div class="casa-services-premium">
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#128666;</div>
+                    <div class="casa-service-icon">🚚</div>
                     <h4>Transporte internacional</h4>
-                    <p>Enviamos todo tipo de mercanc&iacute;a y carga pesada a Paraguay. Veh&iacute;culos, maquinaria, repuestos y carga general con la mejor relaci&oacute;n calidad-precio.</p>
+                    <p>Enviamos mercanc&iacute;a y carga pesada a Paraguay: veh&iacute;culos, maquinaria, repuestos y carga general con trato personalizado.</p>
                 </div>
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#128188;</div>
+                    <div class="casa-service-icon">💼</div>
                     <h4>Gesti&oacute;n de aduanas</h4>
-                    <p>Nos encargamos de toda la documentaci&oacute;n y tr&aacute;mites aduaneros para que tu carga cruce la frontera sin problemas. Gesti&oacute;n profesional y transparente.</p>
+                    <p>Te ayudamos con documentaci&oacute;n, tr&aacute;mites y control aduanero para reducir errores y evitar sorpresas innecesarias.</p>
                 </div>
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#128663;</div>
+                    <div class="casa-service-icon">🚗</div>
                     <h4>Veh&iacute;culos y maquinaria</h4>
-                    <p>Transporte especializado de coches, furgonetas, maquinaria industrial y equipos pesados. Gestionamos toda la log&iacute;stica para tu env&iacute;o.</p>
+                    <p>Transporte especializado de coches, furgonetas, maquinaria industrial y equipos pesados para proyectos reales.</p>
                 </div>
                 <div class="casa-card">
-                    <div class="casa-card-icono">&#128200;</div>
+                    <div class="casa-service-icon">📈</div>
                     <h4>Seguimiento personalizado</h4>
-                    <p>Te mantenemos informado en cada fase del proceso. Desde la recogida hasta la entrega final en Paraguay, sin sorpresas.</p>
+                    <p>Informaci&oacute;n clara en cada fase: recogida, aduana, tr&aacute;nsito, llegada y coordinaci&oacute;n final en Paraguay.</p>
                 </div>
             </div>
         </section>
 
-        <section class="galeria reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
+        <section class="casa-process-premium reveal">
+            <h3>C&oacute;mo trabajamos tu env&iacute;o</h3>
+            <div class="casa-process-grid">
+                <div class="casa-process-step"><span class="casa-step-number">1</span><strong>Consulta inicial</strong><span>Nos cont&aacute;s qu&eacute; quer&eacute;s enviar, peso aproximado, origen y destino.</span></div>
+                <div class="casa-process-step"><span class="casa-step-number">2</span><strong>Revisi&oacute;n de datos</strong><span>Comprobamos fechas, documentaci&oacute;n, tipo de carga y necesidades especiales.</span></div>
+                <div class="casa-process-step"><span class="casa-step-number">3</span><strong>Ruta y gesti&oacute;n</strong><span>Coordinamos recogida, aduanas y tr&aacute;nsito para que el proceso avance con orden.</span></div>
+                <div class="casa-process-step"><span class="casa-step-number">4</span><strong>Seguimiento final</strong><span>Te mantenemos informado hasta la entrega coordinada en Paraguay.</span></div>
+            </div>
+        </section>
+
+        <section class="galeria casa-galeria-premium reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
             <h3>Galer&iacute;a de operaciones</h3>
             <div class="grid-public">
                 <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
@@ -49,6 +85,11 @@
                     <span th:text="${img.titulo}">T&iacute;tulo</span>
                 </div>
             </div>
+        </section>
+
+        <section class="casa-cta-premium reveal">
+            <div><strong>Prepar&aacute; tu env&iacute;o con calma</strong><span>Contanos qu&eacute; necesit&aacute;s enviar y te ayudamos a encontrar la mejor opci&oacute;n Asturias-Paraguay.</span></div>
+            <a href="/reservas">Reservar env&iacute;o</a>
         </section>
     </main>
 
