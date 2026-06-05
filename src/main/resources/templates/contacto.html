@@ -8,35 +8,51 @@
     <header th:replace="~{fragments/header :: header}"></header>
 
     <main>
-        <section class="pagina-titulo reveal">
-            <h2>Contacto</h2>
-            <p>Estamos en Pola de Siero. Ll&aacute;manos o escr&iacute;benos y te asesoramos sin compromiso.</p>
+        <section class="contacto-hero-premium reveal">
+            <span class="contacto-hero-pill">Asturias &harr; Paraguay</span>
+            <h2>Hablemos de tu env&iacute;o</h2>
+            <p>Estamos en Pola de Siero. Ll&aacute;manos o escr&iacute;benos y te ayudamos con recogidas, presupuestos, documentaci&oacute;n y seguimiento personalizado.</p>
         </section>
 
-        <section class="contenido reveal" th:if="${!mensajeEnviado}">
-            <div class="contacto-grid">
+        <section class="contacto-trust-strip reveal" aria-label="Ventajas de contactar con MONTEASTUR">
+            <div><span>📦</span><strong>Atenci&oacute;n para env&iacute;os</strong><small>Te orientamos antes de preparar tu solicitud.</small></div>
+            <div><span>📞</span><strong>Respuesta cercana</strong><small>Contacto directo para resolver dudas reales.</small></div>
+            <div><span>🛡️</span><strong>Sin compromiso</strong><small>Consult&aacute; precios, fechas y opciones con calma.</small></div>
+        </section>
+
+        <section class="contenido reveal contacto-premium-wrap" th:if="${!mensajeEnviado}">
+            <div class="contacto-premium-banner">
+                <h3>Centro de atenci&oacute;n MONTEASTUR</h3>
+                <p>Una consulta clara hoy puede evitar problemas ma&ntilde;ana. Contanos qu&eacute; necesit&aacute;s enviar y te guiamos paso a paso.</p>
+            </div>
+
+            <div class="contacto-grid contacto-grid-premium">
                 <div class="contacto-info-card">
                     <h3><span>&#128205;</span> Informaci&oacute;n de contacto</h3>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#128205;</div>
+                        <div class="contacto-info-icono">📍</div>
                         <div class="contacto-info-texto">
                             <strong>Direcci&oacute;n</strong>
                             <p>Pola de Siero, Asturias &mdash; Asunci&oacute;n, Paraguay</p>
                         </div>
                     </div>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#128222;</div>
+                        <div class="contacto-info-icono">📞</div>
                         <div class="contacto-info-texto">
                             <strong>Tel&eacute;fono</strong>
                             <a href="tel:+34642687292">642 687 292</a>
                         </div>
                     </div>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#9993;</div>
+                        <div class="contacto-info-icono">✉️</div>
                         <div class="contacto-info-texto">
                             <strong>Email</strong>
                             <p>monteastur@hotmail.es</p>
                         </div>
+                    </div>
+                    <div class="contacto-quick-help">
+                        <h4>Respuesta recomendada</h4>
+                        <p>Para consultas urgentes, llamanos directamente. Para presupuestos, dej&aacute; peso aproximado, origen, destino y cantidad de bultos.</p>
                     </div>
                 </div>
 
@@ -45,19 +61,19 @@
                     <form action="#" th:action="@{/contacto}" method="post">
                         <div class="rf-group">
                             <label for="nombre">Nombre *</label>
-                            <input type="text" id="nombre" name="nombre" required class="rf-control">
+                            <input type="text" id="nombre" name="nombre" required class="rf-control" placeholder="Ej. Mar&iacute;a Gonz&aacute;lez">
                         </div>
                         <div class="rf-group">
                             <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required class="rf-control">
+                            <input type="email" id="email" name="email" required class="rf-control" placeholder="tu@email.com">
                         </div>
                         <div class="rf-group">
                             <label for="telefono">Tel&eacute;fono</label>
-                            <input type="tel" id="telefono" name="telefono" class="rf-control">
+                            <input type="tel" id="telefono" name="telefono" class="rf-control" placeholder="+34 600 000 000">
                         </div>
                         <div class="rf-group">
                             <label for="mensaje">Mensaje *</label>
-                            <textarea id="mensaje" name="mensaje" rows="5" required class="rf-control"></textarea>
+                            <textarea id="mensaje" name="mensaje" rows="5" required class="rf-control" placeholder="Contanos qu&eacute; necesit&aacute;s enviar, fechas aproximadas y ciudad de destino."></textarea>
                         </div>
                         <button type="submit" class="btn btn-block">Enviar mensaje</button>
                         <p class="reserva-confianza">Tus datos est&aacute;n protegidos y no ser&aacute;n compartidos.</p>
@@ -67,9 +83,9 @@
         </section>
 
         <section class="contacto-exito reveal" th:if="${mensajeEnviado}">
-            <div class="contacto-exito-icono">&#9989;</div>
+            <div class="contacto-exito-icono">✓</div>
             <h3>&iexcl;Mensaje enviado!</h3>
-            <p>Gracias por contactar con MONTEASTUR. Te responderemos lo antes posible.</p>
+            <p>Gracias por contactar con MONTEASTUR. Hemos recibido tu consulta y te responderemos lo antes posible.</p>
             <a href="/" class="btn">Volver al inicio</a>
         </section>
     </main>
