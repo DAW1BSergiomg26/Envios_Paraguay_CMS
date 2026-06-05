@@ -28,6 +28,9 @@ public class EnvioTracking {
 
     private String contenido;
 
+    @Column(name = "ubicacion_actual")
+    private String ubicacionActual;
+
     @Column(name = "fecha_creacion", nullable = false)
     private LocalDateTime fechaCreacion;
 
@@ -82,6 +85,9 @@ public class EnvioTracking {
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
 
     public String getUbicacionActual() {
+        if (ubicacionActual != null && !ubicacionActual.isBlank()) {
+            return ubicacionActual;
+        }
         if (estado == null) return "";
         return switch (estado) {
             case "RECIBIDO" -> "Asturias, España";
@@ -92,5 +98,9 @@ public class EnvioTracking {
             case "ENTREGADO" -> "Destino final";
             default -> "";
         };
+    }
+
+    public void setUbicacionActual(String ubicacionActual) {
+        this.ubicacionActual = ubicacionActual;
     }
 }
