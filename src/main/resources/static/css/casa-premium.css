@@ -1,0 +1,373 @@
+/* ================================
+   CASA / SERVICIOS PREMIUM - MONTEASTUR
+   Asturias Paraguay logistics storytelling
+   ================================ */
+
+:root {
+    --casa-green: #2d4a28;
+    --casa-dark: #172114;
+    --casa-yellow: #ffd44a;
+    --casa-orange: #e98432;
+    --casa-red: #b91c1c;
+    --casa-paper: #fff8e1;
+    --casa-border: rgba(255, 212, 74, 0.72);
+    --casa-shadow: 0 24px 60px rgba(69, 47, 18, 0.14);
+}
+
+.casa-hero-premium {
+    position: relative;
+    max-width: 1040px;
+    margin: 38px auto 22px;
+    padding: 50px 30px 44px;
+    overflow: hidden;
+    border-radius: 24px;
+    background:
+        linear-gradient(135deg, rgba(255, 212, 74, 0.34), rgba(255, 248, 225, 0.96) 42%, rgba(255, 255, 255, 0.9)),
+        radial-gradient(circle at top right, rgba(185, 28, 28, 0.10), transparent 44%);
+    border: 2px solid var(--casa-border);
+    box-shadow: var(--casa-shadow);
+    text-align: center;
+}
+
+.casa-hero-premium::after {
+    content: "";
+    position: absolute;
+    left: 30px;
+    right: 30px;
+    bottom: 0;
+    height: 7px;
+    background: linear-gradient(90deg, var(--casa-red) 0 22%, var(--casa-yellow) 22% 74%, var(--casa-green) 74% 100%);
+}
+
+.casa-hero-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    background: var(--casa-yellow);
+    color: var(--casa-dark);
+    font-size: 12px;
+    font-weight: 950;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    box-shadow: inset 4px 0 0 var(--casa-red);
+}
+
+.casa-hero-premium h2 {
+    margin: 0;
+    color: var(--casa-dark);
+    font-size: clamp(34px, 5vw, 62px);
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+}
+
+.casa-hero-premium p {
+    max-width: 760px;
+    margin: 16px auto 0;
+    color: #5f5f58;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.casa-trust-strip,
+.casa-metrics-premium {
+    max-width: 1120px;
+    margin: 0 auto 22px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.casa-trust-strip div,
+.casa-metric-card {
+    padding: 18px;
+    border-radius: 16px;
+    background: #fff;
+    border: 1px solid var(--casa-border);
+    box-shadow: 0 14px 34px rgba(69, 47, 18, 0.10);
+}
+
+.casa-trust-strip span,
+.casa-service-icon,
+.casa-route-node span,
+.casa-step-number {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: var(--casa-paper);
+    box-shadow: inset 4px 0 0 var(--casa-orange);
+    font-size: 20px;
+}
+
+.casa-trust-strip strong,
+.casa-metric-card strong {
+    display: block;
+    margin-top: 8px;
+    color: var(--casa-dark);
+    font-weight: 950;
+}
+
+.casa-trust-strip small,
+.casa-metric-card span {
+    display: block;
+    margin-top: 5px;
+    color: #6d675f;
+    line-height: 1.45;
+    font-weight: 800;
+}
+
+.casa-route-premium {
+    max-width: 1040px;
+    margin: 0 auto 22px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(255, 248, 225, 0.94), rgba(255, 255, 255, 0.96));
+    border: 2px solid var(--casa-border);
+    box-shadow: 0 18px 42px rgba(69, 47, 18, 0.10);
+}
+
+.casa-route-line {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+.casa-route-node {
+    display: grid;
+    place-items: center;
+    gap: 7px;
+    padding: 14px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--casa-border);
+    text-align: center;
+    color: var(--casa-dark);
+    font-weight: 900;
+}
+
+.casa-route-node small {
+    color: #6d675f;
+    font-weight: 800;
+}
+
+.casa-route-dash {
+    height: 4px;
+    min-width: 70px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--casa-red), var(--casa-yellow), var(--casa-green));
+    opacity: 0.75;
+}
+
+.casa-premium-wrap {
+    max-width: 1180px;
+    margin: 0 auto 46px;
+    padding: 0;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.casa-story-card {
+    margin-bottom: 20px;
+    padding: 26px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(45, 74, 40, 0.96), rgba(23, 33, 20, 0.98));
+    border: 2px solid rgba(255, 212, 74, 0.36);
+    color: #fff;
+    box-shadow: 0 18px 40px rgba(23, 33, 20, 0.18);
+    text-align: center;
+}
+
+.casa-story-card h3 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 30px;
+    letter-spacing: -0.04em;
+}
+
+.casa-story-card p {
+    max-width: 860px;
+    margin: 8px auto;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.65;
+}
+
+.casa-services-premium {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.casa-services-premium .casa-card {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    padding: 24px;
+    border-radius: 18px;
+    background: #fff;
+    border: 2px solid var(--casa-border);
+    box-shadow: var(--casa-shadow);
+}
+
+.casa-services-premium .casa-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 7px;
+    background: linear-gradient(90deg, var(--casa-red), var(--casa-yellow), var(--casa-green));
+}
+
+.casa-services-premium h4 {
+    margin: 16px 0 10px;
+    color: var(--casa-dark);
+    font-size: 19px;
+    font-weight: 950;
+    letter-spacing: -0.03em;
+}
+
+.casa-services-premium p {
+    color: #5f5f58;
+    line-height: 1.55;
+    font-weight: 700;
+}
+
+.casa-process-premium {
+    max-width: 1120px;
+    margin: 22px auto 44px;
+    padding: 24px;
+    border-radius: 20px;
+    background: #fff;
+    border: 2px solid var(--casa-border);
+    box-shadow: var(--casa-shadow);
+}
+
+.casa-process-premium h3 {
+    margin: 0 0 18px;
+    color: var(--casa-dark);
+    font-size: 28px;
+    font-weight: 950;
+    letter-spacing: -0.04em;
+    text-align: center;
+}
+
+.casa-process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.casa-process-step {
+    padding: 18px;
+    border-radius: 16px;
+    background: #fffdf6;
+    border: 1px solid var(--casa-border);
+}
+
+.casa-step-number {
+    color: var(--casa-dark);
+    font-weight: 950;
+}
+
+.casa-process-step strong {
+    display: block;
+    margin-top: 12px;
+    color: var(--casa-dark);
+    font-weight: 950;
+}
+
+.casa-process-step span {
+    display: block;
+    margin-top: 6px;
+    color: #6d675f;
+    line-height: 1.45;
+    font-weight: 800;
+}
+
+.casa-cta-premium {
+    max-width: 1040px;
+    margin: 0 auto 48px;
+    padding: 28px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, var(--casa-orange), #ef9b42);
+    color: #fff;
+    box-shadow: 0 18px 42px rgba(233, 132, 50, 0.22);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+}
+
+.casa-cta-premium strong {
+    display: block;
+    font-size: 24px;
+    font-weight: 950;
+}
+
+.casa-cta-premium span {
+    display: block;
+    margin-top: 6px;
+    color: rgba(255, 255, 255, 0.88);
+}
+
+.casa-cta-premium a {
+    flex: 0 0 auto;
+    padding: 14px 20px;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--casa-dark);
+    font-weight: 950;
+    text-decoration: none;
+}
+
+.galeria.casa-galeria-premium {
+    max-width: 1180px;
+    margin: 0 auto 48px;
+}
+
+@media (max-width: 1000px) {
+    .casa-services-premium,
+    .casa-process-grid,
+    .casa-trust-strip,
+    .casa-metrics-premium {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .casa-route-line {
+        grid-template-columns: 1fr;
+    }
+
+    .casa-route-dash {
+        width: 4px;
+        min-width: 4px;
+        height: 28px;
+        justify-self: center;
+    }
+}
+
+@media (max-width: 680px) {
+    .casa-services-premium,
+    .casa-process-grid,
+    .casa-trust-strip,
+    .casa-metrics-premium {
+        grid-template-columns: 1fr;
+    }
+
+    .casa-hero-premium,
+    .casa-route-premium,
+    .casa-premium-wrap,
+    .casa-process-premium,
+    .casa-cta-premium {
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+
+    .casa-cta-premium {
+        display: grid;
+        text-align: center;
+    }
+}
