@@ -1,0 +1,56 @@
+# =============================================
+# MONTEASTUR ENVIOS — Koyeb Service Definition
+# =================================#
+# Deploy:  koyeb service create monteastur --file koyeb.yaml
+# Or use the dashboard: connect GitHub repo → auto-detects Dockerfile
+# =============================================
+
+name: monteastur-envios
+app: monteastur
+
+# Build from the multi-stage Dockerfile in repo root
+source:
+  git:
+    repository: <TU_USUARIO_GITHUB>/Envios_Paraguay_CMS
+    branch: feature/seguimiento-premium
+
+instance:
+  type: nano        # Free tier: 512 MB RAM, 0.1 vCPU
+  scalability: manual
+
+ports:
+  - port: 8080
+    protocol: http
+    public: true
+
+routes:
+  - path: /
+    target: monteastur-envios
+
+healthcheck:
+  path: /actuator/health
+  port: 8080
+  interval: 30
+  timeout: 10
+
+# Environment variables — set these in Koyeb dashboard or via CLI
+# koyeb service update monteastur-envios --env VAR=value
+env:
+  PORT: "8080"
+  SPRING_PROFILES_ACTIVE: prod
+  JAVA_OPTS: "-Xms256m -Xmx384m -XX:+UseG1GC"
+
+  # --- MySQL externo (PlanetScale / TiDB / otro provider) ---
+  SPRING_DATASOURCE_URL: jdbc:mysql://<HOST>:3306/<DB_NAME>?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull
+  DB_USERNAME: "<TU_USUARIO_DB>"
+  DB_PASSWORD: "<TU_PASSWORD_DB>"
+  DB_DDL_AUTO: validate
+
+  # --- App ---
+  ADMIN_USERNAME: admin
+  ADMIN_PASSWORD: "<CAMBIAR_EN_PRODUCCION>"
+  APP_DEMO_DATA: "false"
+  UPLOAD_DIR: /tmp/uploads
+
+  # --- Thymeleaf ---
+  THYMELEAF_CACHE: "true"
