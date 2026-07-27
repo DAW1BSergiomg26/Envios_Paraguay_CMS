@@ -12,6 +12,11 @@ logs/
 
 # Documentacion generada localmente
 docs/estructura.txt
+HANDOFF.md
+
+# Scripts obsoletos (reemplazados por start-all.ps1)
+iniciar_proyecto.ps1
+C_UsersasturDesktopEnvios_Paraguay_CMSiniciar_proyecto.ps1
 
 # Playwright artifacts
 frontend-react/test-results/
