@@ -17,4 +17,10 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     @Query("SELECT r FROM Reserva r WHERE r.estado IN ('pendiente', 'aprobada', 'confirmada') AND r.fechaEntrada < :fin AND r.fechaSalida > :inicio")
     List<Reserva> findOcupadasEnRango(@Param("inicio") LocalDate inicio, @Param("fin") LocalDate fin);
+
+    @Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.estado IN ('pendiente', 'aprobada', 'confirmada') AND r.fechaEntrada < :fechaSalida AND r.fechaSalida > :fechaEntrada")
+    boolean existsOverlap(@Param("fechaEntrada") LocalDate fechaEntrada, @Param("fechaSalida") LocalDate fechaSalida);
+
+    @Query("SELECT COUNT(r) > 0 FROM Reserva r WHERE r.estado IN ('pendiente', 'aprobada', 'confirmada') AND r.fechaEntrada < :fechaSalida AND r.fechaSalida > :fechaEntrada AND r.id != :excludeId")
+    boolean existsOverlapExcluding(@Param("fechaEntrada") LocalDate fechaEntrada, @Param("fechaSalida") LocalDate fechaSalida, @Param("excludeId") Long excludeId);
 }
