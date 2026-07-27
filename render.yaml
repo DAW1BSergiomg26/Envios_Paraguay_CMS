@@ -1,9 +1,9 @@
 # =============================================
-# MONTEASTUR ENVIOS — Render (Blueprint Reference)
+# MONTEASTUR ENVIOS — Render Blueprint
 # =============================================
 # Deploy:  Dashboard → New Web Service → Connect GitHub repo
-# Render detecta el Dockerfile y build automático.
-# Este archivo sirve como referencia de variables de entorno.
+# Runtime: Docker (detecta Dockerfile automáticamente)
+# DB:      TiDB Serverless (MySQL compatible, free tier)
 # =============================================
 
 services:
@@ -13,29 +13,44 @@ services:
     plan: free
     healthCheckPath: /actuator/health
     envVars:
+      # ---- Spring Profile ----
       - key: SPRING_PROFILES_ACTIVE
         value: prod
+
+      # ---- JVM Tuning (free tier: 512 MB) ----
       - key: JAVA_OPTS
         value: "-Xms256m -Xmx384m -XX:+UseG1GC -XX:+UseStringDeduplication"
+
+      # ---- MySQL externo — TiDB Serverless ----
+      - key: SPRING_DATASOURCE_URL
+        value: "jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/envios_paraguay_cms?useSSL=true&requireSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull"
+      - key: DB_USERNAME
+        value: "<TU_USUARIO_TIDB>"
+      - key: DB_PASSWORD
+        value: "<TU_PASSWORD_TIDB>"
       - key: DB_DDL_AUTO
-        value: validate
+        value: update
+
+      # ---- JPA / Hibernate ----
+      - key: JPA_SHOW_SQL
+        value: "false"
+
+      # ---- Admin Credentials ----
       - key: ADMIN_USERNAME
         value: admin
+      - key: ADMIN_PASSWORD
+        value: "<CAMBIAR_EN_PRODUCCION>"
+
+      # ---- App Config ----
       - key: APP_DEMO_DATA
         value: "false"
       - key: UPLOAD_DIR
         value: /tmp/uploads
+
+      # ---- Thymeleaf ----
       - key: THYMELEAF_CACHE
         value: "true"
+
+      # ---- Actuator ----
       - key: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE
         value: "health,info,metrics,prometheus"
-      # ---- MySQL externo (PlanetScale / TiDB / Railway) ----
-      # Configurar en dashboard tras crear la database externa
-      # - key: SPRING_DATASOURCE_URL
-      #   value: "jdbc:mysql://<HOST>:3306/envios_paraguay_cms?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull"
-      # - key: DB_USERNAME
-      #   value: "<TU_USUARIO_DB>"
-      # - key: DB_PASSWORD
-      #   value: "<TU_PASSWORD_DB>"
-      # - key: ADMIN_PASSWORD
-      #   value: "<CAMBIAR>"

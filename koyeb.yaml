@@ -40,11 +40,11 @@ env:
   SPRING_PROFILES_ACTIVE: prod
   JAVA_OPTS: "-Xms256m -Xmx384m -XX:+UseG1GC"
 
-  # --- MySQL externo (PlanetScale / TiDB / otro provider) ---
-  SPRING_DATASOURCE_URL: jdbc:mysql://<HOST>:3306/<DB_NAME>?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull
-  DB_USERNAME: "<TU_USUARIO_DB>"
-  DB_PASSWORD: "<TU_PASSWORD_DB>"
-  DB_DDL_AUTO: validate
+  # --- MySQL externo — TiDB Serverless ---
+  SPRING_DATASOURCE_URL: jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/envios_paraguay_cms?useSSL=true&requireSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull
+  DB_USERNAME: "<TU_USUARIO_TIDB>"
+  DB_PASSWORD: "<TU_PASSWORD_TIDB>"
+  DB_DDL_AUTO: update
 
   # --- App ---
   ADMIN_USERNAME: admin
