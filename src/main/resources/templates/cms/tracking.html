@@ -21,14 +21,14 @@
     </div>
 
     <div th:if="${exito}" class="toast toast-success">
-        <span class="toast-icon">&#10003;</span>
+        <span class="toast-icon"><i data-lucide="check" class="luxury-icon"></i></span>
         <span th:text="${exito}">Guardado correctamente.</span>
     </div>
 
-    <div class="card">
+    <div class="card glass-card">
         <div class="tracking-admin-header">
             <h3 style="color: #d4762a;">Todos los env&iacute;os</h3>
-            <a href="/admin/tracking/nuevo" class="btn-upload">+ Nuevo env&iacute;o</a>
+            <a href="/admin/tracking/nuevo" class="btn-upload"><i data-lucide="plus" class="luxury-icon luxury-icon-sm"></i> Nuevo env&iacute;o</a>
         </div>
 
         <div class="table-wrap" th:if="${not #lists.isEmpty(envios)}">
@@ -53,21 +53,21 @@
                         <td>
                             <span class="tr-badge" th:classappend="'estado-' + ${e.estado}">
                                 <span th:switch="${e.estado}">
-                                    <span th:case="'RECIBIDO'">📦 Recibido</span>
-                                    <span th:case="'EN_ADUANA_ORIGEN'">🛃 Aduana origen</span>
-                                    <span th:case="'EN_TRANSITO'">🚢 Tr&aacute;nsito</span>
-                                    <span th:case="'EN_ADUANA_DESTINO'">🛃 Aduana destino</span>
-                                    <span th:case="'EN_REPARTO'">🇵🇾 Reparto</span>
-                                    <span th:case="'ENTREGADO'">✅ Entregado</span>
+                                    <span th:case="'RECIBIDO'"><i data-lucide="package" class="luxury-icon luxury-icon-sm"></i> Recibido</span>
+                                    <span th:case="'EN_ADUANA_ORIGEN'"><i data-lucide="shield" class="luxury-icon luxury-icon-sm"></i> Aduana origen</span>
+                                    <span th:case="'EN_TRANSITO'"><i data-lucide="truck" class="luxury-icon luxury-icon-sm"></i> Tr&aacute;nsito</span>
+                                    <span th:case="'EN_ADUANA_DESTINO'"><i data-lucide="shield" class="luxury-icon luxury-icon-sm"></i> Aduana destino</span>
+                                    <span th:case="'EN_REPARTO'"><i data-lucide="map-pin" class="luxury-icon luxury-icon-sm"></i> Reparto</span>
+                                    <span th:case="'ENTREGADO'"><i data-lucide="check-circle" class="luxury-icon luxury-icon-sm"></i> Entregado</span>
                                     <span th:case="*" th:text="${e.estado}"></span>
                                 </span>
                             </span>
                         </td>
                         <td class="td-date" th:text="${#temporals.format(e.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026</td>
                         <td class="acciones acciones-tracking">
-                            <a th:href="@{/admin/tracking/editar/{id}(id=${e.id})}" class="btn-action btn-action-edit" title="Editar">✏️</a>
+                            <a th:href="@{/admin/tracking/editar/{id}(id=${e.id})}" class="btn-action btn-action-edit" title="Editar"><i data-lucide="file-text" class="luxury-icon"></i></a>
                             <form th:action="@{/admin/tracking/eliminar/{id}(id=${e.id})}" method="post" style="display: inline;" onsubmit="return confirm('Eliminar este env\u00edo?')">
-                                <button type="submit" class="btn-action btn-action-delete" title="Eliminar">🗑️</button>
+                                <button type="submit" class="btn-action btn-action-delete" title="Eliminar"><i data-lucide="trash-2" class="luxury-icon"></i></button>
                             </form>
                         </td>
                     </tr>

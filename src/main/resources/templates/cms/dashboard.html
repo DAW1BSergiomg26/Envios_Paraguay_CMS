@@ -21,49 +21,49 @@
     </div>
 
     <div class="quick-actions">
-        <a href="/admin/reservas" class="quick-action-card">
-            <span class="qa-icon">📅</span>
+        <a href="/admin/reservas" class="quick-action-card glass-card card-hover">
+            <span class="qa-icon"><i data-lucide="calendar-check" class="luxury-icon luxury-icon-lg"></i></span>
             <span class="qa-title">Gestionar Reservas</span>
             <span class="qa-desc">Administra fechas y estados</span>
         </a>
-        <a href="/admin/mensajesrecibidos" class="quick-action-card">
-            <span class="qa-icon">✉️</span>
+        <a href="/admin/mensajesrecibidos" class="quick-action-card glass-card card-hover">
+            <span class="qa-icon"><i data-lucide="message-square" class="luxury-icon luxury-icon-lg"></i></span>
             <span class="qa-title">Ver Mensajes</span>
             <span class="qa-desc">Consulta los mensajes recibidos</span>
         </a>
-        <a href="/admin/imagenes" class="quick-action-card">
-            <span class="qa-icon">🖼️</span>
+        <a href="/admin/imagenes" class="quick-action-card glass-card card-hover">
+            <span class="qa-icon"><i data-lucide="image" class="luxury-icon luxury-icon-lg"></i></span>
             <span class="qa-title">Subir Imagen</span>
             <span class="qa-desc">A&ntilde;ade fotos a la galer&iacute;a</span>
         </a>
-        <a href="/" class="quick-action-card">
-            <span class="qa-icon">🌐</span>
+        <a href="/" class="quick-action-card glass-card card-hover">
+            <span class="qa-icon"><i data-lucide="globe" class="luxury-icon luxury-icon-lg"></i></span>
             <span class="qa-title">Ver Web P&uacute;blica</span>
             <span class="qa-desc">Visualiza la web en vivo</span>
         </a>
     </div>
 
-    <div class="card">
+    <div class="card glass-card">
         <h1 style="color: #d4762a;">Resumen General</h1>
         <p style="color: #3f6338; font-weight: 600;">Datos actualizados del contenido de MONTEASTUR ENVIOS.</p>
         <div class="stats-grid">
             <div class="stat-item">
-                <span class="stat-icon">📊</span>
+                <span class="stat-icon"><i data-lucide="package" class="luxury-icon luxury-icon-lg"></i></span>
                 <span>Total Reservas</span>
                 <strong th:text="${totalReservas}">0</strong>
             </div>
             <div class="stat-item">
-                <span class="stat-icon">⏳</span>
+                <span class="stat-icon"><i data-lucide="clock" class="luxury-icon luxury-icon-lg"></i></span>
                 <span>Pendientes</span>
                 <strong style="color: var(--naranja);" th:text="${reservasPendientes}">0</strong>
             </div>
             <div class="stat-item">
-                <span class="stat-icon">✉️</span>
+                <span class="stat-icon"><i data-lucide="message-circle" class="luxury-icon luxury-icon-lg"></i></span>
                 <span>Mensajes</span>
                 <strong style="color: var(--verde);" th:text="${totalMensajes}">0</strong>
             </div>
             <div class="stat-item">
-                <span class="stat-icon">🖼️</span>
+                <span class="stat-icon"><i data-lucide="image" class="luxury-icon luxury-icon-lg"></i></span>
                 <span>Im&aacute;genes</span>
                 <strong style="color: var(--naranja);" th:text="${totalImagenes}">0</strong>
             </div>
@@ -71,8 +71,8 @@
     </div>
 
     <div class="dashboard-bottom">
-        <div class="card">
-            <h3>Estado del Sistema</h3>
+        <div class="card glass-card">
+            <h3 class="luxury-heading">Estado del Sistema</h3>
             <div class="status-grid">
                 <div class="status-item">
                     <span class="status-dot"></span>
@@ -97,12 +97,12 @@
             </div>
         </div>
 
-        <div class="card">
-            <h3>Actividad Reciente</h3>
+        <div class="card glass-card">
+            <h3 class="luxury-heading">Actividad Reciente</h3>
             <p th:if="${#lists.size(ultimasReservas) == 0 and #lists.size(ultimosMensajes) == 0}" class="vacio">Sin actividad reciente.</p>
             <div class="timeline" th:if="${#lists.size(ultimasReservas) > 0 or #lists.size(ultimosMensajes) > 0}">
                 <div th:each="r : ${ultimasReservas}" class="timeline-item timeline-reserva">
-                    <span class="timeline-icon">📅</span>
+                    <span class="timeline-icon"><i data-lucide="calendar-check" class="luxury-icon"></i></span>
                     <div class="timeline-content">
                         <strong th:text="${r.nombreCliente}">Cliente</strong>
                         <span th:text="${#temporals.format(r.fechaEntrada, 'dd/MM')} + ' - ' + ${#temporals.format(r.fechaSalida, 'dd/MM')}">12/06 - 15/06</span>
@@ -113,7 +113,7 @@
                     <span class="timeline-time" th:text="${#temporals.format(r.fechaEntrada, 'dd/MM')}">12/06</span>
                 </div>
                 <div th:each="m : ${ultimosMensajes}" class="timeline-item timeline-mensaje">
-                    <span class="timeline-icon">✉️</span>
+                    <span class="timeline-icon"><i data-lucide="message-square" class="luxury-icon"></i></span>
                     <div class="timeline-content">
                         <strong th:text="${m.nombre}">Nombre</strong>
                         <span th:text="${m.email}">email@ejemplo.com</span>

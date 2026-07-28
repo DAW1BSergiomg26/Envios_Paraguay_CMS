@@ -23,65 +23,65 @@
         </div>
     </div>
 
-    <div class="card">
+    <div class="card glass-card">
         <form th:action="@{/admin/tracking/guardar}" method="post">
             <input type="hidden" name="id" th:value="${envio.id}">
 
             <div class="legal-editor">
                 <label>C&oacute;digo &uacute;nico</label>
-                <input type="text" name="codigoUnico" th:value="${envio.codigoUnico != null ? envio.codigoUnico : codigoSugerido}" required class="tracking-admin-input">
+                <input type="text" name="codigoUnico" th:value="${envio.codigoUnico != null ? envio.codigoUnico : codigoSugerido}" required class="tracking-admin-input focus-glow">
 
                 <label>Destinatario</label>
-                <input type="text" name="destinatario" th:value="${envio.destinatario}" required class="tracking-admin-input">
+                <input type="text" name="destinatario" th:value="${envio.destinatario}" required class="tracking-admin-input focus-glow">
 
                 <label>Estado</label>
-                <select name="estado" required class="tracking-admin-select">
-                    <option value="RECIBIDO" th:selected="${envio.estado == 'RECIBIDO'}">📦 Recibido en origen</option>
-                    <option value="EN_ADUANA_ORIGEN" th:selected="${envio.estado == 'EN_ADUANA_ORIGEN'}">🛃 Aduana de origen</option>
-                    <option value="EN_TRANSITO" th:selected="${envio.estado == 'EN_TRANSITO'}">🚢 Tr&aacute;nsito atl&aacute;ntico</option>
-                    <option value="EN_ADUANA_DESTINO" th:selected="${envio.estado == 'EN_ADUANA_DESTINO'}">🛃 Aduana de destino</option>
-                    <option value="EN_REPARTO" th:selected="${envio.estado == 'EN_REPARTO'}">🇵🇾 Reparto local</option>
-                    <option value="ENTREGADO" th:selected="${envio.estado == 'ENTREGADO'}">✅ Entregado</option>
+                <select name="estado" required class="tracking-admin-select focus-glow">
+                    <option value="RECIBIDO" th:selected="${envio.estado == 'RECIBIDO'}"><i data-lucide="package" class="luxury-icon luxury-icon-sm"></i> Recibido en origen</option>
+                    <option value="EN_ADUANA_ORIGEN" th:selected="${envio.estado == 'EN_ADUANA_ORIGEN'}"><i data-lucide="shield" class="luxury-icon luxury-icon-sm"></i> Aduana de origen</option>
+                    <option value="EN_TRANSITO" th:selected="${envio.estado == 'EN_TRANSITO'}"><i data-lucide="truck" class="luxury-icon luxury-icon-sm"></i> Tr&aacute;nsito atl&aacute;ntico</option>
+                    <option value="EN_ADUANA_DESTINO" th:selected="${envio.estado == 'EN_ADUANA_DESTINO'}"><i data-lucide="shield" class="luxury-icon luxury-icon-sm"></i> Aduana de destino</option>
+                    <option value="EN_REPARTO" th:selected="${envio.estado == 'EN_REPARTO'}"><i data-lucide="map-pin" class="luxury-icon luxury-icon-sm"></i> Reparto local</option>
+                    <option value="ENTREGADO" th:selected="${envio.estado == 'ENTREGADO'}"><i data-lucide="check-circle" class="luxury-icon luxury-icon-sm"></i> Entregado</option>
                 </select>
 
                 <label>Origen</label>
-                <input type="text" name="origen" th:value="${envio.origen}" class="tracking-admin-input">
+                <input type="text" name="origen" th:value="${envio.origen}" class="tracking-admin-input focus-glow">
 
                 <label>Destino</label>
-                <input type="text" name="destino" th:value="${envio.destino}" class="tracking-admin-input">
+                <input type="text" name="destino" th:value="${envio.destino}" class="tracking-admin-input focus-glow">
 
                 <label>Peso</label>
-                <input type="text" name="peso" th:value="${envio.peso}" placeholder="Ej: 120 kg" class="tracking-admin-input">
+                <input type="text" name="peso" th:value="${envio.peso}" placeholder="Ej: 120 kg" class="tracking-admin-input focus-glow">
 
                 <label>Contenido</label>
-                <input type="text" name="contenido" th:value="${envio.contenido}" placeholder="Ej: Maquinaria industrial" class="tracking-admin-input">
+                <input type="text" name="contenido" th:value="${envio.contenido}" placeholder="Ej: Maquinaria industrial" class="tracking-admin-input focus-glow">
 
                 <label>Cliente asociado</label>
-                <select name="clienteId" class="tracking-admin-select">
+                <select name="clienteId" class="tracking-admin-select focus-glow">
                     <option value="">— Sin cliente —</option>
                     <option th:each="c : ${clientes}" th:value="${c.id}" th:selected="${envio.cliente != null and envio.cliente.id == c.id}" th:text="${c.nombre + ' (' + c.email + ')'}">Cliente</option>
                 </select>
 
                 <label>Observaciones</label>
-                <textarea name="observaciones" th:text="${envio.observaciones}" class="tracking-admin-textarea" placeholder="Notas internas o novedades del env&iacute;o..."></textarea>
+                <textarea name="observaciones" th:text="${envio.observaciones}" class="tracking-admin-textarea focus-glow" placeholder="Notas internas o novedades del env&iacute;o..."></textarea>
 
                 <div class="tracking-form-actions">
-                    <button type="submit" class="btn-save">💾 Guardar env&iacute;o</button>
-                    <a href="/admin/tracking" class="btn-cancel-form">Cancelar</a>
+                    <button type="submit" class="btn-luxury"><i data-lucide="save" class="luxury-icon luxury-icon-sm"></i> Guardar env&iacute;o</button>
+                    <a href="/admin/tracking" class="btn-luxury-ghost">Cancelar</a>
                 </div>
             </div>
         </form>
     </div>
 
-    <div th:if="${envio.id != null and eventos != null and !#lists.isEmpty(eventos)}" class="card evento-section">
-        <h3>Historial del env&iacute;o</h3>
+    <div th:if="${envio.id != null and eventos != null and !#lists.isEmpty(eventos)}" class="card glass-card evento-section">
+        <h3 class="luxury-heading">Historial del env&iacute;o</h3>
         <div class="evento-timeline">
             <div th:each="ev : ${eventos}" class="evento-item">
                 <div class="evento-dot" th:style="'background:' + ${ev.color}"></div>
                 <div class="evento-line"></div>
                 <div class="evento-card">
                     <div class="evento-card-head">
-                        <span class="evento-icon" th:text="${ev.icono}">📦</span>
+                        <span class="evento-icon"><i data-lucide="package" class="luxury-icon"></i></span>
                         <strong class="evento-titulo" th:text="${ev.titulo}">Título</strong>
                         <span class="evento-badge" th:style="'background:' + ${ev.color}" th:text="${ev.estado}">Estado</span>
                     </div>
@@ -95,22 +95,22 @@
         </div>
     </div>
 
-    <div th:if="${envio.id != null}" class="card evidencia-section">
-        <h3>📷 Evidencias del env&iacute;o</h3>
+    <div th:if="${envio.id != null}" class="card glass-card evidencia-section">
+        <h3 class="luxury-heading"><i data-lucide="camera" class="luxury-icon luxury-icon-sm"></i> Evidencias del env&iacute;o</h3>
 
         <div th:if="${exito}" class="toast toast-success" th:text="${exito}"></div>
         <div th:if="${error}" class="toast toast-error" th:text="${error}"></div>
 
         <form th:action="@{/admin/tracking/evidencia/{id}(id=${envio.id})}" method="post" enctype="multipart/form-data" class="evidencia-form">
             <div class="evidencia-form-row">
-                <input type="text" name="titulo" placeholder="T&iacute;tulo" required class="evidencia-input">
-                <input type="text" name="descripcion" placeholder="Descripci&oacute;n (opcional)" class="evidencia-input">
-                <select name="tipo" class="evidencia-select">
-                    <option value="FOTO">📷 Foto</option>
-                    <option value="DOCUMENTO">📄 Documento</option>
+                <input type="text" name="titulo" placeholder="T&iacute;tulo" required class="evidencia-input focus-glow">
+                <input type="text" name="descripcion" placeholder="Descripci&oacute;n (opcional)" class="evidencia-input focus-glow">
+                <select name="tipo" class="evidencia-select focus-glow">
+                    <option value="FOTO"><i data-lucide="camera" class="luxury-icon luxury-icon-sm"></i> Foto</option>
+                    <option value="DOCUMENTO"><i data-lucide="file-text" class="luxury-icon luxury-icon-sm"></i> Documento</option>
                 </select>
                 <input type="file" name="archivo" required class="evidencia-file">
-                <button type="submit" class="btn-evidencia-upload">Subir</button>
+                <button type="submit" class="btn-luxury-outline"><i data-lucide="upload" class="luxury-icon luxury-icon-sm"></i> Subir</button>
             </div>
         </form>
 
@@ -120,7 +120,7 @@
                     <img th:src="${ev.urlArchivo}" th:alt="${ev.titulo}" class="evidencia-thumb">
                 </div>
                 <div class="evidencia-preview evidencia-doc" th:if="${ev.tipo == 'DOCUMENTO'}">
-                    <span class="evidencia-doc-icon">📄</span>
+                    <span class="evidencia-doc-icon"><i data-lucide="file-text" class="luxury-icon"></i></span>
                 </div>
                 <div class="evidencia-info">
                     <strong th:text="${ev.titulo}">T&iacute;tulo</strong>
@@ -131,7 +131,7 @@
                     <span th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" th:text="${ev.descripcion}" class="evidencia-desc"></span>
                     <span class="evidencia-date" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy HH:mm')}">Fecha</span>
                     <a th:href="${ev.urlArchivo}" target="_blank" class="evidencia-link">
-                        <span th:text="${ev.tipo == 'FOTO'} ? '📷 Ver foto' : '📄 Ver documento'">Ver</span>
+                        <span th:text="${ev.tipo == 'FOTO'} ? 'Ver foto' : 'Ver documento'">Ver</span>
                     </a>
                 </div>
                 <div class="evidencia-controls">
@@ -141,7 +141,7 @@
                     </form>
                     <form th:action="@{/admin/tracking/evidencia/eliminar/{evId}(evId=${ev.id})}" method="post" class="evidencia-delete-form" onsubmit="return confirm('Eliminar esta evidencia?')">
                         <input type="hidden" name="envioId" th:value="${envio.id}">
-                        <button type="submit" class="btn-evidencia-delete" title="Eliminar">🗑️</button>
+                        <button type="submit" class="btn-evidencia-delete" title="Eliminar"><i data-lucide="trash-2" class="luxury-icon"></i></button>
                     </form>
                 </div>
             </div>

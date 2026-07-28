@@ -9,10 +9,10 @@
 
     <main>
         <section class="pagina-titulo">
-            <h2 th:text="${texto?.titulo} ?: 'Legal Notice'">Legal Notice</h2>
+            <h2 class="luxury-heading-lg" th:text="${texto?.titulo} ?: 'Legal Notice'">Legal Notice</h2>
         </section>
 
-        <section class="contenido-legal" th:utext="${texto?.contenido} ?: 'Content not available.'">
+        <section class="contenido-legal glass-card" th:utext="${texto?.contenido} ?: 'Content not available.'">
         </section>
     </main>
 
