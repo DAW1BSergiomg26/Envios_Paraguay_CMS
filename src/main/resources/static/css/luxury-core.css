@@ -1,0 +1,151 @@
+/* =============================================
+   LUXURY CORE — Monteastur Envios Design System
+   Stroke: 1.5px | Caps: round | Joins: round
+   Accent: #c27803 | Transitions: cubic-bezier
+   ============================================= */
+
+:root {
+  --color-accent: #c27803;
+  --color-accent-dark: #9a5f02;
+  --color-accent-light: #e8a33d;
+  --color-dark: #1a1a2e;
+  --color-charcoal: #2d2d44;
+  --color-stone: #f8f6f3;
+  --color-parchment: #f0ece6;
+  --color-white: #ffffff;
+  --text-primary: #1a1a2e;
+  --text-secondary: #5a5a72;
+  --text-muted: #8a8a9e;
+  --text-on-accent: #ffffff;
+  --icon-stroke-width: 1.5px;
+  --icon-size: 24px;
+  --icon-color: var(--color-accent);
+  --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-bg: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.3);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  --glass-blur: 12px;
+}
+
+.luxury-icon {
+  stroke-width: var(--icon-stroke-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  color: var(--icon-color);
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.luxury-icon-sm { width: 18px; height: 18px; }
+.luxury-icon-lg { width: 32px; height: 32px; }
+.luxury-icon-xl { width: 48px; height: 48px; }
+
+.luxury-icon-accent { color: var(--color-accent); }
+.luxury-icon-light { color: var(--color-white); }
+.luxury-icon-muted { color: var(--text-muted); }
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  border-radius: 16px;
+  transition: var(--transition-default);
+}
+
+.glass-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.btn-luxury {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: var(--color-accent);
+  color: var(--text-on-accent);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: var(--transition-default);
+}
+
+.btn-luxury:hover {
+  background: var(--color-accent-dark);
+  box-shadow: 0 4px 20px rgba(194, 120, 3, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-luxury-outline {
+  background: transparent;
+  border: 1.5px solid var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn-luxury-outline:hover {
+  background: var(--color-accent);
+  color: var(--text-on-accent);
+}
+
+.luxury-heading {
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  color: var(--color-dark);
+}
+
+.luxury-heading-lg {
+  letter-spacing: 0.08em;
+  font-weight: 800;
+}
+
+.luxury-heading-xl {
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.focus-glow:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(194, 120, 3, 0.2);
+}
+
+.card-hover {
+  transition: var(--transition-default);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+.border-accent-left {
+  border-left: 3px solid var(--color-accent);
+}
+
+.status-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.status-dot-en-transito { background: #c27803; }
+.status-dot-entregado { background: #22c55e; }
+.status-dot-pendiente { background: #94a3b8; }
+.status-dot-cancelado { background: #ef4444; }
+.status-dot-confirmada { background: #22c55e; }
+.status-dot-leido { background: #3b82f6; }
+.status-dot-no-leido { background: #c27803; }
+
+html { scroll-behavior: smooth; }

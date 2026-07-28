@@ -1,8 +1,21 @@
-param([string]$Dir, [string]$Jar)
+# ==========================================
+# Script de inicio rápido de la App - Monteastur Envios
+# ==========================================
 
-Set-Location -LiteralPath $Dir
-java -jar "$Dir\target\$Jar" --server.port=8080 `
-  "--spring.datasource.url=jdbc:mysql://localhost:3307/envios_paraguay_cms?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC" `
-  --spring.datasource.password=root `
-  "--app.upload.dir=C:\Users\astur\Desktop\Envios_Paraguay_CMS\uploads" `
-  --app.admin.password=admin123
+Write-Host ">> Verificando compilación del proyecto (Maven)..." -ForegroundColor Cyan
+./mvnw clean compile -q
+
+if ($LASTEXITCODE -eq 0) {
+    Write-Host ">> ¡Compilación exitosa! Arrancando Spring Boot..." -ForegroundColor Green
+    
+    # Abrir la web principal automáticamente tras unos segundos
+    Start-Job -ScriptBlock {
+        Start-Sleep -Seconds 6
+        Start-Process "http://localhost:8080"
+    } | Out-Null
+
+    # Arrancar la aplicación en primer plano para ver los logs en tiempo real
+    ./mvnw spring-boot:run
+} else {
+    Write-Host ">> Error en la compilación. Revisa el código antes de arrancar." -ForegroundColor Red
+}

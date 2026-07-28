@@ -1,7 +1,7 @@
 <footer th:fragment="footer">
     <div class="banner-reserva">
         <div class="banner-reserva-icono">
-            <span>&#9742;</span>
+            <i data-lucide="phone" class="luxury-icon luxury-icon-light" style="width:32px;height:32px;"></i>
         </div>
         <div class="banner-reserva-cuerpo">
             <p class="banner-reserva-principal">Env&iacute;a desde Asturias a Paraguay. Llama ya</p>
@@ -52,3 +52,8 @@
     </div>
     <div class="cultural-strip-asturias"></div>
 </footer>
+<script defer>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    });
+</script>
