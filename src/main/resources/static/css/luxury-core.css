@@ -95,6 +95,50 @@
   color: var(--text-on-accent);
 }
 
+.btn-luxury-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--color-accent);
+  border: 1.5px solid var(--color-accent);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: var(--transition-default);
+}
+
+.btn-luxury-secondary:hover {
+  background: var(--color-accent);
+  color: var(--text-on-accent);
+  box-shadow: 0 4px 20px rgba(194, 120, 3, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-luxury-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: transparent;
+  color: var(--text-secondary);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: var(--transition-default);
+}
+
+.btn-luxury-ghost:hover {
+  color: var(--color-accent);
+  background: rgba(194, 120, 3, 0.08);
+}
+
 .luxury-heading {
   letter-spacing: 0.06em;
   font-weight: 700;
