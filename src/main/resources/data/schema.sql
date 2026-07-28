@@ -4,11 +4,11 @@
 -- Proyecto: MONTEASTUR ENVIOS - Grupo B_2
 -- =============================================
 
-CREATE DATABASE IF NOT EXISTS casarural
+CREATE DATABASE IF NOT EXISTS envios_paraguay_cms
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
 
-USE casarural;
+USE envios_paraguay_cms;
 
 -- =============================================
 -- TABLA: imagenes

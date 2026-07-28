@@ -11,10 +11,10 @@ on:
 
 env:
   MYSQL_ROOT_PASSWORD: ci_root_pass
-  MYSQL_DATABASE: casarural_ci
+  MYSQL_DATABASE: envios_paraguay_cms_ci
   MYSQL_USER: ci_user
   MYSQL_PASSWORD: ci_user_pass
-  SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/casarural_ci?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/envios_paraguay_cms_ci?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
   DB_DDL_AUTO: validate
   JPA_SHOW_SQL: false
   THYMELEAF_CACHE: true
