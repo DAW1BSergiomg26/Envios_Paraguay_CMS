@@ -9,30 +9,30 @@
 
     <main>
         <section class="pagina-titulo reveal">
-            <h2>Contact</h2>
+            <h2 class="luxury-heading-lg">Contact</h2>
             <p>We are in Pola de Siero. Call us or write to us and we will advise you with no obligation.</p>
         </section>
 
         <section class="contenido reveal" th:if="${!mensajeEnviado}">
             <div class="contacto-grid">
-                <div class="contacto-info-card">
-                    <h3><span>&#128205;</span> Contact Information</h3>
+                <div class="contacto-info-card glass-card border-accent-left">
+                    <h3 class="luxury-heading"><span><i data-lucide="building-2" class="luxury-icon"></i></span> Contact Information</h3>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#128205;</div>
+                        <div class="contacto-info-icono"><i data-lucide="building-2" class="luxury-icon"></i></div>
                         <div class="contacto-info-texto">
                             <strong>Address</strong>
                             <p>Pola de Siero, Asturias &mdash; Asunci&oacute;n, Paraguay</p>
                         </div>
                     </div>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#128222;</div>
+                        <div class="contacto-info-icono"><i data-lucide="phone-call" class="luxury-icon"></i></div>
                         <div class="contacto-info-texto">
                             <strong>Phone</strong>
                             <a href="tel:+34642687292">642 687 292</a>
                         </div>
                     </div>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#9993;</div>
+                        <div class="contacto-info-icono"><i data-lucide="mail" class="luxury-icon"></i></div>
                         <div class="contacto-info-texto">
                             <strong>Email</strong>
                             <p>monteastur@hotmail.es</p>
@@ -40,37 +40,37 @@
                     </div>
                 </div>
 
-                <div class="contacto-form-card">
-                    <h3><span>&#9997;&#65039;</span> Send us a message</h3>
+                <div class="contacto-form-card glass-card">
+                    <h3 class="luxury-heading"><span><i data-lucide="message-square" class="luxury-icon"></i></span> Send us a message</h3>
                     <form action="#" th:action="@{/en/contacto}" method="post">
                         <div class="rf-group">
                             <label for="nombre">Name *</label>
-                            <input type="text" id="nombre" name="nombre" required class="rf-control">
+                            <input type="text" id="nombre" name="nombre" required class="rf-control focus-glow">
                         </div>
                         <div class="rf-group">
                             <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required class="rf-control">
+                            <input type="email" id="email" name="email" required class="rf-control focus-glow">
                         </div>
                         <div class="rf-group">
                             <label for="telefono">Phone</label>
-                            <input type="tel" id="telefono" name="telefono" class="rf-control">
+                            <input type="tel" id="telefono" name="telefono" class="rf-control focus-glow">
                         </div>
                         <div class="rf-group">
                             <label for="mensaje">Message *</label>
-                            <textarea id="mensaje" name="mensaje" rows="5" required class="rf-control"></textarea>
+                            <textarea id="mensaje" name="mensaje" rows="5" required class="rf-control focus-glow"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-block">Send message</button>
+                        <button type="submit" class="btn btn-block btn-luxury"><i data-lucide="send" class="luxury-icon luxury-icon-sm"></i> Send message</button>
                         <p class="reserva-confianza">Your data is protected and will not be shared.</p>
                     </form>
                 </div>
             </div>
         </section>
 
-        <section class="contacto-exito reveal" th:if="${mensajeEnviado}">
-            <div class="contacto-exito-icono">&#9989;</div>
-            <h3>Message sent!</h3>
+        <section class="contacto-exito reveal glass-card" th:if="${mensajeEnviado}">
+            <div class="contacto-exito-icono"><i data-lucide="check-circle" class="luxury-icon luxury-icon-lg"></i></div>
+            <h3 class="luxury-heading">Message sent!</h3>
             <p>Thank you for contacting MONTEASTUR. We will get back to you as soon as possible.</p>
-            <a href="/en" class="btn">Back to home</a>
+            <a href="/en" class="btn btn-luxury">Back to home</a>
         </section>
     </main>
 
