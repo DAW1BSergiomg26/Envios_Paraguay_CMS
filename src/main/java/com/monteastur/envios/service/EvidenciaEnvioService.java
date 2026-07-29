@@ -1,5 +1,6 @@
 package com.monteastur.envios.service;
 
+import com.monteastur.envios.exception.ResourceNotFoundException;
 import com.monteastur.envios.model.EvidenciaEnvio;
 import com.monteastur.envios.repository.EvidenciaEnvioRepository;
 import org.springframework.stereotype.Service;
@@ -26,11 +27,11 @@ public class EvidenciaEnvioService {
     }
 
     public void toggleVisibilidad(Long id) {
-        repo.findById(id).ifPresent(ev -> {
-            Boolean actual = ev.getVisibleCliente();
-            ev.setVisibleCliente(actual == null ? true : !actual);
-            repo.save(ev);
-        });
+        EvidenciaEnvio ev = repo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Evidencia no encontrada: " + id));
+        Boolean actual = ev.getVisibleCliente();
+        ev.setVisibleCliente(actual == null ? true : !actual);
+        repo.save(ev);
     }
 
     public EvidenciaEnvio guardar(EvidenciaEnvio evidencia) {

@@ -2,6 +2,8 @@ package com.monteastur.envios.service;
 
 import com.monteastur.envios.dto.api.ActualizarReservaRequest;
 import com.monteastur.envios.dto.api.CrearReservaPublicRequest;
+import com.monteastur.envios.exception.BadRequestException;
+import com.monteastur.envios.exception.ConflictException;
 import com.monteastur.envios.model.Reserva;
 import com.monteastur.envios.repository.ReservaRepository;
 import org.springframework.stereotype.Service;
@@ -46,13 +48,13 @@ public class ReservaService {
     @Transactional
     public Reserva crearPublico(CrearReservaPublicRequest request) {
         if (request.getFechaEntrada().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de entrada no puede ser en el pasado");
+            throw new BadRequestException("La fecha de entrada no puede ser en el pasado");
         }
         if (!request.getFechaSalida().isAfter(request.getFechaEntrada())) {
-            throw new IllegalArgumentException("La fecha de salida debe ser posterior a la de entrada");
+            throw new BadRequestException("La fecha de salida debe ser posterior a la de entrada");
         }
         if (repo.existsOverlap(request.getFechaEntrada(), request.getFechaSalida())) {
-            throw new IllegalStateException("Las fechas seleccionadas no están disponibles");
+            throw new ConflictException("Las fechas seleccionadas no están disponibles");
         }
 
         Reserva r = new Reserva(
@@ -84,13 +86,13 @@ public class ReservaService {
 
             if (fechasCambiadas) {
                 if (r.getFechaEntrada().isBefore(LocalDate.now())) {
-                    throw new IllegalArgumentException("La fecha de entrada no puede ser en el pasado");
+                    throw new BadRequestException("La fecha de entrada no puede ser en el pasado");
                 }
                 if (!r.getFechaSalida().isAfter(r.getFechaEntrada())) {
-                    throw new IllegalArgumentException("La fecha de salida debe ser posterior a la de entrada");
+                    throw new BadRequestException("La fecha de salida debe ser posterior a la de entrada");
                 }
                 if (repo.existsOverlapExcluding(r.getFechaEntrada(), r.getFechaSalida(), r.getId())) {
-                    throw new IllegalStateException("Las fechas seleccionadas no están disponibles");
+                    throw new ConflictException("Las fechas seleccionadas no están disponibles");
                 }
             }
 
@@ -102,13 +104,13 @@ public class ReservaService {
     public Optional<Reserva> cambiarEstado(Long id, String nuevoEstado) {
         String estadoNormalizado = nuevoEstado.trim().toUpperCase();
         if (!ESTADOS_VALIDOS.contains(estadoNormalizado)) {
-            throw new IllegalArgumentException("Estado no válido: " + nuevoEstado);
+            throw new BadRequestException("Estado no válido: " + nuevoEstado);
         }
 
         return repo.findById(id).map(r -> {
             Set<String> permitidos = TRANSICIONES_PERMITIDAS.getOrDefault(r.getEstado(), Set.of());
             if (!permitidos.contains(estadoNormalizado)) {
-                throw new IllegalStateException(
+                throw new ConflictException(
                     "Transición no permitida: " + r.getEstado() + " → " + estadoNormalizado
                 );
             }

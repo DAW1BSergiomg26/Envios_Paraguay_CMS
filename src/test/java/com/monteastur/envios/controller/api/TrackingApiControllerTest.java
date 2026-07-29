@@ -51,7 +51,8 @@ class TrackingApiControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.codigoUnico").value("MT-2026-0001"))
                 .andExpect(jsonPath("$.estado").value("en_transito"))
-                .andExpect(jsonPath("$.destinatario").value("Juan Perez"));
+                .andExpect(jsonPath("$.origen").value("Madrid"))
+                .andExpect(jsonPath("$.destino").value("Asuncion"));
     }
 
     @Test

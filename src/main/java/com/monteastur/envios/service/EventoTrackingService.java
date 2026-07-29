@@ -18,9 +18,9 @@ public class EventoTrackingService {
         this.repo = repo;
     }
 
-    public EventoTracking crearEvento(EnvioTracking envio, String estadoAnterior) {
+    public Optional<EventoTracking> crearEvento(EnvioTracking envio, String estadoAnterior) {
         if (estadoAnterior != null && estadoAnterior.equals(envio.getEstado())) {
-            return null;
+            return Optional.empty();
         }
         String icono = getIcono(envio.getEstado());
         String color = getColor(envio.getEstado());
@@ -40,7 +40,7 @@ public class EventoTrackingService {
         evento.setCreadoPor("admin");
         evento.setVisibleCliente(true);
 
-        return repo.save(evento);
+        return Optional.of(repo.save(evento));
     }
 
     public EventoTracking crearEventoInicial(EnvioTracking envio) {
