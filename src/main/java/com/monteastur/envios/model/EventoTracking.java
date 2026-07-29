@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "eventos_tracking")
+@Table(name = "eventos_tracking", indexes = {
+    @Index(name = "idx_eventos_envio_id", columnList = "envio_id")
+})
 public class EventoTracking {
 
     @Id

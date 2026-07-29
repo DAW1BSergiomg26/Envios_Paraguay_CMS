@@ -5,7 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "reservas")
+@Table(name = "reservas", indexes = {
+    @Index(name = "idx_reservas_estado", columnList = "estado"),
+    @Index(name = "idx_reservas_fechas", columnList = "fechaEntrada, fechaSalida")
+})
 public class Reserva {
 
     @Id
