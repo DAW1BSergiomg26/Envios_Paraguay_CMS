@@ -17,7 +17,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.format.annotation.DateTimeFormat;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "Admin Tracking", description = "Gestión de envíos del panel de administración (requiere Basic Auth)")
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminApiController {
@@ -34,6 +41,13 @@ public class AdminApiController {
         this.eventoTrackingService = eventoTrackingService;
     }
 
+    @Operation(summary = "Listar envíos", description = "Devuelve una página de envíos filtrable por estado, código, rango de fechas o búsqueda general")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista paginada de envíos",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.AdminEnvioResumenDto.class))),
+        @ApiResponse(responseCode = "401", description = "No autenticado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
     @GetMapping("/envios")
     public ResponseEntity<Page<AdminEnvioResumenDto>> listarEnvios(
             @RequestParam(required = false) String estado,
@@ -96,6 +110,13 @@ public class AdminApiController {
         return ResponseEntity.ok(page);
     }
 
+    @Operation(summary = "Detalle de envío", description = "Obtiene el detalle completo de un envío con eventos y evidencias")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Detalle del envío",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.TrackingDto.class))),
+        @ApiResponse(responseCode = "404", description = "Envío no encontrado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
     @GetMapping("/envios/{codigo}")
     public ResponseEntity<TrackingDto> detalleEnvio(@PathVariable String codigo) {
         EnvioTracking envio = trackingRepo.findWithClienteByCodigoUnico(codigo.trim().toUpperCase())
@@ -103,6 +124,13 @@ public class AdminApiController {
         return ResponseEntity.ok(toTrackingDto(envio));
     }
 
+    @Operation(summary = "Actualizar estado", description = "Cambia el estado de un envío y registra un evento de tracking")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Estado actualizado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.TrackingDto.class))),
+        @ApiResponse(responseCode = "404", description = "Envío no encontrado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
     @PutMapping("/envios/{codigo}/estado")
     public ResponseEntity<TrackingDto> actualizarEstado(@PathVariable String codigo,
                                                          @RequestBody ActualizarEstadoRequest request) {
