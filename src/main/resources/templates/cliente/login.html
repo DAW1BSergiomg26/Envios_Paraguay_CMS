@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Clientes | MONTEASTUR ENVIOS</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body class="login-body">
+
+<div class="login-wrapper glass-card">
+    <div class="login-header">
+        <i data-lucide="lock" class="luxury-icon luxury-icon-lg"></i>
+        <h1 class="luxury-heading-lg">Acceso Clientes</h1>
+        <p>MONTEASTUR ENVIOS</p>
+    </div>
+
+    <div th:if="${error}" class="toast toast-error" th:text="${error}">Error</div>
+
+    <form method="post" th:action="@{/cliente/login}">
+        <div class="login-field">
+            <label><i data-lucide="user" class="luxury-icon luxury-icon-sm"></i> Email</label>
+            <input type="email" name="email" placeholder="tu@email.com" required class="focus-glow">
+        </div>
+        <div class="login-field">
+            <label>Contrase&ntilde;a</label>
+            <input type="password" name="password" placeholder="••••••" required class="focus-glow">
+        </div>
+        <button type="submit" class="btn-luxury"><i data-lucide="log-in" class="luxury-icon luxury-icon-sm"></i> Ingresar al panel</button>
+    </form>
+
+    <div class="login-footer">
+        <a href="/">← Volver a la web</a>
+    </div>
+</div>
+
+</body>
+</html>

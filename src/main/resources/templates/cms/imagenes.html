@@ -9,60 +9,39 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>MONTEASTUR ENVIOS</h2>
-        <small>Panel de Gesti&oacute;n</small>
-        <span class="refugio-tag">Log&iacute;stica Premium</span>
-    </div>
-    <nav class="nav-links">
-        <a href="/admin/dashboard">Panel de Inicio</a>
-        <a href="/admin/reservas">Gestionar Env&iacute;os</a>
-        <a href="/admin/mensajesrecibidos">Consultas Clientes</a>
-        <a href="/admin/imagenes" class="active">Galer&iacute;a de Fotos</a>
-        <a href="/admin/textos">Textos Legales</a>
-        <a href="/" class="btn-web">Ver Web P&uacute;blica</a>
-    </nav>
-    <form th:action="@{/logout}" method="post" class="logout-form">
-        <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
-    </form>
-</div>
+<div th:replace="~{fragments/admin-sidebar :: admin-sidebar(seccionActiva='galeria')}"></div>
 
 <div class="main-content">
-    <div class="card">
-        <h1>Galer&iacute;a de Fotos</h1>
+    <div class="card glass-card">
+        <h1 class="luxury-heading-lg">Galer&iacute;a de Fotos</h1>
         <p>Sube y gestiona las im&aacute;genes de la p&aacute;gina &quot;La Casa&quot;.</p>
 
         <div class="imagenes-layout">
-
             <div class="imagenes-main">
-
                 <div th:if="${exito}" class="toast toast-success">
-                    <span class="toast-icon">✓</span>
+                    <span class="toast-icon"><i data-lucide="check" class="luxury-icon"></i></span>
                     <span th:text="${exito}">Imagen subida</span>
                 </div>
                 <div th:if="${error}" class="toast toast-error">
-                    <span class="toast-icon">!</span>
+                    <span class="toast-icon"><i data-lucide="alert-circle" class="luxury-icon"></i></span>
                     <span th:text="${error}">Error</span>
                 </div>
-
-                <h3 style="color: #3f6338; margin-bottom: 15px; font-size: 18px;">Subir nueva imagen</h3>
-
+                <h3 class="luxury-heading" style="color: #d4762a; margin-bottom: 15px; font-size: 18px;"><i data-lucide="upload" class="luxury-icon luxury-icon-sm"></i> Subir nueva imagen</h3>
                 <form action="#" th:action="@{/admin/imagenes}" method="post" enctype="multipart/form-data">
                     <div style="margin-bottom: 14px;">
                         <label for="titulo" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">T&iacute;tulo *</label>
                         <input type="text" id="titulo" name="titulo" required
-                               style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                               style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;" class="focus-glow">
                     </div>
                     <div style="margin-bottom: 14px;">
                         <label for="descripcion" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Descripci&oacute;n</label>
                         <textarea id="descripcion" name="descripcion" rows="3"
-                                  style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; resize: vertical; box-sizing: border-box;"></textarea>
+                                  style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; resize: vertical; box-sizing: border-box;" class="focus-glow"></textarea>
                     </div>
                     <div style="margin-bottom: 14px;">
                         <label for="categoria" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Categor&iacute;a</label>
                         <select id="categoria" name="categoria"
-                                style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                                style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;" class="focus-glow">
                             <option value="">Sin categor&iacute;a</option>
                             <option value="exterior">Exterior</option>
                             <option value="interior">Interior</option>
@@ -73,20 +52,17 @@
                     <div style="margin-bottom: 14px;">
                         <label for="orden" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Orden *</label>
                         <input type="number" id="orden" name="orden" min="1" required
-                               style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                               style="width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; box-sizing: border-box;" class="focus-glow">
                     </div>
                     <div style="margin-bottom: 18px;">
                         <label for="archivo" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">Archivo de imagen *</label>
                         <input type="file" id="archivo" name="archivo" accept="image/*" required
                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: white; box-sizing: border-box;">
                     </div>
-                    <button type="submit" class="btn-upload">Subir imagen</button>
+                    <button type="submit" class="btn-luxury"><i data-lucide="upload" class="luxury-icon luxury-icon-sm"></i> Subir imagen</button>
                 </form>
-
                 <hr style="margin: 28px 0; border: none; border-top: 1px solid rgba(0,0,0,0.06);">
-
-                <h3 style="color: #3f6338; margin-bottom: 15px; font-size: 18px;">Im&aacute;genes subidas</h3>
-
+                <h3 class="luxury-heading" style="color: #d4762a; margin-bottom: 15px; font-size: 18px;"><i data-lucide="image" class="luxury-icon luxury-icon-sm"></i> Im&aacute;genes subidas</h3>
                 <p th:if="${imagenes == null or imagenes.isEmpty()}" class="vacio">No hay im&aacute;genes registradas.</p>
 
                 <div class="grid-fotos" th:if="${imagenes != null and !imagenes.isEmpty()}" id="galeriaGrid">
@@ -102,16 +78,16 @@
                             <span class="foto-ord" th:if="${img?.orden != null}">Ord. <span th:text="${img?.orden}">1</span></span>
                         </div>
                         <form th:action="@{/admin/imagenes/eliminar/{id}(id=${img.id})}" method="post" class="foto-delete-form" onsubmit="return confirm('¿Eliminar esta imagen?')">
-                            <button type="submit" class="btn-delete" title="Eliminar imagen">&times;</button>
+                            <button type="submit" class="btn-delete" title="Eliminar imagen"><i data-lucide="trash-2" class="luxury-icon"></i></button>
                         </form>
                     </div>
                 </div>
 
             </div>
 
-            <div class="preview-panel" id="previewPanel">
+            <div class="preview-panel glass-card" id="previewPanel">
                 <div class="preview-panel-header">
-                    <h3><span>&#128065;</span> Vista previa</h3>
+                    <h3 class="luxury-heading"><i data-lucide="eye" class="luxury-icon"></i> Vista previa</h3>
                     <small>Haz clic en una imagen para previsualizarla</small>
                 </div>
                 <div th:if="${imagenes != null and !imagenes.isEmpty()}" id="previewContent">
@@ -137,7 +113,7 @@
                     </div>
                 </div>
                 <div th:if="${imagenes == null or imagenes.isEmpty()}" class="preview-panel-empty">
-                    <div class="preview-panel-empty-icon">&#128247;</div>
+                    <div class="preview-panel-empty-icon"><i data-lucide="image" class="luxury-icon luxury-icon-lg"></i></div>
                     <p>No hay im&aacute;genes para mostrar.<br>Sube tu primera foto.</p>
                 </div>
             </div>

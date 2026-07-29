@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header :: head('Seguimiento')}"></head>
+
+<body>
+
+    <header th:replace="~{fragments/header :: header}"></header>
+
+    <main>
+        <section class="pagina-titulo tracking-hero-premium">
+            <span class="tracking-hero-pill">Asturias &harr; Paraguay</span>
+            <h2 class="luxury-heading-lg">Seguimiento de tu env&iacute;o</h2>
+            <p>Introduce tu c&oacute;digo MONTEASTUR y consulta el estado actualizado de tu paquete con una vista clara, segura y sencilla.</p>
+        </section>
+
+        <form method="post" th:action="@{/tracking}" class="tracking-premium-form tracking-form-glass">
+            <div class="tracking-input-wrapper">
+                <span class="tracking-input-icon"><i data-lucide="search" class="luxury-icon luxury-icon-sm"></i></span>
+                <input type="text" name="codigo" placeholder="Introduce tu c&oacute;digo MONTEASTUR" required class="tracking-premium-input focus-glow" autocomplete="off">
+            </div>
+            <button type="submit" class="btn btn-tracking-search btn-luxury">
+                <span>Buscar env&iacute;o</span>
+                <span class="btn-search-arrow">→</span>
+            </button>
+        </form>
+
+        <section class="tracking-help-premium" aria-label="Ayuda para seguimiento">
+            <div class="tracking-help-card tracking-help-main glass-card">
+                <span class="tracking-help-kicker">Gu&iacute;a r&aacute;pida</span>
+                <h3 class="luxury-heading">&iquest;C&oacute;mo funciona el seguimiento?</h3>
+                <p>Us&aacute; el c&oacute;digo que recibiste al registrar tu env&iacute;o. La p&aacute;gina te mostrar&aacute; el estado actual, la ubicaci&oacute;n y el historial de movimientos disponibles.</p>
+            </div>
+            <div class="tracking-help-card glass-card card-hover">
+                <span class="tracking-help-icon"><i data-lucide="barcode" class="luxury-icon"></i></span>
+                <strong>1. C&oacute;digo</strong>
+                <p>Ingres&aacute; tu c&oacute;digo MONTEASTUR sin espacios extra.</p>
+            </div>
+            <div class="tracking-help-card glass-card card-hover">
+                <span class="tracking-help-icon"><i data-lucide="compass" class="luxury-icon"></i></span>
+                <strong>2. Estado</strong>
+                <p>Revis&aacute; si est&aacute; recibido, en tr&aacute;nsito, aduana o reparto.</p>
+            </div>
+            <div class="tracking-help-card glass-card card-hover">
+                <span class="tracking-help-icon"><i data-lucide="headphones" class="luxury-icon"></i></span>
+                <strong>3. Ayuda</strong>
+                <p>Si ten&eacute;s dudas, escribinos por WhatsApp y te ayudamos.</p>
+            </div>
+        </section>
+
+        <section class="tracking-trust-strip" aria-label="Confianza de seguimiento">
+            <div>
+                <span><i data-lucide="check-circle" class="luxury-icon luxury-icon-sm"></i></span>
+                <strong>Seguimiento claro</strong>
+                <small>Estado actualizado del env&iacute;o</small>
+            </div>
+            <div>
+                <span><i data-lucide="file-check" class="luxury-icon luxury-icon-sm"></i></span>
+                <strong>Control de aduanas</strong>
+                <small>Origen, tr&aacute;nsito y destino</small>
+            </div>
+            <div>
+                <span><i data-lucide="flag" class="luxury-icon luxury-icon-sm"></i></span>
+                <strong>Ruta Paraguay</strong>
+                <small>Entrega local coordinada</small>
+            </div>
+        </section>
+
+        <div th:if="${buscado and envio == null}" class="tracking-not-found-premium glass-card">
+            <div class="tnf-icon"><i data-lucide="search" class="luxury-icon luxury-icon-lg"></i></div>
+            <h3 class="luxury-heading">No encontramos ning&uacute;n env&iacute;o con ese c&oacute;digo.</h3>
+            <p>Verific&aacute; el c&oacute;digo e intent&aacute; de nuevo. Si el env&iacute;o es reciente, puede que todav&iacute;a estemos cargando la informaci&oacute;n.</p>
+            <a href="https://wa.me/34642687292" class="btn btn-whatsapp btn-luxury" target="_blank" rel="noopener">
+                <span class="wa-icon"><i data-lucide="message-circle" class="luxury-icon luxury-icon-sm"></i></span> Consultar por WhatsApp
+            </a>
+        </div>
+
+        <div th:if="${envio != null}" class="tracking-result-premium glass-card">
+            <div class="tracking-result-header-premium">
+                <div>
+                    <span class="tracking-result-kicker">Resultado encontrado</span>
+                    <h3 class="luxury-heading">Tu env&iacute;o est&aacute; registrado en MONTEASTUR</h3>
+                </div>
+                <a href="https://wa.me/34642687292" class="tracking-result-support" target="_blank" rel="noopener"><i data-lucide="message-circle" class="luxury-icon luxury-icon-sm"></i> Soporte</a>
+            </div>
+
+            <div class="tracking-mini-resume">
+                <div class="tr-item">
+                    <span class="tr-label">C&oacute;digo</span>
+                    <span class="tr-value tr-code" th:text="${envio.codigoUnico}">MT-2026-0001</span>
+                </div>
+                <div class="tr-item">
+                    <span class="tr-label">Estado</span>
+                    <span class="tr-badge" th:classappend="'estado-' + ${envio.estado}">
+                        <span th:switch="${envio.estado}">
+                            <span th:case="'RECIBIDO'"><i data-lucide="package" class="luxury-icon luxury-icon-sm"></i> Recibido</span>
+                            <span th:case="'EN_ADUANA_ORIGEN'"><i data-lucide="file-check" class="luxury-icon luxury-icon-sm"></i> Aduana origen</span>
+                            <span th:case="'EN_TRANSITO'"><i data-lucide="ship" class="luxury-icon luxury-icon-sm"></i> En tr&aacute;nsito</span>
+                            <span th:case="'EN_ADUANA_DESTINO'"><i data-lucide="file-check" class="luxury-icon luxury-icon-sm"></i> Aduana destino</span>
+                            <span th:case="'EN_REPARTO'"><i data-lucide="flag" class="luxury-icon luxury-icon-sm"></i> En reparto</span>
+                            <span th:case="'ENTREGADO'"><i data-lucide="check-circle" class="luxury-icon luxury-icon-sm"></i> Entregado</span>
+                            <span th:case="*" th:text="${envio.estado}"></span>
+                        </span>
+                    </span>
+                </div>
+                <div class="tr-item">
+                    <span class="tr-label">Ubicaci&oacute;n actual</span>
+                    <span class="tr-value" th:text="${envio.ubicacionActual}">Asturias</span>
+                </div>
+                <div class="tr-item">
+                    <span class="tr-label">&Uacute;ltima actualizaci&oacute;n</span>
+                    <span class="tr-value" th:text="${#temporals.format(envio.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</span>
+                </div>
+            </div>
+
+            <div class="tracking-route">
+                <span class="route-dot route-start">Asturias</span>
+                <span class="route-line"><span class="route-line-glow"></span></span>
+                <span class="route-dot route-mid"><i data-lucide="ship" class="luxury-icon luxury-icon-sm"></i> Atl&aacute;ntico</span>
+                <span class="route-line"><span class="route-line-glow"></span></span>
+                <span class="route-dot route-end">Paraguay</span>
+            </div>
+
+            <div class="tracking-info-grid">
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Destinatario</span>
+                    <span class="tracking-info-value" th:text="${envio.destinatario}">Nombre</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Origen</span>
+                    <span class="tracking-info-value" th:text="${envio.origen}">Origen</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Destino</span>
+                    <span class="tracking-info-value" th:text="${envio.destino}">Destino</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Peso</span>
+                    <span class="tracking-info-value" th:text="${envio.peso}">0 kg</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Contenido</span>
+                    <span class="tracking-info-value" th:text="${envio.contenido}">Descripci&oacute;n</span>
+                </div>
+                <div class="tracking-info-item">
+                    <span class="tracking-info-label">Fecha de creaci&oacute;n</span>
+                    <span class="tracking-info-value" th:text="${#temporals.format(envio.fechaCreacion, 'dd/MM/yyyy')}">10/05/2026</span>
+                </div>
+            </div>
+
+            <div th:if="${envio.observaciones != null and !envio.observaciones.isEmpty()}" class="tracking-observaciones glass-card">
+                <span class="tracking-obs-label"><i data-lucide="file-text" class="luxury-icon luxury-icon-sm"></i> Nota del operador</span>
+                <p class="tracking-obs-text" th:text="${envio.observaciones}">Observaciones</p>
+            </div>
+
+            <div class="tracking-timeline-premium">
+                <h3 class="tracking-timeline-title luxury-heading">Estado del env&iacute;o</h3>
+                <div class="tracking-timeline-steps">
+                    <div th:class="'tl-step ' + (${envio.estado == 'RECIBIDO' or envio.estado == 'EN_ADUANA_ORIGEN' or envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'RECIBIDO'} ? ' active' : '')">
+                        <div class="tl-step-icon"><i data-lucide="package" class="luxury-icon"></i></div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Recibido en origen</strong>
+                            <span th:if="${envio.estado == 'RECIBIDO'}" class="tl-step-label">Procesando</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_ADUANA_ORIGEN' or envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_ADUANA_ORIGEN'} ? ' active' : '')">
+                        <div class="tl-step-icon"><i data-lucide="file-check" class="luxury-icon"></i></div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Aduana de origen</strong>
+                            <span th:if="${envio.estado == 'EN_ADUANA_ORIGEN'}" class="tl-step-label">En proceso</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_TRANSITO'} ? ' active' : '')">
+                        <div class="tl-step-icon"><i data-lucide="ship" class="luxury-icon"></i></div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Tr&aacute;nsito atl&aacute;ntico</strong>
+                            <span th:if="${envio.estado == 'EN_TRANSITO'}" class="tl-step-label">En ruta</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_ADUANA_DESTINO'} ? ' active' : '')">
+                        <div class="tl-step-icon"><i data-lucide="file-check" class="luxury-icon"></i></div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>Aduana de destino</strong>
+                            <span th:if="${envio.estado == 'EN_ADUANA_DESTINO'}" class="tl-step-label">En tr&aacute;mite</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'completed' : '') + (${envio.estado == 'EN_REPARTO'} ? ' active' : '')">
+                        <div class="tl-step-icon"><i data-lucide="flag" class="luxury-icon"></i></div>
+                        <div class="tl-step-line"></div>
+                        <div class="tl-step-content">
+                            <strong>En reparto local</strong>
+                            <span th:if="${envio.estado == 'EN_REPARTO'}" class="tl-step-label">En reparto</span>
+                        </div>
+                    </div>
+                    <div th:class="'tl-step ' + (${envio.estado == 'ENTREGADO'} ? 'completed active' : '')">
+                        <div class="tl-step-icon tl-step-icon-final"><i data-lucide="check-circle" class="luxury-icon"></i></div>
+                        <div class="tl-step-line tl-step-line-final"></div>
+                        <div class="tl-step-content">
+                            <strong>Entregado</strong>
+                            <span th:if="${envio.estado == 'ENTREGADO'}" class="tl-step-label tl-step-label-delivered">Entregado</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:if="${eventos != null and !#lists.isEmpty(eventos)}" class="evento-timeline-public glass-card">
+                <h3 class="tracking-timeline-title luxury-heading">Historial del env&iacute;o</h3>
+                <div class="evento-timeline">
+                    <div th:each="ev : ${eventos}" class="evento-item">
+                        <div class="evento-dot" th:style="'background:' + ${ev.color}"></div>
+                        <div class="evento-line"></div>
+                        <div class="evento-card">
+                            <div class="evento-card-head">
+                                <span class="evento-icon" th:text="${ev.icono}"><i data-lucide="package" class="luxury-icon luxury-icon-sm"></i></span>
+                                <strong class="evento-titulo" th:text="${ev.titulo}">T&iacute;tulo</strong>
+                                <span class="evento-badge" th:style="'background:' + ${ev.color}" th:text="${ev.estado}">Estado</span>
+                            </div>
+                            <div class="evento-card-meta">
+                                <span class="evento-fecha" th:text="${#temporals.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                                <span th:if="${ev.ubicacion != null}" class="evento-ubicacion" th:text="${ev.ubicacion}">Ubicaci&oacute;n</span>
+                            </div>
+                            <p th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" class="evento-desc" th:text="${ev.descripcion}">Descripci&oacute;n</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tracking-whatsapp-cta tracking-final-cta-premium glass-card">
+                <p>&iquest;Ten&eacute;s dudas sobre tu env&iacute;o?</p>
+                <span>Estamos para ayudarte con una atenci&oacute;n cercana entre Asturias y Paraguay.</span>
+                <a href="https://wa.me/34642687292" class="btn btn-whatsapp btn-luxury" target="_blank" rel="noopener">
+                    <span class="wa-icon"><i data-lucide="message-circle" class="luxury-icon luxury-icon-sm"></i></span> Consultar por WhatsApp
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

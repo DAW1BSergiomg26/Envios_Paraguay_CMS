@@ -1,96 +1,108 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header :: head('Envíos')"></head>
+<head th:replace="~{fragments/header :: head('Reservas')}"></head>
 
 <body>
 
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 
     <main>
-        <section class="pagina-titulo reveal">
-            <h2>Env&iacute;os</h2>
-            <p>Solicita tu env&iacute;o a Paraguay desde Pola de Siero. R&aacute;pido, seguro y con seguimiento.</p>
+        <section class="pagina-titulo reveal reservas-hero-premium">
+            <span class="reservas-hero-pill">Asturias &harr; Paraguay</span>
+            <h2 class="luxury-heading-lg">Reserva tu env&iacute;o</h2>
+            <p>Solicit&aacute; tu recogida, indic&aacute; fechas aproximadas y dej&aacute; que MONTEASTUR prepare una propuesta clara para enviar tus paquetes a Paraguay.</p>
         </section>
 
-        <section class="contenido reveal" th:if="${!reservaEnviada}">
+        <section class="reservas-trust-strip" aria-label="Ventajas de reservar con MONTEASTUR">
+            <div><span><i data-lucide="package" class="luxury-icon"></i></span><strong>Solicitud guiada</strong><small>Datos esenciales para preparar tu env&iacute;o sin vueltas.</small></div>
+            <div><span><i data-lucide="file-check" class="luxury-icon"></i></span><strong>Ruta controlada</strong><small>Origen, documentaci&oacute;n, aduanas y entrega coordinada.</small></div>
+            <div><span><i data-lucide="headphones" class="luxury-icon"></i></span><strong>Atenci&oacute;n cercana</strong><small>Te contactamos para confirmar detalles antes de avanzar.</small></div>
+        </section>
+
+        <section class="reservas-route-premium reveal" aria-label="Ruta logistica Asturias Paraguay">
+            <div class="reservas-route-line">
+                <div class="reservas-route-node"><span><i data-lucide="map-pin" class="luxury-icon"></i></span><strong>Asturias</strong><small>Recogida inicial</small></div>
+                <div class="reservas-route-dash"></div>
+                <div class="reservas-route-node"><span><i data-lucide="ship" class="luxury-icon"></i></span><strong>Atl&aacute;ntico</strong><small>Tr&aacute;nsito internacional</small></div>
+                <div class="reservas-route-dash"></div>
+                <div class="reservas-route-node"><span><i data-lucide="map-pin" class="luxury-icon"></i></span><strong>Paraguay</strong><small>Entrega coordinada</small></div>
+            </div>
+        </section>
+
+        <section class="reservas-metrics-premium reveal" aria-label="Indicadores de confianza">
+            <div class="reservas-metric-card glass-card"><span><i data-lucide="package" class="luxury-icon"></i></span><strong>+250</strong><span>env&iacute;os gestionados</span></div>
+            <div class="reservas-metric-card glass-card"><span><i data-lucide="clock" class="luxury-icon"></i></span><strong>14-21 d&iacute;as</strong><span>tiempo orientativo</span></div>
+            <div class="reservas-metric-card glass-card"><span><i data-lucide="check-circle" class="luxury-icon"></i></span><strong>98%</strong><span>entregas completadas</span></div>
+        </section>
+
+        <section class="contenido reveal reservas-contenido-premium glass-card" th:if="${!reservaEnviada}">
             <div class="reserva-header">
-                <h3>Solicita tu env&iacute;o</h3>
-                <p>Elige fechas y completa los datos de tu env&iacute;o.</p>
+                <h3 class="luxury-heading">Planific&aacute; tu env&iacute;o con calma</h3>
+                <p>Complet&aacute; el formulario y revis&aacute; la disponibilidad. Despu&eacute;s te confirmaremos la mejor opci&oacute;n para la ruta Asturias-Paraguay.</p>
             </div>
             <div class="reserva-layout">
-            <div class="reserva-calendario">
-                <h3><span>&#128197;</span> Disponibilidad</h3>
-                <div th:each="mes : ${calendarios}" class="calendario-mes">
-                    <h4 th:text="${mes.nombre + ' ' + mes.year}">Mayo 2026</h4>
-                    <table>
-                        <thead>
-                            <tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>Sá</th><th>Do</th></tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="semana : ${mes.semanas}">
-                                <td th:each="dia : ${semana}">
-                                    <span th:if="${dia.relleno}" class="dia-relleno">&nbsp;</span>
-                                    <span th:if="${!dia.relleno and dia.pasado}" class="dia-pasado" th:text="${dia.numero}"></span>
-                                    <span th:if="${!dia.relleno and !dia.pasado and dia.ocupado}" class="dia-ocupado" th:text="${dia.numero}"></span>
-                                    <span th:if="${!dia.relleno and !dia.pasado and !dia.ocupado}" class="dia-libre" th:text="${dia.numero}"></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="reserva-calendario glass-card">
+                    <h3 class="luxury-heading"><span><i data-lucide="calendar-days" class="luxury-icon"></i></span> Disponibilidad</h3>
+                    <div th:each="mes : ${calendarios}" class="calendario-mes">
+                        <h4 class="luxury-heading" th:text="${mes.nombre + ' ' + mes.year}">Mayo 2026</h4>
+                        <table>
+                            <thead>
+                                <tr><th>Lu</th><th>Ma</th><th>Mi</th><th>Ju</th><th>Vi</th><th>S&aacute;</th><th>Do</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="semana : ${mes.semanas}">
+                                    <td th:each="dia : ${semana}">
+                                        <span th:if="${dia.relleno}" class="dia-relleno">&nbsp;</span>
+                                        <span th:if="${!dia.relleno and dia.pasado}" class="dia-pasado" th:text="${dia.numero}"></span>
+                                        <span th:if="${!dia.relleno and !dia.pasado and dia.ocupado}" class="dia-ocupado" th:text="${dia.numero}"></span>
+                                        <span th:if="${!dia.relleno and !dia.pasado and !dia.ocupado}" class="dia-libre" th:text="${dia.numero}"></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="calendario-leyenda">
+                        <span class="leyenda libre"></span> Disponible
+                        <span class="leyenda ocupado"></span> Reservado
+                        <span class="leyenda pasado"></span> Pasado
+                    </div>
                 </div>
-                <div class="calendario-leyenda">
-                    <span class="leyenda libre"></span> Disponible
-                    <span class="leyenda ocupado"></span> Reservado
-                    <span class="leyenda pasado"></span> Pasado
+                <div class="reserva-formulario glass-card">
+                    <h3 class="luxury-heading"><span><i data-lucide="file-text" class="luxury-icon"></i></span> Solicitud de env&iacute;o</h3>
+                    <form action="#" th:action="@{/reservas}" method="post">
+                        <div class="rf-group"><label for="nombreCliente">Nombre completo *</label><input type="text" id="nombreCliente" name="nombreCliente" required class="rf-control focus-glow" placeholder="Ej. Mar&iacute;a Gonz&aacute;lez"></div>
+                        <div class="rf-group"><label for="email">Email *</label><input type="email" id="email" name="email" required class="rf-control focus-glow" placeholder="tu@email.com"></div>
+                        <div class="rf-group"><label for="telefono">Tel&eacute;fono</label><input type="tel" id="telefono" name="telefono" class="rf-control focus-glow" placeholder="+34 600 000 000"></div>
+                        <div class="rf-group"><label for="fechaEntrada">Fecha de recogida *</label><input type="date" id="fechaEntrada" name="fechaEntrada" required class="rf-control focus-glow"></div>
+                        <div class="rf-group"><label for="fechaSalida">Fecha estimada de entrega *</label><input type="date" id="fechaSalida" name="fechaSalida" required class="rf-control focus-glow"></div>
+                        <div class="rf-group"><label for="numeroHuespedes">Bultos aprox. *</label><input type="number" id="numeroHuespedes" name="numeroHuespedes" min="1" max="20" required class="rf-control focus-glow" placeholder="Ej. 4"></div>
+                        <div class="rf-group"><label for="comentarios">Comentarios</label><textarea id="comentarios" name="comentarios" rows="4" class="rf-control focus-glow" placeholder="Contanos qu&eacute; quer&eacute;s enviar, peso aproximado, ciudad de destino o cualquier detalle importante."></textarea></div>
+                        <button type="submit" class="btn btn-block btn-luxury"><i data-lucide="send" class="luxury-icon luxury-icon-sm"></i> Solicitar env&iacute;o</button>
+                        <p class="reserva-confianza"><i data-lucide="lock" class="luxury-icon luxury-icon-sm"></i> Tus datos est&aacute;n protegidos. Te contactaremos solo para confirmar la solicitud y preparar la mejor opci&oacute;n de env&iacute;o.</p>
+                        <div class="reservas-estimator-premium glass-card">
+                            <h4 class="luxury-heading">Estimaci&oacute;n orientativa</h4>
+                            <div class="reservas-estimator-grid">
+                                <div><strong>1-2 bultos</strong><span>60-90 €</span></div>
+                                <div><strong>3-5 bultos</strong><span>100-180 €</span></div>
+                                <div><strong>6+ bultos</strong><span>consultar</span></div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </div>
-            <div class="reserva-formulario">
-                <h3><span>&#9997;&#65039;</span> Solicitud de env&iacute;o</h3>
-                <form action="#" th:action="@{/reservas}" method="post">
-                <div class="rf-group">
-                    <label for="nombreCliente">Nombre completo *</label>
-                    <input type="text" id="nombreCliente" name="nombreCliente" required class="rf-control">
-                </div>
-                <div class="rf-group">
-                    <label for="email">Email *</label>
-                    <input type="email" id="email" name="email" required class="rf-control">
-                </div>
-                <div class="rf-group">
-                    <label for="telefono">Tel&eacute;fono</label>
-                    <input type="tel" id="telefono" name="telefono" class="rf-control">
-                </div>
-                <div class="rf-group">
-                    <label for="fechaEntrada">Fecha de recogida *</label>
-                    <input type="date" id="fechaEntrada" name="fechaEntrada" required class="rf-control">
-                </div>
-                <div class="rf-group">
-                    <label for="fechaSalida">Fecha de entrega *</label>
-                    <input type="date" id="fechaSalida" name="fechaSalida" required class="rf-control">
-                </div>
-                <div class="rf-group">
-                    <label for="numeroHuespedes">Bultos aprox. *</label>
-                    <input type="number" id="numeroHuespedes" name="numeroHuespedes" min="1" max="20" required class="rf-control">
-                </div>
-                <div class="rf-group">
-                    <label for="comentarios">Comentarios</label>
-                    <textarea id="comentarios" name="comentarios" rows="4" class="rf-control"></textarea>
-                </div>
-                <button type="submit" class="btn btn-block">Solicitar env&iacute;o</button>
-                <p class="reserva-confianza">Tus datos est&aacute;n protegidos y no ser&aacute;n compartidos.</p>
-            </form>
-            </div>
             </div>
         </section>
 
-        <section class="contenido" th:if="${reservaEnviada}" style="text-align: center;">
-            <h3 style="color: #3f6338; font-size: 28px; margin-bottom: 15px;">&iexcl;Solicitud enviada!</h3>
-            <p style="font-size: 18px; color: #555;">Hemos recibido tu solicitud de env&iacute;o. Te confirmaremos los detalles lo antes posible.</p>
-            <a href="/" class="btn" style="margin-top: 20px;">Volver al inicio</a>
+        <section class="reserva-success-premium glass-card" th:if="${reservaEnviada}">
+            <div class="reserva-success-icon"><i data-lucide="check" class="luxury-icon luxury-icon-lg"></i></div>
+            <h3 class="luxury-heading">&iexcl;Solicitud enviada!</h3>
+            <div class="reserva-success-code">RES-2026-0001</div>
+            <p>Hemos recibido tu solicitud de env&iacute;o. Te confirmaremos los detalles lo antes posible para avanzar con seguridad.</p>
+            <a href="/" class="btn btn-luxury">Volver al inicio</a>
         </section>
     </main>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>

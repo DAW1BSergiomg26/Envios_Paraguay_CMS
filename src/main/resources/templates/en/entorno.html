@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header-en :: head('Environment')}"></head>
+
+<body>
+
+    <header th:replace="~{fragments/header-en :: header}"></header>
+
+    <main>
+        <section class="pagina-titulo reveal">
+            <h2 class="luxury-heading-lg">Environment</h2>
+            <p>Nature and peace around you.</p>
+        </section>
+
+        <section class="contenido reveal glass-card">
+            <p>We are located in a valley surrounded by mountains, perfect for hiking, cycling and total disconnection. The privileged environment offers direct access to mountain routes, rivers and native forests.</p>
+            <p>A few kilometres away you will find charming villages, traditional Asturian restaurants and tourist attractions.</p>
+        </section>
+
+        <section class="entorno-features reveal" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:2rem;">
+            <div class="glass-card card-hover" style="text-align:center;padding:1.5rem;">
+                <i data-lucide="leaf" class="luxury-icon luxury-icon-lg"></i>
+                <h3 class="luxury-heading">Nature</h3>
+                <p>Surrounded by mountains and native forests</p>
+            </div>
+            <div class="glass-card card-hover" style="text-align:center;padding:1.5rem;">
+                <i data-lucide="users" class="luxury-icon luxury-icon-lg"></i>
+                <h3 class="luxury-heading">Spaces</h3>
+                <p>Spacious and prepared for groups</p>
+            </div>
+            <div class="glass-card card-hover" style="text-align:center;padding:1.5rem;">
+                <i data-lucide="award" class="luxury-icon luxury-icon-lg"></i>
+                <h3 class="luxury-heading">Quality</h3>
+                <p>Premium service and personalised attention</p>
+            </div>
+            <div class="glass-card card-hover" style="text-align:center;padding:1.5rem;">
+                <i data-lucide="heart" class="luxury-icon luxury-icon-lg"></i>
+                <h3 class="luxury-heading">Peace</h3>
+                <p>Total disconnection in the middle of nature</p>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer-en :: footer}"></footer>
+
+</body>
+</html>

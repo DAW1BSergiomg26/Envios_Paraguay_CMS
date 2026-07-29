@@ -7,3 +7,23 @@ Thumbs.db
 desktop.ini
 *.log
 uploads/
+logs/
+.env
+
+# Documentacion generada localmente
+docs/estructura.txt
+
+# Scripts obsoletos (reemplazados por start-all.ps1)
+iniciar_proyecto.ps1
+C_UsersasturDesktopEnvios_Paraguay_CMSiniciar_proyecto.ps1
+
+# Playwright artifacts
+frontend-react/test-results/
+frontend-react/playwright-report/
+frontend-react/e2e/screenshots/
+frontend-react/**/*.png
+frontend-react/**/*.webm
+frontend-react/**/*.zip
+
+# Superpowers internal workflow artifacts
+.superpowers/

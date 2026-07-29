@@ -1,0 +1,63 @@
+name: CD Deploy VPS
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  pre-deploy-check:
+    name: Pre-deploy Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Dockerfile
+        run: |
+          if [ ! -f Dockerfile ]; then
+            echo "Dockerfile not found"
+            exit 1
+          fi
+          echo "Dockerfile OK"
+      - name: Validate docker-compose.yml
+        run: |
+          if [ ! -f docker-compose.yml ]; then
+            echo "docker-compose.yml not found"
+            exit 1
+          fi
+          echo "docker-compose.yml OK"
+      - name: Validate .env.example
+        run: |
+          if [ ! -f .env.example ]; then
+            echo ".env.example not found"
+            exit 1
+          fi
+          echo ".env.example OK"
+      - name: Validate Nginx config
+        run: |
+          if [ -d nginx/conf.d ]; then
+            echo "nginx conf dir OK"
+          else
+            echo "nginx conf dir missing"
+          fi
+
+  deploy-vps:
+    name: Deploy to VPS
+    needs: pre-deploy-check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          script: |
+            set -e
+            echo "=== Manual deploy Monteastur Envios ==="
+            cd /opt/monteastur
+            git pull
+            docker compose pull
+            docker compose up -d --build
+            docker image prune -f
+            echo "=== Manual deploy complete ==="

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/header-en :: head('The House')}"></head>
+
+<body>
+
+    <header th:replace="~{fragments/header-en :: header}"></header>
+
+    <main>
+        <section class="casa-hero-premium reveal">
+            <span class="casa-hero-pill">Asturias &harr; Paraguay</span>
+            <h2 class="luxury-heading-lg">The house that connects two lands</h2>
+            <p>MONTEASTUR ENVIOS coordinates merchandise, vehicles, machinery and special cargo from Asturias to Paraguay with close support, controlled documentation and clear tracking.</p>
+        </section>
+
+        <section class="casa-trust-strip reveal" aria-label="MONTEASTUR trust points">
+            <div class="glass-card card-hover"><span><i data-lucide="package" class="luxury-icon luxury-icon-lg"></i></span><strong>Careful cargo handling</strong><small>We organise each shipment with clear data, approximate dates and documentation control.</small></div>
+            <div class="glass-card card-hover"><span><i data-lucide="truck" class="luxury-icon luxury-icon-lg"></i></span><strong>Coordinated route</strong><small>From Pola de Siero to Paraguay, we look for the safest and most convenient option.</small></div>
+            <div class="glass-card card-hover"><span><i data-lucide="shield-check" class="luxury-icon luxury-icon-lg"></i></span><strong>Close support</strong><small>We guide you before, during and after the shipment so you never move blindly.</small></div>
+        </section>
+
+        <section class="casa-route-premium reveal" aria-label="Asturias Paraguay route">
+            <div class="casa-route-line">
+                <div class="casa-route-node"><span><i data-lucide="map-pin" class="luxury-icon luxury-icon-lg"></i></span><strong>Asturias</strong><small>Pickup and preparation</small></div>
+                <div class="casa-route-dash"></div>
+                <div class="casa-route-node"><span><i data-lucide="ship" class="luxury-icon luxury-icon-lg"></i></span><strong>Atlantic route</strong><small>Transit and customs</small></div>
+                <div class="casa-route-dash"></div>
+                <div class="casa-route-node"><span><i data-lucide="flag" class="luxury-icon luxury-icon-lg"></i></span><strong>Paraguay</strong><small>Coordinated delivery</small></div>
+            </div>
+        </section>
+
+        <section class="casa-metrics-premium reveal" aria-label="Service data">
+            <div class="casa-metric-card"><strong>+250</strong><span>shipments and enquiries managed</span></div>
+            <div class="casa-metric-card"><strong>14-21 days</strong><span>estimated transit reference</span></div>
+            <div class="casa-metric-card"><strong>98%</strong><span>coordinated deliveries without major incidents</span></div>
+        </section>
+
+        <section class="contenido reveal casa-premium-wrap">
+            <div class="casa-story-card">
+                <h3 class="luxury-heading">Close, serious and human logistics</h3>
+                <p>At MONTEASTUR ENVIOS we manage transport and documentation for merchandise heading to Paraguay. We work with vehicles, machinery, spare parts and general cargo, caring for every detail from pickup to delivery.</p>
+                <p>We coordinate pickup in Pola de Siero, review the required information, manage customs procedures and seek a clear route so your cargo travels with order, safety and tracking.</p>
+            </div>
+
+            <div class="casa-services-premium">
+                <div class="casa-card glass-card card-hover">
+                    <div class="casa-service-icon"><i data-lucide="truck" class="luxury-icon luxury-icon-lg"></i></div>
+                    <h4>International transport</h4>
+                    <p>We ship merchandise and heavy cargo to Paraguay: vehicles, machinery, spare parts and general cargo with personalised care.</p>
+                </div>
+                <div class="casa-card glass-card card-hover">
+                    <div class="casa-service-icon"><i data-lucide="briefcase" class="luxury-icon luxury-icon-lg"></i></div>
+                    <h4>Customs management</h4>
+                    <p>We help with documentation, paperwork and customs control to reduce mistakes and avoid unnecessary surprises.</p>
+                </div>
+                <div class="casa-card glass-card card-hover">
+                    <div class="casa-service-icon"><i data-lucide="car" class="luxury-icon luxury-icon-lg"></i></div>
+                    <h4>Vehicles and machinery</h4>
+                    <p>Specialised transport for cars, vans, industrial machinery and heavy equipment for real projects.</p>
+                </div>
+                <div class="casa-card glass-card card-hover">
+                    <div class="casa-service-icon"><i data-lucide="trending-up" class="luxury-icon luxury-icon-lg"></i></div>
+                    <h4>Personalised tracking</h4>
+                    <p>Clear information at every stage: pickup, customs, transit, arrival and final coordination in Paraguay.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="casa-process-premium reveal">
+            <h3 class="luxury-heading">How we work on your shipment</h3>
+            <div class="casa-process-grid">
+                <div class="casa-process-step"><span class="casa-step-number">1</span><strong>Initial enquiry</strong><span>You tell us what you need to send, approximate weight, origin and destination.</span></div>
+                <div class="casa-process-step"><span class="casa-step-number">2</span><strong>Data review</strong><span>We check dates, documentation, cargo type and any special requirements.</span></div>
+                <div class="casa-process-step"><span class="casa-step-number">3</span><strong>Route and management</strong><span>We coordinate pickup, customs and transit so the process moves forward in order.</span></div>
+                <div class="casa-process-step"><span class="casa-step-number">4</span><strong>Final tracking</strong><span>We keep you informed until the coordinated delivery in Paraguay.</span></div>
+            </div>
+        </section>
+
+        <section class="galeria casa-galeria-premium reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
+            <h3 class="luxury-heading">Operations Gallery</h3>
+            <div class="grid-public">
+                <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
+                    <img th:src="${img.url}" th:alt="${img.titulo}">
+                    <span th:text="${img.titulo}">Title</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="casa-cta-premium reveal">
+            <div><strong>Prepare your shipment calmly</strong><span>Tell us what you need to send and we will help you find the best Asturias-Paraguay option.</span></div>
+            <a href="/en/reservas" class="btn-luxury">Book shipment</a>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer-en :: footer}"></footer>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
+        <button class="lightbox-cerrar" id="lbCer" aria-label="Close">&times;</button>
+        <button class="lightbox-nav lightbox-nav-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+        <button class="lightbox-nav lightbox-nav-next" id="lbNext" aria-label="Next">&#8250;</button>
+        <div class="lightbox-contenido">
+            <img id="lbImg" src="" alt="">
+            <p class="lightbox-titulo" id="lbTit"></p>
+        </div>
+    </div>
+
+</body>
+</html>

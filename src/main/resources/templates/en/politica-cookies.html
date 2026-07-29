@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header-en :: head('Cookie Policy')"></head>
+<head th:replace="~{fragments/header-en :: head('Cookie Policy')}"></head>
 
 <body>
 
-    <header th:replace="fragments/header-en :: header"></header>
+    <header th:replace="~{fragments/header-en :: header}"></header>
 
     <main>
         <section class="pagina-titulo">
-            <h2 th:text="${texto?.titulo} ?: 'Cookie Policy'">Cookie Policy</h2>
+            <h2 class="luxury-heading-lg" th:text="${texto?.titulo} ?: 'Cookie Policy'">Cookie Policy</h2>
         </section>
 
-        <section class="contenido-legal" th:utext="${texto?.contenido} ?: 'Content not available.'">
+        <section class="contenido-legal glass-card" th:utext="${texto?.contenido} ?: 'Content not available.'">
         </section>
     </main>
 
-    <footer th:replace="fragments/footer-en :: footer"></footer>
+    <footer th:replace="~{fragments/footer-en :: footer}"></footer>
 
 </body>
 </html>

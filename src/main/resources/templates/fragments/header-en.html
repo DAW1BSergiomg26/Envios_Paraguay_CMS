@@ -2,21 +2,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${titulo} + ' - MONTEASTUR ENVIOS'">MONTEASTUR ENVIOS</title>
-    <meta name="description" content="MONTEASTUR ENVIOS - International transport and customs clearance Spain&ndash;Paraguay. Heavy cargo, vehicles and machinery shipments with personalised tracking.">
-    <meta property="og:title" th:content="${titulo} + ' - MONTEASTUR ENVIOS'">
-    <meta property="og:description" content="International transport and customs clearance Spain&ndash;Paraguay. Heavy cargo, vehicles and machinery shipments.">
-    <meta property="og:image" content="/img/monteastur/branding/banner-monteastur.jpg">
-    <meta property="og:type" content="website">
-    <link rel="icon" type="image/jpeg" href="/img/monteastur/branding/banner-monteastur.jpg">
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/hero-premium.css">
+    <link rel="stylesheet" href="/css/operaciones-premium.css">
+    <link rel="stylesheet" href="/css/tracking-premium.css">
+    <link rel="stylesheet" href="/css/tracking-logistica.css">
+    <link rel="stylesheet" href="/css/tracking-resultado.css">
+    <link rel="stylesheet" href="/css/tracking-historial.css">
+    <link rel="stylesheet" href="/css/reservas-premium.css">
+    <link rel="stylesheet" href="/css/reservas-premium-v2.css">
+    <link rel="stylesheet" href="/css/casa-premium.css">
+    <link rel="stylesheet" href="/css/contacto-premium.css">
+    <link rel="stylesheet" href="/css/luxury-core.css">
+    <script src="/js/vendor/lucide.min.js" defer></script>
 </head>
 
 <th:block th:fragment="header">
+    <div class="cultural-strip-paraguay"></div>
     <header>
         <div class="header-top">
             <a href="/en" class="logo">MONTEASTUR ENVIOS</a>
             <div class="header-derecha">
-                <span class="telefono">642 687 292</span>
+                <span class="telefono">+34 642 687 292</span>
                 <div class="idiomas">
                     <a href="/">ES</a>
                     <a href="/en">EN</a>
@@ -25,9 +32,9 @@
         </div>
         <nav>
             <a href="/en">Home</a>
-            <a href="/en/casa">Services</a>
-            <a href="/en/reservas">Shipments</a>
-            <a href="/en/operaciones">Operations</a>
+            <a href="/en/casa">The House</a>
+            <a href="/en/tracking">Tracking</a>
+            <a href="/en/reservas">Bookings</a>
             <a href="/en/contacto">Contact</a>
         </nav>
     </header>

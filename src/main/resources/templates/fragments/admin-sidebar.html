@@ -1,0 +1,19 @@
+<div th:fragment="admin-sidebar(seccionActiva)" class="sidebar">
+    <div class="sidebar-header">
+        <h2>MONTEASTUR ENVIOS</h2>
+        <small>Centro de Operaciones</small>
+        <span class="refugio-tag">Log&iacute;stica Premium</span>
+    </div>
+    <nav class="nav-links">
+        <a href="/admin/dashboard" th:class="${seccionActiva == 'dashboard'} ? 'active' : ''"><i data-lucide="layout-dashboard" class="luxury-icon luxury-icon-sm"></i> Panel de Inicio</a>
+        <a href="/admin/tracking" th:class="${seccionActiva == 'tracking'} ? 'active' : ''"><i data-lucide="package-search" class="luxury-icon luxury-icon-sm"></i> Tracking Env&iacute;os</a>
+        <a href="/admin/reservas" th:class="${seccionActiva == 'reservas'} ? 'active' : ''"><i data-lucide="calendar-check" class="luxury-icon luxury-icon-sm"></i> Solicitudes</a>
+        <a href="/admin/mensajesrecibidos" th:class="${seccionActiva == 'mensajes'} ? 'active' : ''"><i data-lucide="message-square" class="luxury-icon luxury-icon-sm"></i> Mensajes</a>
+        <a href="/admin/imagenes" th:class="${seccionActiva == 'galeria'} ? 'active' : ''"><i data-lucide="image" class="luxury-icon luxury-icon-sm"></i> Galer&iacute;a de Fotos</a>
+        <a href="/admin/textos" th:class="${seccionActiva == 'textos'} ? 'active' : ''"><i data-lucide="file-text" class="luxury-icon luxury-icon-sm"></i> Textos Legales</a>
+        <a href="/" class="btn-web">&larr; Volver a la web</a>
+    </nav>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+        <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
+    </form>
+</div>

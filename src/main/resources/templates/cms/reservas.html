@@ -9,29 +9,12 @@
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2>MONTEASTUR ENVIOS</h2>
-        <small>Panel de Gesti&oacute;n</small>
-        <span class="refugio-tag">Log&iacute;stica Premium</span>
-    </div>
-    <nav class="nav-links">
-        <a href="/admin/dashboard">Panel de Inicio</a>
-        <a href="/admin/reservas" class="active">Gestionar Env&iacute;os</a>
-        <a href="/admin/mensajesrecibidos">Consultas Clientes</a>
-        <a href="/admin/imagenes">Galería de Fotos</a>
-        <a href="/admin/textos">Textos Legales</a>
-        <a href="/" class="btn-web">Ver Web Pública</a>
-    </nav>
-    <form th:action="@{/logout}" method="post" class="logout-form">
-        <button type="submit" class="btn-logout">Cerrar Sesión</button>
-    </form>
-</div>
+<div th:replace="~{fragments/admin-sidebar :: admin-sidebar(seccionActiva='reservas')}"></div>
 
 <div class="main-content">
-    <div class="card">
-        <h1>Listado de Env&iacute;os</h1>
-        <p th:if="${#lists.size(reservas) == 0}" class="vacio">No hay env&iacute;os registrados.</p>
+    <div class="card glass-card">
+        <h1 class="luxury-heading-lg" style="color: #d4762a;">Listado de Env&iacute;os</h1>
+        <p th:if="${#lists.size(reservas) == 0}" class="vacio" style="color: #3f6338; font-weight: 600;">No hay env&iacute;os registrados.</p>
         <div class="table-wrap" th:if="${#lists.size(reservas) > 0}">
             <table>
                 <thead>
@@ -63,13 +46,13 @@
                         <td th:text="${r.comentarios} ?: '—'" style="max-width: 200px; white-space: normal;">comentario</td>
                         <td class="acciones">
                             <form th:if="${r.estado == 'pendiente'}" th:action="@{/admin/reservas/aprobar/{id}(id=${r.id})}" method="post" style="display:inline">
-                                <button type="submit" class="btn-aprobar" title="Aprobar">✓</button>
+                                <button type="submit" class="btn-aprobar" title="Aprobar"><i data-lucide="check" class="luxury-icon"></i></button>
                             </form>
                             <form th:if="${r.estado == 'pendiente' or r.estado == 'aprobada' or r.estado == 'confirmada'}" th:action="@{/admin/reservas/cancelar/{id}(id=${r.id})}" method="post" style="display:inline">
-                                <button type="submit" class="btn-cancelar" title="Cancelar" onclick="return confirm('¿Cancelar este env&iacute;o?')">✕</button>
+                                <button type="submit" class="btn-cancelar" title="Cancelar" onclick="return confirm('¿Cancelar este env&iacute;o?')"><i data-lucide="x" class="luxury-icon"></i></button>
                             </form>
                             <form th:action="@{/admin/reservas/eliminar/{id}(id=${r.id})}" method="post" style="display:inline">
-                                <button type="submit" class="btn-eliminar" title="Eliminar" onclick="return confirm('¿Eliminar este env&iacute;o definitivamente?')">🗑</button>
+                                <button type="submit" class="btn-eliminar" title="Eliminar" onclick="return confirm('¿Eliminar este env&iacute;o definitivamente?')"><i data-lucide="trash-2" class="luxury-icon"></i></button>
                             </form>
                         </td>
                     </tr>

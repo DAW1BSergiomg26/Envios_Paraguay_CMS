@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5d6d7e"/>
+      <stop offset="100%" stop-color="#34495e"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="#f0f4f8"/>
+  <rect x="0" y="0" width="800" height="200" fill="#2980b9"/>
+  <rect x="50" y="50" width="700" height="350" fill="url(#wall)" rx="8"/>
+  <rect x="70" y="70" width="200" height="150" fill="#7f8c8d" rx="4"/>
+  <rect x="70" y="70" width="200" height="10" fill="#2c3e50" rx="2"/>
+  <rect x="80" y="90" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="145" y="90" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="210" y="90" width="45" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="80" y="155" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="145" y="155" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="210" y="155" width="45" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="290" y="70" width="200" height="150" fill="#7f8c8d" rx="4"/>
+  <rect x="290" y="70" width="200" height="10" fill="#2c3e50" rx="2"/>
+  <rect x="300" y="90" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="365" y="90" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="430" y="90" width="45" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="300" y="155" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="365" y="155" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="430" y="155" width="45" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="510" y="70" width="220" height="150" fill="#7f8c8d" rx="4"/>
+  <rect x="510" y="70" width="220" height="10" fill="#2c3e50" rx="2"/>
+  <rect x="520" y="90" width="60" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="590" y="90" width="60" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="660" y="90" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="520" y="155" width="60" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="590" y="155" width="60" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="660" y="155" width="55" height="55" fill="#85c1e9" rx="2"/>
+  <rect x="70" y="240" width="660" height="60" fill="#f1c40f" rx="4"/>
+  <rect x="70" y="240" width="660" height="8" fill="#e67e22" rx="2"/>
+  <rect x="90" y="255" width="100" height="35" fill="#2c3e50" rx="4"/>
+  <text x="140" y="278" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">RECEPCION</text>
+  <rect x="270" y="255" width="100" height="35" fill="#2c3e50" rx="4"/>
+  <text x="320" y="278" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">ALMACEN</text>
+  <rect x="450" y="255" width="100" height="35" fill="#2c3e50" rx="4"/>
+  <text x="500" y="278" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">EXPEDICION</text>
+  <rect x="630" y="255" width="80" height="35" fill="#2c3e50" rx="4"/>
+  <text x="670" y="278" text-anchor="middle" fill="white" font-family="Arial" font-size="12" font-weight="bold">MUELLE</text>
+  <rect x="100" y="320" width="600" height="60" fill="white" rx="6" opacity="0.9"/>
+  <text x="400" y="342" text-anchor="middle" fill="#2c3e50" font-family="Arial" font-size="14" font-weight="bold">Almacén logístico</text>
+  <text x="400" y="362" text-anchor="middle" fill="#7f8c8d" font-family="Arial" font-size="12">Centro de distribución Gijón — 2.500 m²</text>
+  <text x="400" y="490" text-anchor="middle" fill="#7f8c8d" font-family="Arial" font-size="12">Almacén logístico Monteastur Envios</text>
+</svg>

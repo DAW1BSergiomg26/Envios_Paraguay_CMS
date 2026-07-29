@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${status} + ' - ' + ${error}">Error</title>
+    <link rel="stylesheet" href="/css/luxury-core.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-gradient);
+            font-family: 'Inter', system-ui, sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+        .error-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-xl);
+            padding: 4rem 3rem;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-elevated);
+        }
+        .error-code {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            color: var(--color-muted);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+        .btn-luxury {
+            display: inline-block;
+            padding: 0.75rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border-radius: var(--radius-full);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-luxury:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="error-code" th:text="${status}">404</div>
+        <div class="error-title" th:text="${error}">Not Found</div>
+        <div class="error-message" th:text="${message}">Page not found</div>
+        <a href="/en" class="btn-luxury">Back to home</a>
+    </div>
+</body>
+</html>

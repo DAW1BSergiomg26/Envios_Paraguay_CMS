@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1d27"/>
+      <stop offset="100%" stop-color="#0f1117"/>
+    </linearGradient>
+  </defs>
+  <rect width="192" height="192" rx="32" fill="url(#bg)"/>
+  <!-- Box body -->
+  <rect x="36" y="72" width="120" height="84" rx="6" fill="#1e2030" stroke="#3b82f6" stroke-width="3"/>
+  <!-- Box lid -->
+  <path d="M36 72 L56 48 L156 48 L156 72 Z" fill="#252840" stroke="#3b82f6" stroke-width="3" stroke-linejoin="round"/>
+  <!-- Lid front -->
+  <path d="M36 72 L56 48 L96 48" fill="none" stroke="#3b82f6" stroke-width="2.5" opacity="0.5"/>
+  <!-- Tape -->
+  <rect x="86" y="72" width="20" height="84" rx="1" fill="#3b82f6" opacity="0.15"/>
+  <rect x="36" y="108" width="120" height="12" rx="1" fill="#3b82f6" opacity="0.1"/>
+  <!-- M letter -->
+  <path d="M68 88 L80 88 L92 106 L104 88 L116 88 L116 120 L104 120 L104 102 L92 116 L80 102 L80 120 L68 120 Z" fill="#3b82f6" opacity="0.8"/>
+</svg>

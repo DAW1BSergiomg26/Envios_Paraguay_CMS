@@ -1,160 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header-en :: head('Operations')"></head>
+<head th:replace="~{fragments/header-en :: head('Operations')}"></head>
 
 <body>
 
-    <header th:replace="fragments/header-en :: header"></header>
+    <header th:replace="~{fragments/header-en :: header}"></header>
 
-    <main>
-        <section class="pagina-titulo reveal">
-            <h2>Operations</h2>
-            <p>Premium international logistics. We handle your heavy cargo with the safety and care it deserves.</p>
-        </section>
-
-        <section class="contenido reveal">
-            <p class="ops-intro">At MONTEASTUR ENVIOS we coordinate each shipment in a personalised way. From pickup in Pola de Siero to final delivery in Paraguay, our team manages the entire logistics process with experience and dedication.</p>
-
-            <div class="ops-grid">
-                <div class="ops-card">
-                    <div class="ops-card-badge">General cargo</div>
-                    <div class="ops-card-icono">&#128230;</div>
-                    <h4>Loading &amp; packaging</h4>
-                    <p>We prepare your merchandise with professional packaging for heavy and fragile cargo. We consolidate shipments and optimise space to maximise safety during international transport.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Removals</div>
-                    <div class="ops-card-icono">&#127969;</div>
-                    <h4>International removals</h4>
-                    <p>We coordinate complete removals from Asturias to Paraguay with customs management included. Your belongings travel protected and insured to your new home.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Vehicles</div>
-                    <div class="ops-card-icono">&#128663;</div>
-                    <h4>Vehicles &amp; machinery</h4>
-                    <p>Specialised transport for cars, vans, industrial machinery and agricultural equipment. We handle the technical documentation and customs paperwork.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Customs</div>
-                    <div class="ops-card-icono">&#128188;</div>
-                    <h4>Customs clearance</h4>
-                    <p>We process all customs documentation for export from Spain and import into Paraguay. Declarations, tariffs and certifications without complications.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Door to door</div>
-                    <div class="ops-card-icono">&#128666;</div>
-                    <h4>Door-to-door delivery</h4>
-                    <p>We pick up at your home or business in Asturias and deliver directly to the address you provide in Paraguay. No unnecessary transshipment or intermediate storage.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Tracking</div>
-                    <div class="ops-card-icono">&#128065;</div>
-                    <h4>Personalised tracking</h4>
-                    <p>We keep you informed at every stage of the process. From pickup to final delivery, you will receive status updates on your shipment with direct attention.</p>
-                </div>
-            </div>
-
-            <div class="ops-cta">
-                <p>Need to send cargo to Paraguay?</p>
-                <a href="https://wa.me/34642687292" class="btn" target="_blank">Check prices and availability</a>
+    <main class="operations-page">
+        <section class="operations-hero reveal">
+            <span class="operations-eyebrow">International operations</span>
+            <h1 class="luxury-heading-lg">Safe logistics between Asturias and Paraguay</h1>
+            <p>We manage cargo, packaging, documents, customs and tracking so every shipment travels with order, control and close support.</p>
+            <div class="operations-cta-row">
+                <a href="https://wa.me/34642687292" class="operations-btn btn-luxury" target="_blank">Ask on WhatsApp</a>
+                <a href="/en/tracking" class="operations-btn secondary btn-luxury">Track shipment</a>
             </div>
         </section>
 
-        <section class="ops-placeholder reveal">
-            <div class="ops-placeholder-card">
-                <span class="ops-placeholder-icono">&#128247;</span>
-                <h4>Operations gallery</h4>
-                <p>Soon you will be able to see real images of our loading, packaging and transport operations.</p>
+        <section class="operations-grid reveal" aria-label="Monteastur operations services">
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="package" class="luxury-icon"></i></div><h3 class="luxury-heading">Loading and packaging</h3><p>We prepare boxes, packages and delicate goods with professional packaging for international transport.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="home" class="luxury-icon"></i></div><h3 class="luxury-heading">International removals</h3><p>We coordinate removals from Asturias to Paraguay with close support during the whole process.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="truck" class="luxury-icon"></i></div><h3 class="luxury-heading">Vehicles and machinery</h3><p>Specialised transport for cars, vans, machinery and large volume equipment.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="file-text" class="luxury-icon"></i></div><h3 class="luxury-heading">Customs and documents</h3><p>We help with the required paperwork to reduce doubts, delays and surprises.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="truck" class="luxury-icon"></i></div><h3 class="luxury-heading">Pickup and delivery</h3><p>We organise pickup, consolidation and final delivery depending on the type of cargo and destination.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="map-pin" class="luxury-icon"></i></div><h3 class="luxury-heading">Clear tracking</h3><p>We keep direct communication so you know where your shipment is at every stage.</p></article>
+        </section>
+
+        <section class="operations-timeline reveal" aria-label="Shipping process">
+            <h2 class="luxury-heading-lg">How we support your shipment</h2>
+            <div class="timeline-steps">
+                <div class="timeline-step"><strong>01</strong><span>Request and quote</span></div>
+                <div class="timeline-step"><strong>02</strong><span>Cargo preparation</span></div>
+                <div class="timeline-step"><strong>03</strong><span>Documents and customs</span></div>
+                <div class="timeline-step"><strong>04</strong><span>International transit</span></div>
+                <div class="timeline-step"><strong>05</strong><span>Arrival in Paraguay</span></div>
             </div>
         </section>
 
-        <section class="ops-envios-reales reveal">
-            <h3>Our real shipments</h3>
-            <p>Real operations by MONTEASTUR ENVIOS</p>
-            <div class="ops-envios-grid">
-                <div class="ops-envio-card has-image">
-                    <div class="ops-envio-bg" style="background-image: url('/img/monteastur/operaciones/operaciones-carga.jpg');"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Boxes</span>
-                        <h4>Cargo ready for Paraguay</h4>
-                        <p>Professional packaging and consolidation</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-mudanzas"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Removals</span>
-                        <h4>Safe international removal</h4>
-                        <p>From Asturias to Paraguay with guarantee</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-vehiculos"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Vehicles</span>
-                        <h4>Vehicle ready for export</h4>
-                        <p>Specialised transport with customs management</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-pesada"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Heavy cargo</span>
-                        <h4>Industrial machinery shipped</h4>
-                        <p>Large volume and weight logistics</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card has-image">
-                    <div class="ops-envio-bg" style="background-image: url('/img/monteastur/operaciones/operaciones-entrega.jpg');"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Containers</span>
-                        <h4>Consolidated container bound for Paraguay</h4>
-                        <p>Space optimisation and safety</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-embalaje"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Packaging</span>
-                        <h4>Professional fragile cargo packaging</h4>
-                        <p>Maximum protection for your merchandise</p>
-                    </div>
-                </div>
+        <section class="operations-gallery reveal" aria-label="Monteastur operations gallery">
+            <div class="operations-gallery-header">
+                <span class="operations-eyebrow">Real operations</span>
+                <h2 class="luxury-heading-lg">Visible work, protected cargo and a clear process</h2>
+                <p>A visual sample of the operations we support: preparation, packaging, containers, heavy cargo and delivery.</p>
             </div>
-            <div class="ops-envios-cta">
-                <a href="https://wa.me/34642687292" class="btn" target="_blank">Check prices and availability</a>
+            <div class="operations-gallery-grid">
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="package" class="luxury-icon"></i></div><span>Prepared cargo</span><h3 class="luxury-heading">Boxes ready for Paraguay</h3><p>Consolidation and packaging so every item travels protected.</p></article>
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="truck" class="luxury-icon"></i></div><span>Pickup</span><h3 class="luxury-heading">Departure from Asturias</h3><p>We coordinate pickup, review and preparation before transport.</p></article>
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="ship" class="luxury-icon"></i></div><span>Container</span><h3 class="luxury-heading">International cargo</h3><p>Space organisation to improve volume, order and safety.</p></article>
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="file-text" class="luxury-icon"></i></div><span>Customs</span><h3 class="luxury-heading">Supported documentation</h3><p>Document control to reduce doubts, waiting times and complications.</p></article>
             </div>
         </section>
 
-        <section class="galeria reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
-            <h3>Operations Gallery</h3>
-            <div class="grid-public">
-                <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
-                    <img th:src="${img.url}" th:alt="${img.titulo}">
-                    <span th:text="${img.titulo}">Title</span>
-                </div>
+        <section class="operations-final reveal">
+            <h2 class="luxury-heading-lg">Do you have a shipment ready to go?</h2>
+            <p>Tell us what you need to send, where the cargo starts and the final destination. We will guide you through the next step.</p>
+            <div class="operations-cta-row">
+                <a href="https://wa.me/34642687292" class="operations-btn btn-luxury" target="_blank">Ask for guidance</a>
+                <a href="/en/contacto" class="operations-btn secondary btn-luxury">Contact us</a>
             </div>
         </section>
     </main>
 
-    <footer th:replace="fragments/footer-en :: footer"></footer>
-
-    <div class="lightbox" id="lightbox" role="dialog" aria-label="Image viewer">
-        <button class="lightbox-cerrar" id="lbCer" aria-label="Close">&times;</button>
-        <button class="lightbox-nav lightbox-nav-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
-        <button class="lightbox-nav lightbox-nav-next" id="lbNext" aria-label="Next">&#8250;</button>
-        <div class="lightbox-contenido">
-            <img id="lbImg" src="" alt="">
-            <p class="lightbox-titulo" id="lbTit"></p>
-        </div>
-    </div>
+    <footer th:replace="~{fragments/footer-en :: footer}"></footer>
 
 </body>
 </html>

@@ -1,0 +1,315 @@
+{
+  "title": "Monteastur Envios",
+  "uid": "monteastur-envios",
+  "description": "Dashboard de monitorización para Monteastur Envios — JVM, HTTP, Tomcat",
+  "tags": ["monteastur", "spring-boot", "production"],
+  "schemaVersion": 39,
+  "version": 1,
+  "timezone": "browser",
+  "editable": false,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": ["15s", "30s", "1m", "5m", "15m"]
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "instance",
+        "type": "query",
+        "query": "label_values(up{application=\"monteastur-envios\"}, instance)",
+        "refresh": 1,
+        "includeAll": true,
+        "multi": true,
+        "allValue": ".*",
+        "current": {"text": "All", "value": "$__all"}
+      }
+    ]
+  },
+  "panels": [
+    {
+      "title": "App Status",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 3, "x": 0, "y": 0},
+      "targets": [{
+        "expr": "up{application=\"monteastur-envios\",instance=~\"$instance\"}",
+        "legendFormat": "{{instance}}"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "red", "value": null},
+              {"color": "green", "value": 1}
+            ]
+          },
+          "color": {"mode": "thresholds"},
+          "unit": "none",
+          "mappings": [
+            {"type": "value", "options": {"0": {"text": "DOWN", "color": "red"}, "1": {"text": "UP", "color": "green"}}}
+          ]
+        }
+      }
+    },
+    {
+      "title": "Uptime",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 3, "x": 3, "y": 0},
+      "targets": [{
+        "expr": "process_uptime_seconds{application=\"monteastur-envios\",instance=~\"$instance\"}",
+        "legendFormat": "{{instance}}"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "dtdurations",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "CPU Usage",
+      "type": "gauge",
+      "gridPos": {"h": 4, "w": 3, "x": 6, "y": 0},
+      "targets": [{
+        "expr": "process_cpu_usage{application=\"monteastur-envios\",instance=~\"$instance\"}",
+        "legendFormat": "{{instance}}"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "orange", "value": 0.7},
+              {"color": "red", "value": 0.9}
+            ]
+          },
+          "color": {"mode": "thresholds"}
+        }
+      }
+    },
+    {
+      "title": "Threads",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 3, "x": 9, "y": 0},
+      "targets": [{
+        "expr": "jvm_threads_live_threads{application=\"monteastur-envios\",instance=~\"$instance\"}",
+        "legendFormat": "{{instance}}"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "Active Sessions",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 3, "x": 12, "y": 0},
+      "targets": [{
+        "expr": "tomcat_sessions_active_current_sessions{application=\"monteastur-envios\",instance=~\"$instance\"}",
+        "legendFormat": "{{instance}}"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "Log Errors",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 3, "x": 15, "y": 0},
+      "targets": [{
+        "expr": "sum(logback_events_total{level=\"error\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+        "legendFormat": "errors"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "Heap Used",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 4, "x": 0, "y": 4},
+      "targets": [{
+        "expr": "sum(jvm_memory_used_bytes{area=\"heap\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+        "legendFormat": "used"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "Heap Max",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 4, "x": 4, "y": 4},
+      "targets": [{
+        "expr": "sum(jvm_memory_max_bytes{area=\"heap\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+        "legendFormat": "max"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "Heap Usage %",
+      "type": "gauge",
+      "gridPos": {"h": 4, "w": 4, "x": 8, "y": 4},
+      "targets": [{
+        "expr": "sum(jvm_memory_used_bytes{area=\"heap\",application=\"monteastur-envios\",instance=~\"$instance\"}) * 100 / sum(jvm_memory_max_bytes{area=\"heap\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+        "legendFormat": "heap %"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"color": "green", "value": null},
+              {"color": "orange", "value": 70},
+              {"color": "red", "value": 90}
+            ]
+          },
+          "color": {"mode": "thresholds"}
+        }
+      }
+    },
+    {
+      "title": "Non-Heap Used",
+      "type": "stat",
+      "gridPos": {"h": 4, "w": 4, "x": 12, "y": 4},
+      "targets": [{
+        "expr": "sum(jvm_memory_used_bytes{area=\"nonheap\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+        "legendFormat": "non-heap"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "JVM Memory (Heap)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+      "targets": [
+        {
+          "expr": "sum(jvm_memory_used_bytes{area=\"heap\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+          "legendFormat": "used"
+        },
+        {
+          "expr": "sum(jvm_memory_max_bytes{area=\"heap\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+          "legendFormat": "max"
+        },
+        {
+          "expr": "sum(jvm_memory_committed_bytes{area=\"heap\",application=\"monteastur-envios\",instance=~\"$instance\"})",
+          "legendFormat": "committed"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "Garbage Collection",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 8},
+      "targets": [
+        {
+          "expr": "rate(jvm_gc_pause_seconds_count{application=\"monteastur-envios\",instance=~\"$instance\"}[1m])",
+          "legendFormat": "GC {{action}} {{cause}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "HTTP Requests / min",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 8, "x": 0, "y": 16},
+      "targets": [{
+        "expr": "sum(rate(http_server_requests_seconds_count{application=\"monteastur-envios\",instance=~\"$instance\"}[1m]))",
+        "legendFormat": "total"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rpm",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "HTTP Latency (avg)",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 8, "x": 8, "y": 16},
+      "targets": [{
+        "expr": "sum(rate(http_server_requests_seconds_sum{application=\"monteastur-envios\",instance=~\"$instance\"}[1m])) / sum(rate(http_server_requests_seconds_count{application=\"monteastur-envios\",instance=~\"$instance\"}[1m]))",
+        "legendFormat": "avg latency"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "HTTP 4xx / min",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 4, "x": 16, "y": 16},
+      "targets": [{
+        "expr": "sum(rate(http_server_requests_seconds_count{status=~\"4..\",application=\"monteastur-envios\",instance=~\"$instance\"}[1m]))",
+        "legendFormat": "4xx"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rpm",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    },
+    {
+      "title": "HTTP 5xx / min",
+      "type": "timeseries",
+      "gridPos": {"h": 8, "w": 4, "x": 20, "y": 16},
+      "targets": [{
+        "expr": "sum(rate(http_server_requests_seconds_count{status=~\"5..\",application=\"monteastur-envios\",instance=~\"$instance\"}[1m]))",
+        "legendFormat": "5xx"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rpm",
+          "color": {"mode": "palette-classic"}
+        }
+      }
+    }
+  ]
+}

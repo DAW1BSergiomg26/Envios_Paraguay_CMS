@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Panel | MONTEASTUR ENVIOS</title>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+</head>
+<body>
+
+<div class="cliente-topbar">
+    <div class="ct-left">
+        <strong>MONTEASTUR ENVIOS</strong>
+        <span>&mdash; Panel de Cliente</span>
+    </div>
+    <div class="ct-right">
+        <span class="ct-user"><i data-lucide="user" class="luxury-icon luxury-icon-sm"></i> <span th:text="${cliente.nombre}">Nombre</span></span>
+        <a href="/cliente/logout" class="ct-logout">Cerrar sesi&oacute;n</a>
+    </div>
+</div>
+
+<div class="main-content" style="max-width: 960px; margin: 2rem auto;">
+
+    <div class="dashboard-header">
+        <div class="dashboard-header-content">
+            <h1>Mis env&iacute;os</h1>
+            <p th:text="'Bienvenido, ' + ${cliente.nombre}">Bienvenido</p>
+        </div>
+    </div>
+
+    <div th:if="not ${#lists.isEmpty(envios)}" th:each="envio : ${envios}" class="cp-card glass-card">
+        <div class="cp-card-header">
+            <span class="cp-code" th:text="${envio.codigoUnico}">MT-2026-0001</span>
+            <span class="tr-badge" th:classappend="'estado-' + ${envio.estado}">
+                <span th:switch="${envio.estado}">
+                    <span th:case="'RECIBIDO'"><i data-lucide="package" class="luxury-icon luxury-icon-sm"></i> Recibido</span>
+                    <span th:case="'EN_ADUANA_ORIGEN'"><i data-lucide="shield" class="luxury-icon luxury-icon-sm"></i> Aduana origen</span>
+                    <span th:case="'EN_TRANSITO'"><i data-lucide="truck" class="luxury-icon luxury-icon-sm"></i> Tr&aacute;nsito</span>
+                    <span th:case="'EN_ADUANA_DESTINO'"><i data-lucide="shield" class="luxury-icon luxury-icon-sm"></i> Aduana destino</span>
+                    <span th:case="'EN_REPARTO'"><i data-lucide="map-pin" class="luxury-icon luxury-icon-sm"></i> Reparto</span>
+                    <span th:case="'ENTREGADO'"><i data-lucide="check-circle" class="luxury-icon luxury-icon-sm"></i> Entregado</span>
+                </span>
+            </span>
+        </div>
+
+        <div class="cp-card-body">
+            <div class="cp-info-row">
+                <span class="cp-label">Destinatario</span>
+                <span class="cp-value" th:text="${envio.destinatario}">Nombre</span>
+            </div>
+            <div class="cp-info-row">
+                <span class="cp-label">Origen</span>
+                <span class="cp-value" th:text="${envio.origen}">Origen</span>
+            </div>
+            <div class="cp-info-row">
+                <span class="cp-label">Destino</span>
+                <span class="cp-value" th:text="${envio.destino}">Destino</span>
+            </div>
+            <div class="cp-info-row">
+                <span class="cp-label">Ubicaci&oacute;n actual</span>
+                <span class="cp-value" th:text="${envio.ubicacionActual}">Ubicaci&oacute;n</span>
+            </div>
+            <div class="cp-info-row">
+                <span class="cp-label"><i data-lucide="clock" class="luxury-icon luxury-icon-sm"></i> &Uacute;ltima actualizaci&oacute;n</span>
+                <span class="cp-value" th:text="${#temporals.format(envio.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</span>
+            </div>
+            <div class="cp-info-row" th:if="${envio.peso != null and !envio.peso.isEmpty()}">
+                <span class="cp-label">Peso</span>
+                <span class="cp-value" th:text="${envio.peso}">120 kg</span>
+            </div>
+            <div class="cp-info-row" th:if="${envio.contenido != null and !envio.contenido.isEmpty()}">
+                <span class="cp-label">Contenido</span>
+                <span class="cp-value" th:text="${envio.contenido}">Descripci&oacute;n</span>
+            </div>
+        </div>
+
+        <div th:if="${envio.observaciones != null and !envio.observaciones.isEmpty()}" class="cp-obs">
+            <span class="cp-obs-label"><i data-lucide="file-text" class="luxury-icon luxury-icon-sm"></i> Observaciones</span>
+            <p class="cp-obs-text" th:text="${envio.observaciones}">Nota</p>
+        </div>
+
+        <div class="cp-timeline" th:if="${envio.estado != null}">
+            <div th:class="'cp-tl-step ' + (${envio.estado == 'RECIBIDO' or envio.estado == 'EN_ADUANA_ORIGEN' or envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'done' : '') + (${envio.estado == 'RECIBIDO'} ? ' current' : '')">
+                <div class="cp-tl-icon"><i data-lucide="package" class="luxury-icon"></i></div>
+                <span>Recibido en origen</span>
+            </div>
+            <div th:class="'cp-tl-step ' + (${envio.estado == 'EN_ADUANA_ORIGEN' or envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'done' : '') + (${envio.estado == 'EN_ADUANA_ORIGEN'} ? ' current' : '')">
+                <div class="cp-tl-icon"><i data-lucide="shield" class="luxury-icon"></i></div>
+                <span>Aduana origen</span>
+            </div>
+            <div th:class="'cp-tl-step ' + (${envio.estado == 'EN_TRANSITO' or envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'done' : '') + (${envio.estado == 'EN_TRANSITO'} ? ' current' : '')">
+                <div class="cp-tl-icon"><i data-lucide="truck" class="luxury-icon"></i></div>
+                <span>Tr&aacute;nsito</span>
+            </div>
+            <div th:class="'cp-tl-step ' + (${envio.estado == 'EN_ADUANA_DESTINO' or envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'done' : '') + (${envio.estado == 'EN_ADUANA_DESTINO'} ? ' current' : '')">
+                <div class="cp-tl-icon"><i data-lucide="shield" class="luxury-icon"></i></div>
+                <span>Aduana destino</span>
+            </div>
+            <div th:class="'cp-tl-step ' + (${envio.estado == 'EN_REPARTO' or envio.estado == 'ENTREGADO'} ? 'done' : '') + (${envio.estado == 'EN_REPARTO'} ? ' current' : '')">
+                <div class="cp-tl-icon"><i data-lucide="map-pin" class="luxury-icon"></i></div>
+                <span>Reparto</span>
+            </div>
+            <div th:class="'cp-tl-step ' + (${envio.estado == 'ENTREGADO'} ? 'done current' : '')">
+                <div class="cp-tl-icon"><i data-lucide="check-circle" class="luxury-icon"></i></div>
+                <span>Entregado</span>
+            </div>
+        </div>
+
+        <div th:if="${evidenciasPorEnvio != null and evidenciasPorEnvio.get(envio.id) != null and !evidenciasPorEnvio.get(envio.id).isEmpty()}" class="cp-evidencias">
+            <h4 class="cp-ev-title luxury-heading"><i data-lucide="camera" class="luxury-icon luxury-icon-sm"></i> Evidencias del env&iacute;o</h4>
+            <div class="cp-ev-grid">
+                <div th:each="ev : ${evidenciasPorEnvio.get(envio.id)}" class="cp-ev-card">
+                    <div th:if="${ev.tipo == 'FOTO'}" class="cp-ev-thumb-wrap">
+                        <img th:src="${ev.urlArchivo}" th:alt="${ev.titulo}" class="cp-ev-thumb">
+                    </div>
+                    <div th:if="${ev.tipo == 'DOCUMENTO'}" class="cp-ev-doc-icon"><i data-lucide="file-text" class="luxury-icon"></i></div>
+                    <div class="cp-ev-info">
+                        <strong th:text="${ev.titulo}">T&iacute;tulo</strong>
+                        <span th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" th:text="${ev.descripcion}" class="cp-ev-desc"></span>
+                        <span class="cp-ev-date" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy')}">Fecha</span>
+                        <a th:href="${ev.urlArchivo}" target="_blank" class="cp-ev-link">
+                            <span th:text="${ev.tipo == 'FOTO'} ? 'Ver foto' : 'Ver documento'">Ver</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${evidenciasPorEnvio == null or evidenciasPorEnvio.get(envio.id) == null or evidenciasPorEnvio.get(envio.id).isEmpty()}" class="cp-ev-empty">
+            <span><i data-lucide="inbox" class="luxury-icon luxury-icon-sm"></i> A&uacute;n no hay evidencias subidas para este env&iacute;o.</span>
+        </div>
+
+        <div th:if="${eventosPorEnvio != null and eventosPorEnvio.get(envio.id) != null and !eventosPorEnvio.get(envio.id).isEmpty()}" class="cp-eventos">
+            <h4 class="cp-ev-title luxury-heading">Historial del env&iacute;o</h4>
+            <div class="evento-timeline cliente-timeline">
+                <div th:each="ev : ${eventosPorEnvio.get(envio.id)}" class="evento-item">
+                    <div class="evento-dot" th:style="'background:' + ${ev.color}"></div>
+                    <div class="evento-line"></div>
+                    <div class="evento-card">
+                        <div class="evento-card-head">
+                            <span class="evento-icon"><i data-lucide="package" class="luxury-icon"></i></span>
+                            <strong class="evento-titulo" th:text="${ev.titulo}">Título</strong>
+                            <span class="evento-badge" th:style="'background:' + ${ev.color}" th:text="${ev.estado}">Estado</span>
+                        </div>
+                        <div class="evento-card-meta">
+                            <span class="evento-fecha" th:text="${#temporals.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                            <span th:if="${ev.ubicacion != null}" class="evento-ubicacion" th:text="${ev.ubicacion}">Ubicación</span>
+                        </div>
+                        <p th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" class="evento-desc" th:text="${ev.descripcion}">Descripción</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cp-whatsapp">
+            <a href="https://wa.me/34642687292" target="_blank" rel="noopener" class="btn-luxury-outline">
+                <i data-lucide="message-circle" class="luxury-icon luxury-icon-sm"></i> Consultar por WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <div th:if="${#lists.isEmpty(envios)}" class="cp-empty glass-card">
+        <div class="cp-empty-icon"><i data-lucide="inbox" class="luxury-icon luxury-icon-lg"></i></div>
+        <h3>No ten&eacute;s env&iacute;os activos</h3>
+        <p>Si esper&aacute;s un env&iacute;o, comunicate con nosotros por WhatsApp.</p>
+        <a href="https://wa.me/34642687292" target="_blank" rel="noopener" class="btn-luxury-outline">
+            <i data-lucide="message-circle" class="luxury-icon luxury-icon-sm"></i> Contactar por WhatsApp
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

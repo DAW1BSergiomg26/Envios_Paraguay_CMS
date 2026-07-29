@@ -1,160 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header :: head('Operaciones')"></head>
+<head th:replace="~{fragments/header :: head('Operaciones')}"></head>
 
 <body>
 
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 
-    <main>
-        <section class="pagina-titulo reveal">
-            <h2>Operaciones</h2>
-            <p>Log&iacute;stica internacional premium. Gestionamos tu carga pesada con la seguridad y el cuidado que merece.</p>
-        </section>
-
-        <section class="contenido reveal">
-            <p class="ops-intro">En MONTEASTUR ENVIOS coordinamos cada env&iacute;o de forma personalizada. Desde la recogida en Pola de Siero hasta la entrega final en Paraguay, nuestro equipo gestiona todo el proceso log&iacute;stico con experiencia y dedicaci&oacute;n.</p>
-
-            <div class="ops-grid">
-                <div class="ops-card">
-                    <div class="ops-card-badge">Carga general</div>
-                    <div class="ops-card-icono">&#128230;</div>
-                    <h4>Carga y embalaje</h4>
-                    <p>Preparamos tu mercanc&iacute;a con embalaje profesional para carga pesada y fr&aacute;gil. Consolidamos bultos y optimizamos el espacio para maximizar la seguridad durante el transporte internacional.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Mudanzas</div>
-                    <div class="ops-card-icono">&#127969;</div>
-                    <h4>Mudanzas internacionales</h4>
-                    <p>Coordinamos mudanzas completas desde Asturias a Paraguay con gesti&oacute;n de aduanas incluida. Tus pertenencias viajan protegidas y aseguradas hasta tu nuevo hogar.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Veh&iacute;culos</div>
-                    <div class="ops-card-icono">&#128663;</div>
-                    <h4>Veh&iacute;culos y maquinaria</h4>
-                    <p>Transporte especializado para coches, furgonetas, maquinaria industrial y equipamiento agr&iacute;cola. Gestionamos la documentaci&oacute;n t&eacute;cnica y aduanera.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Aduanas</div>
-                    <div class="ops-card-icono">&#128188;</div>
-                    <h4>Gesti&oacute;n de aduanas</h4>
-                    <p>Tramitamos toda la documentaci&oacute;n aduanera para la exportaci&oacute;n desde Espa&ntilde;a y la importaci&oacute;n en Paraguay. Declaraciones, aranceles y certificaciones sin complicaciones.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Puerta a puerta</div>
-                    <div class="ops-card-icono">&#128666;</div>
-                    <h4>Entrega puerta a puerta</h4>
-                    <p>Recogemos en tu domicilio o empresa en Asturias y entregamos directamente en la direcci&oacute;n que nos indiques en Paraguay. Sin trasbordos innecesarios ni almacenajes intermedios.</p>
-                </div>
-                <div class="ops-card">
-                    <div class="ops-card-badge">Seguimiento</div>
-                    <div class="ops-card-icono">&#128065;</div>
-                    <h4>Seguimiento personalizado</h4>
-                    <p>Te mantenemos informado en cada etapa del proceso. Desde la recogida hasta la entrega final, recibir&aacute;s actualizaciones del estado de tu env&iacute;o con atenci&oacute;n directa.</p>
-                </div>
-            </div>
-
-            <div class="ops-cta">
-                <p>¿Necesitas enviar carga a Paraguay?</p>
-                <a href="https://wa.me/34642687292" class="btn" target="_blank">Consult&aacute; precios y disponibilidad</a>
+    <main class="operations-page">
+        <section class="operations-hero reveal">
+            <span class="operations-eyebrow">Operaciones internacionales</span>
+            <h1 class="luxury-heading-lg">Log&iacute;stica segura entre Asturias y Paraguay</h1>
+            <p>Gestionamos carga, embalaje, documentaci&oacute;n, aduanas y seguimiento para que cada env&iacute;o viaje con orden, control y atenci&oacute;n cercana.</p>
+            <div class="operations-cta-row">
+                <a href="https://wa.me/34642687292" class="operations-btn btn-luxury" target="_blank">Consultar por WhatsApp</a>
+                <a href="/tracking" class="operations-btn secondary btn-luxury">Rastrear env&iacute;o</a>
             </div>
         </section>
 
-        <section class="ops-placeholder reveal">
-            <div class="ops-placeholder-card">
-                <span class="ops-placeholder-icono">&#128247;</span>
-                <h4>Galer&iacute;a de operaciones</h4>
-                <p>Pronto podr&aacute;s ver im&aacute;genes reales de nuestras operaciones de carga, embalaje y transporte.</p>
+        <section class="operations-grid reveal" aria-label="Servicios operativos Monteastur">
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="package" class="luxury-icon"></i></div><h3 class="luxury-heading">Carga y embalaje</h3><p>Preparamos cajas, bultos y mercanc&iacute;a delicada con embalaje profesional para transporte internacional.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="home" class="luxury-icon"></i></div><h3 class="luxury-heading">Mudanzas internacionales</h3><p>Coordinamos mudanzas desde Asturias a Paraguay con acompa&ntilde;amiento durante todo el proceso.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="truck" class="luxury-icon"></i></div><h3 class="luxury-heading">Veh&iacute;culos y maquinaria</h3><p>Transporte especializado para coches, furgonetas, maquinaria y equipamiento de gran volumen.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="file-text" class="luxury-icon"></i></div><h3 class="luxury-heading">Aduanas y documentos</h3><p>Te ayudamos con la documentaci&oacute;n necesaria para reducir dudas, retrasos y sorpresas.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="truck" class="luxury-icon"></i></div><h3 class="luxury-heading">Recogida y entrega</h3><p>Organizamos la recogida, consolidaci&oacute;n y entrega final seg&uacute;n el tipo de carga y destino.</p></article>
+            <article class="operation-card glass-card card-hover"><div class="operation-icon"><i data-lucide="map-pin" class="luxury-icon"></i></div><h3 class="luxury-heading">Seguimiento claro</h3><p>Mantenemos comunicaci&oacute;n directa para que sepas en qu&eacute; punto est&aacute; tu env&iacute;o.</p></article>
+        </section>
+
+        <section class="operations-timeline reveal" aria-label="Proceso de envio">
+            <h2 class="luxury-heading-lg">As&iacute; acompa&ntilde;amos tu env&iacute;o</h2>
+            <div class="timeline-steps">
+                <div class="timeline-step"><strong>01</strong><span>Consulta y presupuesto</span></div>
+                <div class="timeline-step"><strong>02</strong><span>Preparaci&oacute;n de carga</span></div>
+                <div class="timeline-step"><strong>03</strong><span>Documentaci&oacute;n y aduanas</span></div>
+                <div class="timeline-step"><strong>04</strong><span>Tr&aacute;nsito internacional</span></div>
+                <div class="timeline-step"><strong>05</strong><span>Llegada a Paraguay</span></div>
             </div>
         </section>
 
-        <section class="ops-envios-reales reveal">
-            <h3>Nuestros env&iacute;os reales</h3>
-            <p>Operaciones reales de MONTEASTUR ENVIOS</p>
-            <div class="ops-envios-grid">
-                <div class="ops-envio-card has-image">
-                    <div class="ops-envio-bg" style="background-image: url('/img/monteastur/operaciones/operaciones-carga.jpg');"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Cajas</span>
-                        <h4>Carga preparada para Paraguay</h4>
-                        <p>Embalaje y consolidaci&oacute;n profesional</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-mudanzas"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Mudanzas</span>
-                        <h4>Mudanza internacional segura</h4>
-                        <p>De Asturias a Paraguay con garant&iacute;a</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-vehiculos"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Veh&iacute;culos</span>
-                        <h4>Veh&iacute;culo listo para exportaci&oacute;n</h4>
-                        <p>Transporte especializado con gesti&oacute;n aduanera</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-pesada"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Carga pesada</span>
-                        <h4>Maquinaria industrial embarcada</h4>
-                        <p>Log&iacute;stica de gran volumen y peso</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card has-image">
-                    <div class="ops-envio-bg" style="background-image: url('/img/monteastur/operaciones/operaciones-entrega.jpg');"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Contenedores</span>
-                        <h4>Contenedor consolidado con destino Paraguay</h4>
-                        <p>Optimizaci&oacute;n de espacio y seguridad</p>
-                    </div>
-                </div>
-                <div class="ops-envio-card">
-                    <div class="ops-envio-bg ops-envio-bg-embalaje"></div>
-                    <div class="ops-envio-overlay"></div>
-                    <div class="ops-envio-content">
-                        <span class="ops-envio-badge">Embalaje</span>
-                        <h4>Embalaje profesional de carga fr&aacute;gil</h4>
-                        <p>Protecci&oacute;n m&aacute;xima para tu mercanc&iacute;a</p>
-                    </div>
-                </div>
+        <section class="operations-gallery reveal" aria-label="Galeria de operaciones Monteastur">
+            <div class="operations-gallery-header">
+                <span class="operations-eyebrow">Operaciones reales</span>
+                <h2 class="luxury-heading-lg">Trabajo visible, carga cuidada y proceso claro</h2>
+                <p>Una muestra visual del tipo de operaciones que acompa&ntilde;amos: preparaci&oacute;n, embalaje, contenedores, carga pesada y entrega.</p>
             </div>
-            <div class="ops-envios-cta">
-                <a href="https://wa.me/34642687292" class="btn" target="_blank">Consult&aacute; precios y disponibilidad</a>
+            <div class="operations-gallery-grid">
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="package" class="luxury-icon"></i></div><span>Carga preparada</span><h3 class="luxury-heading">Cajas listas para Paraguay</h3><p>Consolidaci&oacute;n y embalaje para que cada bulto viaje protegido.</p></article>
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="truck" class="luxury-icon"></i></div><span>Recogida</span><h3 class="luxury-heading">Salida desde Asturias</h3><p>Coordinamos recogida, revisi&oacute;n y preparaci&oacute;n antes del transporte.</p></article>
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="ship" class="luxury-icon"></i></div><span>Contenedor</span><h3 class="luxury-heading">Carga internacional</h3><p>Organizaci&oacute;n del espacio para aprovechar volumen y seguridad.</p></article>
+                <article class="gallery-card glass-card card-hover"><div class="gallery-visual"><i data-lucide="file-text" class="luxury-icon"></i></div><span>Aduanas</span><h3 class="luxury-heading">Documentaci&oacute;n acompa&ntilde;ada</h3><p>Control documental para reducir dudas, esperas y complicaciones.</p></article>
             </div>
         </section>
 
-        <section class="galeria reveal" th:if="${imagenes != null and !imagenes.isEmpty()}">
-            <h3>Galer&iacute;a de operaciones</h3>
-            <div class="grid-public">
-                <div class="gal-item" th:each="img : ${imagenes}" th:data-src="${img.url}" th:data-title="${img.titulo}">
-                    <img th:src="${img.url}" th:alt="${img.titulo}">
-                    <span th:text="${img.titulo}">T&iacute;tulo</span>
-                </div>
+        <section class="operations-final reveal">
+            <h2 class="luxury-heading-lg">&iquest;Tienes una operaci&oacute;n lista para salir?</h2>
+            <p>Cu&eacute;ntanos qu&eacute; necesitas enviar, desde d&oacute;nde sale la carga y cu&aacute;l es el destino. Te orientamos con el siguiente paso.</p>
+            <div class="operations-cta-row">
+                <a href="https://wa.me/34642687292" class="operations-btn btn-luxury" target="_blank">Pedir orientaci&oacute;n</a>
+                <a href="/contacto" class="operations-btn secondary btn-luxury">Ver contacto</a>
             </div>
         </section>
     </main>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
-
-    <div class="lightbox" id="lightbox" role="dialog" aria-label="Visor de im&aacute;genes">
-        <button class="lightbox-cerrar" id="lbCer" aria-label="Cerrar">&times;</button>
-        <button class="lightbox-nav lightbox-nav-prev" id="lbPrev" aria-label="Anterior">&#8249;</button>
-        <button class="lightbox-nav lightbox-nav-next" id="lbNext" aria-label="Siguiente">&#8250;</button>
-        <div class="lightbox-contenido">
-            <img id="lbImg" src="" alt="">
-            <p class="lightbox-titulo" id="lbTit"></p>
-        </div>
-    </div>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>

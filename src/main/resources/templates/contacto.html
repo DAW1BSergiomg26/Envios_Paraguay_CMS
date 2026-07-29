@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="fragments/header :: head('Contacto')"></head>
+<head th:replace="~{fragments/header :: head('Contacto')}"></head>
 
 <body>
 
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
 
     <main>
         <section class="pagina-titulo reveal">
-            <h2>Contacto</h2>
+            <h2 class="luxury-heading-lg">Contacto</h2>
             <p>Estamos en Pola de Siero. Ll&aacute;manos o escr&iacute;benos y te asesoramos sin compromiso.</p>
         </section>
 
         <section class="contenido reveal" th:if="${!mensajeEnviado}">
             <div class="contacto-grid">
-                <div class="contacto-info-card">
-                    <h3><span>&#128205;</span> Informaci&oacute;n de contacto</h3>
+                <div class="contacto-info-card glass-card border-accent-left">
+                    <h3 class="luxury-heading"><span><i data-lucide="building-2" class="luxury-icon"></i></span> Informaci&oacute;n de contacto</h3>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#128205;</div>
+                        <div class="contacto-info-icono"><i data-lucide="building-2" class="luxury-icon"></i></div>
                         <div class="contacto-info-texto">
                             <strong>Direcci&oacute;n</strong>
                             <p>Pola de Siero, Asturias &mdash; Asunci&oacute;n, Paraguay</p>
                         </div>
                     </div>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#128222;</div>
+                        <div class="contacto-info-icono"><i data-lucide="phone-call" class="luxury-icon"></i></div>
                         <div class="contacto-info-texto">
                             <strong>Tel&eacute;fono</strong>
                             <a href="tel:+34642687292">642 687 292</a>
                         </div>
                     </div>
                     <div class="contacto-info-item">
-                        <div class="contacto-info-icono">&#9993;</div>
+                        <div class="contacto-info-icono"><i data-lucide="mail" class="luxury-icon"></i></div>
                         <div class="contacto-info-texto">
                             <strong>Email</strong>
                             <p>monteastur@hotmail.es</p>
@@ -40,41 +40,41 @@
                     </div>
                 </div>
 
-                <div class="contacto-form-card">
-                    <h3><span>&#9997;&#65039;</span> Env&iacute;anos un mensaje</h3>
+                <div class="contacto-form-card glass-card">
+                    <h3 class="luxury-heading"><span><i data-lucide="message-square" class="luxury-icon"></i></span> Env&iacute;anos un mensaje</h3>
                     <form action="#" th:action="@{/contacto}" method="post">
                         <div class="rf-group">
                             <label for="nombre">Nombre *</label>
-                            <input type="text" id="nombre" name="nombre" required class="rf-control">
+                            <input type="text" id="nombre" name="nombre" required class="rf-control focus-glow">
                         </div>
                         <div class="rf-group">
                             <label for="email">Email *</label>
-                            <input type="email" id="email" name="email" required class="rf-control">
+                            <input type="email" id="email" name="email" required class="rf-control focus-glow">
                         </div>
                         <div class="rf-group">
                             <label for="telefono">Tel&eacute;fono</label>
-                            <input type="tel" id="telefono" name="telefono" class="rf-control">
+                            <input type="tel" id="telefono" name="telefono" class="rf-control focus-glow">
                         </div>
                         <div class="rf-group">
                             <label for="mensaje">Mensaje *</label>
-                            <textarea id="mensaje" name="mensaje" rows="5" required class="rf-control"></textarea>
+                            <textarea id="mensaje" name="mensaje" rows="5" required class="rf-control focus-glow"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-block">Enviar mensaje</button>
+                        <button type="submit" class="btn btn-block btn-luxury"><i data-lucide="send" class="luxury-icon luxury-icon-sm"></i> Enviar mensaje</button>
                         <p class="reserva-confianza">Tus datos est&aacute;n protegidos y no ser&aacute;n compartidos.</p>
                     </form>
                 </div>
             </div>
         </section>
 
-        <section class="contacto-exito reveal" th:if="${mensajeEnviado}">
-            <div class="contacto-exito-icono">&#9989;</div>
-            <h3>&iexcl;Mensaje enviado!</h3>
+        <section class="contacto-exito reveal glass-card" th:if="${mensajeEnviado}">
+            <div class="contacto-exito-icono"><i data-lucide="check-circle" class="luxury-icon luxury-icon-lg"></i></div>
+            <h3 class="luxury-heading">&iexcl;Mensaje enviado!</h3>
             <p>Gracias por contactar con MONTEASTUR. Te responderemos lo antes posible.</p>
-            <a href="/" class="btn">Volver al inicio</a>
+            <a href="/" class="btn btn-luxury">Volver al inicio</a>
         </section>
     </main>
 
-    <footer th:replace="fragments/footer :: footer"></footer>
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
 
 </body>
 </html>
