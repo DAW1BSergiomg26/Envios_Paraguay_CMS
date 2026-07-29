@@ -2,6 +2,8 @@ package com.monteastur.envios.service;
 
 import com.monteastur.envios.model.Cliente;
 import com.monteastur.envios.repository.ClienteRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -40,10 +42,12 @@ public class ClienteService {
         return Optional.empty();
     }
 
+    @Cacheable("envios.clientes")
     public Optional<Cliente> buscarPorId(Long id) {
         return repo.findById(id);
     }
 
+    @CacheEvict(value = "envios.clientes", allEntries = true)
     public Cliente guardar(Cliente cliente) {
         if (!esBcrypt(cliente.getPassword())) {
             cliente.setPassword(passwordEncoder.encode(cliente.getPassword()));
@@ -51,6 +55,7 @@ public class ClienteService {
         return repo.save(cliente);
     }
 
+    @Cacheable("envios.clientes")
     public java.util.List<Cliente> listarTodos() {
         return repo.findAll();
     }

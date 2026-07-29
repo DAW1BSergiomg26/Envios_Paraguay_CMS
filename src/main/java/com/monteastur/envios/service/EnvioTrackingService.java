@@ -2,6 +2,8 @@ package com.monteastur.envios.service;
 
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -17,14 +19,17 @@ public class EnvioTrackingService {
         this.repo = repo;
     }
 
+    @Cacheable("envios.tracking")
     public Optional<EnvioTracking> buscarPorCodigo(String codigo) {
         return repo.findByCodigoUnico(codigo.trim().toUpperCase());
     }
 
+    @Cacheable("envios.dashboard")
     public List<EnvioTracking> listarTodos() {
         return repo.findAllByOrderByUltimaActualizacionDesc();
     }
 
+    @CacheEvict(value = "envios.tracking", allEntries = true)
     public EnvioTracking guardar(EnvioTracking envio) {
         envio.setUltimaActualizacion(LocalDateTime.now());
         if (envio.getFechaCreacion() == null) {
@@ -33,6 +38,7 @@ public class EnvioTrackingService {
         return repo.save(envio);
     }
 
+    @CacheEvict(value = "envios.tracking", allEntries = true)
     public void eliminar(Long id) {
         repo.deleteById(id);
     }
