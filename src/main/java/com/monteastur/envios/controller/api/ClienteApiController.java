@@ -15,6 +15,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +28,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Tag(name = "Cliente", description = "Portal del cliente autenticado por sesión (requiere cookie JSESSIONID)")
 @RestController
 @RequestMapping("/api/v1/cliente")
 public class ClienteApiController {
@@ -44,6 +51,13 @@ public class ClienteApiController {
         this.eventoTrackingService = eventoTrackingService;
     }
 
+    @Operation(summary = "Listar envíos del cliente", description = "Devuelve los envíos asociados al cliente autenticado")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de envíos del cliente",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ClienteEnvioResumenDto.class))),
+        @ApiResponse(responseCode = "403", description = "No autenticado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
     @GetMapping("/envios")
     public ResponseEntity<?> listarEnvios(HttpSession session) {
         Long clienteId = (Long) session.getAttribute("clienteId");
@@ -64,6 +78,15 @@ public class ClienteApiController {
         return ResponseEntity.ok(dtos);
     }
 
+    @Operation(summary = "Detalle de envío del cliente", description = "Obtiene el detalle completo de un envío con eventos y evidencias visibles")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Detalle del envío",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.TrackingDto.class))),
+        @ApiResponse(responseCode = "403", description = "No autenticado o no autorizado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class))),
+        @ApiResponse(responseCode = "404", description = "Envío no encontrado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
     @GetMapping("/envios/{codigo}")
     public ResponseEntity<?> detalleEnvio(@PathVariable String codigo, HttpSession session) {
         Long clienteId = (Long) session.getAttribute("clienteId");
@@ -105,6 +128,14 @@ public class ClienteApiController {
         return ResponseEntity.ok(dto);
     }
 
+    @Operation(summary = "Descargar evidencia", description = "Descarga un archivo de evidencia asociado a un envío del cliente")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Archivo descargado"),
+        @ApiResponse(responseCode = "403", description = "No autenticado, archivo no visible o nombre no permitido",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class))),
+        @ApiResponse(responseCode = "404", description = "Evidencia o archivo no encontrado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
     @GetMapping("/evidencias/{id}/archivo")
     public ResponseEntity<?> descargarEvidencia(@PathVariable Long id, HttpSession session) {
         Long clienteId = (Long) session.getAttribute("clienteId");
