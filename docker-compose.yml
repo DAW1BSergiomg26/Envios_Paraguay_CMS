@@ -50,6 +50,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
     networks:
       - backend
@@ -133,6 +135,23 @@ services:
       - backend
     mem_limit: 256m
 
+  redis:
+    image: redis:7-alpine
+    container_name: monteastur-redis
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - backend
+    mem_limit: 64m
+
 networks:
   backend:
     driver: bridge
@@ -145,3 +164,4 @@ volumes:
   prometheus_data:
   grafana_data:
   uptime_kuma_data:
+  redis_data:
