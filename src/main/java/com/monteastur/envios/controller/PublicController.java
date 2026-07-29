@@ -12,18 +12,25 @@ import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
 import com.monteastur.envios.service.EmailService;
 import com.monteastur.envios.service.EventoTrackingService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.*;
 
 @Controller
 public class PublicController {
+
+    private static final String[] MESES_ES =
+        {"Enero","Febrero","Marzo","Abril","Mayo","Junio",
+         "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
+    private static final String[] MESES_EN =
+        {"January","February","March","April","May","June",
+         "July","August","September","October","November","December"};
 
     private final MensajeContactoRepository mensajeRepo;
     private final ReservaRepository reservaRepo;
@@ -46,31 +53,31 @@ public class PublicController {
         this.eventoTrackingService = eventoTrackingService;
     }
 
-    @GetMapping("/")
-    public String index() {
-        return "home";
+    @GetMapping({"/", "/en"})
+    public String index(HttpServletRequest request) {
+        return template("home", request);
     }
 
-    @GetMapping({"/casa", "/lacasa"})
-    public String laCasa(Model model) {
+    @GetMapping({"/casa", "/lacasa", "/en/casa"})
+    public String laCasa(Model model, HttpServletRequest request) {
         model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
-        return "lacasa";
+        return template("lacasa", request);
     }
 
-    @GetMapping("/entorno")
-    public String entorno() {
-        return "entorno";
+    @GetMapping({"/entorno", "/en/entorno"})
+    public String entorno(HttpServletRequest request) {
+        return template("entorno", request);
     }
 
-    @GetMapping("/reservas")
+    @GetMapping({"/reservas", "/en/reservas"})
     public String reservas(Model model, HttpServletRequest request) {
         request.getSession();
         model.addAttribute("reservaEnviada", false);
-        model.addAttribute("calendarios", generarCalendarios(occupiedDates(), MESES_ES));
-        return "reservas";
+        model.addAttribute("calendarios", generarCalendarios(occupiedDates(), monthNames(request)));
+        return template("reservas", request);
     }
 
-    @PostMapping("/reservas")
+    @PostMapping({"/reservas", "/en/reservas"})
     public String enviarReserva(@RequestParam String nombreCliente,
                                  @RequestParam String email,
                                  @RequestParam(required = false) String telefono,
@@ -78,167 +85,71 @@ public class PublicController {
                                  @RequestParam String fechaSalida,
                                  @RequestParam Integer numeroHuespedes,
                                  @RequestParam(required = false) String comentarios,
-                                 Model model) {
+                                 Model model, HttpServletRequest request) {
         Reserva res = new Reserva(nombreCliente, email, telefono,
                                   LocalDate.parse(fechaEntrada), LocalDate.parse(fechaSalida),
                                   numeroHuespedes, comentarios);
         reservaRepo.save(res);
         emailService.notificarReserva(res);
         model.addAttribute("reservaEnviada", true);
-        return "reservas";
+        return template("reservas", request);
     }
 
-    @GetMapping("/contacto")
-    public String contacto(Model model) {
+    @GetMapping({"/contacto", "/en/contacto"})
+    public String contacto(Model model, HttpServletRequest request) {
         model.addAttribute("mensajeEnviado", false);
-        return "contacto";
+        return template("contacto", request);
     }
 
-    @PostMapping("/contacto")
+    @PostMapping({"/contacto", "/en/contacto"})
     public String enviarContacto(@RequestParam String nombre,
                                   @RequestParam String email,
                                   @RequestParam(required = false) String telefono,
                                   @RequestParam String mensaje,
-                                  Model model) {
+                                  Model model, HttpServletRequest request) {
         MensajeContacto msg = new MensajeContacto(nombre, email, telefono, mensaje);
         mensajeRepo.save(msg);
         emailService.notificarContacto(nombre, email, mensaje);
         model.addAttribute("mensajeEnviado", true);
-        return "contacto";
+        return template("contacto", request);
     }
 
-    @GetMapping("/operaciones")
-    public String operaciones() {
-        return "operaciones";
+    @GetMapping({"/operaciones", "/en/operaciones"})
+    public String operaciones(HttpServletRequest request) {
+        return template("operaciones", request);
     }
 
-    @GetMapping("/aviso-legal")
-    public String avisoLegal(Model model) {
+    @GetMapping({"/aviso-legal", "/en/aviso-legal"})
+    public String avisoLegal(Model model, HttpServletRequest request) {
         model.addAttribute("texto", textoRepo.findBySlug("aviso-legal").orElse(null));
-        return "aviso-legal";
+        return template("aviso-legal", request);
     }
 
-    @GetMapping("/politica-cookies")
-    public String politicaCookies(Model model) {
+    @GetMapping({"/politica-cookies", "/en/politica-cookies"})
+    public String politicaCookies(Model model, HttpServletRequest request) {
         model.addAttribute("texto", textoRepo.findBySlug("politica-cookies").orElse(null));
-        return "politica-cookies";
+        return template("politica-cookies", request);
     }
 
-    @GetMapping("/en")
-    public String enIndex() {
-        return "en/home";
-    }
-
-    @GetMapping("/en/casa")
-    public String enCasa(Model model) {
-        model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
-        return "en/casa";
-    }
-
-    @GetMapping("/en/reservas")
-    public String enReservas(Model model, HttpServletRequest request) {
-        request.getSession();
-        model.addAttribute("reservaEnviada", false);
-        model.addAttribute("calendarios", generarCalendarios(occupiedDates(), MESES_EN));
-        return "en/reservas";
-    }
-
-    @PostMapping("/en/reservas")
-    public String enEnviarReserva(@RequestParam String nombreCliente,
-                                   @RequestParam String email,
-                                   @RequestParam(required = false) String telefono,
-                                   @RequestParam String fechaEntrada,
-                                   @RequestParam String fechaSalida,
-                                   @RequestParam Integer numeroHuespedes,
-                                   @RequestParam(required = false) String comentarios,
-                                   Model model) {
-        Reserva res = new Reserva(nombreCliente, email, telefono,
-                                  LocalDate.parse(fechaEntrada), LocalDate.parse(fechaSalida),
-                                  numeroHuespedes, comentarios);
-        reservaRepo.save(res);
-        emailService.notificarReserva(res);
-        model.addAttribute("reservaEnviada", true);
-        return "en/reservas";
-    }
-
-    @GetMapping("/en/contacto")
-    public String enContacto(Model model) {
-        model.addAttribute("mensajeEnviado", false);
-        return "en/contacto";
-    }
-
-    @PostMapping("/en/contacto")
-    public String enEnviarContacto(@RequestParam String nombre,
-                                    @RequestParam String email,
-                                    @RequestParam(required = false) String telefono,
-                                    @RequestParam String mensaje,
-                                    Model model) {
-        MensajeContacto msg = new MensajeContacto(nombre, email, telefono, mensaje);
-        mensajeRepo.save(msg);
-        emailService.notificarContacto(nombre, email, mensaje);
-        model.addAttribute("mensajeEnviado", true);
-        return "en/contacto";
-    }
-
-    @GetMapping("/en/operaciones")
-    public String enOperaciones() {
-        return "en/operaciones";
-    }
-
-    @GetMapping("/en/aviso-legal")
-    public String enAvisoLegal(Model model) {
-        model.addAttribute("texto", textoRepo.findBySlug("aviso-legal").orElse(null));
-        return "en/aviso-legal";
-    }
-
-    @GetMapping("/tracking")
-    public String tracking(Model model) {
+    @GetMapping({"/tracking", "/en/tracking"})
+    public String tracking(Model model, HttpServletRequest request) {
         model.addAttribute("envio", null);
         model.addAttribute("buscado", false);
-        return "tracking";
+        return template("tracking", request);
     }
 
-    @PostMapping("/tracking")
-    public String buscarTracking(@RequestParam String codigo, Model model) {
+    @PostMapping({"/tracking", "/en/tracking"})
+    public String buscarTracking(@RequestParam String codigo, Model model, HttpServletRequest request) {
         var optEnvio = trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase());
         model.addAttribute("envio", optEnvio.orElse(null));
         model.addAttribute("buscado", true);
         optEnvio.ifPresent(e -> model.addAttribute("eventos", eventoTrackingService.listarPorEnvio(e.getId())));
-        return "tracking";
-    }
-
-    @GetMapping("/en/politica-cookies")
-    public String enPoliticaCookies(Model model) {
-        model.addAttribute("texto", textoRepo.findBySlug("politica-cookies").orElse(null));
-        return "en/politica-cookies";
-    }
-
-    @GetMapping("/en/tracking")
-    public String enTracking(Model model) {
-        model.addAttribute("envio", null);
-        model.addAttribute("buscado", false);
-        return "en/tracking";
-    }
-
-    @PostMapping("/en/tracking")
-    public String enBuscarTracking(@RequestParam String codigo, Model model) {
-        var optEnvio = trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase());
-        model.addAttribute("envio", optEnvio.orElse(null));
-        model.addAttribute("buscado", true);
-        optEnvio.ifPresent(e -> model.addAttribute("eventos", eventoTrackingService.listarPorEnvio(e.getId())));
-        return "en/tracking";
+        return template("tracking", request);
     }
 
     // -----------------------------------------------------------
     //  CALENDARIO DE DISPONIBILIDAD
     // -----------------------------------------------------------
-
-    private static final String[] MESES_ES =
-        {"Enero","Febrero","Marzo","Abril","Mayo","Junio",
-         "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"};
-    private static final String[] MESES_EN =
-        {"January","February","March","April","May","June",
-         "July","August","September","October","November","December"};
 
     public static class MesCalendario {
         private final String nombre;
@@ -264,6 +175,19 @@ public class PublicController {
         public boolean isOcupado() { return ocupado; }
         public boolean isPasado() { return pasado; }
         public boolean isRelleno() { return relleno; }
+    }
+
+    private String template(String view, HttpServletRequest request) {
+        return isEnglish(request) ? "en/" + view : view;
+    }
+
+    private boolean isEnglish(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return uri.startsWith("/en/") || uri.equals("/en");
+    }
+
+    private String[] monthNames(HttpServletRequest request) {
+        return isEnglish(request) ? MESES_EN : MESES_ES;
     }
 
     private Set<LocalDate> occupiedDates() {
@@ -316,6 +240,3 @@ public class PublicController {
         return calendarios;
     }
 }
-
-
-
