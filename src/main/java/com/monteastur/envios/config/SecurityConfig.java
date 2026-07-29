@@ -45,6 +45,7 @@ public class SecurityConfig {
             // Rutas protegidas: admin MVC y API REST admin requieren autenticaci�n
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**", "/api/v1/admin/**").authenticated()
+                .requestMatchers("/api/v1/docs", "/api/v1/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().permitAll()
             )
             // Login basado en formulario Spring Security (Thymeleaf)
