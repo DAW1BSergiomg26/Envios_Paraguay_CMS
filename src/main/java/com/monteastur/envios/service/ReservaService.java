@@ -6,6 +6,8 @@ import com.monteastur.envios.exception.BadRequestException;
 import com.monteastur.envios.exception.ConflictException;
 import com.monteastur.envios.model.Reserva;
 import com.monteastur.envios.repository.ReservaRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,22 +31,27 @@ public class ReservaService {
         this.repo = repo;
     }
 
+    @CacheEvict(value = {"envios.reservas", "envios.disponibilidad"}, allEntries = true)
     public Reserva crear(Reserva reserva) {
         return repo.save(reserva);
     }
 
+    @Cacheable("envios.reservas")
     public Optional<Reserva> buscarPorId(Long id) {
         return repo.findById(id);
     }
 
+    @Cacheable("envios.reservas")
     public List<Reserva> listarTodas() {
         return repo.findAllByOrderByCreatedAtDesc();
     }
 
+    @CacheEvict(value = {"envios.reservas", "envios.disponibilidad"}, allEntries = true)
     public void eliminar(Long id) {
         repo.deleteById(id);
     }
 
+    @CacheEvict(value = {"envios.reservas", "envios.disponibilidad"}, allEntries = true)
     @Transactional
     public Reserva crearPublico(CrearReservaPublicRequest request) {
         if (request.getFechaEntrada().isBefore(LocalDate.now())) {
@@ -69,6 +76,7 @@ public class ReservaService {
         return repo.save(r);
     }
 
+    @CacheEvict(value = "envios.reservas", allEntries = true)
     @Transactional
     public Optional<Reserva> actualizar(Long id, ActualizarReservaRequest request) {
         return repo.findById(id).map(r -> {
@@ -100,6 +108,7 @@ public class ReservaService {
         });
     }
 
+    @CacheEvict(value = "envios.reservas", allEntries = true)
     @Transactional
     public Optional<Reserva> cambiarEstado(Long id, String nuevoEstado) {
         String estadoNormalizado = nuevoEstado.trim().toUpperCase();
@@ -119,6 +128,7 @@ public class ReservaService {
         });
     }
 
+    @Cacheable("envios.disponibilidad")
     public boolean verificarDisponibilidad(LocalDate fechaEntrada, LocalDate fechaSalida) {
         return !repo.existsOverlap(fechaEntrada, fechaSalida);
     }
