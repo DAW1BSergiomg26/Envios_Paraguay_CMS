@@ -9,7 +9,9 @@ BACKUP_DIR="${BACKUP_DIR:-./backup}"
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-3306}"
 DB_USER="${DB_USER:-app_user}"
-DB_PASSWORD="${DB_PASSWORD:-changeme_app}"
+# For production, use ~/.my.cnf (chmod 600) instead of environment variable
+# to avoid password exposure in process listings
+DB_PASSWORD="${DB_PASSWORD:?DB_PASSWORD is required. Set env var or use ~/.my.cnf}"
 DB_NAME="${DB_NAME:-envios_paraguay_cms}"
 RETENTION_DAYS="${RETENTION_DAYS:-30}"
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
