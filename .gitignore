@@ -12,7 +12,6 @@ logs/
 
 # Documentacion generada localmente
 docs/estructura.txt
-HANDOFF.md
 
 # Scripts obsoletos (reemplazados por start-all.ps1)
 iniciar_proyecto.ps1

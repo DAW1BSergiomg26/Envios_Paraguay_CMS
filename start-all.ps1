@@ -1,80 +1,82 @@
-# ==========================================
-# Monteastur Envios — Docker Compose Launcher
-# ==========================================
-# Uso: .\start-all.ps1 [-NoBrowser] [-NoBuild]
-# ==========================================
-
 param(
     [switch]$NoBrowser,
     [switch]$NoBuild
 )
 
-$NginxUrl  = "http://localhost:8090"
-$AppUrl    = "http://localhost:8080"
-$HealthUrl = "http://localhost:8080/actuator/health"
+Write-Host "==========================================" -ForegroundColor Cyan
+Write-Host "  MONTEASTUR ENVIOS - ORQUESTADOR DOCKER" -ForegroundColor Cyan
+Write-Host "==========================================" -ForegroundColor Cyan
 
-Write-Host ">> Forzando apagado previo de contenedores..." -ForegroundColor Cyan
-docker compose down --timeout 5 2>&1 | Out-Null
+# 1. Apagar contenedores previos
+Write-Host ">> Deteniendo contenedores anteriores..." -ForegroundColor Yellow
+docker compose down
 
+# 2. Build (opcional)
 if (-not $NoBuild) {
-    Write-Host ">> Construyendo imágenes Docker..." -ForegroundColor Cyan
-    docker compose build --quiet 2>&1 | Out-Null
+    Write-Host ">> Construyendo contenedores (multi-stage)..." -ForegroundColor Yellow
+    docker compose build
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host ">> Error en el build de Docker." -ForegroundColor Red
+        exit 1
+    }
 }
 
-Write-Host ">> Levantando servicios..." -ForegroundColor Cyan
+# 3. Levantar servicios
+Write-Host ">> Arrancando servicios con Docker Compose..." -ForegroundColor Yellow
 docker compose up -d
 
-Write-Host ">> Esperando a que MySQL esté saludable..." -ForegroundColor Yellow
+# 4. Esperar a que MySQL esté healthy
+Write-Host ">> Esperando a que MySQL esté listo..." -ForegroundColor Cyan
 $maxRetries = 30
 $retryCount = 0
-$healthy = $false
-while (-not $healthy -and $retryCount -lt $maxRetries) {
-    $status = docker inspect --format="{{if .State.Health}}{{.State.Health.Status}}{{else}}running{{end}}" monteastur-mysql 2>&1
-    if ($status -match "healthy") {
-        $healthy = $true
+$dbReady = $false
+
+while (-not $dbReady -and $retryCount -lt $maxRetries) {
+    $status = docker inspect --format="{{json .State.Health.Status}}" monteastur-mysql 2>$null
+    if ($status -eq '"healthy"') {
+        $dbReady = $true
+        Write-Host ">> ¡MySQL está operativo!" -ForegroundColor Green
     } else {
-        Start-Sleep -Seconds 3
+        Start-Sleep -Seconds 2
         $retryCount++
-        Write-Host "." -NoNewline
+        Write-Host "   Esperando base de datos... ($retryCount/$maxRetries)" -ForegroundColor Gray
     }
 }
-Write-Host ""
-if ($healthy) { Write-Host ">> MySQL lista" -ForegroundColor Green }
 
-Write-Host ">> Esperando a que la App esté saludable..." -ForegroundColor Yellow
+if (-not $dbReady) {
+    Write-Host ">> Advertencia: MySQL tardó demasiado en responder, continuando de todos modos..." -ForegroundColor Yellow
+}
+
+# 5. Esperar a que la App devuelva UP en el healthcheck
+Write-Host ">> Esperando a que Spring Boot esté listo (/actuator/health)..." -ForegroundColor Cyan
+$appReady = $false
 $retryCount = 0
-$healthy = $false
-while (-not $healthy -and $retryCount -lt 40) {
+$maxAppRetries = 40
+
+while (-not $appReady -and $retryCount -lt $maxAppRetries) {
     try {
-        $response = Invoke-WebRequest -Uri $HealthUrl -UseBasicParsing -TimeoutSec 3
-        if ($response.Content -match '"status":"UP"') {
-            $healthy = $true
+        $response = Invoke-RestMethod -Uri "http://localhost:8080/actuator/health" -Method Get -ErrorAction Stop
+        if ($response.status -eq "UP") {
+            $appReady = $true
+            Write-Host ">> ¡Spring Boot está UP y funcionando!" -ForegroundColor Green
         }
-    } catch {}
-    if (-not $healthy) {
+    } catch {
         Start-Sleep -Seconds 3
         $retryCount++
-        Write-Host "." -NoNewline
+        Write-Host "   Esperando aplicación web... ($retryCount/$maxAppRetries)" -ForegroundColor Gray
     }
 }
-Write-Host ""
-if ($healthy) { Write-Host ">> App lista en $AppUrl (Nginx: $NginxUrl)" -ForegroundColor Green }
 
+# 6. Abrir navegador en Nginx (:8090)
 if (-not $NoBrowser) {
-    Write-Host ">> Abriendo navegador..." -ForegroundColor Cyan
-    Start-Process $NginxUrl
+    Write-Host ">> Abriendo plataforma en el navegador (Nginx :8090)..." -ForegroundColor Cyan
+    Start-Process "http://localhost:8090"
 }
 
-Write-Host ""
-Write-Host "╔══════════════════════════════════════════╗" -ForegroundColor Green
-Write-Host "║  MONTEASTUR ENVIOS — Sistema operativo   ║" -ForegroundColor Green
-Write-Host "╠══════════════════════════════════════════╣" -ForegroundColor Green
-Write-Host "║  Web:       $NginxUrl  ║" -ForegroundColor Green
-Write-Host "║  App:       $AppUrl  ║" -ForegroundColor Green
-Write-Host "║  Health:    $HealthUrl ║" -ForegroundColor Green
-Write-Host "║  Grafana:   http://localhost:3001        ║" -ForegroundColor Green
-Write-Host "║  Uptime:    http://localhost:3002        ║" -ForegroundColor Green
-Write-Host "║  Prometeus: http://localhost:9090        ║" -ForegroundColor Green
-Write-Host "╚══════════════════════════════════════════╝" -ForegroundColor Green
-Write-Host ""
-Write-Host ">> docker compose logs -f para ver logs en tiempo real" -ForegroundColor Gray
+Write-Host "==========================================" -ForegroundColor Green
+Write-Host "  ¡SISTEMA LEVANTADO CON ÉXITO!" -ForegroundColor Green
+Write-Host "  - Nginx (Web): http://localhost:8090" -ForegroundColor White
+Write-Host "  - Uptime Kuma: http://localhost:3002" -ForegroundColor White
+Write-Host "  - Grafana:     http://localhost:3001" -ForegroundColor White
+Write-Host "  Usa 'docker compose logs -f' para ver logs en tiempo real." -ForegroundColor Gray
+Write-Host "==========================================" -ForegroundColor Green
