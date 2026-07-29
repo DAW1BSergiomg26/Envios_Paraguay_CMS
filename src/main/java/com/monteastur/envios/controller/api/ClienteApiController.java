@@ -71,12 +71,8 @@ public class ClienteApiController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
         }
-        var opt = trackingRepo.findWithClienteByCodigoUnico(codigo.trim().toUpperCase());
-        if (opt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorDto(Instant.now().toString(), 404, "Tracking no encontrado"));
-        }
-        EnvioTracking envio = opt.get();
+        EnvioTracking envio = trackingRepo.findWithClienteByCodigoUnico(codigo.trim().toUpperCase())
+            .orElseThrow(() -> new com.monteastur.envios.exception.ResourceNotFoundException("Tracking no encontrado: " + codigo));
         if (envio.getCliente() == null || !envio.getCliente().getId().equals(clienteId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
@@ -117,13 +113,8 @@ public class ClienteApiController {
                     .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
         }
 
-        var opt = evidenciaService.buscar(id);
-        if (opt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorDto(Instant.now().toString(), 404, "Evidencia no encontrada"));
-        }
-
-        var evidencia = opt.get();
+        var evidencia = evidenciaService.buscar(id)
+            .orElseThrow(() -> new com.monteastur.envios.exception.ResourceNotFoundException("Evidencia no encontrada: " + id));
         if (!Boolean.TRUE.equals(evidencia.getVisibleCliente())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));

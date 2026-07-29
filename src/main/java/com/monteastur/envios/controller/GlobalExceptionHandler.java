@@ -62,6 +62,24 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Ha ocurrido un error inesperado. Por favor, inténtelo de nuevo más tarde.");
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Object handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request, Model model) {
+        if (isRestRequest(request)) {
+            return ResponseEntity.badRequest()
+                .body(new ErrorDto(Instant.now().toString(), 400, ex.getMessage()));
+        }
+        return mvcError(request, model, HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage());
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public Object handleIllegalState(IllegalStateException ex, HttpServletRequest request, Model model) {
+        if (isRestRequest(request)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ErrorDto(Instant.now().toString(), 409, ex.getMessage()));
+        }
+        return mvcError(request, model, HttpStatus.CONFLICT, "Conflict", ex.getMessage());
+    }
+
     private boolean isRestRequest(HttpServletRequest request) {
         return request.getRequestURI().startsWith("/api/");
     }

@@ -1,15 +1,13 @@
 package com.monteastur.envios.controller.api;
 
 import com.monteastur.envios.dto.api.*;
+import com.monteastur.envios.exception.ResourceNotFoundException;
 import com.monteastur.envios.model.Reserva;
 import com.monteastur.envios.service.ReservaService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -43,62 +41,34 @@ public class ReservaApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> detalle(@PathVariable Long id) {
-        Optional<Reserva> reserva = reservaService.buscarPorId(id);
-        if (reserva.isPresent()) {
-            return ResponseEntity.ok(toDto(reserva.get()));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(new ErrorDto(Instant.now().toString(), 404, "Reserva no encontrada"));
+    public ResponseEntity<ReservaAdminDto> detalle(@PathVariable Long id) {
+        Reserva reserva = reservaService.buscarPorId(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada: " + id));
+        return ResponseEntity.ok(toDto(reserva));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> actualizar(@PathVariable Long id,
-                                             @RequestBody ActualizarReservaRequest request) {
-        try {
-            Optional<Reserva> reserva = reservaService.actualizar(id, request);
-            if (reserva.isPresent()) {
-                return ResponseEntity.ok(toDto(reserva.get()));
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorDto(Instant.now().toString(), 404, "Reserva no encontrada"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                .body(new ErrorDto(Instant.now().toString(), 400, e.getMessage()));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorDto(Instant.now().toString(), 409, e.getMessage()));
-        }
+    public ResponseEntity<ReservaAdminDto> actualizar(@PathVariable Long id,
+                                                       @RequestBody ActualizarReservaRequest request) {
+        Reserva reserva = reservaService.actualizar(id, request)
+            .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada: " + id));
+        return ResponseEntity.ok(toDto(reserva));
     }
 
     @PatchMapping("/{id}/estado")
-    public ResponseEntity<Object> cambiarEstado(@PathVariable Long id,
-                                                 @RequestBody ActualizarEstadoRequest request) {
-        try {
-            Optional<Reserva> reserva = reservaService.cambiarEstado(id, request.getEstado());
-            if (reserva.isPresent()) {
-                return ResponseEntity.ok(toDto(reserva.get()));
-            }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorDto(Instant.now().toString(), 404, "Reserva no encontrada"));
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest()
-                .body(new ErrorDto(Instant.now().toString(), 400, e.getMessage()));
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest()
-                .body(new ErrorDto(Instant.now().toString(), 400, e.getMessage()));
-        }
+    public ResponseEntity<ReservaAdminDto> cambiarEstado(@PathVariable Long id,
+                                                          @RequestBody ActualizarEstadoRequest request) {
+        Reserva reserva = reservaService.cambiarEstado(id, request.getEstado())
+            .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada: " + id));
+        return ResponseEntity.ok(toDto(reserva));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> eliminar(@PathVariable Long id) {
-        Optional<Reserva> reserva = reservaService.buscarPorId(id);
-        if (reserva.isPresent()) {
-            reservaService.eliminar(id);
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(new ErrorDto(Instant.now().toString(), 404, "Reserva no encontrada"));
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        Reserva reserva = reservaService.buscarPorId(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Reserva no encontrada: " + id));
+        reservaService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 
     private ReservaAdminDto toDto(Reserva r) {
