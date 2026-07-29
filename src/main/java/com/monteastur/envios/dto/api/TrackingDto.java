@@ -1,13 +1,25 @@
 package com.monteastur.envios.dto.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Schema(description = "Detalle completo de un envío con eventos y evidencias")
 public class TrackingDto {
+    @Schema(description = "Código único de seguimiento", example = "MT-2026-0001")
     private String codigoUnico;
+
+    @Schema(description = "Estado actual del envío", example = "EN_TRANSITO",
+        allowableValues = {"RECIBIDO", "EN_ADUANA_ORIGEN", "EN_TRANSITO", "EN_ADUANA_DESTINO", "EN_REPARTO", "ENTREGADO"})
     private String estado;
+
+    @Schema(description = "Nombre del destinatario", example = "María González")
     private String destinatario;
+
+    @Schema(description = "Ciudad o país de origen", example = "Asturias, España")
     private String origen;
+
+    @Schema(description = "Ciudad o país de destino", example = "Asunción, Paraguay")
     private String destino;
     private String peso;
     private String contenido;

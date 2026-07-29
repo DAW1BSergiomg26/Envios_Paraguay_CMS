@@ -1,17 +1,28 @@
 package com.monteastur.envios.dto.api;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Schema(description = "Reserva visible para el administrador")
 public class ReservaAdminDto {
+    @Schema(description = "ID único de la reserva", example = "42")
     private Long id;
+
+    @Schema(description = "Nombre del cliente que realizó la reserva", example = "Juan Pérez")
     private String nombreCliente;
+
+    @Schema(description = "Email de contacto", example = "juan@example.com")
     private String email;
+
     private String telefono;
     private LocalDate fechaEntrada;
     private LocalDate fechaSalida;
     private Integer numeroHuespedes;
     private String comentarios;
+
+    @Schema(description = "Estado de la reserva", example = "pendiente",
+        allowableValues = {"pendiente", "aprobada", "cancelada", "confirmada"})
     private String estado;
     private LocalDateTime createdAt;
 
