@@ -23,6 +23,9 @@ public class EmailService {
     @Value("${spring.mail.to:monteastur@hotmail.es}")
     private String to;
 
+    @Value("${app.notification.mail.from:no-reply@enviosparaguay.com.py}")
+    private String notifFrom;
+
     private void enviar(String asunto, String texto) {
         if (mailSender == null) {
             log.info("Email no configurado. Se saltó el envío de: {}", asunto);
@@ -39,6 +42,19 @@ public class EmailService {
         } catch (Exception e) {
             log.warn("No se pudo enviar email ({}): {}", asunto, e.getMessage());
         }
+    }
+
+    public void enviarCorreoSimple(String para, String asunto, String texto) {
+        if (mailSender == null) {
+            throw new IllegalStateException("JavaMailSender no configurado — no se pudo enviar correo a " + para);
+        }
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom(notifFrom);
+        msg.setTo(para);
+        msg.setSubject(asunto);
+        msg.setText(texto);
+        mailSender.send(msg);
+        log.info("Email enviado a {}: {}", para, asunto);
     }
 
     public void notificarContacto(String nombre, String email, String mensaje) {

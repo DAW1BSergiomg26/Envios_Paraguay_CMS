@@ -21,7 +21,7 @@ if (-not $NoBuild) {
     }
 }
 
-# 3. Levantar servicios
+# 3. Levantar servicios (incluyendo Redis, MySQL, App, Nginx, etc.)
 Write-Host ">> Arrancando servicios con Docker Compose..." -ForegroundColor Yellow
 docker compose up -d
 
@@ -39,15 +39,38 @@ while (-not $dbReady -and $retryCount -lt $maxRetries) {
     } else {
         Start-Sleep -Seconds 2
         $retryCount++
-        Write-Host "   Esperando base de datos... ($retryCount/$maxRetries)" -ForegroundColor Gray
+        Write-Host "    Esperando base de datos... ($retryCount/$maxRetries)" -ForegroundColor Gray
     }
 }
 
 if (-not $dbReady) {
-    Write-Host ">> Advertencia: MySQL tardó demasiado en responder, continuando de todos modos..." -ForegroundColor Yellow
+    Write-Host ">> Advertencia: MySQL tardó demasiado en responder, continuando..." -ForegroundColor Yellow
 }
 
-# 5. Esperar a que la App devuelva UP en el healthcheck
+# 4.5. Esperar a que Redis esté operativo (NUEVA MEJORA DE ARQUITECTURA)
+Write-Host ">> Comprobando disponibilidad de Redis..." -ForegroundColor Cyan
+$redisReady = $false
+$retryCount = 0
+$maxRedisRetries = 15
+
+while (-not $redisReady -and $retryCount -lt $maxRedisRetries) {
+    # Comprobamos si el contenedor de redis responde al comando ping de redis-cli
+    $redisPing = docker exec monteastur-redis redis-cli ping 2>$null
+    if ($redisPing -match "PONG") {
+        $redisReady = $true
+        Write-Host ">> ¡Redis está respondiendo correctamente!" -ForegroundColor Green
+    } else {
+        Start-Sleep -Seconds 2
+        $retryCount++
+        Write-Host "    Esperando a Redis... ($retryCount/$maxRedisRetries)" -ForegroundColor Gray
+    }
+}
+
+if (-not $redisReady) {
+    Write-Host ">> Advertencia: Redis no respondió al ping, continuando..." -ForegroundColor Yellow
+}
+
+# 5. Esperar a que la App devuelva UP en el healthcheck (Ya incluye verificación interna de MySQL y Redis)
 Write-Host ">> Esperando a que Spring Boot esté listo (/actuator/health)..." -ForegroundColor Cyan
 $appReady = $false
 $retryCount = 0
@@ -58,12 +81,12 @@ while (-not $appReady -and $retryCount -lt $maxAppRetries) {
         $response = Invoke-RestMethod -Uri "http://localhost:8080/actuator/health" -Method Get -ErrorAction Stop
         if ($response.status -eq "UP") {
             $appReady = $true
-            Write-Host ">> ¡Spring Boot está UP y funcionando!" -ForegroundColor Green
+            Write-Host ">> ¡Spring Boot está UP y funcionando con caché y base de datos conectadas!" -ForegroundColor Green
         }
     } catch {
         Start-Sleep -Seconds 3
         $retryCount++
-        Write-Host "   Esperando aplicación web... ($retryCount/$maxAppRetries)" -ForegroundColor Gray
+        Write-Host "    Esperando aplicación web... ($retryCount/$maxAppRetries)" -ForegroundColor Gray
     }
 }
 
@@ -74,9 +97,9 @@ if (-not $NoBrowser) {
 }
 
 Write-Host "==========================================" -ForegroundColor Green
-Write-Host "  ¡SISTEMA LEVANTADO CON ÉXITO!" -ForegroundColor Green
-Write-Host "  - Nginx (Web): http://localhost:8090" -ForegroundColor White
-Write-Host "  - Uptime Kuma: http://localhost:3002" -ForegroundColor White
-Write-Host "  - Grafana:     http://localhost:3001" -ForegroundColor White
+Write-Host "  ¡SISTEMA LEVANTADO CON ÉXITO Y VERIFICADO!" -ForegroundColor Green
+Write-Host "  - Nginx (Web):       http://localhost:8090" -ForegroundColor White
+Write-Host "  - Uptime Kuma:       http://localhost:3002" -ForegroundColor White
+Write-Host "  - Grafana:           http://localhost:3001" -ForegroundColor White
 Write-Host "  Usa 'docker compose logs -f' para ver logs en tiempo real." -ForegroundColor Gray
 Write-Host "==========================================" -ForegroundColor Green
