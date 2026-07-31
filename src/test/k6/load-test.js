@@ -9,6 +9,9 @@ const ADMIN_USERNAME = __ENV.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = __ENV.ADMIN_PASSWORD || '';
 const TRACKING_CODES = (__ENV.TRACKING_CODES || 'MT-2026-0001,MT-2026-0002,MT-2026-0003,MT-2026-0004,MT-2026-0005').split(',');
 
+// Solo 5xx y errores de red cuentan como request fallido; 4xx esperados (409) no.
+http.setResponseCallback(http.expectedStatuses({ min: 200, max: 499 }));
+
 const SCENARIO_OPTIONS = {
   smoke: {
     executor: 'per-vu-iterations',
@@ -47,8 +50,6 @@ export const options = {
     [SCENARIO]: SCENARIO_OPTIONS[SCENARIO],
   },
   thresholds: THRESHOLDS[SCENARIO],
-  // Solo 5xx y errores de red cuentan como request fallido; 4xx esperados (409) no.
-  responseCallback: (res) => res.status >= 500,
 };
 
 let adminReady = false;
