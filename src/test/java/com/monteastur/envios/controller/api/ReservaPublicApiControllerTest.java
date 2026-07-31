@@ -1,9 +1,11 @@
 package com.monteastur.envios.controller.api;
 
+import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.config.SecurityConfig;
 import com.monteastur.envios.controller.GlobalExceptionHandler;
 import com.monteastur.envios.exception.BadRequestException;
 import com.monteastur.envios.exception.ConflictException;
+import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import com.monteastur.envios.service.ReservaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.sql.DataSource;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -33,6 +37,15 @@ class ReservaPublicApiControllerTest {
 
     @MockBean
     private ReservaService reservaService;
+
+    @MockBean
+    private DataSource dataSource;
+
+    @MockBean
+    private RBACAccessLogger rbacAccessLogger;
+
+    @MockBean
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     private static final String VALID_BODY =
         "{\"nombreCliente\":\"Test\",\"email\":\"test@example.com\"," +

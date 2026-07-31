@@ -1,5 +1,6 @@
 package com.monteastur.envios.controller;
 
+import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.config.SecurityConfig;
 import com.monteastur.envios.model.Imagen;
 import com.monteastur.envios.model.TextoLegal;
@@ -8,6 +9,7 @@ import com.monteastur.envios.repository.ImagenRepository;
 import com.monteastur.envios.repository.MensajeContactoRepository;
 import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
+import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import com.monteastur.envios.service.EmailService;
 import com.monteastur.envios.service.EventoTrackingService;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+
+import javax.sql.DataSource;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -48,6 +52,13 @@ class PublicControllerTest {
     @MockBean private MensajeContactoRepository mensajeRepo;
     @MockBean private EmailService emailService;
     @MockBean private EventoTrackingService eventoTrackingService;
+    @MockBean private DataSource dataSource;
+
+    @MockBean
+    private RBACAccessLogger rbacAccessLogger;
+
+    @MockBean
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @ParameterizedTest
     @CsvSource({
