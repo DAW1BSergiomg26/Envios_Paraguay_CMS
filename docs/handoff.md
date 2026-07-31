@@ -29,12 +29,18 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
    - `MonteasturApplication.java` inyecta `Environment` y ejecuta `@PostConstruct validateEnvironment()`: cuando el perfil activo es `prod`, valida que `DB_USERNAME` y `DB_PASSWORD` existan; si falta alguna, registra el error y aborta el arranque lanzando `IllegalStateException`. En desarrollo, la validación se omite y se loguea un aviso informativo.
 3. **Optimización Nginx** — commit `efd2bd9`:
    - Caché estático agresivo (`expires 30d;`, `add_header Cache-Control "public, immutable";`) para CSS, JS, fuentes e imágenes en `nginx/conf.d/local.conf` y `nginx/conf.d/monteastur.conf`, antes del bloque `location /`.
-4. **Módulo de Notificaciones Automáticas (en curso)**:
+4. **Módulo de Notificaciones Automáticas (completado)**:
    - Spec de diseño: commit `841fb2b`.
    - Migración Flyway `V3` (tabla `notificaciones`), entidad `Notificacion` y repositorio: commit `d46a08c`.
    - Evento `EstadoEnvioActualizadoEvent`, `@EnableAsync` y propiedades SMTP/notificaciones: commit `5dc9a4f`.
    - `EmailService.enviarCorreoSimple(...)`: commit `7bc3182`.
-   - Pendiente: listener asíncrono, `actualizarEstado` en servicio/controller, tests de integración y wiring Mailpit/compose.
+   - Listener async `NotificacionEventListener` + unit tests: commit `602548b`.
+   - `EnvioTrackingService.actualizarEstado` (evento de dominio) + refactor controller: commit `85a11cf`.
+   - Perfil de test + servicio redis en CI: commit `31f4b89`.
+   - Test de integración end-to-end (primer `@SpringBootTest`): commit `f823019` (listener con `REQUIRES_NEW`).
+   - Mailpit dev + `.env.example`: commits `ac391ac` y `b88dfee`.
+   - Timeouts SMTP (hardenig): commit `49c7a3e`.
+   - Suite completa 59/59 tests + smoke runtime verificado (email vía Mailpit).
 
 ---
 
