@@ -169,7 +169,7 @@ export function adminLogin(baseURL, username, password) {
     'login page GET 200': (r) => r.status === 200,
   });
 
-  const match = loginPage.body.match(/name="_csrf"\s+type="hidden"\s+value="([^"]+)"/);
+  const match = loginPage.body.match(/<input[^>]*name="_csrf"[^>]*value="([^"]+)"/);
   check(null, {
     'csrf token present': () => match !== null,
   });
@@ -235,13 +235,14 @@ const THRESHOLDS = {
   stress: { http_req_duration: ['p(95)<1000'], http_req_failed: ['rate<0.05'] },
 };
 
+// Solo 5xx y errores de red cuentan como request fallido; 4xx esperados (409) no.
+http.setResponseCallback(http.expectedStatuses({ min: 200, max: 499 }));
+
 export const options = {
   scenarios: {
     [SCENARIO]: SCENARIO_OPTIONS[SCENARIO],
   },
   thresholds: THRESHOLDS[SCENARIO],
-  // Solo 5xx y errores de red cuentan como request fallido; 4xx esperados (409) no.
-  responseCallback: (res) => res.status >= 500,
 };
 
 let adminReady = false;
@@ -317,7 +318,9 @@ Run:
 ```pwsh
 docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts grafana/k6 inspect /scripts/load-test.js
 ```
-Expected: el parseo del script (sintaxis + imports + init) valida; el comando NO sale con exit 0 porque `k6 inspect` no puede serializar la función `responseCallback` a JSON (limitación conocida de k6, issues #855/#2909 — error `json: unsupported type: func(sobek.FunctionCall)`). Ese error de serialización tras parsear ES la señal de que sintaxis/imports están bien. Para confirmar las opciones resultantes, verificar con una copia temporal del script SIN la línea `responseCallback`: JSON con `scenarios` (sola clave `load`, `ramping-vus`, stages 1m/8m/1m), `thresholds` p(95)<500 y rate<0.01. El gate funcional real es el smoke de Step 5.
+Expected: JSON de opciones con `scenarios` (sola clave `load`, `ramping-vus`, stages 1m/8m/1m) y `thresholds` p(95)<500 + rate<0.01. Exit code 0. Si hay error de sintaxis/import, corregir y repetir.
+
+> NOTA: `responseCallback` se configura con `http.setResponseCallback(http.expectedStatuses({ min: 200, max: 499 }))` en init (no como `options.responseCallback`, que rompe la inicialización del script en k6 — error `json: unsupported type: func`).
 
 - [ ] **Step 5: Verificación funcional end-to-end con Smoke (sin exportación JSON)**
 
