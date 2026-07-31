@@ -14,6 +14,7 @@ import com.monteastur.envios.repository.MensajeContactoRepository;
 import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
 import com.monteastur.envios.service.EmailService;
+import com.monteastur.envios.service.EnvioTrackingService;
 import com.monteastur.envios.service.EvidenciaEnvioService;
 import com.monteastur.envios.service.EventoTrackingService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -51,6 +52,7 @@ public class AdminController {
     private final ClienteRepository clienteRepo;
     private final EvidenciaEnvioService evidenciaService;
     private final EventoTrackingService eventoTrackingService;
+    private final EnvioTrackingService envioTrackingService;
 
     @Value("${app.upload.dir}")
     private String uploadDir;
@@ -59,7 +61,8 @@ public class AdminController {
                            MensajeContactoRepository mensajeRepo, TextoLegalRepository textoRepo,
                            EnvioTrackingRepository trackingRepo, EmailService emailService,
                            ClienteRepository clienteRepo, EvidenciaEnvioService evidenciaService,
-                           EventoTrackingService eventoTrackingService) {
+                           EventoTrackingService eventoTrackingService,
+                           EnvioTrackingService envioTrackingService) {
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.mensajeRepo = mensajeRepo;
@@ -69,6 +72,7 @@ public class AdminController {
         this.clienteRepo = clienteRepo;
         this.evidenciaService = evidenciaService;
         this.eventoTrackingService = eventoTrackingService;
+        this.envioTrackingService = envioTrackingService;
     }
 
     @GetMapping("/dashboard")
@@ -267,7 +271,7 @@ public class AdminController {
         if (clienteId != null) {
             clienteRepo.findById(clienteId).ifPresent(envio::setCliente);
         }
-        trackingRepo.save(envio);
+        envioTrackingService.guardar(envio);
         if (esNuevo) {
             eventoTrackingService.crearEventoInicial(envio);
         } else {
@@ -279,7 +283,7 @@ public class AdminController {
 
     @PostMapping("/tracking/eliminar/{id}")
     public String eliminarTracking(@PathVariable Long id, RedirectAttributes ra) {
-        trackingRepo.deleteById(id);
+        envioTrackingService.eliminar(id);
         ra.addFlashAttribute("exito", "Envío eliminado.");
         return "redirect:/admin/tracking";
     }

@@ -1,5 +1,7 @@
 package com.monteastur.envios.dto.api;
 
+import com.monteastur.envios.model.EnvioTracking;
+
 import java.time.LocalDateTime;
 
 public class PublicTrackingDto {
@@ -9,6 +11,16 @@ public class PublicTrackingDto {
     private String origen;
     private String destino;
     private LocalDateTime ultimaActualizacion;
+
+    public static PublicTrackingDto from(EnvioTracking envio) {
+        PublicTrackingDto dto = new PublicTrackingDto();
+        dto.setCodigoUnico(envio.getCodigoUnico());
+        dto.setEstado(envio.getEstado());
+        dto.setOrigen(envio.getOrigen());
+        dto.setDestino(envio.getDestino());
+        dto.setUltimaActualizacion(envio.getUltimaActualizacion());
+        return dto;
+    }
 
     public String getCodigoUnico() {
         return codigoUnico;

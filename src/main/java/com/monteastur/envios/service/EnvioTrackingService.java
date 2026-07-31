@@ -1,5 +1,6 @@
 package com.monteastur.envios.service;
 
+import com.monteastur.envios.dto.api.PublicTrackingDto;
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import org.springframework.cache.annotation.CacheEvict;
@@ -19,9 +20,11 @@ public class EnvioTrackingService {
         this.repo = repo;
     }
 
-    @Cacheable("envios.tracking")
-    public Optional<EnvioTracking> buscarPorCodigo(String codigo) {
-        return repo.findByCodigoUnico(codigo.trim().toUpperCase());
+    @Cacheable(value = "envios.tracking", unless = "#result == null")
+    public PublicTrackingDto buscarPorCodigo(String codigo) {
+        return repo.findByCodigoUnico(codigo.trim().toUpperCase())
+                .map(PublicTrackingDto::from)
+                .orElse(null);
     }
 
     @Cacheable("envios.dashboard")

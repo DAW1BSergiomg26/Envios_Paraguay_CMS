@@ -5,6 +5,7 @@ import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.service.EvidenciaEnvioService;
 import com.monteastur.envios.service.EventoTrackingService;
+import com.monteastur.envios.service.EnvioTrackingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -14,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,13 +34,16 @@ public class AdminApiController {
     private final EnvioTrackingRepository trackingRepo;
     private final EvidenciaEnvioService evidenciaService;
     private final EventoTrackingService eventoTrackingService;
+    private final EnvioTrackingService envioTrackingService;
 
     public AdminApiController(EnvioTrackingRepository trackingRepo,
                               EvidenciaEnvioService evidenciaService,
-                              EventoTrackingService eventoTrackingService) {
+                              EventoTrackingService eventoTrackingService,
+                              EnvioTrackingService envioTrackingService) {
         this.trackingRepo = trackingRepo;
         this.evidenciaService = evidenciaService;
         this.eventoTrackingService = eventoTrackingService;
+        this.envioTrackingService = envioTrackingService;
     }
 
     @Operation(summary = "Listar envíos", description = "Devuelve una página de envíos filtrable por estado, código, rango de fechas o búsqueda general")
@@ -140,8 +143,7 @@ public class AdminApiController {
             .orElseThrow(() -> new com.monteastur.envios.exception.ResourceNotFoundException("Tracking no encontrado: " + codigo));
         String estadoAnterior = envio.getEstado();
         envio.setEstado(request.getEstado());
-        envio.setUltimaActualizacion(LocalDateTime.now());
-        trackingRepo.save(envio);
+        envioTrackingService.guardar(envio);
         eventoTrackingService.crearEvento(envio, estadoAnterior);
         return ResponseEntity.ok(toTrackingDto(envio));
     }

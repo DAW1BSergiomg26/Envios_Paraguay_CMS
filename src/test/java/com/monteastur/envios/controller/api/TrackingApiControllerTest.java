@@ -2,9 +2,9 @@ package com.monteastur.envios.controller.api;
 
 import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.config.SecurityConfig;
-import com.monteastur.envios.model.EnvioTracking;
-import com.monteastur.envios.repository.EnvioTrackingRepository;
+import com.monteastur.envios.dto.api.PublicTrackingDto;
 import com.monteastur.envios.security.CustomAccessDeniedHandler;
+import com.monteastur.envios.service.EnvioTrackingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.sql.DataSource;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -35,7 +34,7 @@ class TrackingApiControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private EnvioTrackingRepository trackingRepository;
+    private EnvioTrackingService envioTrackingService;
 
     @MockBean
     private DataSource dataSource;
@@ -48,17 +47,14 @@ class TrackingApiControllerTest {
 
     @Test
     void getTrackingByCodigo_existente_retorna200() throws Exception {
-        EnvioTracking envio = new EnvioTracking();
-        envio.setCodigoUnico("MT-2026-0001");
-        envio.setEstado("en_transito");
-        envio.setDestinatario("Juan Perez");
-        envio.setOrigen("Madrid");
-        envio.setDestino("Asuncion");
-        envio.setPeso("2.5");
-        envio.setContenido("Documentos");
-        envio.setUltimaActualizacion(LocalDateTime.now());
+        PublicTrackingDto dto = new PublicTrackingDto();
+        dto.setCodigoUnico("MT-2026-0001");
+        dto.setEstado("en_transito");
+        dto.setOrigen("Madrid");
+        dto.setDestino("Asuncion");
+        dto.setUltimaActualizacion(LocalDateTime.now());
 
-        when(trackingRepository.findByCodigoUnico("MT-2026-0001")).thenReturn(Optional.of(envio));
+        when(envioTrackingService.buscarPorCodigo("MT-2026-0001")).thenReturn(dto);
 
         mockMvc.perform(get("/api/v1/tracking/{codigo}", "MT-2026-0001"))
                 .andExpect(status().isOk())
@@ -70,7 +66,7 @@ class TrackingApiControllerTest {
 
     @Test
     void getTrackingByCodigo_inexistente_retorna404() throws Exception {
-        when(trackingRepository.findByCodigoUnico(anyString())).thenReturn(Optional.empty());
+        when(envioTrackingService.buscarPorCodigo(anyString())).thenReturn(null);
 
         mockMvc.perform(get("/api/v1/tracking/{codigo}", "NO-EXISTE"))
                 .andExpect(status().isNotFound())
