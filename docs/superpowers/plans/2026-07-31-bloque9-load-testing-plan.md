@@ -34,17 +34,17 @@
 - Consumes: `docker-compose.yml` (servicios `db`, `redis`, `app`), `.env` (credenciales DB y admin), esquema `envios_tracking` (entidad `EnvioTracking.java`)
 - Produces: Stack arriba y saludable en `http://localhost:8080`; 5 envíos con códigos conocidos en `envios_tracking`; tablas `envios_tracking` con los códigos seed que el script k6 de Task 2 usará.
 
-- [ ] **Step 1: Verificar que el daemon de Docker está corriendo**
+- [x] **Step 1: Verificar que el daemon de Docker está corriendo**
 
 Run: `docker info`
 Expected: sale con éxito (no error de conexión al daemon). Si falla, arrancar Docker Desktop y esperar a que esté `running`.
 
-- [ ] **Step 2: Arrancar la stack de la aplicación**
+- [x] **Step 2: Arrancar la stack de la aplicación**
 
 Run: `docker compose up -d db redis app`
 Expected: contenedores `monteastur-mysql`, `monteastur-redis`, `monteastur-app` creados y `Started` (comprobar con `docker compose ps`; `app` espera a que `db` y `redis` estén healthy vía `depends_on`).
 
-- [ ] **Step 3: Verificar salud de la app y presencia de CSRF en /login**
+- [x] **Step 3: Verificar salud de la app y presencia de CSRF en /login**
 
 Run:
 ```pwsh
@@ -55,7 +55,7 @@ $login.Content -match 'name="_csrf"'
 ```
 Expected: `200`, `200`, `True` (el form de Thymeleaf incluye el token `_csrf`).
 
-- [ ] **Step 4: Leer credenciales admin y DB desde .env**
+- [x] **Step 4: Leer credenciales admin y DB desde .env**
 
 Run:
 ```pwsh
@@ -63,7 +63,7 @@ Get-Content .env | Where-Object { $_ -match '^(ADMIN_USERNAME|ADMIN_PASSWORD|MYS
 ```
 Expected: valores no vacíos para `ADMIN_USERNAME`, `ADMIN_PASSWORD`, `MYSQL_USER`, `MYSQL_PASSWORD`, `MYSQL_DATABASE`. Anotar `ADMIN_USERNAME`/`ADMIN_PASSWORD` (se usan en Tasks 2-3). Si `ADMIN_PASSWORD` es el default `change_me_secure_password`, seguir igualmente (entorno local).
 
-- [ ] **Step 5: Crear el seed de envíos**
+- [x] **Step 5: Crear el seed de envíos**
 
 Create: `src/test/k6/seed-envios.sql`
 ```sql
@@ -78,7 +78,7 @@ VALUES
   ('MT-2026-0005', 'RECIBIDO',         'Pedro Fernández', 'Oviedo',     'Asunción',        '8 kg',  'Equipos',    NOW(), NOW());
 ```
 
-- [ ] **Step 6: Aplicar el seed al contenedor MySQL**
+- [x] **Step 6: Aplicar el seed al contenedor MySQL**
 
 Run:
 ```pwsh
@@ -87,7 +87,7 @@ docker compose exec -T db sh -c 'mysql -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYS
 ```
 Expected: sin errores (la contraseña y usuario se leen del `env_file` del contenedor `db`). `INSERT IGNORE` evita duplicados en re-ejecuciones.
 
-- [ ] **Step 7: Verificar el seed vía la API de tracking**
+- [x] **Step 7: Verificar el seed vía la API de tracking**
 
 Run:
 ```pwsh
@@ -98,7 +98,7 @@ Expected: JSON con `codigoUnico = MT-2026-0001` y `estado`. También comprobar l
 Invoke-RestMethod "http://localhost:8080/api/v1/reservas/disponibilidad?fechaEntrada=2026-09-01&fechaSalida=2026-09-10"
 ```
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/test/k6/seed-envios.sql
@@ -124,7 +124,7 @@ git commit -m "chore(k6): add envio seed data for load tests (Bloque 9)"
   - `load-test.js` → `export const options` (con `scenarios`, `thresholds`, `responseCallback`) y `export default function ()` — usado por Tasks 3-4
   - `README.md` → instrucciones de ejecución usadas por Tasks 3-5
 
-- [ ] **Step 1: Crear `helpers/data.js`**
+- [x] **Step 1: Crear `helpers/data.js`**
 
 Create: `src/test/k6/helpers/data.js`
 ```js
@@ -153,7 +153,7 @@ export function randomTrackingCode(codes) {
 }
 ```
 
-- [ ] **Step 2: Crear `helpers/auth.js`**
+- [x] **Step 2: Crear `helpers/auth.js`**
 
 Create: `src/test/k6/helpers/auth.js`
 ```js
@@ -187,7 +187,7 @@ export function adminLogin(baseURL, username, password) {
 }
 ```
 
-- [ ] **Step 3: Crear `load-test.js`**
+- [x] **Step 3: Crear `load-test.js`**
 
 Create: `src/test/k6/load-test.js`
 ```js
@@ -312,7 +312,7 @@ export default function () {
 }
 ```
 
-- [ ] **Step 4: Validar sintaxis y opciones con `k6 inspect`**
+- [x] **Step 4: Validar sintaxis y opciones con `k6 inspect`**
 
 Run:
 ```pwsh
@@ -322,7 +322,7 @@ Expected: JSON de opciones con `scenarios` (sola clave `load`, `ramping-vus`, st
 
 > NOTA: `responseCallback` se configura con `http.setResponseCallback(http.expectedStatuses({ min: 200, max: 499 }))` en init (no como `options.responseCallback`, que rompe la inicialización del script en k6 — error `json: unsupported type: func`).
 
-- [ ] **Step 5: Verificación funcional end-to-end con Smoke (sin exportación JSON)**
+- [x] **Step 5: Verificación funcional end-to-end con Smoke (sin exportación JSON)**
 
 Run (reemplazar `<ADMIN_USERNAME>`/`<ADMIN_PASSWORD>` por los valores reales de `.env` leídos en Task 1, Step 4):
 ```pwsh
@@ -333,7 +333,7 @@ docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
 ```
 Expected: ejecución completa (1 VU, 10 iteraciones, ~1-2 min). En el summary: `checks` al 100%, sin thresholds en rojo (`http_req_duration p(95)<500` y `http_req_failed rate<0.01` en `PASS`). Si el check `login POST redirects to dashboard` falla, revisar credenciales y el regex de CSRF (el atributo debe ser `name="_csrf"` seguido de `type="hidden"` y `value=...`).
 
-- [ ] **Step 6: Crear `README.md`**
+- [x] **Step 6: Crear `README.md`**
 
 Create: `src/test/k6/README.md`
 ````markdown
@@ -405,7 +405,7 @@ Mix de Load: 60% tracking (DB), 25% disponibilidad (Redis), 10% POST reservas,
   `EnvioTrackingService.buscarPorCodigo` (método sin invocar desde controladores).
 ````
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/test/k6/helpers/auth.js src/test/k6/helpers/data.js src/test/k6/load-test.js src/test/k6/README.md src/test/k6/results/.gitkeep
@@ -425,7 +425,7 @@ git commit -m "feat(k6): add load testing scripts for Bloque 9"
 - Consumes: Task 2 (`load-test.js` con escenarios y checks), Task 1 (stack + seed), credenciales admin de `.env`
 - Produces: resultados JSON + summary logs por escenario, consumidos por Task 4
 
-- [ ] **Step 1: Definir variables de entorno y timestamp**
+- [x] **Step 1: Definir variables de entorno y timestamp**
 
 Run:
 ```pwsh
@@ -435,7 +435,7 @@ $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 ```
 Expected: sin salida; variables pobladas (verificar con `$env:ADMIN_USERNAME`).
 
-- [ ] **Step 2: Ejecutar Smoke y capturar resultados**
+- [x] **Step 2: Ejecutar Smoke y capturar resultados**
 
 Run:
 ```pwsh
@@ -452,7 +452,7 @@ Expected: exit 0, checks al 100%, thresholds PASS. Confirmar que existen los fic
 Get-Item src/test/k6/results/smoke-$ts.json, src/test/k6/results/smoke-$ts.log
 ```
 
-- [ ] **Step 3: Ejecutar Load y capturar resultados**
+- [x] **Step 3: Ejecutar Load y capturar resultados**
 
 > La carga dura ~10 min. Si se usa una tool con timeout por defecto, ampliarlo a >= 15 min (900000 ms).
 
@@ -468,7 +468,7 @@ docker run --rm `
 ```
 Expected: exit 0 (o exit con thresholds en rojo — es un fallo de umbral, no de ejecución), ficheros creados. Anotar si algún threshold quedó en `FAIL`.
 
-- [ ] **Step 4: Ejecutar Stress y capturar resultados**
+- [x] **Step 4: Ejecutar Stress y capturar resultados**
 
 > Dura ~5 min. Ampliar timeout a >= 8 min (480000 ms) si es necesario.
 
@@ -484,7 +484,7 @@ docker run --rm `
 ```
 Expected: ficheros creados. Este escenario puede exceder umbrales relajados o degradarse — es el objetivo (observar punto de quiebre). Registrar qué umbrales fallaron y en qué intervalo (los logs por intervalo muestran la progresión).
 
-- [ ] **Step 5: Commit resultados**
+- [x] **Step 5: Commit resultados**
 
 ```bash
 git add src/test/k6/results/
@@ -502,7 +502,7 @@ git commit -m "test(k6): run smoke/load/stress scenarios and capture results (Bl
 - Consumes: logs/summaries de Task 3 (`smoke-*.log`, `load-*.log`, `stress-*.log` + sus `.json`)
 - Produces: `REPORT.md` con umbrales PASS/FAIL, tablas por endpoint, comparativa cache vs DB, punto de quiebre y recomendaciones — deliverable final del bloque.
 
-- [ ] **Step 1: Extraer métricas por endpoint de los summaries**
+- [x] **Step 1: Extraer métricas por endpoint de los summaries**
 
 Los summaries de k6 (en los `.log`) contienen tablas con `http_req_duration` desglosada por `name` (endpoint) con `avg`, `p(95)`, `p(99)`, throughput y error rate. Extraer para cada escenario:
 
@@ -513,19 +513,19 @@ Select-String -Path "src/test/k6/results/load-*.log" -Pattern 'http_req_duration
 ```
 Expected: líneas con las métricas agregadas y por endpoint. Registrar los valores `p(95)` de cada endpoint: `/api/v1/tracking/{codigo}`, `/api/v1/reservas/disponibilidad`, `/api/v1/reservas` (POST), `/login`, `/api/v1/admin/envios`.
 
-- [ ] **Step 2: Determinar PASS/FAIL de umbrales por escenario**
+- [x] **Step 2: Determinar PASS/FAIL de umbrales por escenario**
 
 Del summary de cada escenario, localizar la sección de thresholds (muestra `PASS`/`FAIL` para `http_req_duration: p(95)<...` y `http_req_failed: rate<...`). Anotar el resultado y, si hubo `FAIL`, el valor real observado y la fase (ramp-up, plateau, ramp-down) según los `level=warning`/`level=error` o la progresión en el log.
 
-- [ ] **Step 3: Comparar tracking (DB) vs disponibilidad (Redis)**
+- [x] **Step 3: Comparar tracking (DB) vs disponibilidad (Redis)**
 
 Con los p95 extraídos en Step 1, calcular la diferencia entre `/api/v1/tracking/{codigo}` (consulta directa a MySQL) y `/api/v1/reservas/disponibilidad` (cache `envios.disponibilidad` en Redis). Anotar el ratio (p95_tracking / p95_disponibilidad) y si el beneficio de caché es evidente en p95, p99 y throughput.
 
-- [ ] **Step 4: Determinar el punto de quiebre en Stress**
+- [x] **Step 4: Determinar el punto de quiebre en Stress**
 
 Revisar el log de stress (o el JSON) para localizar el intervalo a partir del cual `http_req_failed` supera el 1% o los p95 se disparan (progresión de VUs 100→200). Registrar el VU/intervalo aproximado del deterioro.
 
-- [ ] **Step 5: Escribir `REPORT.md`**
+- [x] **Step 5: Escribir `REPORT.md`**
 
 Create: `src/test/k6/results/REPORT.md`
 ````markdown
@@ -578,7 +578,7 @@ Create: `src/test/k6/results/REPORT.md`
 ````
 > Completar cada `<valor>` con los datos reales de los logs. El `REPORT.md` final NO debe contener placeholders `<>`.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/test/k6/results/REPORT.md
@@ -597,7 +597,7 @@ git commit -m "docs(k6): add load test report for Bloque 9"
 - Consumes: Tasks 1-4 (todo implementado y commiteado)
 - Produces: confirmación de completitud y, si procede, commits de corrección de docs.
 
-- [ ] **Step 1: Verificar árbol de trabajo y commits**
+- [x] **Step 1: Verificar árbol de trabajo y commits**
 
 Run:
 ```bash
@@ -606,18 +606,18 @@ git log --oneline -8
 ```
 Expected: working tree limpio y 6 commits de este bloque (seed, scripts, resultados, report) tras el commit de la spec.
 
-- [ ] **Step 2: Cross-check spec ↔ plan**
+- [x] **Step 2: Cross-check spec ↔ plan**
 
 Leer `docs/superpowers/specs/2026-07-31-bloque9-load-testing-design.md` y confirmar que cada sección tiene implementación:
-- [ ] Escenarios Smoke/Load/Stress → Task 2 `SCENARIO_OPTIONS` + Task 3
-- [ ] Umbrales (500ms/1% y 1000ms/5%) → Task 2 `THRESHOLDS`
-- [ ] Mix 60/25/10/5 → Task 2 `default()`
-- [ ] Flujo admin completo (login + CSRF + RBAC) → Task 2 `helpers/auth.js`
-- [ ] Seed mínimo 5 envíos → Task 1 `seed-envios.sql`
-- [ ] Resultados en `src/test/k6/results/` + REPORT.md → Tasks 3-4
-- [ ] Documentación de ejecución → Task 2 `README.md`
+- [x] Escenarios Smoke/Load/Stress → Task 2 `SCENARIO_OPTIONS` + Task 3
+- [x] Umbrales (500ms/1% y 1000ms/5%) → Task 2 `THRESHOLDS`
+- [x] Mix 60/25/10/5 → Task 2 `default()`
+- [x] Flujo admin completo (login + CSRF + RBAC) → Task 2 `helpers/auth.js`
+- [x] Seed mínimo 5 envíos → Task 1 `seed-envios.sql`
+- [x] Resultados en `src/test/k6/results/` + REPORT.md → Tasks 3-4
+- [x] Documentación de ejecución → Task 2 `README.md`
 
-- [ ] **Step 3: Re-verificación rápida de la stack y un run smoke**
+- [x] **Step 3: Re-verificación rápida de la stack y un run smoke**
 
 Run (mismo comando que Task 2 Step 5, sin exportación JSON):
 ```pwsh
@@ -629,7 +629,7 @@ docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
 ```
 Expected: checks al 100%, thresholds PASS.
 
-- [ ] **Step 4: Commit final si hubo correcciones**
+- [x] **Step 4: Commit final si hubo correcciones**
 
 ```bash
 git add -A
@@ -644,3 +644,4 @@ Run: `git status --short` → Expected: limpio (si no hubo cambios, omitir el co
 - **Spec coverage:** Todas las secciones de la spec tienen tarea asignada (escenarios, umbrales, mix, auth, seed, resultados, reporte, README). El hallazgo de cache (tracking sin Redis) se ejecuta comparando endpoints en Task 4 y se documenta en REPORT.md. La decisión de ejecución por Docker container está en Global Constraints y en cada comando.
 - **Placeholder scan:** Ningún paso usa "TBD/TODO"; los únicos `<>` son valores de métricas que Task 4 debe completar con datos reales y el propio Task 4 Step 5 lo prohíbe explícitamente en el reporte final. Nombres de fichero `*-<timestamp>.json` son artefactos de ejecución, no placeholders.
 - **Type consistency:** `adminLogin(baseURL, username, password)` se define en Task 2 Step 2 y se consume en Task 2 Step 3. `randomDateRange(minStartDays, maxStartDays, maxSpanDays)` y `randomTrackingCode(codes)` se definen en Step 1 y consumen en Step 3. `options`/`default` de `load-test.js` se consumen en Tasks 3-5. Códigos seed `MT-2026-0001..0005` consistentes entre Task 1, Task 2 (default `TRACKING_CODES`) y README.
+
