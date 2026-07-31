@@ -169,7 +169,7 @@ export function adminLogin(baseURL, username, password) {
     'login page GET 200': (r) => r.status === 200,
   });
 
-  const match = loginPage.body.match(/name="_csrf"\s+type="hidden"\s+value="([^"]+)"/);
+  const match = loginPage.body.match(/<input[^>]*name="_csrf"[^>]*value="([^"]+)"/);
   check(null, {
     'csrf token present': () => match !== null,
   });
@@ -235,13 +235,14 @@ const THRESHOLDS = {
   stress: { http_req_duration: ['p(95)<1000'], http_req_failed: ['rate<0.05'] },
 };
 
+// Solo 5xx y errores de red cuentan como request fallido; 4xx esperados (409) no.
+http.setResponseCallback(http.expectedStatuses({ min: 200, max: 499 }));
+
 export const options = {
   scenarios: {
     [SCENARIO]: SCENARIO_OPTIONS[SCENARIO],
   },
   thresholds: THRESHOLDS[SCENARIO],
-  // Solo 5xx y errores de red cuentan como request fallido; 4xx esperados (409) no.
-  responseCallback: (res) => res.status >= 500,
 };
 
 let adminReady = false;
@@ -317,7 +318,9 @@ Run:
 ```pwsh
 docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts grafana/k6 inspect /scripts/load-test.js
 ```
-Expected: JSON de opciones con `scenarios` (una sola clave `load` por defecto), `thresholds` y `responseCallback`. Exit code 0. Si hay error de sintaxis/import, corregir y repetir.
+Expected: JSON de opciones con `scenarios` (sola clave `load`, `ramping-vus`, stages 1m/8m/1m) y `thresholds` p(95)<500 + rate<0.01. Exit code 0. Si hay error de sintaxis/import, corregir y repetir.
+
+> NOTA: `responseCallback` se configura con `http.setResponseCallback(http.expectedStatuses({ min: 200, max: 499 }))` en init (no como `options.responseCallback`, que rompe la inicialización del script en k6 — error `json: unsupported type: func`).
 
 - [ ] **Step 5: Verificación funcional end-to-end con Smoke (sin exportación JSON)**
 
@@ -355,7 +358,9 @@ $env:ADMIN_USERNAME = (Get-Content .env | Where-Object {$_ -match '^ADMIN_USERNA
 $env:ADMIN_PASSWORD  = (Get-Content .env | Where-Object {$_ -match '^ADMIN_PASSWORD='}).Split('=',2)[1]
 $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=$env:SCENARIO -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/$env:SCENARIO-$ts.json `
@@ -434,7 +439,9 @@ Expected: sin salida; variables pobladas (verificar con `$env:ADMIN_USERNAME`).
 
 Run:
 ```pwsh
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=smoke -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/smoke-$ts.json `
@@ -451,7 +458,9 @@ Get-Item src/test/k6/results/smoke-$ts.json, src/test/k6/results/smoke-$ts.log
 
 Run:
 ```pwsh
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=load -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/load-$ts.json `
@@ -465,7 +474,9 @@ Expected: exit 0 (o exit con thresholds en rojo — es un fallo de umbral, no de
 
 Run:
 ```pwsh
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=stress -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/stress-$ts.json `
