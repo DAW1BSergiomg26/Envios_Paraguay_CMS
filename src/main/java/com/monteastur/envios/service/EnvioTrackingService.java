@@ -1,11 +1,15 @@
 package com.monteastur.envios.service;
 
 import com.monteastur.envios.dto.api.PublicTrackingDto;
+import com.monteastur.envios.event.EstadoEnvioActualizadoEvent;
+import com.monteastur.envios.exception.ResourceNotFoundException;
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,9 +19,11 @@ import java.util.Optional;
 public class EnvioTrackingService {
 
     private final EnvioTrackingRepository repo;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public EnvioTrackingService(EnvioTrackingRepository repo) {
+    public EnvioTrackingService(EnvioTrackingRepository repo, ApplicationEventPublisher eventPublisher) {
         this.repo = repo;
+        this.eventPublisher = eventPublisher;
     }
 
     @Cacheable(value = "envios.tracking", unless = "#result == null")
@@ -39,6 +45,22 @@ public class EnvioTrackingService {
             envio.setFechaCreacion(LocalDateTime.now());
         }
         return repo.save(envio);
+    }
+
+    @Transactional
+    @CacheEvict(value = "envios.tracking", allEntries = true)
+    public EnvioTracking actualizarEstado(String codigo, String nuevoEstado) {
+        EnvioTracking envio = repo.findWithClienteByCodigoUnico(codigo.trim().toUpperCase())
+                .orElseThrow(() -> new ResourceNotFoundException("Tracking no encontrado: " + codigo));
+        String estadoAnterior = envio.getEstado();
+        if (estadoAnterior != null && estadoAnterior.equals(nuevoEstado)) {
+            return envio;
+        }
+        envio.setEstado(nuevoEstado);
+        EnvioTracking actualizado = guardar(envio);
+        eventPublisher.publishEvent(new EstadoEnvioActualizadoEvent(
+                actualizado.getId(), actualizado.getCodigoUnico(), estadoAnterior, nuevoEstado));
+        return actualizado;
     }
 
     @CacheEvict(value = "envios.tracking", allEntries = true)

@@ -142,10 +142,9 @@ public class AdminApiController {
         EnvioTracking envio = trackingRepo.findWithClienteByCodigoUnico(codigo.trim().toUpperCase())
             .orElseThrow(() -> new com.monteastur.envios.exception.ResourceNotFoundException("Tracking no encontrado: " + codigo));
         String estadoAnterior = envio.getEstado();
-        envio.setEstado(request.getEstado());
-        envioTrackingService.guardar(envio);
-        eventoTrackingService.crearEvento(envio, estadoAnterior);
-        return ResponseEntity.ok(toTrackingDto(envio));
+        EnvioTracking actualizado = envioTrackingService.actualizarEstado(codigo, request.getEstado());
+        eventoTrackingService.crearEvento(actualizado, estadoAnterior);
+        return ResponseEntity.ok(toTrackingDto(actualizado));
     }
 
     private TrackingDto toTrackingDto(EnvioTracking envio) {

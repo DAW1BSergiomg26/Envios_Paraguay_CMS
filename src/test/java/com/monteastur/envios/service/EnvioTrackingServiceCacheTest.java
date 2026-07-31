@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.ContextConfiguration;
@@ -33,8 +34,13 @@ class EnvioTrackingServiceCacheTest {
         }
 
         @Bean
-        EnvioTrackingService envioTrackingService(EnvioTrackingRepository repo) {
-            return new EnvioTrackingService(repo);
+        ApplicationEventPublisher applicationEventPublisher() {
+            return Mockito.mock(ApplicationEventPublisher.class);
+        }
+
+        @Bean
+        EnvioTrackingService envioTrackingService(EnvioTrackingRepository repo, ApplicationEventPublisher publisher) {
+            return new EnvioTrackingService(repo, publisher);
         }
 
         @Bean
