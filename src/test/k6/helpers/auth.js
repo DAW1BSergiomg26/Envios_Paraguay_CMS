@@ -10,7 +10,7 @@ export function adminLogin(baseURL, username, password) {
     'login page GET 200': (r) => r.status === 200,
   });
 
-  const match = loginPage.body.match(/name="_csrf"\s+type="hidden"\s+value="([^"]+)"/);
+  const match = loginPage.body.match(/<input[^>]*name="_csrf"[^>]*value="([^"]+)"/);
   check(null, {
     'csrf token present': () => match !== null,
   });
