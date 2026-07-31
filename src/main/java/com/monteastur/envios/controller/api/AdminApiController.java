@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Admin Tracking", description = "Gestión de envíos del panel de administración (requiere Basic Auth)")
 @RestController
 @RequestMapping("/api/v1/admin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminApiController {
 
     private final EnvioTrackingRepository trackingRepo;
