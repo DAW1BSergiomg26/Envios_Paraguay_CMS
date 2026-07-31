@@ -1,6 +1,8 @@
 package com.monteastur.envios.config;
 
+import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.controller.api.PushSubscriptionController;
+import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,6 +31,12 @@ class SecurityConfigTest {
 
     @MockBean
     private DataSource dataSource;
+
+    @MockBean
+    private RBACAccessLogger rbacAccessLogger;
+
+    @MockBean
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Test
     void apiPublico_accesibleSinAuth() throws Exception {

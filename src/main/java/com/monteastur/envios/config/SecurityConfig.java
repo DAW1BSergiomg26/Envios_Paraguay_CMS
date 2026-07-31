@@ -1,5 +1,6 @@
 package com.monteastur.envios.config;
 
+import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,12 +20,16 @@ import javax.sql.DataSource;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http,
+                                           CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/admin/**", "/api/v1/admin/**").authenticated()
                 .requestMatchers("/api/v1/docs", "/api/v1/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().permitAll()
+            )
+            .exceptionHandling(handling -> handling
+                .accessDeniedHandler(customAccessDeniedHandler)
             )
             .formLogin(form -> form
                 .loginPage("/login")

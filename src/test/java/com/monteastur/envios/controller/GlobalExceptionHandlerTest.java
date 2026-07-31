@@ -1,6 +1,8 @@
 package com.monteastur.envios.controller;
 
+import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.config.SecurityConfig;
+import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,12 @@ class GlobalExceptionHandlerTest {
 
     @MockBean
     private DataSource dataSource;
+
+    @MockBean
+    private RBACAccessLogger rbacAccessLogger;
+
+    @MockBean
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @ParameterizedTest
     @CsvSource({

@@ -1,8 +1,10 @@
 package com.monteastur.envios.controller.api;
 
+import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.config.SecurityConfig;
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
+import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,6 +39,12 @@ class TrackingApiControllerTest {
 
     @MockBean
     private DataSource dataSource;
+
+    @MockBean
+    private RBACAccessLogger rbacAccessLogger;
+
+    @MockBean
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Test
     void getTrackingByCodigo_existente_retorna200() throws Exception {
