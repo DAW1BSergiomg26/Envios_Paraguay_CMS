@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.sql.DataSource;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -32,6 +34,9 @@ class TrackingApiControllerTest {
 
     @MockBean
     private EnvioTrackingRepository trackingRepository;
+
+    @MockBean
+    private DataSource dataSource;
 
     @Test
     void getTrackingByCodigo_existente_retorna200() throws Exception {

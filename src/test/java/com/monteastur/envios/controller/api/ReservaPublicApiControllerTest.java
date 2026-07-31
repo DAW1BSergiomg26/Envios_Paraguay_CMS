@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.sql.DataSource;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,6 +35,9 @@ class ReservaPublicApiControllerTest {
 
     @MockBean
     private ReservaService reservaService;
+
+    @MockBean
+    private DataSource dataSource;
 
     private static final String VALID_BODY =
         "{\"nombreCliente\":\"Test\",\"email\":\"test@example.com\"," +

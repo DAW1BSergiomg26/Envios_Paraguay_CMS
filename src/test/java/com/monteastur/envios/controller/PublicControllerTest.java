@@ -20,6 +20,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.sql.DataSource;
+
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
@@ -48,6 +50,7 @@ class PublicControllerTest {
     @MockBean private MensajeContactoRepository mensajeRepo;
     @MockBean private EmailService emailService;
     @MockBean private EventoTrackingService eventoTrackingService;
+    @MockBean private DataSource dataSource;
 
     @ParameterizedTest
     @CsvSource({
