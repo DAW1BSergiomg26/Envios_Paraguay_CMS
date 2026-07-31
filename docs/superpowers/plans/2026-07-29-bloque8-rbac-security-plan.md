@@ -155,7 +155,7 @@ Tarea 6: feat(security): final verification & security checks
 | Tarea 3: @PreAuthorize | `security-security-annotations` subagent | ✅ completa (solo ADMIN; portal cliente queda sin anotar por auth por sesión) |
 | Tarea 4: Auditor | `security-security-auditor` subagent | ✅ completa |
 | Tarea 5: DeniedHandler | `security-security-denied` subagent | ✅ completa |
-| Tarea 6: Verification | `security-verification` subagent | ⏩ pendiente |
+| Tarea 6: Verification | `security-verification` subagent | ✅ completa (48/48 tests; verificación de Flyway V2 en runtime pendiente hasta levantar infra MySQL/Redis) |
 
 ## Guía de configuración y resolución de problemas
 
