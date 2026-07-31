@@ -160,8 +160,8 @@ services:
     image: axllent/mailpit:latest
     container_name: monteastur-mailpit
     ports:
-      - "${MAILPIT_UI_PORT:-8025}:8025"
-      - "1025:1025"
+      - "127.0.0.1:${MAILPIT_UI_PORT:-8025}:8025"
+      - "127.0.0.1:1025:1025"
     restart: unless-stopped
     networks:
       - backend
