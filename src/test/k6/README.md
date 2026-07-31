@@ -19,7 +19,9 @@ $env:ADMIN_USERNAME = (Get-Content .env | Where-Object {$_ -match '^ADMIN_USERNA
 $env:ADMIN_PASSWORD  = (Get-Content .env | Where-Object {$_ -match '^ADMIN_PASSWORD='}).Split('=',2)[1]
 $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=$env:SCENARIO -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/$env:SCENARIO-$ts.json `
