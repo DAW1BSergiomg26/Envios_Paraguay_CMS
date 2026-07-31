@@ -317,7 +317,7 @@ Run:
 ```pwsh
 docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts grafana/k6 inspect /scripts/load-test.js
 ```
-Expected: JSON de opciones con `scenarios` (una sola clave `load` por defecto), `thresholds` y `responseCallback`. Exit code 0. Si hay error de sintaxis/import, corregir y repetir.
+Expected: el parseo del script (sintaxis + imports + init) valida; el comando NO sale con exit 0 porque `k6 inspect` no puede serializar la función `responseCallback` a JSON (limitación conocida de k6, issues #855/#2909 — error `json: unsupported type: func(sobek.FunctionCall)`). Ese error de serialización tras parsear ES la señal de que sintaxis/imports están bien. Para confirmar las opciones resultantes, verificar con una copia temporal del script SIN la línea `responseCallback`: JSON con `scenarios` (sola clave `load`, `ramping-vus`, stages 1m/8m/1m), `thresholds` p(95)<500 y rate<0.01. El gate funcional real es el smoke de Step 5.
 
 - [ ] **Step 5: Verificación funcional end-to-end con Smoke (sin exportación JSON)**
 
@@ -355,7 +355,9 @@ $env:ADMIN_USERNAME = (Get-Content .env | Where-Object {$_ -match '^ADMIN_USERNA
 $env:ADMIN_PASSWORD  = (Get-Content .env | Where-Object {$_ -match '^ADMIN_PASSWORD='}).Split('=',2)[1]
 $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=$env:SCENARIO -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/$env:SCENARIO-$ts.json `
@@ -434,7 +436,9 @@ Expected: sin salida; variables pobladas (verificar con `$env:ADMIN_USERNAME`).
 
 Run:
 ```pwsh
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=smoke -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/smoke-$ts.json `
@@ -451,7 +455,9 @@ Get-Item src/test/k6/results/smoke-$ts.json, src/test/k6/results/smoke-$ts.log
 
 Run:
 ```pwsh
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=load -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/load-$ts.json `
@@ -465,7 +471,9 @@ Expected: exit 0 (o exit con thresholds en rojo — es un fallo de umbral, no de
 
 Run:
 ```pwsh
-docker run --rm --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+docker run --rm `
+  --mount type=bind,source="${PWD}/src/test/k6",target=/scripts `
+  --mount type=bind,source="${PWD}/src/test/k6/results",target=/results `
   -e SCENARIO=stress -e BASE_URL=http://host.docker.internal:8080 `
   -e ADMIN_USERNAME=$env:ADMIN_USERNAME -e ADMIN_PASSWORD=$env:ADMIN_PASSWORD `
   --out json=/results/stress-$ts.json `
