@@ -107,7 +107,7 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `6d1d4f7` (`feat(webhooks): modulo outbound con firma HMAC-SHA256 y CRUD admin`).
+- **HEAD:** `ca980f9` (`fix(webhooks): hardening post code review`).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
