@@ -186,6 +186,15 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+      mailpit:
+        image: axllent/mailpit:latest
+        ports:
+          - 1025:1025
+        options: >-
+          --health-cmd "wget -q -O /dev/null http://localhost:8025/readyz || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - uses: actions/checkout@v4
       - name: Set up Docker Buildx
@@ -300,6 +309,7 @@ Anotar en el handoff (Task 5) el número de tests ejecutados/fallos 0 y el `BUIL
 
 **Interfaces:**
 - Valida el sanity check de Task 2. Replica local (Docker Desktop Windows: no existe `--network host`, por eso se usan contenedores efímeros en la red `envios_paraguay_cms_backend` y puerto host 18080; el puerto 8080 del host está ocupado por `monteastur-app`).
+- **Corrección deliberada al spec (hallada en ejecución):** el endpoint agregado `/actuator/health` incluye el `MailHealthIndicator`; sin servidor SMTP responde `DOWN` y el smoke falla aunque la app esté sana (DB/Redis/Flyway OK). Fix: el smoke incluye `mailpit` (mismo rol que en `docker-compose.yml` de prod). En CI, `axllent/mailpit` publica `1025:1025` y con `--network host` la app usa su default `localhost:1025`. Localmente se apunta a `SPRING_MAIL_HOST=monteastur-mailpit` (mailpit existente en la red).
 
 - [ ] **Step 1: Levantar MySQL y Redis efímeros para el smoke**
 
@@ -328,7 +338,8 @@ docker run -d --name envios-smoke --network envios_paraguay_cms_backend -p 18080
   -e PORT=18080 `
   -e SPRING_DATASOURCE_URL="jdbc:mysql://smoke-mysql:3306/envios_paraguay_cms_smoke?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" `
   -e DB_USERNAME=root -e DB_PASSWORD=root -e ADMIN_USERNAME=smoke -e ADMIN_PASSWORD=smoke `
-  -e REDIS_HOST=smoke-redis -e APP_NOTIFICATION_MAIL_ENABLED=false -e SPRING_PROFILES_ACTIVE=prod `
+  -e REDIS_HOST=smoke-redis -e APP_NOTIFICATION_MAIL_ENABLED=false -e SPRING_MAIL_HOST=monteastur-mailpit `
+  -e SPRING_PROFILES_ACTIVE=prod `
   envios-paraguay-cms:latest
 ```
 
