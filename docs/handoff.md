@@ -89,7 +89,7 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - Job `docker-build`: buildx + `docker/build-push-action@v5` (`load: true`, tag `envios-paraguay-cms:latest`) y smoke test de arranque en frío: contenedor con `--network host`, envs de prod (`DB_USERNAME/DB_PASSWORD/ADMIN_USERNAME/ADMIN_PASSWORD/REDIS_HOST/APP_NOTIFICATION_MAIL_ENABLED=false`), loop 30×5 s hasta que `curl /actuator/health` devuelva HTTP 200 con `"UP"` (servicios efímeros `mysql` + `redis` + `mailpit`).
     - **Corrección deliberada al spec (hallada en la verificación local):** el endpoint agregado `/actuator/health` incluye el `MailHealthIndicator`; sin servidor SMTP responde `DOWN` y el smoke falla aunque la app esté sana. Fix: el job `docker-build` añade el servicio `axllent/mailpit` (publica `1025:1025`, healthcheck `wget -q -O /dev/null http://localhost:8025/readyz`), replicando el rol de Mailpit en `docker-compose.yml` de prod. Verificado empíricamente que la imagen incluye `wget` y el healthcheck pasa.
     - Verificación local completa: suite en contenedor Maven Linux con `./mvnw clean test -B` → **BUILD SUCCESS, 190 tests, 0 fallos**; imagen construida; arranque en frío con `/actuator/health` → **`UP` en el intento 2** (contenedores efímeros `smoke-mysql`/`smoke-redis`, puerto 18080, `SPRING_MAIL_HOST=monteastur-mailpit`); Flyway V1–V8 aplicadas con `success=1` en el smoke DB; contenedores efímeros limpiados.
-    - **Pendiente:** `push` a GitHub para validar la ejecución real del workflow en GitHub Actions (requiere confirmación explícita del usuario; sin push ni merge sin permiso).
+    - **Validado en GitHub Actions (cierre):** push del bloque a `origin/main` y run `30769845155` (commit `9c57351`) → **`conclusion=success`** en ambos jobs: `Test suite (MySQL 8 + Redis 7)` con **217 tests / 0 fallos** (`Tests run: 217, Failures: 0, Errors: 0, Skipped: 0`) y `Docker image build + smoke test` con `/actuator/health` → `{"status":"UP"}` (HTTP 200 en el intento 4, `SMOKE TEST PASSED`), MySQL/Redis/Mailpit efímeros levantados y limpiados por el runner.
 11. **Bloque 15: Portal Público de Rastreo & Dashboard Interactivo de Clientes (Tailwind)** (completado, 2026-08-02):
     - Spec de diseño: commits `48b7956`/`1efc0b8` (`docs/superpowers/specs/2026-08-02-bloque15-portal-tracking-dashboard-design.md`); plan de implementación: commit `72d4bc3` (`docs/superpowers/plans/2026-08-02-bloque15-portal-tracking-dashboard-plan.md`).
     - DTOs web Java puro (`PublicTrackingView`, `EventoView`, `EvidenciaView`, `EntregaView`, `ClientDashboardView`, `EnvioResumenView`; listas `ArrayList` para el serializador Redis `NON_FINAL`): commit `0a5421e`.
@@ -99,7 +99,8 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - `TrackingWebController` (buscador PRG + 404 personalizado), `ClientDashboardController` (panel + etiqueta PDF con ownership 200/403/404), excepciones `TrackingNoEncontradoException`/`ForbiddenException`, limpieza de `PublicController`/`ClienteController`, logout POST: commits `11849e9` y `1346527`.
     - **Correcciones sobre el plan (verificación empírica):** (a) el `@ResponseStatus` de las excepciones NO aplica cuando hay un `@ExceptionHandler` que las captura → se añadió `@ResponseStatus` a todos los handlers MVC de `GlobalExceptionHandler` y al handler local de `TrackingWebController` (la rama web devuelve ahora 400/403/404/409/500 reales; la rama REST intacta); (b) en `@SpringBootTest` + `@AutoConfigureMockMvc`, Spring Security reemplaza la sesión de MockMvc (los `sessionAttr` no llegan al controller) → el test de integración usa `@AutoConfigureMockMvc(addFilters = false)` (las rutas son `permitAll`; la seguridad ya está cubierta por los `@WebMvcTest`).
     - Test de integración E2E `PortalTrackingDashboardIntegrationTest` (9 tests: rutas web, POD, 404, ownership PDF, caché Redis con TTL 1–300 s): commit `8be0aa9`.
-    - Suite completa en contenedor Maven Linux: **BUILD SUCCESS, 217 tests, 0 fallos**. **Pendiente:** `push` a `origin/main` (requiere confirmación explícita).
+    - Suite completa en contenedor Maven Linux: **BUILD SUCCESS, 217 tests, 0 fallos**.
+    - **Validado en GitHub Actions (cierre):** mismo run `30769845155` de CI/CD (ver Bloque 14); el pipeline completo pasó en la nube sobre el estado final de `main` con el Bloque 15 incluido.
 
 ---
 
@@ -150,9 +151,10 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `8be0aa9` (Task 8 del Bloque 15, test de integración E2E). **Working tree:** pendiente de commit este handoff (Task 5/9 del Bloque 15). Bloques 11–15 completados; pendiente `push` a GitHub (Bloques 14 y 15) para validar el workflow real en Actions.
+- **HEAD:** `9c57351` (`docs(plan): mark all Bloque 15 tasks as completed`). **Sincronizado con `origin/main`** (push completado: `982d36b..9c57351`). Working tree limpio; sin contenedores huérfanos locales (eliminados 6 exited de otros proyectos; stack `monteastur-*` intacta y sana, compose project `envios_paraguay_cms`).
+- **CI/CD validado en la nube:** run `30769845155` (workflow `CI/CD Enterprise Pipeline - Envios Paraguay CMS`) → **success** en `Test suite (MySQL 8 + Redis 7)` (217 tests, 0 fallos) y `Docker image build + smoke test` (`/actuator/health` → `UP`, HTTP 200 en el intento 4).
 - **Migraciones Flyway aplicadas:** V1–V8 (V8 crea `entregas_evidencia` con `envio_id UNIQUE`, FK `ON DELETE CASCADE`, firma PNG `LONGTEXT` y coordenadas `DECIMAL(10,8)`/`DECIMAL(11,8)`).
-- **Suite completa:** **217 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP` en el intento 2.
+- **Suite completa:** **217 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis y en GitHub Actions). Smoke test de la imagen en frío: `/actuator/health` → `UP`.
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
