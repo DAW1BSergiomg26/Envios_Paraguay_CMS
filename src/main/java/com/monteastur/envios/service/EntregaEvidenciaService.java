@@ -31,7 +31,7 @@ public class EntregaEvidenciaService {
     }
 
     @Transactional
-    @CacheEvict(value = "envios.dashboard", allEntries = true)
+    @CacheEvict(value = {"envios.dashboard", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
     public EntregaEvidencia registrarEntrega(String codigo, RegistrarEntregaRequest request) {
         EntregaValidator.validar(request);
         EnvioTracking envio = envioTrackingRepository.findWithClienteByCodigoUnico(codigo.trim().toUpperCase())

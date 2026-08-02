@@ -39,6 +39,8 @@ public class RedisConfig {
         var configs = Map.of(
             "envios.tracking", defaultConfig.entryTtl(Duration.ofMinutes(5)),
             "envios.dashboard", defaultConfig.entryTtl(Duration.ofMinutes(1)),
+            "envios.tracking.pagina", defaultConfig.entryTtl(Duration.ofMinutes(5)),
+            "envios.cliente.dashboard", defaultConfig.entryTtl(Duration.ofMinutes(1)),
             "envios.reservas", defaultConfig.entryTtl(Duration.ofMinutes(10)),
             "envios.clientes", defaultConfig.entryTtl(Duration.ofMinutes(10)),
             "envios.disponibilidad", defaultConfig.entryTtl(Duration.ofMinutes(2))
