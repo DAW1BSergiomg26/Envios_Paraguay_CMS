@@ -40,7 +40,7 @@
 **Interfaces:**
 - Produces: `./mvnw clean test -B` (bash, Linux/macOS) y `.\mvnw.cmd` (Windows) usando Maven 3.9.9. Lo consumen el job `test` del `ci.yml` (Task 2) y la verificación local (Task 3).
 
-- [ ] **Step 1: Generar el wrapper con el Maven local**
+- [x] **Step 1: Generar el wrapper con el Maven local**
 
 ```powershell
 & "C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd" wrapper:wrapper "-Dmaven=3.9.9"
@@ -48,7 +48,7 @@
 
 Expected: `BUILD SUCCESS` y aparición de `mvnw`, `mvnw.cmd`, `.mvn/wrapper/maven-wrapper.properties`.
 
-- [ ] **Step 2: Verificar que `maven-wrapper.properties` fija 3.9.9**
+- [x] **Step 2: Verificar que `maven-wrapper.properties` fija 3.9.9**
 
 ```powershell
 Get-Content ".mvn/wrapper/maven-wrapper.properties"
@@ -56,7 +56,7 @@ Get-Content ".mvn/wrapper/maven-wrapper.properties"
 
 Expected: `distributionUrl=...apache-maven-3.9.9-bin.zip` (o `maven-wrapper.properties` con `distributionType=only-script` + `distributionUrl` 3.9.9).
 
-- [ ] **Step 3: Verificar versión con el wrapper Windows**
+- [x] **Step 3: Verificar versión con el wrapper Windows**
 
 ```powershell
 .\mvnw.cmd --version
@@ -64,7 +64,7 @@ Expected: `distributionUrl=...apache-maven-3.9.9-bin.zip` (o `maven-wrapper.prop
 
 Expected: primera línea `Apache Maven 3.9.9 (...)`. (El wrapper descargará el distribution en `~/.m2/wrapper` la primera vez.)
 
-- [ ] **Step 4: Crear `.gitattributes` para pin de LF en `mvnw`**
+- [x] **Step 4: Crear `.gitattributes` para pin de LF en `mvnw`**
 
 `.gitattributes`:
 ```
@@ -72,7 +72,7 @@ mvnw text eol=lf
 mvnw.cmd text eol=crlf
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add mvnw mvnw.cmd .mvn .gitattributes
@@ -89,7 +89,7 @@ git commit -m "build: add Maven Wrapper 3.9.9 for reproducible CI builds"
 **Interfaces:**
 - Consumes: `./mvnw` (Task 1). Produce: pipeline con jobs `test` y `docker-build` (referenciado en la verificación YAML y documentado en `docs/handoff.md`).
 
-- [ ] **Step 1: Escribir el workflow**
+- [x] **Step 1: Escribir el workflow**
 
 `.github/workflows/ci.yml` (reemplazo completo):
 
@@ -240,7 +240,7 @@ jobs:
           exit 1
 ```
 
-- [ ] **Step 2: Validar sintaxis YAML y estructura de jobs**
+- [x] **Step 2: Validar sintaxis YAML y estructura de jobs**
 
 ```powershell
 python -c "import yaml; d=yaml.safe_load(open('.github/workflows/ci.yml', encoding='utf-8')); assert set(d['jobs'].keys())=={'test','docker-build'}, d['jobs'].keys(); assert d['jobs']['docker-build']['needs']=='test'; assert d['jobs']['docker-build']['if']==\"github.event_name == 'push'\"; assert d['permissions']=={'contents':'read'}; print('YAML OK; jobs:', list(d['jobs'].keys()))"
@@ -248,7 +248,7 @@ python -c "import yaml; d=yaml.safe_load(open('.github/workflows/ci.yml', encodi
 
 Expected: `YAML OK; jobs: ['test', 'docker-build']`.
 
-- [ ] **Step 3: Verificar que los nombres de env vars coinciden con el código**
+- [x] **Step 3: Verificar que los nombres de env vars coinciden con el código**
 
 Comprobación manual con grep (no modifica nada):
 
@@ -258,7 +258,7 @@ rg -n "DB_USERNAME|DB_PASSWORD|REDIS_HOST|ADMIN_USERNAME|ADMIN_PASSWORD|APP_NOTI
 
 Expected: `spring.datasource.username=${DB_USERNAME}`, `spring.datasource.password=${DB_PASSWORD}`, `app.admin.username=${ADMIN_USERNAME}`, `app.admin.password=${ADMIN_PASSWORD}`, `spring.data.redis.host=${REDIS_HOST:redis}`, `app.notification.mail.enabled=${APP_NOTIFICATION_MAIL_ENABLED:true}`, y `required = {"DB_USERNAME", "DB_PASSWORD"}` en `validateEnvironment()`.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add .github/workflows/ci.yml
@@ -275,7 +275,7 @@ git commit -m "ci: enterprise pipeline with test and docker-build jobs and smoke
 **Interfaces:**
 - Valida Task 1 (`mvnw` bash funciona) y Task 2 (env vars del job `test` correctas contra MySQL/Redis reales). Requiere red `envios_paraguay_cms_backend` con los contenedores `db` (monteastur-mysql) y `redis` (monteastur-redis) levantados.
 
-- [ ] **Step 1: Garantizar que la DB de test existe en el MySQL de la red**
+- [x] **Step 1: Garantizar que la DB de test existe en el MySQL de la red**
 
 ```powershell
 docker exec monteastur-mysql mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS envios_paraguay_cms_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>&1 | Select-String -NotMatch "Using a password"
@@ -283,7 +283,7 @@ docker exec monteastur-mysql mysql -uroot -proot -e "CREATE DATABASE IF NOT EXIS
 
 Expected: sin errores.
 
-- [ ] **Step 2: Ejecutar la suite completa dentro del contenedor Maven usando `./mvnw`**
+- [x] **Step 2: Ejecutar la suite completa dentro del contenedor Maven usando `./mvnw`**
 
 ```powershell
 docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
@@ -296,7 +296,7 @@ docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
 
 Expected: `BUILD SUCCESS`, ~190 tests, y en el log del wrapper `Maven home: ...maven-3.9.9...` (demuestra que el wrapper usa 3.9.9 dentro del contenedor, igual que CI).
 
-- [ ] **Step 3: Registrar evidencia**
+- [x] **Step 3: Registrar evidencia**
 
 Anotar en el handoff (Task 5) el número de tests ejecutados/fallos 0 y el `BUILD SUCCESS`.
 
@@ -311,7 +311,7 @@ Anotar en el handoff (Task 5) el número de tests ejecutados/fallos 0 y el `BUIL
 - Valida el sanity check de Task 2. Replica local (Docker Desktop Windows: no existe `--network host`, por eso se usan contenedores efímeros en la red `envios_paraguay_cms_backend` y puerto host 18080; el puerto 8080 del host está ocupado por `monteastur-app`).
 - **Corrección deliberada al spec (hallada en ejecución):** el endpoint agregado `/actuator/health` incluye el `MailHealthIndicator`; sin servidor SMTP responde `DOWN` y el smoke falla aunque la app esté sana (DB/Redis/Flyway OK). Fix: el smoke incluye `mailpit` (mismo rol que en `docker-compose.yml` de prod). En CI, `axllent/mailpit` publica `1025:1025` y con `--network host` la app usa su default `localhost:1025`. Localmente se apunta a `SPRING_MAIL_HOST=monteastur-mailpit` (mailpit existente en la red).
 
-- [ ] **Step 1: Levantar MySQL y Redis efímeros para el smoke**
+- [x] **Step 1: Levantar MySQL y Redis efímeros para el smoke**
 
 ```powershell
 docker run -d --name smoke-mysql --network envios_paraguay_cms_backend -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=envios_paraguay_cms_smoke mysql:8.0
@@ -321,7 +321,7 @@ docker exec smoke-mysql sh -c "until mysqladmin ping -h localhost -uroot -proot 
 
 Expected: los dos contenedores corriendo y el `until` termina sin error (MySQL listo).
 
-- [ ] **Step 2: Construir la imagen**
+- [x] **Step 2: Construir la imagen**
 
 ```powershell
 docker build -t envios-paraguay-cms:latest .
@@ -331,7 +331,7 @@ docker build -t envios-paraguay-cms:latest .
 
 Expected: `Successfully built` / `Successfully tagged envios-paraguay-cms:latest`.
 
-- [ ] **Step 3: Arrancar la imagen con las env vars de prod (mismas que CI, con servicios efímeros)**
+- [x] **Step 3: Arrancar la imagen con las env vars de prod (mismas que CI, con servicios efímeros)**
 
 ```powershell
 docker run -d --name envios-smoke --network envios_paraguay_cms_backend -p 18080:18080 `
@@ -345,7 +345,7 @@ docker run -d --name envios-smoke --network envios_paraguay_cms_backend -p 18080
 
 Expected: contenedor `envios-smoke` arrancado (la app aplica Flyway V1–V8 contra `envios_paraguay_cms_smoke`).
 
-- [ ] **Step 4: Esperar salud y validar `/actuator/health`**
+- [x] **Step 4: Esperar salud y validar `/actuator/health`**
 
 ```powershell
 $ok = $false
@@ -358,7 +358,7 @@ if (-not $ok) { docker logs envios-smoke; throw "SMOKE TEST FAILED" }
 
 Expected: `SMOKE PASSED on attempt N: {"status":"UP"}`.
 
-- [ ] **Step 5: Verificar Flyway aplicado (migraciones V1–V8 en el smoke DB)**
+- [x] **Step 5: Verificar Flyway aplicado (migraciones V1–V8 en el smoke DB)**
 
 ```powershell
 docker exec smoke-mysql mysql -uroot -proot -e "SELECT version, success FROM envios_paraguay_cms_smoke.flyway_schema_history;" 2>&1 | Select-String -NotMatch "Using a password"
@@ -366,7 +366,7 @@ docker exec smoke-mysql mysql -uroot -proot -e "SELECT version, success FROM env
 
 Expected: filas V1…V8 todas con `success = 1`.
 
-- [ ] **Step 6: Limpiar contenedores efímeros**
+- [x] **Step 6: Limpiar contenedores efímeros**
 
 ```powershell
 docker rm -f envios-smoke smoke-mysql smoke-redis
@@ -374,7 +374,7 @@ docker rm -f envios-smoke smoke-mysql smoke-redis
 
 Expected: tres nombres impresos sin error.
 
-- [ ] **Step 7: Registrar evidencia**
+- [x] **Step 7: Registrar evidencia**
 
 Anotar en el handoff (Task 5): imagen construida, salud `UP` en intento N, migraciones V1–V8 aplicadas.
 
@@ -388,13 +388,13 @@ Anotar en el handoff (Task 5): imagen construida, salud `UP` en intento N, migra
 **Interfaces:**
 - Consume la evidencia de Tasks 3 y 4 (tests, BUILD SUCCESS, smoke PASSED, migraciones). Deja constancia de que la ejecución real de GitHub Actions queda pendiente de un `push` a GitHub.
 
-- [ ] **Step 1: Leer la sección de estado actual del handoff**
+- [x] **Step 1: Leer la sección de estado actual del handoff**
 
 ```powershell
 rg -n "Bloque 1[34]|Bloque 13|handoff" docs/handoff.md
 ```
 
-- [ ] **Step 2: Añadir la sección del Bloque 14**
+- [x] **Step 2: Añadir la sección del Bloque 14**
 
 Insertar tras el estado del Bloque 13 un bloque:
 
@@ -409,7 +409,7 @@ Insertar tras el estado del Bloque 13 un bloque:
 - **Pendiente:** push a GitHub para validación real del workflow (no se hizo push sin confirmación del usuario).
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add docs/handoff.md
@@ -423,3 +423,14 @@ git commit -m "docs(handoff): Bloque 14 CI/CD enterprise pipeline"
 - **Cobertura de spec:** job `test` (Task 2) ✓; job `docker-build` con sanity check (Task 2) ✓; Maven Wrapper (Task 1) ✓; permisos/concurrency (Task 2) ✓; corrección de env vars de prod (Task 2 Step 3, Task 4) ✓; verificación local suite+smoke (Tasks 3–4) ✓; handoff (Task 5) ✓; `deploy*.yml` intactos (Task 2 solo toca `ci.yml`) ✓.
 - **Sin placeholders:** todos los pasos incluyen código o comandos completos.
 - **Consistencia de nombres:** `envios-paraguay-cms:latest`, `envios-smoke`, `smoke-mysql`, `smoke-redis`, `envios_paraguay_cms_smoke` y `envios_paraguay_cms_test` usados consistentemente en Task 2 y Task 4.
+
+---
+
+## Completion
+
+- **Task 1 (Wrapper):** completada — `mvnw`/`mvnw.cmd`/`.mvn/wrapper/maven-wrapper.properties` (3.9.9) + `.gitattributes` (`e76b39d`).
+- **Task 2 (Workflow):** completada — `ci.yml` con jobs `test` + `docker-build` (`5bea243`) + ajuste del smoke con servicio `mailpit` (`5de1dc9`).
+- **Task 3 (Suite en contenedor):** completada — `./mvnw clean test -B` → BUILD SUCCESS, **190 tests, 0 fallos**.
+- **Task 4 (Smoke local):** completada — imagen `envios-paraguay-cms:latest` construida; arranque en frío con `/actuator/health` → **`UP` en el intento 2** (con `SPRING_MAIL_HOST=monteastur-mailpit`, puerto 18080, contenedores efímeros `smoke-mysql`/`smoke-redis`); Flyway V1–V8 con `success=1`; limpieza realizada.
+- **Task 5 (Handoff):** completada — `docs/handoff.md` actualizado con el Bloque 14 (`816ac1d`).
+- **Pendiente (fuera del plan, requiere confirmación del usuario):** `push` a GitHub para validar el workflow real en GitHub Actions.
