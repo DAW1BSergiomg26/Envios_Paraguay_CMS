@@ -90,6 +90,16 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - **Corrección deliberada al spec (hallada en la verificación local):** el endpoint agregado `/actuator/health` incluye el `MailHealthIndicator`; sin servidor SMTP responde `DOWN` y el smoke falla aunque la app esté sana. Fix: el job `docker-build` añade el servicio `axllent/mailpit` (publica `1025:1025`, healthcheck `wget -q -O /dev/null http://localhost:8025/readyz`), replicando el rol de Mailpit en `docker-compose.yml` de prod. Verificado empíricamente que la imagen incluye `wget` y el healthcheck pasa.
     - Verificación local completa: suite en contenedor Maven Linux con `./mvnw clean test -B` → **BUILD SUCCESS, 190 tests, 0 fallos**; imagen construida; arranque en frío con `/actuator/health` → **`UP` en el intento 2** (contenedores efímeros `smoke-mysql`/`smoke-redis`, puerto 18080, `SPRING_MAIL_HOST=monteastur-mailpit`); Flyway V1–V8 aplicadas con `success=1` en el smoke DB; contenedores efímeros limpiados.
     - **Pendiente:** `push` a GitHub para validar la ejecución real del workflow en GitHub Actions (requiere confirmación explícita del usuario; sin push ni merge sin permiso).
+11. **Bloque 15: Portal Público de Rastreo & Dashboard Interactivo de Clientes (Tailwind)** (completado, 2026-08-02):
+    - Spec de diseño: commits `48b7956`/`1efc0b8` (`docs/superpowers/specs/2026-08-02-bloque15-portal-tracking-dashboard-design.md`); plan de implementación: commit `72d4bc3` (`docs/superpowers/plans/2026-08-02-bloque15-portal-tracking-dashboard-plan.md`).
+    - DTOs web Java puro (`PublicTrackingView`, `EventoView`, `EvidenciaView`, `EntregaView`, `ClientDashboardView`, `EnvioResumenView`; listas `ArrayList` para el serializador Redis `NON_FINAL`): commit `0a5421e`.
+    - `PublicTrackingService.cargarPagina(codigo)` (`@Cacheable "envios.tracking.pagina"`, TTL 5 min, `unless result==null`) con timeline + POD solo si `ENTREGADO`; `ClientDashboardService.cargarDashboard(clienteId)` (`@Cacheable "envios.cliente.dashboard"`, TTL 1 min) con métricas `PesoUtil.parsear` (pesos inválidos ignorados): commits `6d57098` y `1718989` (6 + 2 unit tests).
+    - Caches Redis + `@CacheEvict` ampliados a los tres caches en los puntos de mutación (`EnvioTrackingService.guardar/actualizarEstado/eliminar`, `EntregaEvidenciaService.registrarEntrega`, `BatchImportPersistenceService.procesarChunk`): commit `7fdedbe`.
+    - Plantillas Tailwind CDN (fragmentos `public-head`, `tracking-search` con lector QR `html5-qrcode`, `tracking-result` con stepper de 6 pasos + POD con firma, `tracking-404`, `cliente/panel` con logout POST y métricas); eliminados `tracking.html`/`en/tracking.html`: commit `4b09243`.
+    - `TrackingWebController` (buscador PRG + 404 personalizado), `ClientDashboardController` (panel + etiqueta PDF con ownership 200/403/404), excepciones `TrackingNoEncontradoException`/`ForbiddenException`, limpieza de `PublicController`/`ClienteController`, logout POST: commits `11849e9` y `1346527`.
+    - **Correcciones sobre el plan (verificación empírica):** (a) el `@ResponseStatus` de las excepciones NO aplica cuando hay un `@ExceptionHandler` que las captura → se añadió `@ResponseStatus` a todos los handlers MVC de `GlobalExceptionHandler` y al handler local de `TrackingWebController` (la rama web devuelve ahora 400/403/404/409/500 reales; la rama REST intacta); (b) en `@SpringBootTest` + `@AutoConfigureMockMvc`, Spring Security reemplaza la sesión de MockMvc (los `sessionAttr` no llegan al controller) → el test de integración usa `@AutoConfigureMockMvc(addFilters = false)` (las rutas son `permitAll`; la seguridad ya está cubierta por los `@WebMvcTest`).
+    - Test de integración E2E `PortalTrackingDashboardIntegrationTest` (9 tests: rutas web, POD, 404, ownership PDF, caché Redis con TTL 1–300 s): commit `8be0aa9`.
+    - Suite completa en contenedor Maven Linux: **BUILD SUCCESS, 217 tests, 0 fallos**. **Pendiente:** `push` a `origin/main` (requiere confirmación explícita).
 
 ---
 
@@ -140,9 +150,9 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `5bea243` (Task 2 del Bloque 14, workflow CI/CD). **Working tree:** pendientes de commit los ajustes del smoke (servicio `mailpit` en `ci.yml`), la corrección en el plan (mailpit) y este handoff (Task 5). Bloques 11–13 completados; Bloque 14 completado (falta `push` a GitHub para validar el workflow real en Actions).
+- **HEAD:** `8be0aa9` (Task 8 del Bloque 15, test de integración E2E). **Working tree:** pendiente de commit este handoff (Task 5/9 del Bloque 15). Bloques 11–15 completados; pendiente `push` a GitHub (Bloques 14 y 15) para validar el workflow real en Actions.
 - **Migraciones Flyway aplicadas:** V1–V8 (V8 crea `entregas_evidencia` con `envio_id UNIQUE`, FK `ON DELETE CASCADE`, firma PNG `LONGTEXT` y coordenadas `DECIMAL(10,8)`/`DECIMAL(11,8)`).
-- **Suite completa:** **190 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP` en el intento 2.
+- **Suite completa:** **217 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP` en el intento 2.
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
