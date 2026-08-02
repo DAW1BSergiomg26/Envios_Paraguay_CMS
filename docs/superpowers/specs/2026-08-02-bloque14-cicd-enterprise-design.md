@@ -67,7 +67,7 @@ push: main, develop / PR: main
        - `APP_NOTIFICATION_MAIL_ENABLED=false` (evita intentos SMTP durante el smoke)
        - `SPRING_PROFILES_ACTIVE=prod` explícito (aunque el ENTRYPOINT del Dockerfile ya lo fuerza, se documenta intención).
      - `docker logs envios-smoke` (visibilidad inmediata).
-     - Loop de espera: consultar `curl --fail http://localhost:8080/actuator/health` hasta `UP`, con ~30 intentos × 5 s (~150 s; margen sobre el `start-period` de 40 s del HEALTHCHECK del Dockerfile). Si agota o el estado no es UP, imprimir `docker logs envios-smoke` y `exit 1`.
+     - Loop de espera: consultar `curl --fail http://localhost:8080/actuator/health` hasta `UP`, con ~30 intentos × 5 s (~150 s; margen sobre el `start-period` de 40 s del HEALTHCHECK del Dockerfile). La consulta se hace **desde el runner** (no desde dentro del contenedor). Si agota o el estado no es UP, imprimir `docker logs envios-smoke` y `exit 1`.
      - Limpieza del contenedor en `finally` (o paso final con `if: always()`).
 
 ### Por qué `--network host`
@@ -83,6 +83,8 @@ En runners nativos de GitHub (Linux) los contenedores de servicio publican sus p
 ### Reemplazo de `.github/workflows/ci.yml`
 - Nombre: `CI/CD Enterprise Pipeline - Envios Paraguay CMS`.
 - Triggers: `push` a `main` y `develop`; `pull_request` a `main`.
+- **Permisos mínimos:** `permissions: contents: read` (nada más).
+- **Concurrencia:** `concurrency` agrupada por rama para cancelar runs redundantes en push rápidos.
 - El `ci.yml` actual (trigger `feature/seguimiento-premium`, sin job Docker) se sustituye por completo.
 - **Fuera de alcance:** `deploy.yml`, `deploy-prod.yml`, `deploy-koyeb.yml` (CD existente) no se modifican.
 
