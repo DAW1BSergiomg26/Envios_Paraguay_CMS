@@ -174,6 +174,6 @@ String fechaEntrega;   // ISO_LOCAL_DATE_TIME
 ## Criterio de finalización
 
 - `mvn clean test` (contenedor Docker) con BUILD SUCCESS y suite completa en verde
-  (159 base + ~18 nuevos ≈ 177 tests).
+  (159 base + ~26 nuevos ≈ 185 tests).
 - `docs/handoff.md` actualizado con el Bloque 13 (migración V8, endpoints, seguridad HTTP Basic).
 - Working tree limpio tras el commit final.
