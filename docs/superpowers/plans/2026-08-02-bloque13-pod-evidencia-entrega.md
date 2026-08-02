@@ -1,6 +1,6 @@
 # Bloque 13 — Evidencia Digital de Entrega (POD) Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Registrar la entrega final de paquetes vía API REST (`POST/GET /api/v1/deliveries/{codigo}/pod`) con firma digital PNG, GPS validado, actualización atómica a `ENTREGADO` y propagación de eventos corporativos.
 
@@ -34,7 +34,7 @@
 **Interfaces:**
 - Produces: entidad `EntregaEvidencia` con constructor `EntregaEvidencia(EnvioTracking envio, String receptorNombre, String receptorDocumento, String firmaBase64, Double latitud, Double longitud, String notas)`, getters/setters, `@PrePersist` para `fechaEntrega`; repositorio `EntregaEvidenciaRepository extends JpaRepository<EntregaEvidencia, Long>` con `Optional<EntregaEvidencia> findByEnvioId(Long envioId)` y `boolean existsByEnvioId(Long envioId)`. Lo consume `EntregaEvidenciaService` (Task 4) y `EntregaEvidenciaIntegrationTest` (Task 7).
 
-- [ ] **Step 1: Crear la migración**
+- [x] **Step 1: Crear la migración**
 
 `src/main/resources/db/migration/V8__create_proof_of_delivery_tables.sql`:
 
@@ -53,7 +53,7 @@ CREATE TABLE entregas_evidencia (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-- [ ] **Step 2: Crear la entidad**
+- [x] **Step 2: Crear la entidad**
 
 `src/main/java/com/monteastur/envios/model/EntregaEvidencia.java`:
 
@@ -137,7 +137,7 @@ public class EntregaEvidencia {
 }
 ```
 
-- [ ] **Step 3: Crear el repositorio**
+- [x] **Step 3: Crear el repositorio**
 
 `src/main/java/com/monteastur/envios/repository/EntregaEvidenciaRepository.java`:
 
@@ -157,12 +157,12 @@ public interface EntregaEvidenciaRepository extends JpaRepository<EntregaEvidenc
 }
 ```
 
-- [ ] **Step 4: Compilar**
+- [x] **Step 4: Compilar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd compile -q`
 Expected: `BUILD SUCCESS` (el mapeo JPA se valida en la integración, Task 7).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/main/resources/db/migration/V8__create_proof_of_delivery_tables.sql src/main/java/com/monteastur/envios/model/EntregaEvidencia.java src/main/java/com/monteastur/envios/repository/EntregaEvidenciaRepository.java
@@ -183,7 +183,7 @@ git commit -m "feat(pod): add V8 migration and EntregaEvidencia entity/repositor
 
 > **Nota de orden:** primero crea los DTOs de la Task 3 (son requeridos por la firma del validador), luego el validador y su test, y commitea ambos junto con la Task 3.
 
-- [ ] **Step 1: Escribir el test que falla**
+- [x] **Step 1: Escribir el test que falla**
 
 `src/test/java/com/monteastur/envios/service/EntregaValidatorTest.java`:
 
@@ -293,12 +293,12 @@ class EntregaValidatorTest {
 }
 ```
 
-- [ ] **Step 2: Ejecutar para verlo fallar**
+- [x] **Step 2: Ejecutar para verlo fallar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=EntregaValidatorTest" -q`
 Expected: FAIL — `EntregaValidator` no existe (compilación de la clase de test con `RegistrarEntregaRequest` también pendiente).
 
-- [ ] **Step 3: Crear los DTOs (Task 3 adelantada)**
+- [x] **Step 3: Crear los DTOs (Task 3 adelantada)**
 
 `src/main/java/com/monteastur/envios/dto/api/RegistrarEntregaRequest.java`:
 
@@ -402,7 +402,7 @@ public class EntregaEvidenciaDto {
 }
 ```
 
-- [ ] **Step 4: Implementar el validador**
+- [x] **Step 4: Implementar el validador**
 
 `src/main/java/com/monteastur/envios/service/EntregaValidator.java`:
 
@@ -487,12 +487,12 @@ public final class EntregaValidator {
 }
 ```
 
-- [ ] **Step 5: Ejecutar para verlo pasar**
+- [x] **Step 5: Ejecutar para verlo pasar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=EntregaValidatorTest" -q`
 Expected: PASS (11 tests, 0 failures).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/service/EntregaValidator.java src/test/java/com/monteastur/envios/service/EntregaValidatorTest.java src/main/java/com/monteastur/envios/dto/api/RegistrarEntregaRequest.java src/main/java/com/monteastur/envios/dto/api/EntregaEvidenciaDto.java
@@ -511,7 +511,7 @@ git commit -m "feat(pod): add strict firma/GPS validation and POD DTOs"
 - Consumes: `EntregaEvidenciaRepository` (Task 1), `EnvioTrackingRepository.findWithClienteByCodigoUnico` (existente), `EnvioTrackingService.actualizarEstado(String codigo, String nuevoEstado)` (existente), `EventoTrackingService.crearEvento(EnvioTracking envio, String estadoAnterior)` (existente), `EntregaValidator` (Task 2), DTOs (Task 2).
 - Produces: `@Transactional public EntregaEvidencia registrarEntrega(String codigo, RegistrarEntregaRequest request)`, `@Transactional(readOnly = true) public EntregaEvidenciaDto obtenerEntrega(String codigo)`. Lo consume `EntregaEvidenciaController` (Task 5).
 
-- [ ] **Step 1: Escribir el test que falla**
+- [x] **Step 1: Escribir el test que falla**
 
 `src/test/java/com/monteastur/envios/service/EntregaEvidenciaServiceTest.java`:
 
@@ -663,12 +663,12 @@ class EntregaEvidenciaServiceTest {
 }
 ```
 
-- [ ] **Step 2: Ejecutar para verlo fallar**
+- [x] **Step 2: Ejecutar para verlo fallar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=EntregaEvidenciaServiceTest" -q`
 Expected: FAIL — `EntregaEvidenciaService` no existe.
 
-- [ ] **Step 3: Implementar el servicio**
+- [x] **Step 3: Implementar el servicio**
 
 `src/main/java/com/monteastur/envios/service/EntregaEvidenciaService.java`:
 
@@ -736,12 +736,12 @@ public class EntregaEvidenciaService {
 }
 ```
 
-- [ ] **Step 4: Ejecutar para verlo pasar**
+- [x] **Step 4: Ejecutar para verlo pasar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=EntregaEvidenciaServiceTest" -q`
 Expected: PASS (6 tests, 0 failures).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/service/EntregaEvidenciaService.java src/test/java/com/monteastur/envios/service/EntregaEvidenciaServiceTest.java
@@ -759,7 +759,7 @@ git commit -m "feat(pod): add transactional delivery registration service"
 **Interfaces:**
 - Consumes: nada nuevo. Produce: `SecurityFilterChain` que protege `/api/v1/deliveries/**` con `authenticated()` y habilita HTTP Basic para clientes REST. Lo ejercita `EntregaEvidenciaControllerTest` (Task 5).
 
-- [ ] **Step 1: Escribir el test que falla**
+- [x] **Step 1: Escribir el test que falla**
 
 Añadir a `src/test/java/com/monteastur/envios/config/SecurityConfigTest.java` (dentro de la clase, junto a los tests existentes) el método:
 
@@ -772,12 +772,12 @@ Añadir a `src/test/java/com/monteastur/envios/config/SecurityConfigTest.java` (
     }
 ```
 
-- [ ] **Step 2: Ejecutar para verlo fallar**
+- [x] **Step 2: Ejecutar para verlo fallar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=SecurityConfigTest" -q`
 Expected: FAIL — `deliveriesSinAuth_devuelve401Json` no pasa (hoy devuelve 200/404 porque es `permitAll`).
 
-- [ ] **Step 3: Modificar `SecurityConfig`**
+- [x] **Step 3: Modificar `SecurityConfig`**
 
 En `src/main/java/com/monteastur/envios/config/SecurityConfig.java`:
 1. Añadir import: `import org.springframework.security.config.Customizer;`
@@ -798,12 +798,12 @@ En `src/main/java/com/monteastur/envios/config/SecurityConfig.java`:
             .httpBasic(Customizer.withDefaults())
 ```
 
-- [ ] **Step 4: Ejecutar para verlo pasar**
+- [x] **Step 4: Ejecutar para verlo pasar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=SecurityConfigTest" -q`
 Expected: PASS (4 tests, 0 failures).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/config/SecurityConfig.java src/test/java/com/monteastur/envios/config/SecurityConfigTest.java
@@ -822,7 +822,7 @@ git commit -m "feat(security): protect deliveries API with HTTP Basic and authen
 - Consumes: `EntregaEvidenciaService` (Task 3): `registrarEntrega(String, RegistrarEntregaRequest)` y `obtenerEntrega(String)`; DTOs (Task 2).
 - Produces: endpoints `POST /api/v1/deliveries/{codigo}/pod` (201) y `GET /api/v1/deliveries/{codigo}/pod` (200) con `@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERADOR')")`. Lo ejercita `EntregaEvidenciaIntegrationTest` (Task 6).
 
-- [ ] **Step 1: Escribir el test que falla**
+- [x] **Step 1: Escribir el test que falla**
 
 `src/test/java/com/monteastur/envios/controller/api/EntregaEvidenciaControllerTest.java`:
 
@@ -983,12 +983,12 @@ class EntregaEvidenciaControllerTest {
 }
 ```
 
-- [ ] **Step 2: Ejecutar para verlo fallar**
+- [x] **Step 2: Ejecutar para verlo fallar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=EntregaEvidenciaControllerTest" -q`
 Expected: FAIL — el controller no existe.
 
-- [ ] **Step 3: Implementar el controller**
+- [x] **Step 3: Implementar el controller**
 
 `src/main/java/com/monteastur/envios/controller/api/EntregaEvidenciaController.java`:
 
@@ -1034,12 +1034,12 @@ public class EntregaEvidenciaController {
 }
 ```
 
-- [ ] **Step 4: Ejecutar para verlo pasar**
+- [x] **Step 4: Ejecutar para verlo pasar**
 
 Run: `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd test "-Dtest=EntregaEvidenciaControllerTest" -q`
 Expected: PASS (8 tests, 0 failures).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/controller/api/EntregaEvidenciaController.java src/test/java/com/monteastur/envios/controller/api/EntregaEvidenciaControllerTest.java
@@ -1057,7 +1057,7 @@ git commit -m "feat(pod): add delivery evidence REST controller"
 **Interfaces:**
 - Consumes: beans reales `EntregaEvidenciaService`, repos, `EnvioTrackingService`, `EventoTrackingRepository`, `NotificacionRepository`, `TransactionTemplate`; `EmailService` mockeado.
 
-- [ ] **Step 1: Escribir el test de integración**
+- [x] **Step 1: Escribir el test de integración**
 
 `src/test/java/com/monteastur/envios/integration/EntregaEvidenciaIntegrationTest.java`:
 
@@ -1199,30 +1199,30 @@ class EntregaEvidenciaIntegrationTest {
 
 > **Nota:** el método `crearEnvioSinCliente` devuelve el envío guardado; si `transactionTemplate.execute` devuelve null se lanza `NullPointerException`. Ese caso no ocurre en estos tests porque `guardar` siempre retorna la entidad persistida.
 
-- [ ] **Step 2: Ejecutar el test de integración (requiere DB/Redis)**
+- [x] **Step 2: Ejecutar el test de integración (requiere DB/Redis)**
 
 Run (contenedor):
 `docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend -e SPRING_DATASOURCE_URL="jdbc:mysql://db:3306/envios_paraguay_cms_test?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" -e DB_USERNAME=root -e DB_PASSWORD=root -e SPRING_DATA_REDIS_HOST=redis -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-17 mvn test "-Dtest=EntregaEvidenciaIntegrationTest" -q`
 Expected: PASS (3 tests, 0 failures).
 
-- [ ] **Step 3: Ejecutar la suite completa (BUILD SUCCESS)**
+- [x] **Step 3: Ejecutar la suite completa (BUILD SUCCESS)**
 
 Run (contenedor):
 `docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend -e SPRING_DATASOURCE_URL="jdbc:mysql://db:3306/envios_paraguay_cms_test?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" -e DB_USERNAME=root -e DB_PASSWORD=root -e SPRING_DATA_REDIS_HOST=redis -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-17 mvn clean test`
 Expected: `BUILD SUCCESS`, `Tests run: 159` base + 28 nuevos ≈ **187 tests, 0 failures, 0 errors**.
 
-- [ ] **Step 4: Actualizar `docs/handoff.md`**
+- [x] **Step 4: Actualizar `docs/handoff.md`**
 
 Añadir una entrada del Bloque 13 tras la del Bloque 12: migración V8 (`entregas_evidencia`, `envio_id UNIQUE`, FK `ON DELETE CASCADE`), entidad/repositorio `EntregaEvidencia`, `EntregaValidator` (Base64+PNG `\x89PNG`, rangos GPS), `EntregaEvidenciaService` transaccional (POD → `actualizarEstado("ENTREGADO")` → eventos webhook/notificación async + `@CacheEvict` dashboard), endpoints `/api/v1/deliveries/{codigo}/pod` (POST 201 / GET 200) con `@PreAuthorize` ADMIN/OPERADOR, `SecurityConfig` con HTTP Basic, 409 duplicado, 404 inexistentes. Actualizar el bloque «Estado Git Actual» (HEAD y working tree limpio) y la suite total (≈187).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/test/java/com/monteastur/envios/integration/EntregaEvidenciaIntegrationTest.java docs/handoff.md
 git commit -m "test(pod): add end-to-end POD integration tests and update handoff"
 ```
 
-- [ ] **Step 6: Verificar working tree limpio**
+- [x] **Step 6: Verificar working tree limpio**
 
 Run: `git status`
 Expected: `nothing to commit, working tree clean`.
