@@ -4,9 +4,12 @@ import com.monteastur.envios.dto.api.ErrorDto;
 import com.monteastur.envios.exception.BadRequestException;
 import com.monteastur.envios.exception.ConflictException;
 import com.monteastur.envios.exception.ResourceNotFoundException;
+import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,6 +20,19 @@ import java.time.format.DateTimeParseException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+
+    public GlobalExceptionHandler(CustomAccessDeniedHandler customAccessDeniedHandler) {
+        this.customAccessDeniedHandler = customAccessDeniedHandler;
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public Object handleAccessDenied(AccessDeniedException ex, HttpServletRequest request,
+                                     HttpServletResponse response, Model model) throws java.io.IOException {
+        customAccessDeniedHandler.handle(request, response, ex);
+        return null;
+    }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public Object handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request, Model model) {
