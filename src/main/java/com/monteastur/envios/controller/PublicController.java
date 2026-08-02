@@ -1,17 +1,14 @@
 package com.monteastur.envios.controller;
 
-import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.model.Imagen;
 import com.monteastur.envios.model.MensajeContacto;
 import com.monteastur.envios.model.Reserva;
 import com.monteastur.envios.model.TextoLegal;
-import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.repository.ImagenRepository;
 import com.monteastur.envios.repository.MensajeContactoRepository;
 import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
 import com.monteastur.envios.service.EmailService;
-import com.monteastur.envios.service.EventoTrackingService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,21 +33,16 @@ public class PublicController {
     private final ReservaRepository reservaRepo;
     private final ImagenRepository imagenRepo;
     private final TextoLegalRepository textoRepo;
-    private final EnvioTrackingRepository trackingRepo;
     private final EmailService emailService;
-    private final EventoTrackingService eventoTrackingService;
 
     public PublicController(MensajeContactoRepository mensajeRepo, ReservaRepository reservaRepo,
                             ImagenRepository imagenRepo, TextoLegalRepository textoRepo,
-                            EnvioTrackingRepository trackingRepo, EmailService emailService,
-                            EventoTrackingService eventoTrackingService) {
+                            EmailService emailService) {
         this.mensajeRepo = mensajeRepo;
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.textoRepo = textoRepo;
-        this.trackingRepo = trackingRepo;
         this.emailService = emailService;
-        this.eventoTrackingService = eventoTrackingService;
     }
 
     @GetMapping({"/", "/en"})
@@ -129,22 +121,6 @@ public class PublicController {
     public String politicaCookies(Model model, HttpServletRequest request) {
         model.addAttribute("texto", textoRepo.findBySlug("politica-cookies").orElse(null));
         return template("politica-cookies", request);
-    }
-
-    @GetMapping({"/tracking", "/en/tracking"})
-    public String tracking(Model model, HttpServletRequest request) {
-        model.addAttribute("envio", null);
-        model.addAttribute("buscado", false);
-        return template("tracking", request);
-    }
-
-    @PostMapping({"/tracking", "/en/tracking"})
-    public String buscarTracking(@RequestParam String codigo, Model model, HttpServletRequest request) {
-        var optEnvio = trackingRepo.findByCodigoUnico(codigo.trim().toUpperCase());
-        model.addAttribute("envio", optEnvio.orElse(null));
-        model.addAttribute("buscado", true);
-        optEnvio.ifPresent(e -> model.addAttribute("eventos", eventoTrackingService.listarPorEnvio(e.getId())));
-        return template("tracking", request);
     }
 
     // -----------------------------------------------------------

@@ -4,14 +4,12 @@ import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.config.SecurityConfig;
 import com.monteastur.envios.model.Imagen;
 import com.monteastur.envios.model.TextoLegal;
-import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.repository.ImagenRepository;
 import com.monteastur.envios.repository.MensajeContactoRepository;
 import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
 import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import com.monteastur.envios.service.EmailService;
-import com.monteastur.envios.service.EventoTrackingService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -48,10 +46,8 @@ class PublicControllerTest {
     @MockBean private ImagenRepository imagenRepo;
     @MockBean private TextoLegalRepository textoRepo;
     @MockBean private ReservaRepository reservaRepo;
-    @MockBean private EnvioTrackingRepository trackingRepo;
     @MockBean private MensajeContactoRepository mensajeRepo;
     @MockBean private EmailService emailService;
-    @MockBean private EventoTrackingService eventoTrackingService;
     @MockBean private DataSource dataSource;
 
     @MockBean
@@ -163,21 +159,5 @@ class PublicControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("en/contacto"))
                 .andExpect(model().attribute("mensajeEnviado", false));
-    }
-
-    @Test
-    void tracking_returnsView() throws Exception {
-        mockMvc.perform(get("/tracking"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("tracking"))
-                .andExpect(model().attribute("buscado", false));
-    }
-
-    @Test
-    void tracking_en_returnsEnView() throws Exception {
-        mockMvc.perform(get("/en/tracking"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("en/tracking"))
-                .andExpect(model().attribute("buscado", false));
     }
 }

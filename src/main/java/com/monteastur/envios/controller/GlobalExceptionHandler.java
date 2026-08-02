@@ -3,6 +3,7 @@ package com.monteastur.envios.controller;
 import com.monteastur.envios.dto.api.ErrorDto;
 import com.monteastur.envios.exception.BadRequestException;
 import com.monteastur.envios.exception.ConflictException;
+import com.monteastur.envios.exception.ForbiddenException;
 import com.monteastur.envios.exception.ResourceNotFoundException;
 import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,6 +14,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.time.Instant;
@@ -34,6 +36,7 @@ public class GlobalExceptionHandler {
         return null;
     }
 
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
     public Object handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {
@@ -43,6 +46,7 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BadRequestException.class)
     public Object handleBadRequest(BadRequestException ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {
@@ -52,6 +56,7 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(ConflictException.class)
     public Object handleConflict(ConflictException ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {
@@ -61,6 +66,17 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.CONFLICT, "Conflict", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(ForbiddenException.class)
+    public Object handleForbidden(ForbiddenException ex, HttpServletRequest request, Model model) {
+        if (isRestRequest(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new ErrorDto(Instant.now().toString(), 403, ex.getMessage()));
+        }
+        return mvcError(request, model, HttpStatus.FORBIDDEN, "Forbidden", ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(DateTimeParseException.class)
     public Object handleDateTimeParse(DateTimeParseException ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {
@@ -70,6 +86,7 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.BAD_REQUEST, "Bad Request", "Formato de fecha inválido.");
     }
 
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public Object handleGeneric(Exception ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {
@@ -79,6 +96,7 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Ha ocurrido un error inesperado. Por favor, inténtelo de nuevo más tarde.");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestPartException.class)
     public Object handleMissingPart(MissingServletRequestPartException ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {
@@ -88,6 +106,7 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.BAD_REQUEST, "Bad Request", "Falta un campo obligatorio de la petición.");
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public Object handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {
@@ -97,6 +116,7 @@ public class GlobalExceptionHandler {
         return mvcError(request, model, HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage());
     }
 
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(IllegalStateException.class)
     public Object handleIllegalState(IllegalStateException ex, HttpServletRequest request, Model model) {
         if (isRestRequest(request)) {

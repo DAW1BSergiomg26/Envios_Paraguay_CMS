@@ -49,7 +49,7 @@ class GlobalExceptionHandlerTest {
     })
     void mvcPath_returnsCorrectViewAndModel(String url, int status, String error) throws Exception {
         mockMvc.perform(get(url))
-                .andExpect(status().isOk())
+                .andExpect(status().is(status))
                 .andExpect(view().name("error"))
                 .andExpect(model().attribute("status", status))
                 .andExpect(model().attribute("error", error))
@@ -68,7 +68,6 @@ class GlobalExceptionHandlerTest {
     })
     void mvcPath_enLocale_returnsEnErrorView(String url) throws Exception {
         mockMvc.perform(get(url))
-                .andExpect(status().isOk())
                 .andExpect(view().name("en/error"))
                 .andExpect(model().attributeExists("status", "error", "message", "timestamp"));
     }
