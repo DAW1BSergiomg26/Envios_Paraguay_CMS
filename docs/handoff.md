@@ -41,7 +41,17 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
    - Mailpit dev + `.env.example`: commits `ac391ac` y `b88dfee`.
    - Timeouts SMTP (hardenig): commit `49c7a3e`.
    - Suite completa 59/59 tests + smoke runtime verificado (email vía Mailpit).
-5. **Sprint de Optimización y Resiliencia** (post k6, 2026-07-31):
+5. **Bloque 10: Módulo de Webhooks Outbound y Firma Digital HMAC-SHA256** (completado, 2026-08-02):
+   - Spec de diseño: commit `b5735fb`; plan de implementación: commit `8c55328`.
+   - Implementación: commit `6d1d4f7` (Task 1-6).
+   - Migración Flyway `V4` (tablas `webhook_configs` y `webhook_logs`, `BOOLEAN` + FKs `ON DELETE CASCADE`), entidades `WebhookConfig`/`WebhookLog` y repositorios (Java puro, sin Lombok).
+   - `WebhookSignature` (HMAC-SHA256 en hex lowercase, firma sobre el body bruto, `X-Signature-256`) y `WebhookPayloadBuilder` (JSON normalizado con `url_seguimiento` y timestamp ISO).
+   - `WebhookDispatchService`: `POST` vía `RestClient`, timeouts 2s/5s, sin reintentos, auditoría en `webhook_logs` (payload, estado, status, error).
+   - `WebhookEventListener`: `@Async` (`webhookTaskExecutor`) + `REQUIRES_NEW` + `AFTER_COMMIT`, traga excepciones para no romper el flujo de tracking.
+   - CRUD admin `/api/v1/admin/webhooks` (GET/POST/DELETE) con `secretToken` nunca expuesto en las respuestas.
+   - Props `app.webhook.*` en `application.properties` (enabled, timeouts, base-url, executor).
+   - Tests: 5 unitarios nuevos + 2 de integración end-to-end (sink HTTP local con `HttpServer` de puerto efímero, casos 200 y 500). Suite completa en verde: **86 tests**.
+6. **Sprint de Optimización y Resiliencia** (post k6, 2026-07-31):
    - `commons-pool2` añadido al pom para activar el pool de conexiones Lettuce (sin él, las props de pool se ignoraban): commit de Task 1 (`bd56610`).
    - Tuning de pools: HikariCP max=25/min=5/connection-timeout=20000 (base y prod reconciliado, conservando hardening); pool Lettuce max-active=30/max-idle=15/min-idle=5/max-wait=2000ms; `spring.data.redis.timeout=3000ms`; save/flush mode explícitos manteniendo namespace `monteastur:session`: commit de Task 2 (`b44ca79`).
    - Nuevo test de integración `EnvioTrackingCacheIntegrationTest` (populate/evict/TTL de `envios.tracking` + verificación del pool Lettuce vía `LettuceConnectionFactory.getClientConfiguration()`): commit de Task 3 (`2d21e78`). Corrección sobre el plan: Spring Boot 3.3.5 no registra un bean `GenericObjectPoolConfig`; el assert usa la client configuration del factory (4/4 tests OK).
@@ -97,7 +107,7 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `f77a9bc` (`docs(k6): correct stale claim about tracking cache in load report (sprint optimizacion)`).
+- **HEAD:** `6d1d4f7` (`feat(webhooks): modulo outbound con firma HMAC-SHA256 y CRUD admin`).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
