@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,8 +51,8 @@ class EntregaEvidenciaServiceTest {
         req.setReceptorNombre("Ana López");
         req.setReceptorDocumento("12345678");
         req.setFirmaBase64(PNG_1X1);
-        req.setLatitud(-25.2637421);
-        req.setLongitud(-57.575926);
+        req.setLatitud(new BigDecimal("-25.2637421"));
+        req.setLongitud(new BigDecimal("-57.575926"));
         return req;
     }
 
@@ -120,7 +121,7 @@ class EntregaEvidenciaServiceTest {
     void obtenerEntrega_retornaDto() {
         EnvioTracking envio = envioRecibido(1L);
         EntregaEvidencia evidencia = new EntregaEvidencia(envio, "Ana López", "12345678",
-                PNG_1X1, -25.2637421, -57.575926, "Recibido en mano");
+                PNG_1X1, new BigDecimal("-25.2637421"), new BigDecimal("-57.575926"), "Recibido en mano");
         evidencia.setId(7L);
         when(envioTrackingRepository.findWithClienteByCodigoUnico("MT-1")).thenReturn(Optional.of(envio));
         when(entregaRepository.findByEnvioId(1L)).thenReturn(Optional.of(evidencia));
@@ -130,7 +131,7 @@ class EntregaEvidenciaServiceTest {
         assertThat(dto.getCodigoRastreo()).isEqualTo("MT-1");
         assertThat(dto.getReceptorNombre()).isEqualTo("Ana López");
         assertThat(dto.getFirmaBase64()).isEqualTo(PNG_1X1);
-        assertThat(dto.getLatitud()).isEqualTo(-25.2637421);
+        assertThat(dto.getLatitud()).isEqualByComparingTo(new BigDecimal("-25.2637421"));
     }
 
     @Test

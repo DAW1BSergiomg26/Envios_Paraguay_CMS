@@ -1,6 +1,7 @@
 package com.monteastur.envios.model;
 
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,10 +26,10 @@ public class EntregaEvidencia {
     private String firmaBase64;
 
     @Column(precision = 10, scale = 8)
-    private Double latitud;
+    private BigDecimal latitud;
 
     @Column(precision = 11, scale = 8)
-    private Double longitud;
+    private BigDecimal longitud;
 
     @Column(columnDefinition = "TEXT")
     private String notas;
@@ -39,7 +40,7 @@ public class EntregaEvidencia {
     public EntregaEvidencia() {}
 
     public EntregaEvidencia(EnvioTracking envio, String receptorNombre, String receptorDocumento,
-                            String firmaBase64, Double latitud, Double longitud, String notas) {
+                            String firmaBase64, BigDecimal latitud, BigDecimal longitud, String notas) {
         this.envio = envio;
         this.receptorNombre = receptorNombre;
         this.receptorDocumento = receptorDocumento;
@@ -66,10 +67,10 @@ public class EntregaEvidencia {
     public void setReceptorDocumento(String receptorDocumento) { this.receptorDocumento = receptorDocumento; }
     public String getFirmaBase64() { return firmaBase64; }
     public void setFirmaBase64(String firmaBase64) { this.firmaBase64 = firmaBase64; }
-    public Double getLatitud() { return latitud; }
-    public void setLatitud(Double latitud) { this.latitud = latitud; }
-    public Double getLongitud() { return longitud; }
-    public void setLongitud(Double longitud) { this.longitud = longitud; }
+    public BigDecimal getLatitud() { return latitud; }
+    public void setLatitud(BigDecimal latitud) { this.latitud = latitud; }
+    public BigDecimal getLongitud() { return longitud; }
+    public void setLongitud(BigDecimal longitud) { this.longitud = longitud; }
     public String getNotas() { return notas; }
     public void setNotas(String notas) { this.notas = notas; }
     public LocalDateTime getFechaEntrega() { return fechaEntrega; }

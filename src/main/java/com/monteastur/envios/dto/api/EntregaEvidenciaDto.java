@@ -3,6 +3,8 @@ package com.monteastur.envios.dto.api;
 import com.monteastur.envios.model.EntregaEvidencia;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
+
 @Schema(description = "Evidencia digital de entrega (POD)")
 public class EntregaEvidenciaDto {
 
@@ -11,14 +13,14 @@ public class EntregaEvidenciaDto {
     private final String receptorNombre;
     private final String receptorDocumento;
     private final String firmaBase64;
-    private final Double latitud;
-    private final Double longitud;
+    private final BigDecimal latitud;
+    private final BigDecimal longitud;
     private final String notas;
     private final String fechaEntrega;
 
     private EntregaEvidenciaDto(Long id, String codigoRastreo, String receptorNombre,
-                                String receptorDocumento, String firmaBase64, Double latitud,
-                                Double longitud, String notas, String fechaEntrega) {
+                                String receptorDocumento, String firmaBase64, BigDecimal latitud,
+                                BigDecimal longitud, String notas, String fechaEntrega) {
         this.id = id;
         this.codigoRastreo = codigoRastreo;
         this.receptorNombre = receptorNombre;
@@ -47,8 +49,8 @@ public class EntregaEvidenciaDto {
     public String getReceptorNombre() { return receptorNombre; }
     public String getReceptorDocumento() { return receptorDocumento; }
     public String getFirmaBase64() { return firmaBase64; }
-    public Double getLatitud() { return latitud; }
-    public Double getLongitud() { return longitud; }
+    public BigDecimal getLatitud() { return latitud; }
+    public BigDecimal getLongitud() { return longitud; }
     public String getNotas() { return notas; }
     public String getFechaEntrega() { return fechaEntrega; }
 }

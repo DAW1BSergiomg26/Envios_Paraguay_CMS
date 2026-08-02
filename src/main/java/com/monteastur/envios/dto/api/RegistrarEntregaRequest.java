@@ -2,6 +2,8 @@ package com.monteastur.envios.dto.api;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import java.math.BigDecimal;
+
 @Schema(description = "Solicitud de registro de evidencia de entrega (POD)")
 public class RegistrarEntregaRequest {
 
@@ -15,10 +17,10 @@ public class RegistrarEntregaRequest {
     private String firmaBase64;
 
     @Schema(description = "Latitud de la entrega (opcional)", example = "-25.2637421")
-    private Double latitud;
+    private BigDecimal latitud;
 
     @Schema(description = "Longitud de la entrega (opcional)", example = "-57.575926")
-    private Double longitud;
+    private BigDecimal longitud;
 
     @Schema(description = "Notas o incidencias de entrega (opcional)")
     private String notas;
@@ -29,10 +31,10 @@ public class RegistrarEntregaRequest {
     public void setReceptorDocumento(String receptorDocumento) { this.receptorDocumento = receptorDocumento; }
     public String getFirmaBase64() { return firmaBase64; }
     public void setFirmaBase64(String firmaBase64) { this.firmaBase64 = firmaBase64; }
-    public Double getLatitud() { return latitud; }
-    public void setLatitud(Double latitud) { this.latitud = latitud; }
-    public Double getLongitud() { return longitud; }
-    public void setLongitud(Double longitud) { this.longitud = longitud; }
+    public BigDecimal getLatitud() { return latitud; }
+    public void setLatitud(BigDecimal latitud) { this.latitud = latitud; }
+    public BigDecimal getLongitud() { return longitud; }
+    public void setLongitud(BigDecimal longitud) { this.longitud = longitud; }
     public String getNotas() { return notas; }
     public void setNotas(String notas) { this.notas = notas; }
 }

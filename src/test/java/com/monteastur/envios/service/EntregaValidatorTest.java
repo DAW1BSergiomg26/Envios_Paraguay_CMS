@@ -4,6 +4,8 @@ import com.monteastur.envios.dto.api.RegistrarEntregaRequest;
 import com.monteastur.envios.exception.BadRequestException;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -17,8 +19,8 @@ class EntregaValidatorTest {
         req.setReceptorNombre("Ana López");
         req.setReceptorDocumento("12345678");
         req.setFirmaBase64(PNG_1X1);
-        req.setLatitud(-25.2637421);
-        req.setLongitud(-57.575926);
+        req.setLatitud(new BigDecimal("-25.2637421"));
+        req.setLongitud(new BigDecimal("-57.575926"));
         return req;
     }
 
@@ -78,22 +80,24 @@ class EntregaValidatorTest {
 
     @Test
     void latitudFueraDeRango_lanza400() {
-        assertThatThrownBy(() -> EntregaValidator.validarCoordenadas(90.5, 0.0))
+        assertThatThrownBy(() -> EntregaValidator.validarCoordenadas(new BigDecimal("90.5"), BigDecimal.ZERO))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Latitud");
     }
 
     @Test
     void longitudFueraDeRango_lanza400() {
-        assertThatThrownBy(() -> EntregaValidator.validarCoordenadas(0.0, 181.0))
+        assertThatThrownBy(() -> EntregaValidator.validarCoordenadas(BigDecimal.ZERO, new BigDecimal("181")))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessageContaining("Longitud");
     }
 
     @Test
     void bordesValidos_noLanzan() {
-        assertThatCode(() -> EntregaValidator.validarCoordenadas(-90.0, 180.0)).doesNotThrowAnyException();
-        assertThatCode(() -> EntregaValidator.validarCoordenadas(90.0, -180.0)).doesNotThrowAnyException();
+        assertThatCode(() -> EntregaValidator.validarCoordenadas(new BigDecimal("-90"), new BigDecimal("180")))
+                .doesNotThrowAnyException();
+        assertThatCode(() -> EntregaValidator.validarCoordenadas(new BigDecimal("90"), new BigDecimal("-180")))
+                .doesNotThrowAnyException();
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.monteastur.envios.service;
 import com.monteastur.envios.dto.api.RegistrarEntregaRequest;
 import com.monteastur.envios.exception.BadRequestException;
 
+import java.math.BigDecimal;
 import java.util.Base64;
 
 public final class EntregaValidator {
@@ -12,6 +13,10 @@ public final class EntregaValidator {
     private static final int MAX_FIRMA_BASE64_LENGTH = 5_242_880;
     private static final int MAX_NOTAS_LENGTH = 2000;
     private static final byte[] PNG_MAGIC = {(byte) 0x89, 0x50, 0x4E, 0x47};
+    private static final BigDecimal LATITUD_MIN = new BigDecimal("-90");
+    private static final BigDecimal LATITUD_MAX = new BigDecimal("90");
+    private static final BigDecimal LONGITUD_MIN = new BigDecimal("-180");
+    private static final BigDecimal LONGITUD_MAX = new BigDecimal("180");
 
     private EntregaValidator() {}
 
@@ -43,11 +48,11 @@ public final class EntregaValidator {
         }
     }
 
-    public static void validarCoordenadas(Double latitud, Double longitud) {
-        if (latitud != null && (latitud < -90.0 || latitud > 90.0)) {
+    public static void validarCoordenadas(BigDecimal latitud, BigDecimal longitud) {
+        if (latitud != null && (latitud.compareTo(LATITUD_MIN) < 0 || latitud.compareTo(LATITUD_MAX) > 0)) {
             throw new BadRequestException("Latitud fuera de rango: debe estar entre -90 y 90");
         }
-        if (longitud != null && (longitud < -180.0 || longitud > 180.0)) {
+        if (longitud != null && (longitud.compareTo(LONGITUD_MIN) < 0 || longitud.compareTo(LONGITUD_MAX) > 0)) {
             throw new BadRequestException("Longitud fuera de rango: debe estar entre -180 y 180");
         }
     }

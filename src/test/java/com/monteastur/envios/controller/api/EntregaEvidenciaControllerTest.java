@@ -22,6 +22,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
+import java.math.BigDecimal;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -56,7 +57,7 @@ class EntregaEvidenciaControllerTest {
         EnvioTracking envio = new EnvioTracking("MT-1", "ENTREGADO", "Receptor",
                 "Origen", "Destino", "10 kg", "Documentos");
         EntregaEvidencia evidencia = new EntregaEvidencia(envio, "Ana López", "12345678",
-                PNG_1X1, -25.2637421, -57.575926, null);
+                PNG_1X1, new BigDecimal("-25.2637421"), new BigDecimal("-57.575926"), null);
         evidencia.setId(5L);
         return evidencia;
     }
@@ -75,7 +76,7 @@ class EntregaEvidenciaControllerTest {
                 .andExpect(jsonPath("$.receptorNombre").value("Ana López"))
                 .andExpect(jsonPath("$.receptorDocumento").value("12345678"))
                 .andExpect(jsonPath("$.firmaBase64").value(PNG_1X1))
-                .andExpect(jsonPath("$.latitud").value(-25.2637421));
+                .andExpect(jsonPath("$.latitud").value(new BigDecimal("-25.2637421")));
     }
 
     @Test
