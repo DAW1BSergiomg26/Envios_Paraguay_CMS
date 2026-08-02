@@ -3,6 +3,7 @@ package com.monteastur.envios.config;
 import com.monteastur.envios.security.CustomAccessDeniedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -24,7 +25,7 @@ public class SecurityConfig {
                                            CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/admin/**", "/api/v1/admin/**").authenticated()
+                .requestMatchers("/admin/**", "/api/v1/admin/**", "/api/v1/deliveries/**").authenticated()
                 .requestMatchers("/api/v1/docs", "/api/v1/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .anyRequest().permitAll()
             )
@@ -36,6 +37,7 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/admin/dashboard")
                 .permitAll()
             )
+            .httpBasic(Customizer.withDefaults())
             .logout(logout -> logout
                 .logoutSuccessUrl("/login?logout")
                 .invalidateHttpSession(true)

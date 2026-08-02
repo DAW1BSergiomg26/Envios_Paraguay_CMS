@@ -179,10 +179,10 @@ class BatchImportControllerTest {
 
     @Test
     @WithAnonymousUser
-    void sinAutenticacion_redirigeAlLogin() throws Exception {
+    void sinAutenticacion_devuelve401() throws Exception {
         mockMvc.perform(multipart("/api/v1/admin/imports/csv")
                         .file(ficheroCsv("codigo,estado,destinatario\nMT-1,RECIBIDO,María"))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isUnauthorized());
     }
 }

@@ -152,8 +152,8 @@ class WebhookConfigControllerTest {
 
     @Test
     @WithAnonymousUser
-    void sinAutenticacion_redirigeAlLogin() throws Exception {
+    void sinAutenticacion_devuelve401() throws Exception {
         mockMvc.perform(get("/api/v1/admin/webhooks"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().isUnauthorized());
     }
 }

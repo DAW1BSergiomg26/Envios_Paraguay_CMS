@@ -46,15 +46,24 @@ class SecurityConfigTest {
 
     @Test
     void adminSinAuth_redirigeALogin() throws Exception {
-        mockMvc.perform(get("/admin/dashboard"))
+        mockMvc.perform(get("/admin/dashboard")
+                .accept(org.springframework.http.MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
     }
 
     @Test
     void apiAdminSinAuth_redirigeALogin() throws Exception {
-        mockMvc.perform(get("/api/v1/admin/envios"))
+        mockMvc.perform(get("/api/v1/admin/envios")
+                .accept(org.springframework.http.MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrlPattern("**/login"));
+    }
+
+    @Test
+    void deliveriesSinAuth_devuelve401Json() throws Exception {
+        mockMvc.perform(get("/api/v1/deliveries/MT-1/pod")
+                .accept(org.springframework.http.MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 }
