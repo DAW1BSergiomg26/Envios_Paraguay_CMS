@@ -49,7 +49,7 @@ Comandos de verificación:
 **Interfaces:**
 - Producen los DTOs planos que consumen `PublicTrackingService`/`ClientDashboardService` (Tasks 2–3) y los templates Tailwind (Task 5). Se serializan en Redis con typing `NON_FINAL` → clases no finales y listas `ArrayList`.
 
-- [ ] **Step 1: `PublicTrackingView`**
+- [x] **Step 1: `PublicTrackingView`**
 
 ```java
 package com.monteastur.envios.dto.web;
@@ -171,7 +171,7 @@ public class PublicTrackingView {
 }
 ```
 
-- [ ] **Step 2: `EventoView`, `EvidenciaView`, `EntregaView`** (mismo patrón: ctor vacío + ctor parametrizado + `from` + getters/setters)
+- [x] **Step 2: `EventoView`, `EvidenciaView`, `EntregaView`** (mismo patrón: ctor vacío + ctor parametrizado + `from` + getters/setters)
 
 ```java
 package com.monteastur.envios.dto.web;
@@ -329,7 +329,7 @@ public class EntregaView {
 }
 ```
 
-- [ ] **Step 3: `ClientDashboardView` y `EnvioResumenView`**
+- [x] **Step 3: `ClientDashboardView` y `EnvioResumenView`**
 
 ```java
 package com.monteastur.envios.dto.web;
@@ -442,7 +442,7 @@ public class EnvioResumenView {
 }
 ```
 
-- [ ] **Step 4: Compilar y commit**
+- [x] **Step 4: Compilar y commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/dto/web
@@ -460,7 +460,7 @@ git commit -m "feat(web): add view DTOs for public tracking and client dashboard
 **Interfaces:**
 - Consume: `EnvioTrackingRepository.findWithClienteByCodigoUnico`, `EventoTrackingService.listarPorEnvio`, `EvidenciaEnvioService.listarPorEnvioParaCliente`, `EntregaEvidenciaRepository.findByEnvioId`, y los DTOs de Task 1. Produce: `PublicTrackingView` cacheado en `envios.tracking.pagina` (clave = código, TTL 5 min, no cachea null).
 
-- [ ] **Step 1: Escribir el servicio** (TDD: primero el test, después la implementación)
+- [x] **Step 1: Escribir el servicio** (TDD: primero el test, después la implementación)
 
 ```java
 package com.monteastur.envios.service.web;
@@ -526,7 +526,7 @@ public class PublicTrackingService {
 }
 ```
 
-- [ ] **Step 2: Escribir el test** (Mockito + `ConcurrentMapCacheManager`, patrón `EnvioTrackingServiceCacheTest`)
+- [x] **Step 2: Escribir el test** (Mockito + `ConcurrentMapCacheManager`, patrón `EnvioTrackingServiceCacheTest`)
 
 ```java
 package com.monteastur.envios.service.web;
@@ -682,7 +682,7 @@ class PublicTrackingServiceTest {
 }
 ```
 
-- [ ] **Step 3: Verificar el test puntual**
+- [x] **Step 3: Verificar el test puntual**
 
 ```powershell
 docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
@@ -693,7 +693,7 @@ docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
 
 Expected: `BUILD SUCCESS`, 4 tests, 0 fallos.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/service/web src/test/java/com/monteastur/envios/service/web
@@ -711,7 +711,7 @@ git commit -m "feat(web): add PublicTrackingService with Redis-cached public tra
 **Interfaces:**
 - Consume: `EnvioTrackingRepository.findByClienteIdOrderByUltimaActualizacionDesc`, `ClienteRepository.findById`, `PesoUtil.parsear`. Produce: `ClientDashboardView` cacheado en `envios.cliente.dashboard` (clave = clienteId, TTL 1 min).
 
-- [ ] **Step 1: Escribir el test** (Mockito puro, sin Spring)
+- [x] **Step 1: Escribir el test** (Mockito puro, sin Spring)
 
 ```java
 package com.monteastur.envios.service.web;
@@ -792,7 +792,7 @@ class ClientDashboardServiceTest {
 }
 ```
 
-- [ ] **Step 2: Escribir la implementación**
+- [x] **Step 2: Escribir la implementación**
 
 ```java
 package com.monteastur.envios.service.web;
@@ -860,8 +860,8 @@ public class ClientDashboardService {
 }
 ```
 
-- [ ] **Step 3: Verificar el test puntual** (mismo comando Docker, `-Dtest=ClientDashboardServiceTest`) → `BUILD SUCCESS`, 2 tests.
-- [ ] **Step 4: Commit**
+- [x] **Step 3: Verificar el test puntual** (mismo comando Docker, `-Dtest=ClientDashboardServiceTest`) → `BUILD SUCCESS`, 2 tests.
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/service/web src/test/java/com/monteastur/envios/service/web
@@ -881,7 +881,7 @@ git commit -m "feat(web): add ClientDashboardService with PesoUtil weight metric
 **Interfaces:**
 - Consume los `@Cacheable` de Tasks 2–3. Produce la invalidación correcta en cada punto de mutación de envíos.
 
-- [ ] **Step 1: Añadir los caches a `RedisConfig`** (tras la entrada `envios.clientes`)
+- [x] **Step 1: Añadir los caches a `RedisConfig`** (tras la entrada `envios.clientes`)
 
 ```java
 var configs = Map.of(
@@ -895,7 +895,7 @@ var configs = Map.of(
 );
 ```
 
-- [ ] **Step 2: Ampliar `@CacheEvict` en `EnvioTrackingService`**
+- [x] **Step 2: Ampliar `@CacheEvict` en `EnvioTrackingService`**
 
 ```java
 @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
@@ -909,21 +909,21 @@ public EnvioTracking actualizarEstado(String codigo, String nuevoEstado) { ... }
 public void eliminar(Long id) { ... }
 ```
 
-- [ ] **Step 3: Ampliar `@CacheEvict` en `EntregaEvidenciaService.registrarEntrega`**
+- [x] **Step 3: Ampliar `@CacheEvict` en `EntregaEvidenciaService.registrarEntrega`**
 
 ```java
 @CacheEvict(value = {"envios.dashboard", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
 public EntregaEvidencia registrarEntrega(String codigo, RegistrarEntregaRequest request) { ... }
 ```
 
-- [ ] **Step 4: Ampliar `@CacheEvict` en `BatchImportPersistenceService.procesarChunk`**
+- [x] **Step 4: Ampliar `@CacheEvict` en `BatchImportPersistenceService.procesarChunk`**
 
 ```java
 @CacheEvict(value = {"envios.dashboard", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
 public void procesarChunk(Long batchId, List<EnvioTracking> envios, List<CsvImportLineError> errores) { ... }
 ```
 
-- [ ] **Step 5: Compilar y commit**
+- [x] **Step 5: Compilar y commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/config/RedisConfig.java src/main/java/com/monteastur/envios/service/EnvioTrackingService.java src/main/java/com/monteastur/envios/service/EntregaEvidenciaService.java src/main/java/com/monteastur/envios/service/batch/BatchImportPersistenceService.java
@@ -946,7 +946,7 @@ git commit -m "perf(cache): register tracking-page and client-dashboard Redis ca
 **Interfaces:**
 - Son las vistas que renderizan los controladores de Tasks 6–7 y que los tests `@WebMvcTest` resuelven (por eso van ANTES). Aislamiento: solo las páginas modernizadas cargan Tailwind; las vistas premium intactas no.
 
-- [ ] **Step 1: `fragments/public-head.html`** (head con Tailwind CDN + config de marca; navbar y footer)
+- [x] **Step 1: `fragments/public-head.html`** (head con Tailwind CDN + config de marca; navbar y footer)
 
 ```html
 <head th:fragment="head(titulo)">
@@ -1010,7 +1010,7 @@ git commit -m "perf(cache): register tracking-page and client-dashboard Redis ca
 </footer>
 ```
 
-- [ ] **Step 2: `tracking-search.html`** (hero + buscador + error + modal QR con `html5-qrcode`)
+- [x] **Step 2: `tracking-search.html`** (hero + buscador + error + modal QR con `html5-qrcode`)
 
 ```html
 <!DOCTYPE html>
@@ -1105,7 +1105,7 @@ git commit -m "perf(cache): register tracking-page and client-dashboard Redis ca
 </html>
 ```
 
-- [ ] **Step 3: `tracking-result.html`** (timeline interactivo + eventos expandibles + POD + evidencias)
+- [x] **Step 3: `tracking-result.html`** (timeline interactivo + eventos expandibles + POD + evidencias)
 
 ```html
 <!DOCTYPE html>
@@ -1267,7 +1267,7 @@ git commit -m "perf(cache): register tracking-page and client-dashboard Redis ca
 </html>
 ```
 
-- [ ] **Step 4: `tracking-404.html`**
+- [x] **Step 4: `tracking-404.html`**
 
 ```html
 <!DOCTYPE html>
@@ -1296,7 +1296,7 @@ git commit -m "perf(cache): register tracking-page and client-dashboard Redis ca
 </html>
 ```
 
-- [ ] **Step 5: Reescribir `cliente/panel.html`** (topbar con nombre + logout POST, tarjetas de métricas, tabla con acciones tracking + etiqueta)
+- [x] **Step 5: Reescribir `cliente/panel.html`** (topbar con nombre + logout POST, tarjetas de métricas, tabla con acciones tracking + etiqueta)
 
 ```html
 <!DOCTYPE html>
@@ -1400,8 +1400,8 @@ git commit -m "perf(cache): register tracking-page and client-dashboard Redis ca
 </html>
 ```
 
-- [ ] **Step 6: Eliminar templates supersedidos** (`tracking.html`, `en/tracking.html`)
-- [ ] **Step 7: Commit**
+- [x] **Step 6: Eliminar templates supersedidos** (`tracking.html`, `en/tracking.html`)
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/main/resources/templates
@@ -1425,7 +1425,7 @@ git commit -m "style(web): Tailwind public tracking, result timeline, 404 and cl
 **Interfaces:**
 - `TrackingWebController` consume `PublicTrackingService` (Task 2) y las vistas de Task 5. `PublicController` conserva el resto de rutas públicas y su helper `template()`.
 
-- [ ] **Step 1: Excepciones**
+- [x] **Step 1: Excepciones**
 
 ```java
 package com.monteastur.envios.exception;
@@ -1460,7 +1460,7 @@ public class ForbiddenException extends RuntimeException {
 }
 ```
 
-- [ ] **Step 2: Handler de `ForbiddenException` en `GlobalExceptionHandler`** (tras el handler de `ConflictException`)
+- [x] **Step 2: Handler de `ForbiddenException` en `GlobalExceptionHandler`** (tras el handler de `ConflictException`)
 
 ```java
 @ExceptionHandler(ForbiddenException.class)
@@ -1475,7 +1475,7 @@ public Object handleForbidden(ForbiddenException ex, HttpServletRequest request,
 
 (Imports necesarios: `com.monteastur.envios.exception.ForbiddenException`.)
 
-- [ ] **Step 3: `TrackingWebController`**
+- [x] **Step 3: `TrackingWebController`**
 
 ```java
 package com.monteastur.envios.controller.web;
@@ -1542,11 +1542,11 @@ public class TrackingWebController {
 }
 ```
 
-- [ ] **Step 4: Limpiar `PublicController`** (eliminar handlers `tracking`/`buscarTracking`, el campo `trackingRepo`, el campo `eventoTrackingService`, sus params de constructor y los imports `EnvioTracking`, `EnvioTrackingRepository`, `EventoTrackingService`). Se conservan `template()`, `isEnglish()`, el resto de rutas y el resto de imports (`@PostMapping`, `@RequestParam` siguen usándose en reservas/contacto).
+- [x] **Step 4: Limpiar `PublicController`** (eliminar handlers `tracking`/`buscarTracking`, el campo `trackingRepo`, el campo `eventoTrackingService`, sus params de constructor y los imports `EnvioTracking`, `EnvioTrackingRepository`, `EventoTrackingService`). Se conservan `template()`, `isEnglish()`, el resto de rutas y el resto de imports (`@PostMapping`, `@RequestParam` siguen usándose en reservas/contacto).
 
-- [ ] **Step 5: Actualizar `PublicControllerTest`** (eliminar `tracking_returnsView`, `tracking_en_returnsEnView`, los `@MockBean EnvioTrackingRepository` y `@MockBean EventoTrackingService`, y los imports de esos dos tipos).
+- [x] **Step 5: Actualizar `PublicControllerTest`** (eliminar `tracking_returnsView`, `tracking_en_returnsEnView`, los `@MockBean EnvioTrackingRepository` y `@MockBean EventoTrackingService`, y los imports de esos dos tipos).
 
-- [ ] **Step 6: `TrackingWebControllerTest`** (TDD — se escribió con el mismo patrón `@WebMvcTest` + `@Import(SecurityConfig.class)` + `@TestPropertySource` de `PublicControllerTest`; POST con `.with(csrf())`)
+- [x] **Step 6: `TrackingWebControllerTest`** (TDD — se escribió con el mismo patrón `@WebMvcTest` + `@Import(SecurityConfig.class)` + `@TestPropertySource` de `PublicControllerTest`; POST con `.with(csrf())`)
 
 ```java
 package com.monteastur.envios.controller.web;
@@ -1678,8 +1678,8 @@ class TrackingWebControllerTest {
 }
 ```
 
-- [ ] **Step 7: Verificar los tests nuevos** (`-Dtest=TrackingWebControllerTest,PublicControllerTest`) → `BUILD SUCCESS`
-- [ ] **Step 8: Commit**
+- [x] **Step 7: Verificar los tests nuevos** (`-Dtest=TrackingWebControllerTest,PublicControllerTest`) → `BUILD SUCCESS`
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/exception src/main/java/com/monteastur/envios/controller/web src/main/java/com/monteastur/envios/controller/GlobalExceptionHandler.java src/main/java/com/monteastur/envios/controller/PublicController.java src/test/java/com/monteastur/envios/controller
@@ -1698,7 +1698,7 @@ git commit -m "feat(web): add TrackingWebController with PRG search and 404 page
 **Interfaces:**
 - `ClientDashboardController` consume `ClientDashboardService` (Task 3), `DocumentoPdfService`, `EnvioTrackingRepository`, `ClienteService`, `ForbiddenException` (Task 6) y la vista `cliente/panel` (Task 5). `ClienteController` conserva `/cliente/login` y `/cliente/logout` (GET) y añade logout POST (lo usa el topbar nuevo).
 
-- [ ] **Step 1: Escribir el test** (patrón `EntregaEvidenciaControllerTest`/`DocumentosControllerTest`: `@WebMvcTest` + `@Import({GlobalExceptionHandler.class, SecurityConfig.class})` + mocks `DataSource`, `RBACAccessLogger`, `CustomAccessDeniedHandler`)
+- [x] **Step 1: Escribir el test** (patrón `EntregaEvidenciaControllerTest`/`DocumentosControllerTest`: `@WebMvcTest` + `@Import({GlobalExceptionHandler.class, SecurityConfig.class})` + mocks `DataSource`, `RBACAccessLogger`, `CustomAccessDeniedHandler`)
 
 ```java
 package com.monteastur.envios.controller.web;
@@ -1862,7 +1862,7 @@ class ClientDashboardControllerTest {
 }
 ```
 
-- [ ] **Step 2: Escribir la implementación**
+- [x] **Step 2: Escribir la implementación**
 
 ```java
 package com.monteastur.envios.controller.web;
@@ -1958,7 +1958,7 @@ public class ClientDashboardController {
 }
 ```
 
-- [ ] **Step 3: Limpiar `ClienteController`** (eliminar el handler `panel`, los campos `trackingRepo`/`evidenciaService`/`eventoTrackingService` y sus params de constructor, imports de `EnvioTracking`, `EnvioTrackingRepository`, `EvidenciaEnvioService`, `EventoTrackingService`, `EvidenciaEnvio`, `EventoTracking`, `Model`, `List`, `Map`, `HashMap`; añadir el handler POST de logout)
+- [x] **Step 3: Limpiar `ClienteController`** (eliminar el handler `panel`, los campos `trackingRepo`/`evidenciaService`/`eventoTrackingService` y sus params de constructor, imports de `EnvioTracking`, `EnvioTrackingRepository`, `EvidenciaEnvioService`, `EventoTrackingService`, `EvidenciaEnvio`, `EventoTracking`, `Model`, `List`, `Map`, `HashMap`; añadir el handler POST de logout)
 
 ```java
 @PostMapping("/logout")
@@ -1968,8 +1968,8 @@ public String logoutPost(HttpSession session) {
 }
 ```
 
-- [ ] **Step 4: Verificar los tests** (`-Dtest=ClientDashboardControllerTest,ClienteControllerTest`) — nota: no existe `ClienteControllerTest`; usar `-Dtest=ClientDashboardControllerTest` → `BUILD SUCCESS`
-- [ ] **Step 5: Commit**
+- [x] **Step 4: Verificar los tests** (`-Dtest=ClientDashboardControllerTest,ClienteControllerTest`) — nota: no existe `ClienteControllerTest`; usar `-Dtest=ClientDashboardControllerTest` → `BUILD SUCCESS`
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/main/java/com/monteastur/envios/controller/web src/main/java/com/monteastur/envios/controller/ClienteController.java src/test/java/com/monteastur/envios/controller/web
@@ -1986,7 +1986,7 @@ git commit -m "feat(web): add ClientDashboardController with ownership-protected
 **Interfaces:**
 - Valida extremo a extremo con contexto real (`@SpringBootTest` + `@ActiveProfiles("test")` + `@AutoConfigureMockMvc` + `@MockBean EmailService`): rutas web, ownership del PDF, 404, y caché Redis (patrón `EnvioTrackingCacheIntegrationTest`/`EntregaEvidenciaIntegrationTest`). Requiere MySQL (`envios_paraguay_cms_test`) y Redis levantados.
 
-- [ ] **Step 1: Escribir el test**
+- [x] **Step 1: Escribir el test**
 
 ```java
 package com.monteastur.envios.integration;
@@ -2211,8 +2211,8 @@ class PortalTrackingDashboardIntegrationTest {
 }
 ```
 
-- [ ] **Step 2: Verificar el test de integración** (requiere MySQL/Redis de la red; `-Dtest=PortalTrackingDashboardIntegrationTest`) → `BUILD SUCCESS`, 8 tests
-- [ ] **Step 3: Commit**
+- [x] **Step 2: Verificar el test de integración** (requiere MySQL/Redis de la red; `-Dtest=PortalTrackingDashboardIntegrationTest`) → `BUILD SUCCESS`, 8 tests
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/test/java/com/monteastur/envios/integration/PortalTrackingDashboardIntegrationTest.java
@@ -2229,13 +2229,13 @@ git commit -m "test(integration): portal tracking and dashboard E2E with Redis c
 **Interfaces:**
 - Valida los criterios de aceptación del spec (criterio 7: `./mvnw clean test` BUILD SUCCESS en contenedor) y deja constancia del estado del Bloque 15.
 
-- [ ] **Step 1: Garantizar que la DB de test existe**
+- [x] **Step 1: Garantizar que la DB de test existe**
 
 ```powershell
 docker exec monteastur-mysql mysql -uroot -proot -e "CREATE DATABASE IF NOT EXISTS envios_paraguay_cms_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" 2>&1 | Select-String -NotMatch "Using a password"
 ```
 
-- [ ] **Step 2: Suite completa en contenedor Maven Linux**
+- [x] **Step 2: Suite completa en contenedor Maven Linux**
 
 ```powershell
 docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
@@ -2246,8 +2246,8 @@ docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
 
 (Timeout amplio: 600000 ms.) Expected: `BUILD SUCCESS`, ~210 tests, 0 fallos.
 
-- [ ] **Step 3: Actualizar `docs/handoff.md`** con el estado del Bloque 15 (componentes, caches, tests, `BUILD SUCCESS`, pendiente de push).
-- [ ] **Step 4: Commit final**
+- [x] **Step 3: Actualizar `docs/handoff.md`** con el estado del Bloque 15 (componentes, caches, tests, `BUILD SUCCESS`, pendiente de push).
+- [x] **Step 4: Commit final**
 
 ```bash
 git add docs/handoff.md
