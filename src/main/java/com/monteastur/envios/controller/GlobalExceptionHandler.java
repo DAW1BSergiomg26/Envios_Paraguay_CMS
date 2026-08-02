@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
@@ -60,6 +61,15 @@ public class GlobalExceptionHandler {
                 .body(new ErrorDto(Instant.now().toString(), 500, "Error interno del servidor"));
         }
         return mvcError(request, model, HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", "Ha ocurrido un error inesperado. Por favor, inténtelo de nuevo más tarde.");
+    }
+
+    @ExceptionHandler(MissingServletRequestPartException.class)
+    public Object handleMissingPart(MissingServletRequestPartException ex, HttpServletRequest request, Model model) {
+        if (isRestRequest(request)) {
+            return ResponseEntity.badRequest()
+                .body(new ErrorDto(Instant.now().toString(), 400, "Falta la parte de la petición: " + ex.getRequestPartName()));
+        }
+        return mvcError(request, model, HttpStatus.BAD_REQUEST, "Bad Request", "Falta un campo obligatorio de la petición.");
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
