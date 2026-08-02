@@ -1,0 +1,59 @@
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${titulo} + ' - MONTEASTUR ENVIOS'">MONTEASTUR ENVIOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#d4762a',
+                            50: '#fdf3ea', 100: '#fbe5d1', 400: '#e6a26a',
+                            600: '#b9631f', 700: '#9a4f1a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<header th:fragment="navbar" class="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-stone-200">
+    <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href="/" class="text-xl font-bold tracking-tight">
+            <span class="text-brand-600">MONTEASTUR</span> <span class="text-stone-900">ENVIOS</span>
+        </a>
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium">
+            <a href="/" class="text-stone-600 hover:text-brand-600">Inicio</a>
+            <a href="/casa" class="text-stone-600 hover:text-brand-600">La Casa</a>
+            <a href="/tracking" class="text-brand-600 font-semibold">Seguimiento</a>
+            <a href="/reservas" class="text-stone-600 hover:text-brand-600">Reservas</a>
+            <a href="/contacto" class="text-stone-600 hover:text-brand-600">Contacto</a>
+        </div>
+    </nav>
+</header>
+
+<footer th:fragment="footer" class="bg-stone-900 text-stone-300 mt-16">
+    <div class="max-w-6xl mx-auto px-4 py-10 grid gap-6 md:grid-cols-3">
+        <div>
+            <p class="font-bold text-white">MONTEASTUR ENVIOS</p>
+            <p class="text-sm mt-2">Envíos entre Asturias y Paraguay con seguimiento en tiempo real.</p>
+        </div>
+        <div class="text-sm">
+            <p class="font-semibold text-white mb-2">Enlaces</p>
+            <a href="/tracking" class="block hover:text-brand-400">Seguimiento</a>
+            <a href="/contacto" class="block hover:text-brand-400">Contacto</a>
+        </div>
+        <div class="text-sm">
+            <p class="font-semibold text-white mb-2">Contacto</p>
+            <p>+34 642 687 292</p>
+            <p>Asturias &harr; Paraguay</p>
+        </div>
+    </div>
+    <div class="border-t border-stone-800 text-center text-xs py-4">© 2026 MONTEASTUR ENVIOS</div>
+</footer>

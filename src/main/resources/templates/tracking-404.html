@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/public-head :: head('Envío no encontrado')}"></head>
+<body class="bg-stone-50 text-stone-900">
+<header th:replace="~{fragments/public-head :: navbar}"></header>
+
+<main class="max-w-2xl mx-auto px-4 py-20 text-center">
+    <p class="text-6xl font-extrabold text-brand-600">404</p>
+    <h1 class="mt-4 text-2xl font-bold">Envío no encontrado</h1>
+    <p class="mt-2 text-stone-500">
+        No encontramos ningún envío con el código
+        <span class="font-semibold text-stone-800" th:text="${codigo}">MT-...</span>. Verifícalo e inténtalo de nuevo.
+    </p>
+    <form method="post" th:action="@{/tracking}" class="mt-8 flex flex-col sm:flex-row gap-3">
+        <input type="text" name="codigo" th:value="${codigo}" required
+               class="flex-1 rounded-xl border border-stone-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-brand-600">
+        <button type="submit" class="rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 transition">Reintentar</button>
+    </form>
+    <a href="/tracking" class="mt-6 inline-block text-sm font-medium text-brand-600 hover:underline">Escanear otro QR</a>
+</main>
+
+<footer th:replace="~{fragments/public-head :: footer}"></footer>
+</body>
+</html>

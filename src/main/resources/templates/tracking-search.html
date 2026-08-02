@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/public-head :: head('Seguimiento')}"></head>
+<body class="bg-stone-50 text-stone-900">
+<header th:replace="~{fragments/public-head :: navbar}"></header>
+
+<main class="max-w-6xl mx-auto px-4">
+    <section class="mt-12 rounded-3xl bg-gradient-to-br from-brand-600 to-brand-700 text-white p-8 md:p-12 shadow-xl">
+        <span class="inline-block text-xs font-semibold uppercase tracking-widest bg-white/15 px-3 py-1 rounded-full">Asturias &harr; Paraguay</span>
+        <h1 class="mt-4 text-3xl md:text-4xl font-extrabold">Seguimiento de tu envío</h1>
+        <p class="mt-2 text-white/85 max-w-xl">Introduce tu código MONTEASTUR o escanea el QR de la etiqueta para ver el estado actualizado de tu paquete.</p>
+
+        <form method="post" th:action="@{/tracking}" class="mt-8 flex flex-col sm:flex-row gap-3 max-w-2xl">
+            <input type="text" name="codigo" th:value="${codigo}" required autocomplete="off"
+                   placeholder="Introduce tu código MONTEASTUR"
+                   class="flex-1 rounded-xl px-4 py-3 text-stone-900 placeholder-stone-400 focus:outline-none focus:ring-4 focus:ring-white/40">
+            <button type="submit"
+                    class="rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-semibold px-6 py-3 transition">Buscar envío</button>
+            <button type="button" onclick="abrirEscanner()"
+                    class="rounded-xl bg-white/15 hover:bg-white/25 border border-white/30 text-white font-semibold px-6 py-3 transition">Escanear QR</button>
+        </form>
+
+        <p th:if="${buscado and error}"
+           class="mt-4 inline-block bg-red-600 text-white text-sm font-medium px-4 py-2 rounded-lg">
+            No encontramos ningún envío con el código
+            <span class="font-bold" th:text="${codigo}">MT-...</span>. Verifícalo e inténtalo de nuevo.
+        </p>
+    </section>
+
+    <section class="mt-12">
+        <h2 class="text-xl font-bold">¿Cómo funciona?</h2>
+        <div class="mt-4 grid gap-4 md:grid-cols-3">
+            <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                <span class="text-brand-600 font-bold text-sm uppercase tracking-wide">1. Busca</span>
+                <h3 class="mt-2 font-semibold">Introduce el código</h3>
+                <p class="text-sm text-stone-500 mt-1">El código MONTEASTUR viene en la etiqueta de tu envío (formato MT-AAAA-0001).</p>
+            </div>
+            <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                <span class="text-brand-600 font-bold text-sm uppercase tracking-wide">2. Escanea</span>
+                <h3 class="mt-2 font-semibold">Usa la cámara</h3>
+                <p class="text-sm text-stone-500 mt-1">O escanea el código QR de la etiqueta térmica para abrir el seguimiento al instante.</p>
+            </div>
+            <div class="bg-white rounded-2xl border border-stone-200 p-6">
+                <span class="text-brand-600 font-bold text-sm uppercase tracking-wide">3. Sigue</span>
+                <h3 class="mt-2 font-semibold">Consulta el estado</h3>
+                <p class="text-sm text-stone-500 mt-1">Revisa la línea de tiempo, los eventos y el comprobante de entrega (POD) si ya fue entregado.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div id="qr-modal" class="hidden fixed inset-0 z-50 bg-stone-900/70 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6">
+        <div class="flex items-center justify-between">
+            <h3 class="font-bold">Escanear código QR</h3>
+            <button type="button" onclick="cerrarEscanner()" class="text-stone-400 hover:text-stone-700 font-bold">Cerrar</button>
+        </div>
+        <div id="qr-reader" class="mt-4 rounded-xl overflow-hidden"></div>
+        <p id="qr-error" class="mt-3 text-sm text-red-600 hidden">No se pudo acceder a la cámara. Inténtalo de nuevo o introduce el código manualmente.</p>
+    </div>
+</div>
+
+<footer th:replace="~{fragments/public-head :: footer}"></footer>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+    let qrScanner = null;
+    function abrirEscanner() {
+        document.getElementById('qr-modal').classList.remove('hidden');
+        document.getElementById('qr-error').classList.add('hidden');
+        if (typeof Html5Qrcode === 'undefined') {
+            document.getElementById('qr-error').classList.remove('hidden');
+            return;
+        }
+        qrScanner = new Html5Qrcode('qr-reader');
+        qrScanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: 220 },
+            function (texto) {
+                const m = texto.match(/\/tracking\/([A-Za-z0-9-]+)/);
+                const codigo = m ? m[1] : texto.trim();
+                window.location.href = '/tracking/' + encodeURIComponent(codigo);
+            },
+            function () {});
+    }
+    function cerrarEscanner() {
+        document.getElementById('qr-modal').classList.add('hidden');
+        if (qrScanner) { qrScanner.stop().then(() => qrScanner.clear()); qrScanner = null; }
+    }
+</script>
+</body>
+</html>
