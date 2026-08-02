@@ -59,6 +59,7 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
    - API admin `POST /api/v1/admin/imports/csv` (`@PreAuthorize("hasRole('ROLE_ADMIN')")`): 202 + `batch_id`, validaciones 400 (sin fichero, vacío, no `.csv`, >5MB), 404 cliente inexistente, copia síncrona a `app.batch.tmp-dir`; GET de estado y de errores del lote. `GlobalExceptionHandler` con `MissingServletRequestPartException` → 400.
    - Auditoría en `batch_import_errors` (línea, código, mensaje) y estado/progreso en `batch_imports` (`PENDIENTE/EN_PROCESO/COMPLETADO/COMPLETADO_CON_ERRORES/FALLIDO`). La ingesta **no** publica `EstadoEnvioActualizadoEvent` ni dispara webhooks.
    - Tests: 10 parser + 8 worker + 10 controller + 6 integración. Suite completa en verde: **122 tests** (`BUILD SUCCESS` verificado en contenedor Docker).
+   - Consolidación final del Bloque 11 (19 ficheros pendientes commiteados en `main`): commit `fa3fc76`.
 7. **Bloque 12: Motor de Generación de Documentación PDF, Etiquetas Térmicas (100×150 mm) y Códigos QR/Code128** (completado, 2026-08-02):
    - Spec de diseño: commit `242c099` (`docs/superpowers/specs/2026-08-02-bloque12-pdf-etiquetas-barcodes-design.md`).
    - Dependencias OpenPDF 1.3.40 + ZXing core/javase 3.5.3 y migraciones `V6` (tabla `documentos_generados` con FKs `ON DELETE CASCADE` y `ON DELETE SET NULL`) y `V7` (`batch_id` en `envios_tracking`, FK `ON DELETE SET NULL` + índice, vínculo envíos↔lote rellenado en `BatchImportPersistenceService.procesarChunk`): commit `1649ca8`.
@@ -123,7 +124,9 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `90608cb` (Bloque 12 Task 8: DocumentosController). Cambios del Bloque 11 implementados **sin commitear** (pendiente de revisión/commit por el usuario). Bloque 12 completado (Tasks 1–9, suite 159 tests en verde).
+- **HEAD:** `fa3fc76` (consolidación Bloque 11). **Working tree 100% limpio** — sin cambios pendientes. Bloque 11 y Bloque 12 completados y commiteados.
+- **Migraciones Flyway aplicadas:** V1–V7 (V7 añade `batch_id` a `envios_tracking` con FK `ON DELETE SET NULL` para el vínculo envíos↔lote del Bloque 12).
+- **Suite completa:** **159 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
