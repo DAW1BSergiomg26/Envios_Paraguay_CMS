@@ -123,6 +123,15 @@ class WebhookConfigControllerTest {
     }
 
     @Test
+    void crear_urlConEsquemaInvalido_retorna400() throws Exception {
+        mockMvc.perform(post("/api/v1/admin/webhooks")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"clienteId\":1,\"url\":\"ftp://hook.example.com/x\",\"secretToken\":\"s3cr3t\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400));
+    }
+
+    @Test
     void eliminar_retorna204() throws Exception {
         when(webhookConfigRepository.existsById(10L)).thenReturn(true);
 

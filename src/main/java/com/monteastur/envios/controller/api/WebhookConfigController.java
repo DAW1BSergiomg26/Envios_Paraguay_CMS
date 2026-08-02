@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,7 @@ public class WebhookConfigController {
         if (request.getUrl() == null || request.getUrl().isBlank()) {
             throw new BadRequestException("url es obligatoria");
         }
+        validarUrl(request.getUrl());
         if (request.getSecretToken() == null || request.getSecretToken().isBlank()) {
             throw new BadRequestException("secretToken es obligatorio");
         }
@@ -80,6 +82,22 @@ public class WebhookConfigController {
         }
         WebhookConfig guardado = webhookConfigRepository.save(config);
         return ResponseEntity.status(HttpStatus.CREATED).body(WebhookConfigDto.from(guardado));
+    }
+
+    private void validarUrl(String url) {
+        URI uri;
+        try {
+            uri = URI.create(url);
+        } catch (IllegalArgumentException ex) {
+            throw new BadRequestException("url no es válida");
+        }
+        String scheme = uri.getScheme();
+        if (scheme == null || !(scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"))) {
+            throw new BadRequestException("url debe usar esquema http o https");
+        }
+        if (uri.getHost() == null) {
+            throw new BadRequestException("url no es válida");
+        }
     }
 
     @Operation(summary = "Eliminar configuración de webhook", description = "Borra la configuración; los logs asociados se eliminan en cascada")

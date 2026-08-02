@@ -44,7 +44,7 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
 5. **Bloque 10: Módulo de Webhooks Outbound y Firma Digital HMAC-SHA256** (completado, 2026-08-02):
    - Spec de diseño: commit `b5735fb`; plan de implementación: commit `8c55328`.
    - Implementación: commit `6d1d4f7` (Task 1-6).
-   - Migración Flyway `V4` (tablas `webhook_configs` y `webhook_logs`, `BOOLEAN` + FKs `ON DELETE CASCADE`), entidades `WebhookConfig`/`WebhookLog` y repositorios (Java puro, sin Lombok).
+   - Migración Flyway `V4` (tablas `webhooks_config` y `webhook_logs`, `BOOLEAN` + FKs `ON DELETE CASCADE`), entidades `WebhookConfig`/`WebhookLog` y repositorios (Java puro, sin Lombok).
    - `WebhookSignature` (HMAC-SHA256 en hex lowercase, firma sobre el body bruto, `X-Signature-256`) y `WebhookPayloadBuilder` (JSON normalizado con `url_seguimiento` y timestamp ISO).
    - `WebhookDispatchService`: `POST` vía `RestClient`, timeouts 2s/5s, sin reintentos, auditoría en `webhook_logs` (payload, estado, status, error).
    - `WebhookEventListener`: `@Async` (`webhookTaskExecutor`) + `REQUIRES_NEW` + `AFTER_COMMIT`, traga excepciones para no romper el flujo de tracking.

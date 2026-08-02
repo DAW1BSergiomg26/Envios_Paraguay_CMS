@@ -30,6 +30,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -186,5 +187,37 @@ class WebhookDispatchIntegrationTest {
             assertThat(log.getResponseStatus()).isEqualTo(500);
             assertThat(log.getErrorMensaje()).isEqualTo("HTTP 500");
         });
+    }
+
+    @Test
+    void transicionEnRollback_noDespachaNiAudita() {
+        String email = "webhook-rollback-" + System.nanoTime() + "@example.com";
+        String codigo = "PY-RB-" + System.nanoTime();
+        respondCode = 200;
+        receivedBody = null;
+
+        EnvioTracking guardado = transactionTemplate.execute(status -> {
+            Cliente cliente = new Cliente(email, "password123", "Cliente RB", "+595 000 000");
+            Cliente persistido = clienteRepository.save(cliente);
+            WebhookConfig config =
+                    webhookConfigRepository.save(new WebhookConfig(persistido.getId(), sinkUrl(), "secreto"));
+            webhookConfigId = config.getId();
+            EnvioTracking envio = new EnvioTracking(codigo, "RECIBIDO", "Destinatario RB",
+                    "Origen", "Destino", "10 kg", "Docs");
+            envio.setCliente(persistido);
+            EnvioTracking guardar = envioTrackingService.guardar(envio);
+            clienteId = guardar.getCliente().getId();
+            return guardar;
+        });
+        envioId = guardado.getId();
+
+        assertThrows(IllegalStateException.class, () ->
+                transactionTemplate.execute(status -> {
+                    envioTrackingService.actualizarEstado(codigo, "EN_TRANSITO");
+                    throw new IllegalStateException("forzar rollback");
+                }));
+
+        await().atMost(Duration.ofSeconds(2)).untilAsserted(() -> assertThat(receivedBody).isNull());
+        assertThat(webhookLogRepository.findByEnvioIdOrderByFechaCreacionDesc(envioId)).isEmpty();
     }
 }
