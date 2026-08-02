@@ -51,7 +51,23 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
    - CRUD admin `/api/v1/admin/webhooks` (GET/POST/DELETE) con `secretToken` nunca expuesto en las respuestas.
    - Props `app.webhook.*` en `application.properties` (enabled, timeouts, base-url, executor).
    - Tests: 5 unitarios nuevos + 2 de integración end-to-end (sink HTTP local con `HttpServer` de puerto efímero, casos 200 y 500). Suite completa en verde: **86 tests**.
-6. **Sprint de Optimización y Resiliencia** (post k6, 2026-07-31):
+6. **Bloque 11: Carga Masiva de Envíos por Lotes vía CSV (Batch Ingestion)** (implementado, pendiente de commit, 2026-08-02):
+   - Spec de diseño: commit `ad9b0e6` (`docs/superpowers/specs/2026-08-02-bloque11-batch-ingestion-csv-design.md`).
+   - Migración Flyway `V5` (tablas `batch_imports` y `batch_import_errors`, `cliente_id` NULL `ON DELETE SET NULL`, errores `ON DELETE CASCADE`, `utf8mb4`), entidades `BatchImport`/`BatchImportEstado`/`BatchImportError` y repositorios (Java puro, sin Lombok).
+   - `CsvEnvioParser` (`@Component`, `maxLineLength` vía `app.batch.max-line-length`): parsing streaming con OpenCSV 5.9, cabecera saltada con BOM, columnas `codigo,estado,destinatario,origen,destino,peso,contenido,observaciones`, filas cortas rellenadas a 8, límites >255 por campo, mensajes de error auditables.
+   - `CsvBatchImportService`: worker `@Async("batchTaskExecutor")` sin `@Transactional`, deduplicación local + `existsByCodigoUnico`, chunks de 100 con `BatchImportPersistenceService.procesarChunk` (`REQUIRES_NEW` + `@CacheEvict("envios.dashboard")`), `MaxRowsExcedidoException` (200 000 filas), limpieza del temporal en `finally`.
+   - API admin `POST /api/v1/admin/imports/csv` (`@PreAuthorize("hasRole('ROLE_ADMIN')")`): 202 + `batch_id`, validaciones 400 (sin fichero, vacío, no `.csv`, >5MB), 404 cliente inexistente, copia síncrona a `app.batch.tmp-dir`; GET de estado y de errores del lote. `GlobalExceptionHandler` con `MissingServletRequestPartException` → 400.
+   - Auditoría en `batch_import_errors` (línea, código, mensaje) y estado/progreso en `batch_imports` (`PENDIENTE/EN_PROCESO/COMPLETADO/COMPLETADO_CON_ERRORES/FALLIDO`). La ingesta **no** publica `EstadoEnvioActualizadoEvent` ni dispara webhooks.
+   - Tests: 10 parser + 8 worker + 10 controller + 6 integración. Suite completa en verde: **122 tests** (`BUILD SUCCESS` verificado en contenedor Docker).
+7. **Bloque 12: Motor de Generación de Documentación PDF, Etiquetas Térmicas (100×150 mm) y Códigos QR/Code128** (completado, 2026-08-02):
+   - Spec de diseño: commit `242c099` (`docs/superpowers/specs/2026-08-02-bloque12-pdf-etiquetas-barcodes-design.md`).
+   - Dependencias OpenPDF 1.3.40 + ZXing core/javase 3.5.3 y migraciones `V6` (tabla `documentos_generados` con FKs `ON DELETE CASCADE` y `ON DELETE SET NULL`) y `V7` (`batch_id` en `envios_tracking`, FK `ON DELETE SET NULL` + índice, vínculo envíos↔lote rellenado en `BatchImportPersistenceService.procesarChunk`): commit `1649ca8`.
+   - Modelo: enum `TipoDocumento` (`ETIQUETA_TERMICA/ETIQUETAS_LOTE/MANIFIESTO_CARGA`), entidad `DocumentoGenerado` con `@PrePersist` (peso/creación) y `DocumentoGeneradoRepository` (histórico, `findByTipoOrderByFechaCreacionDesc`): commit `eda9c4b`.
+   - `PesoUtil.parsear(String)` (coma→punto, tolerante a sufijos, inválidos→`OptionalDouble.empty`), `BarcodeService` (ZXing Code128 + QR 250×250 → `BufferedImage` + PNG, modo seguro: `Margin 0/1`, fallback `ISO-8859-1` a `UTF-8`), `EtiquetaPdfGenerator` (283.46×425.2 pt = 100×150 mm, campos del envío + code128 + QR con tracking URL), `ManifiestoPdfGenerator` (A4 595.28×841.89 pt, tabla 5 columnas, totales de peso vía `PesoUtil` con «—» para inválidos, firma de despacho). Todos con `writer.setCompressionLevel(PdfStream.NO_COMPRESSION)` para auditoría de contenido en crudo: commits `4a79349`, `4f11e25`, `932d525`, `39917c6`.
+   - `DocumentoPdfService`: generación en memoria (cero I/O en disco), streaming de etiquetas de lote al `OutputStream` con tope `app.pdf.max-pages` (default 5000) → 400 `BadRequestException`, auditoría persistida en `documentos_generados` (tipo/referenciaId/nombreArchivo/pesoBytes/usuario), props `app.pdf.*` (`enabled`, `max-pages`, `tracking.base-url`, `qr.size`, `barcode.width/height`): commit `356d6b6`.
+   - API admin `/api/v1/admin/documentos` (`ROLE_ADMIN`): `GET /envios/{codigo}/etiqueta` (inline), `GET /lotes/{batchId}/etiquetas` (attachment, streaming `void` + `HttpServletResponse`, reset del response ante 400/404 para devolver JSON), `GET /lotes/{batchId}/manifiesto` (attachment A4), `GET /documentos?tipo=` (auditoría JSON sin campos sensibles): commit `90608cb`.
+   - Tests: 6 PesoUtil + 5 BarcodeService + 2 EtiquetaPdfGenerator + 3 ManifiestoPdfGenerator + 7 DocumentoPdfService + 8 DocumentosController + 4 integración end-to-end. Suite completa en verde: **159 tests** (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis).
+8. **Sprint de Optimización y Resiliencia** (post k6, 2026-07-31):
    - `commons-pool2` añadido al pom para activar el pool de conexiones Lettuce (sin él, las props de pool se ignoraban): commit de Task 1 (`bd56610`).
    - Tuning de pools: HikariCP max=25/min=5/connection-timeout=20000 (base y prod reconciliado, conservando hardening); pool Lettuce max-active=30/max-idle=15/min-idle=5/max-wait=2000ms; `spring.data.redis.timeout=3000ms`; save/flush mode explícitos manteniendo namespace `monteastur:session`: commit de Task 2 (`b44ca79`).
    - Nuevo test de integración `EnvioTrackingCacheIntegrationTest` (populate/evict/TTL de `envios.tracking` + verificación del pool Lettuce vía `LettuceConnectionFactory.getClientConfiguration()`): commit de Task 3 (`2d21e78`). Corrección sobre el plan: Spring Boot 3.3.5 no registra un bean `GenericObjectPoolConfig`; el assert usa la client configuration del factory (4/4 tests OK).
@@ -107,7 +123,7 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `ca980f9` (`fix(webhooks): hardening post code review`).
+- **HEAD:** `90608cb` (Bloque 12 Task 8: DocumentosController). Cambios del Bloque 11 implementados **sin commitear** (pendiente de revisión/commit por el usuario). Bloque 12 completado (Tasks 1–9, suite 159 tests en verde).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
