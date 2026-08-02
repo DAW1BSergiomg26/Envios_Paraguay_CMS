@@ -48,6 +48,9 @@ public class EnvioTracking {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    @Column(name = "batch_id")
+    private Long batchId;
+
     public EnvioTracking() {}
 
     public EnvioTracking(String codigoUnico, String estado, String destinatario,
@@ -87,6 +90,8 @@ public class EnvioTracking {
     public void setObservaciones(String observaciones) { this.observaciones = observaciones; }
     public Cliente getCliente() { return cliente; }
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
+    public Long getBatchId() { return batchId; }
+    public void setBatchId(Long batchId) { this.batchId = batchId; }
 
     public String getUbicacionActual() {
         if (ubicacionActual != null && !ubicacionActual.isBlank()) {
