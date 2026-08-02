@@ -82,6 +82,14 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
    - Nuevo test de integración `EnvioTrackingCacheIntegrationTest` (populate/evict/TTL de `envios.tracking` + verificación del pool Lettuce vía `LettuceConnectionFactory.getClientConfiguration()`): commit de Task 3 (`2d21e78`). Corrección sobre el plan: Spring Boot 3.3.5 no registra un bean `GenericObjectPoolConfig`; el assert usa la client configuration del factory (4/4 tests OK).
    - Corregido el `REPORT.md` de k6 (afirmación obsoleta: tracking ya usaba caché desde `4407c07`): commit de Task 4 (`f77a9bc`).
    - Verificado: `mvn clean test` en verde (63 tests).
+10. **Bloque 14: Pipeline CI/CD Enterprise (GitHub Actions + Docker & healthchecks)** (completado, 2026-08-02):
+    - Spec de diseño: commits `b7421b4` y `57a4361` (`docs/superpowers/specs/2026-08-02-bloque14-cicd-enterprise-design.md`); plan de implementación: commit `e13888d` (`docs/superpowers/plans/2026-08-02-bloque14-ci-cd-enterprise-plan.md`).
+    - Maven Wrapper 3.9.9 (`mvnw`, `mvnw.cmd`, `.mvn/wrapper/maven-wrapper.properties`) + `.gitattributes` (LF para `mvnw`, CRLF para `mvnw.cmd`): commit `e76b39d`.
+    - Workflow `.github/workflows/ci.yml` con `permissions: contents: read` y `concurrency` por `github.ref` (`cancel-in-progress: true`): job `test` (MySQL 8 `envios_paraguay_cms_test` + Redis 7-alpine con healthchecks, `setup-java@v4` Temurin 17 + cache Maven, `chmod +x mvnw`, `./mvnw clean test -B` con `SPRING_PROFILES_ACTIVE=test`, upload de Surefire con `if: always()`) → job `docker-build` (`needs: test`, solo en `push` a `main`/`develop`): commit `5bea243`.
+    - Job `docker-build`: buildx + `docker/build-push-action@v5` (`load: true`, tag `envios-paraguay-cms:latest`) y smoke test de arranque en frío: contenedor con `--network host`, envs de prod (`DB_USERNAME/DB_PASSWORD/ADMIN_USERNAME/ADMIN_PASSWORD/REDIS_HOST/APP_NOTIFICATION_MAIL_ENABLED=false`), loop 30×5 s hasta que `curl /actuator/health` devuelva HTTP 200 con `"UP"` (servicios efímeros `mysql` + `redis` + `mailpit`).
+    - **Corrección deliberada al spec (hallada en la verificación local):** el endpoint agregado `/actuator/health` incluye el `MailHealthIndicator`; sin servidor SMTP responde `DOWN` y el smoke falla aunque la app esté sana. Fix: el job `docker-build` añade el servicio `axllent/mailpit` (publica `1025:1025`, healthcheck `wget -q -O /dev/null http://localhost:8025/readyz`), replicando el rol de Mailpit en `docker-compose.yml` de prod. Verificado empíricamente que la imagen incluye `wget` y el healthcheck pasa.
+    - Verificación local completa: suite en contenedor Maven Linux con `./mvnw clean test -B` → **BUILD SUCCESS, 190 tests, 0 fallos**; imagen construida; arranque en frío con `/actuator/health` → **`UP` en el intento 2** (contenedores efímeros `smoke-mysql`/`smoke-redis`, puerto 18080, `SPRING_MAIL_HOST=monteastur-mailpit`); Flyway V1–V8 aplicadas con `success=1` en el smoke DB; contenedores efímeros limpiados.
+    - **Pendiente:** `push` a GitHub para validar la ejecución real del workflow en GitHub Actions (requiere confirmación explícita del usuario; sin push ni merge sin permiso).
 
 ---
 
@@ -132,9 +140,9 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `fdaed17` (Task 5 del Bloque 13, controller POD). **Working tree:** pendiente de commit solo el test de integración `EntregaEvidenciaIntegrationTest` y este handoff (Task 6). Bloques 11 y 12 completados; Bloque 13 en curso.
+- **HEAD:** `5bea243` (Task 2 del Bloque 14, workflow CI/CD). **Working tree:** pendientes de commit los ajustes del smoke (servicio `mailpit` en `ci.yml`), la corrección en el plan (mailpit) y este handoff (Task 5). Bloques 11–13 completados; Bloque 14 completado (falta `push` a GitHub para validar el workflow real en Actions).
 - **Migraciones Flyway aplicadas:** V1–V8 (V8 crea `entregas_evidencia` con `envio_id UNIQUE`, FK `ON DELETE CASCADE`, firma PNG `LONGTEXT` y coordenadas `DECIMAL(10,8)`/`DECIMAL(11,8)`).
-- **Suite completa:** **190 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis).
+- **Suite completa:** **190 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP` en el intento 2.
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
