@@ -105,7 +105,7 @@
     document.addEventListener('click', function (e) {
         var btn = e.target.closest('.row-menu-btn');
         document.querySelectorAll('.row-menu').forEach(function (m) {
-            m.hidden = m.hidden && m.parentElement !== (btn ? btn.parentElement : null);
+            m.hidden = m.hidden || m.parentElement !== (btn ? btn.parentElement : null);
         });
         if (btn) {
             var menu = btn.parentElement.querySelector('.row-menu');
