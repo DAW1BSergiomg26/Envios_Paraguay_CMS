@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 /* =============================================
    CMS ADMIN + PANEL CLIENTE - MONTEASTUR ENVIOS
    Cinematographic Premium Theme - REFACTOR VISUAL FINAL
@@ -1231,4 +1233,155 @@ html::after {
 
 .ft-link-ct:hover {
     color: #e8c88a;
+}
+
+/* =============================================
+   DARK RE-SKIN OVERRIDE — Entrega B (Admin/CMS)
+   Al final de admin.css vence por orden de carga;
+   con !important vence a reglas previas que usan
+   el mismo !important. Define además las clases
+   luxury usadas por los logins (antes inexistentes).
+   ============================================= */
+
+/* Tipografía global */
+body, .card, .sidebar, .login-wrapper, input, select, textarea, button {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif !important;
+}
+
+/* ---- Login wrapper: claro → dark glass ---- */
+.login-wrapper {
+    background: rgba(18, 18, 21, 0.9) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+}
+.login-wrapper h1, .login-header h1 {
+    color: var(--naranja) !important;
+}
+.login-wrapper .subtitle,
+.login-header p {
+    color: var(--gris-texto-legible) !important;
+}
+
+/* ---- Clases luxury para logins (antes inexistentes) ---- */
+.glass-card {
+    border-radius: 16px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.btn-luxury {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 28px;
+    width: 100%;
+    background: linear-gradient(135deg, var(--naranja), var(--naranja-hover)) !important;
+    color: #ffffff !important;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(212, 118, 42, 0.25) !important;
+}
+.btn-luxury:hover {
+    background: linear-gradient(135deg, var(--naranja-hover), var(--naranja)) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212, 118, 42, 0.4) !important;
+}
+
+.luxury-icon {
+    stroke-width: 1.5px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    width: 24px;
+    height: 24px;
+    color: var(--naranja);
+    vertical-align: middle;
+    display: inline-block;
+}
+.luxury-icon-sm { width: 18px; height: 18px; }
+.luxury-icon-lg { width: 32px; height: 32px; }
+
+.focus-glow:focus {
+    outline: none;
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 3px rgba(212, 118, 42, 0.25) !important;
+}
+
+/* ---- Inputs / selects / textareas: claro → dark ---- */
+input, textarea, select,
+.form-group input, .login-field input, .legal-editor textarea,
+.evidencia-input, .evidencia-select, .evidencia-file {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: var(--blanco-principal) !important;
+}
+input:focus, textarea:focus, select:focus,
+.form-group input:focus, .login-field input:focus, .legal-editor textarea:focus {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 3px rgba(212, 118, 42, 0.18) !important;
+}
+input::placeholder, textarea::placeholder, select::placeholder {
+    color: var(--gris-texto-legible) !important;
+    opacity: 0.7;
+}
+
+/* ---- Labels ---- */
+.form-group label, .login-field label, .legal-editor label {
+    color: var(--blanco-principal) !important;
+}
+
+/* ---- Mensajes error / éxito / toasts ---- */
+.error-msg, .toast-error {
+    background: rgba(224, 85, 85, 0.12) !important;
+    border-left: 3px solid var(--rojo-error) !important;
+    color: #fecaca !important;
+}
+.logout-msg, .toast-success {
+    background: rgba(76, 175, 130, 0.12) !important;
+    border-left: 3px solid var(--verde-exito) !important;
+    color: #bbf7d0 !important;
+}
+
+/* ---- Badges de estados (tracking admin) ---- */
+.estado-pendiente {
+    background: rgba(240, 168, 48, 0.12) !important;
+    color: var(--naranja-advertencia) !important;
+}
+.estado-aprobada {
+    background: rgba(76, 175, 130, 0.12) !important;
+    color: var(--verde-confirmada) !important;
+}
+.estado-cancelada {
+    background: rgba(224, 85, 85, 0.12) !important;
+    color: var(--rojo) !important;
+}
+
+/* ---- Estado vacío ---- */
+.vacio {
+    background: var(--glass-bg) !important;
+    border: 2px dashed rgba(255, 255, 255, 0.12) !important;
+    color: var(--gris-texto-legible) !important;
+}
+
+/* ---- Tablas ---- */
+td, .dash-table td {
+    color: var(--blanco-secundario) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+tr:nth-child(even) td, .dash-table tr:nth-child(even) td {
+    background: rgba(255, 255, 255, 0.03) !important;
+}
+tr:hover td, .dash-table tr:hover td {
+    background: rgba(212, 118, 42, 0.08) !important;
+}
+
+/* ---- Sidebar: ya oscuro, refinamiento tipográfico ---- */
+.sidebar {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
