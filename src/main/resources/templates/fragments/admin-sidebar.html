@@ -13,6 +13,9 @@
         <a href="/admin/textos" th:class="${seccionActiva == 'textos'} ? 'active' : ''"><i data-lucide="file-text" class="luxury-icon luxury-icon-sm"></i> Textos Legales</a>
         <a href="/" class="btn-web">&larr; Volver a la web</a>
     </nav>
+    <button type="button" class="btn-theme-toggle" aria-label="Activar modo claro" title="Activar modo claro">
+        <i data-lucide="sun" class="luxury-icon luxury-icon-sm"></i>
+    </button>
     <form th:action="@{/logout}" method="post" class="logout-form">
         <button type="submit" class="btn-logout">Cerrar Sesi&oacute;n</button>
     </form>
