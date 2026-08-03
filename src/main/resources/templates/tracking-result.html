@@ -64,7 +64,7 @@
             <h2 class="text-lg font-bold tracking-tight">Progreso del envío</h2>
             <ol class="mt-6">
                 <li th:each="paso, iter : ${view.pasos}" class="relative flex gap-4 pb-8 last:pb-0">
-                    <span th:class="'mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ' + (${view.pasoActual >= 0 and iter.index < view.pasoActual} ? 'bg-brand-600 text-[var(--text-primary)]' : (${view.pasoActual == iter.index} ? 'ring-2 ring-brand-500 ring-offset-2 ring-offset-[var(--bg-body)] bg-brand-600/20 text-brand-300' : 'bg-[var(--surface-card-strong)] text-[var(--text-muted)]'))"
+                    <span th:class="'mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ' + (${view.pasoActual >= 0 and iter.index < view.pasoActual} ? 'bg-brand-600 text-[var(--text-on-accent)]' : (${view.pasoActual == iter.index} ? 'ring-2 ring-brand-500 ring-offset-2 ring-offset-[var(--bg-body)] bg-brand-600/20 text-brand-300' : 'bg-[var(--surface-card-strong)] text-[var(--text-muted)]'))"
                           th:text="${iter.index + 1}">1</span>
                     <div class="flex flex-col">
                         <span th:switch="${paso}"
