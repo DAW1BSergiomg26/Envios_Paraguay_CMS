@@ -227,6 +227,14 @@ public class AdminController {
         return "cms/imports";
     }
 
+    @GetMapping("/documentos")
+    public String documentos(Model model) {
+        model.addAttribute("envios", trackingRepo.findAllByOrderByUltimaActualizacionDesc());
+        model.addAttribute("lotes", batchImportPersistenceService.listarLotes());
+        model.addAttribute("emisiones", documentoPdfService.listarEmisiones(null));
+        return "cms/documentos";
+    }
+
     @GetMapping("/tracking/nuevo")
     public String nuevoTracking(Model model) {
         long count = trackingRepo.count() + 1;

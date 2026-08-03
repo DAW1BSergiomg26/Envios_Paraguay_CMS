@@ -74,4 +74,16 @@ class AdminControllerTest {
                 .andExpect(view().name("cms/imports"))
                 .andExpect(model().attributeExists("clientes", "lotes"));
     }
+
+    @Test
+    void documentos_returnsViewWithModel() throws Exception {
+        when(trackingRepo.findAllByOrderByUltimaActualizacionDesc()).thenReturn(List.of(new EnvioTracking()));
+        when(batchImportPersistenceService.listarLotes()).thenReturn(List.of());
+        when(documentoPdfService.listarEmisiones(null)).thenReturn(List.of());
+
+        mockMvc.perform(get("/admin/documentos").with(user("admin").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("cms/documentos"))
+                .andExpect(model().attributeExists("envios", "lotes", "emisiones"));
+    }
 }

@@ -1292,6 +1292,12 @@ body, .card, .sidebar, .login-wrapper, input, select, textarea, button {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(212, 118, 42, 0.4) !important;
 }
+.btn-luxury.btn-sm {
+    width: auto;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    vertical-align: middle;
+}
 
 .luxury-icon {
     stroke-width: 1.5px;
