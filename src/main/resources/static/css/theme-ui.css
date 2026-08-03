@@ -1,0 +1,70 @@
+/* =============================================
+   THEME UI — Boton toggle, pulso stepper, motion
+   Envios Paraguay CMS (theme switcher)
+   ============================================= */
+
+/* ---- Theme toggle (estilo Vercel/Linear) ---- */
+.btn-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--text-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-theme-toggle:hover {
+    background: var(--glass-bg-hover);
+    transform: translateY(-1px);
+}
+
+.btn-theme-toggle svg {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-theme-toggle.theme-rotating svg {
+    transform: rotate(180deg);
+}
+
+.btn-theme-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* ---- Stepper pulse (tracking-result) ---- */
+.step-pulse {
+    position: relative;
+}
+
+.step-pulse::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    border-radius: 999px;
+    border: 2px solid var(--accent-color);
+    opacity: 0.7;
+    animation: step-pulse-ring 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    pointer-events: none;
+}
+
+@keyframes step-pulse-ring {
+    0%   { transform: scale(0.85); opacity: 0.7; }
+    70%  { transform: scale(1.2);  opacity: 0; }
+    100% { transform: scale(1.2);  opacity: 0; }
+}
+
+/* ---- Motion polish (60fps: solo transform/opacity) ---- */
+.card,
+.quick-action-card,
+.dropzone,
+.status-card,
+.timeline-item {
+    transition: transform 0.2s ease, box-shadow 0.3s ease,
+                background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}

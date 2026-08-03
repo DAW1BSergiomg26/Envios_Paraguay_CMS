@@ -168,4 +168,12 @@ class PublicControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("/css/design-system.css")));
     }
+
+    @Test
+    void themeAssets_marketingPage_hasToggleAssets() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("/css/theme-ui.css")))
+                .andExpect(content().string(containsString("/js/theme-toggle.js")));
+    }
 }
