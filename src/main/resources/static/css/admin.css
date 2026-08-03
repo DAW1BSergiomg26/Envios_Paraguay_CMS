@@ -1309,7 +1309,7 @@ body, .card, .sidebar, .login-wrapper, input, select, textarea, button {
 .focus-glow:focus {
     outline: none;
     border-color: var(--naranja) !important;
-    box-shadow: 0 0 0 3px rgba(212, 118, 42, 0.25) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
 }
 
 /* ---- Inputs / selects / textareas: claro → dark ---- */
@@ -1462,4 +1462,53 @@ select option {
     background: var(--bg-card) !important;
     border-color: var(--border-subtle) !important;
     box-shadow: var(--glass-shadow);
+}
+
+/* ---- Menú contextual por fila (tracking) ---- */
+.row-actions {
+    position: relative;
+    text-align: right;
+}
+
+.row-menu-btn {
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 4px 6px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.row-menu-btn:hover {
+    background: var(--surface-card-strong);
+    color: var(--text-primary);
+}
+
+.row-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 30;
+    min-width: 160px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    box-shadow: var(--glass-shadow);
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+}
+
+.row-menu a {
+    padding: 8px 12px;
+    border-radius: 6px;
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    text-decoration: none;
+}
+
+.row-menu a:hover {
+    background: var(--surface-card-strong);
+    color: var(--accent-color);
 }

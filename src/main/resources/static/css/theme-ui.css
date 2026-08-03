@@ -62,6 +62,7 @@
 /* ---- Motion polish (60fps: solo transform/opacity) ---- */
 .card,
 .quick-action-card,
+.stat-item,
 .dropzone,
 .status-card,
 .timeline-item {

@@ -77,11 +77,19 @@
                             </span>
                         </td>
                         <td class="td-date" th:text="${#temporals.format(e.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026</td>
-                        <td class="acciones acciones-tracking">
+                        <td class="acciones acciones-tracking row-actions">
                             <a th:href="@{/admin/tracking/editar/{id}(id=${e.id})}" class="btn-action btn-action-edit" title="Editar"><i data-lucide="file-text" class="luxury-icon"></i></a>
                             <form th:action="@{/admin/tracking/eliminar/{id}(id=${e.id})}" method="post" style="display: inline;" onsubmit="return confirm('Eliminar este env\u00edo?')">
                                 <button type="submit" class="btn-action btn-action-delete" title="Eliminar"><i data-lucide="trash-2" class="luxury-icon"></i></button>
                             </form>
+                            <button type="button" class="row-menu-btn" aria-label="Acciones">
+                                <i data-lucide="more-horizontal" class="luxury-icon luxury-icon-sm"></i>
+                            </button>
+                            <div class="row-menu" hidden>
+                                <a th:href="@{/admin/tracking/editar/{id}(id=${e.id})}">Editar</a>
+                                <a th:href="@{/tracking/{codigo}(codigo=${e.codigoUnico})}" target="_blank">Ver p&uacute;blico</a>
+                                <a th:href="@{/api/v1/admin/documentos/envios/{codigo}/etiqueta(codigo=${e.codigoUnico})}" target="_blank">Etiqueta PDF</a>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -92,6 +100,20 @@
     </div>
 
 </div>
+
+<script>
+    document.addEventListener('click', function (e) {
+        var btn = e.target.closest('.row-menu-btn');
+        document.querySelectorAll('.row-menu').forEach(function (m) {
+            m.hidden = m.hidden && m.parentElement !== (btn ? btn.parentElement : null);
+        });
+        if (btn) {
+            var menu = btn.parentElement.querySelector('.row-menu');
+            menu.hidden = !menu.hidden;
+            e.stopPropagation();
+        }
+    });
+</script>
 
 </body>
 </html>

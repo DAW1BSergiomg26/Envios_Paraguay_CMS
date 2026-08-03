@@ -182,7 +182,7 @@ body {
 .focus-glow:focus {
   outline: none;
   border-color: var(--color-accent);
-  box-shadow: 0 0 0 3px rgba(212, 118, 42, 0.2);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 /* ---- Utilidades ---- */

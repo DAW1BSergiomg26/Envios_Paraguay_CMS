@@ -28,8 +28,8 @@
 
     <div class="dashboard-header">
         <div class="dashboard-header-content">
-            <h1 style="color: #d4762a;">Bienvenido, Administrador</h1>
-            <p style="color: #ffffff;">Panel de control &mdash; Centro de gesti&oacute;n premium</p>
+            <h1 style="color: var(--accent-color);">Bienvenido, Administrador</h1>
+            <p style="color: var(--text-primary);">Panel de control &mdash; Centro de gesti&oacute;n premium</p>
         </div>
     </div>
 
@@ -57,8 +57,8 @@
     </div>
 
     <div class="card glass-card">
-        <h1 style="color: #d4762a;">Resumen General</h1>
-        <p style="color: #3f6338; font-weight: 600;">Datos actualizados del contenido de MONTEASTUR ENVIOS.</p>
+        <h1 style="color: var(--accent-color);">Resumen General</h1>
+        <p style="color: var(--status-success); font-weight: 600;">Datos actualizados del contenido de MONTEASTUR ENVIOS.</p>
         <div class="stats-grid">
             <div class="stat-item">
                 <span class="stat-icon"><i data-lucide="package" class="luxury-icon luxury-icon-lg"></i></span>
@@ -68,17 +68,17 @@
             <div class="stat-item">
                 <span class="stat-icon"><i data-lucide="clock" class="luxury-icon luxury-icon-lg"></i></span>
                 <span>Pendientes</span>
-                <strong style="color: var(--naranja);" th:text="${reservasPendientes}">0</strong>
+                <strong style="color: var(--status-warning);" th:text="${reservasPendientes}">0</strong>
             </div>
             <div class="stat-item">
                 <span class="stat-icon"><i data-lucide="message-circle" class="luxury-icon luxury-icon-lg"></i></span>
                 <span>Mensajes</span>
-                <strong style="color: var(--verde);" th:text="${totalMensajes}">0</strong>
+                <strong style="color: var(--status-success);" th:text="${totalMensajes}">0</strong>
             </div>
             <div class="stat-item">
                 <span class="stat-icon"><i data-lucide="image" class="luxury-icon luxury-icon-lg"></i></span>
                 <span>Im&aacute;genes</span>
-                <strong style="color: var(--naranja);" th:text="${totalImagenes}">0</strong>
+                <strong style="color: var(--status-warning);" th:text="${totalImagenes}">0</strong>
             </div>
         </div>
     </div>
