@@ -1,51 +1,53 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/public-head :: head('Mi Panel')}"></head>
-<body class="bg-stone-50 text-stone-900">
-<header class="bg-white border-b border-stone-200 sticky top-0 z-40">
+<body class="bg-[#09090b] text-zinc-100 antialiased">
+<header class="sticky top-0 z-40 bg-[#09090b]/80 backdrop-blur-xl border-b border-white/10">
     <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <span class="text-xl font-bold tracking-tight">
-            <span class="text-brand-600">MONTEASTUR</span> <span class="text-stone-900">ENVIOS</span>
+        <span class="text-xl font-extrabold tracking-tight">
+            <span class="text-brand-500">MONTEASTUR</span> <span class="text-zinc-100">ENVIOS</span>
         </span>
         <div class="flex items-center gap-4">
-            <span class="text-sm font-medium" th:text="'Hola, ' + ${panel.clienteNombre}">Hola, Nombre</span>
+            <span class="text-sm font-medium text-zinc-300" th:text="'Hola, ' + ${panel.clienteNombre}">Hola, Nombre</span>
             <form method="post" th:action="@{/cliente/logout}">
-                <button type="submit" class="text-sm font-medium text-stone-500 hover:text-red-600">Cerrar sesión</button>
+                <button type="submit" class="inline-flex items-center gap-1.5 text-sm font-medium text-zinc-400 hover:text-red-400 transition-colors">
+                    <i data-lucide="log-out" class="h-4 w-4"></i> Cerrar sesión
+                </button>
             </form>
         </div>
     </div>
 </header>
 
 <main class="max-w-6xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold">Mis envíos</h1>
+    <h1 class="text-2xl font-bold tracking-tight">Mis envíos</h1>
 
     <div class="mt-6 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-        <div class="bg-white rounded-2xl border border-stone-200 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-stone-400">Total</p>
-            <p class="mt-1 text-2xl font-extrabold text-brand-600" th:text="${panel.totalEnvios}">0</p>
+        <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-white/30">
+            <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">Total</p>
+            <p class="mt-1 text-2xl font-extrabold text-brand-400" th:text="${panel.totalEnvios}">0</p>
         </div>
-        <div class="bg-white rounded-2xl border border-stone-200 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-stone-400">Envíos activos</p>
-            <p class="mt-1 text-2xl font-extrabold" th:text="${panel.enviosActivos}">0</p>
+        <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-white/30">
+            <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">Envíos activos</p>
+            <p class="mt-1 text-2xl font-extrabold text-zinc-100" th:text="${panel.enviosActivos}">0</p>
         </div>
-        <div class="bg-white rounded-2xl border border-stone-200 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-stone-400">Entregados</p>
-            <p class="mt-1 text-2xl font-extrabold text-emerald-600" th:text="${panel.enviosEntregados}">0</p>
+        <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-white/30">
+            <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">Entregados</p>
+            <p class="mt-1 text-2xl font-extrabold text-emerald-300" th:text="${panel.enviosEntregados}">0</p>
         </div>
-        <div class="bg-white rounded-2xl border border-stone-200 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-stone-400">Peso total (kg)</p>
-            <p class="mt-1 text-2xl font-extrabold" th:text="${#numbers.formatDecimal(panel.pesoTotalKg, 1, 1)}">0.0</p>
+        <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-white/30">
+            <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">Peso total (kg)</p>
+            <p class="mt-1 text-2xl font-extrabold text-zinc-100" th:text="${#numbers.formatDecimal(panel.pesoTotalKg, 1, 1)}">0.0</p>
         </div>
-        <div class="bg-white rounded-2xl border border-stone-200 p-4">
-            <p class="text-xs font-semibold uppercase tracking-wide text-stone-400">Peso activo (kg)</p>
-            <p class="mt-1 text-2xl font-extrabold" th:text="${#numbers.formatDecimal(panel.pesoActivoKg, 1, 1)}">0.0</p>
+        <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-white/30">
+            <p class="text-xs font-semibold uppercase tracking-widest text-zinc-500">Peso activo (kg)</p>
+            <p class="mt-1 text-2xl font-extrabold text-zinc-100" th:text="${#numbers.formatDecimal(panel.pesoActivoKg, 1, 1)}">0.0</p>
         </div>
     </div>
 
-    <div class="mt-8 bg-white rounded-2xl border border-stone-200 overflow-hidden">
+    <div class="mt-8 overflow-hidden rounded-2xl border border-white/15 bg-white/[0.02] backdrop-blur-xl">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-stone-100 text-stone-500 text-left">
+                <thead class="bg-white/[0.04] text-zinc-500 text-left">
                     <tr>
                         <th class="px-4 py-3 font-semibold">Código</th>
                         <th class="px-4 py-3 font-semibold">Destino</th>
@@ -57,38 +59,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="envio : ${panel.envios}" class="border-t border-stone-100 hover:bg-stone-50">
-                        <td class="px-4 py-3 font-semibold text-brand-600">
+                    <tr th:each="envio : ${panel.envios}" class="border-t border-white/10 hover:bg-white/[0.03] transition-colors">
+                        <td class="px-4 py-3 font-semibold text-brand-400">
                             <a th:href="@{/tracking/{codigo}(codigo=${envio.codigoUnico})}" th:text="${envio.codigoUnico}">MT-2026-0001</a>
                         </td>
                         <td class="px-4 py-3" th:text="${envio.destino}">Asunción, Paraguay</td>
                         <td class="px-4 py-3" th:text="${envio.contenido}">Documentos</td>
                         <td class="px-4 py-3" th:text="${envio.peso}">10 kg</td>
                         <td class="px-4 py-3">
-                            <span th:switch="${envio.estado}" class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide">
-                                <span th:case="'RECIBIDO'" class="bg-slate-200 text-slate-700 rounded-full px-2.5 py-0.5">Recibido</span>
-                                <span th:case="'EN_ADUANA_ORIGEN'" class="bg-amber-200 text-amber-800 rounded-full px-2.5 py-0.5">Aduana origen</span>
-                                <span th:case="'EN_TRANSITO'" class="bg-sky-200 text-sky-800 rounded-full px-2.5 py-0.5">Tránsito</span>
-                                <span th:case="'EN_ADUANA_DESTINO'" class="bg-violet-200 text-violet-800 rounded-full px-2.5 py-0.5">Aduana destino</span>
-                                <span th:case="'EN_REPARTO'" class="bg-orange-200 text-orange-800 rounded-full px-2.5 py-0.5">Reparto</span>
-                                <span th:case="'ENTREGADO'" class="bg-emerald-200 text-emerald-800 rounded-full px-2.5 py-0.5">Entregado</span>
-                                <span th:case="*" class="bg-stone-200 text-stone-700 rounded-full px-2.5 py-0.5" th:text="${envio.estado}">Estado</span>
+                            <span th:switch="${envio.estado}" class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-xl">
+                                <span th:case="'RECIBIDO'" class="border-indigo-400/30 bg-indigo-400/10 text-indigo-300 rounded-full px-2.5 py-0.5">Recibido</span>
+                                <span th:case="'EN_ADUANA_ORIGEN'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-2.5 py-0.5">Aduana origen</span>
+                                <span th:case="'EN_TRANSITO'" class="border-amber-400/40 bg-amber-400/10 text-amber-300 shadow-glow-amber rounded-full px-2.5 py-0.5">Tránsito</span>
+                                <span th:case="'EN_ADUANA_DESTINO'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-2.5 py-0.5">Aduana destino</span>
+                                <span th:case="'EN_REPARTO'" class="border-sky-400/30 bg-sky-400/10 text-sky-300 rounded-full px-2.5 py-0.5">Reparto</span>
+                                <span th:case="'ENTREGADO'" class="border-emerald-400/40 bg-emerald-400/10 text-emerald-300 shadow-glow-emerald rounded-full px-2.5 py-0.5">Entregado</span>
+                                <span th:case="*" class="border-white/15 bg-white/[0.06] text-zinc-300 rounded-full px-2.5 py-0.5" th:text="${envio.estado}">Estado</span>
                             </span>
                         </td>
                         <td class="px-4 py-3" th:text="${#temporals.format(envio.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 <a th:href="@{/tracking/{codigo}(codigo=${envio.codigoUnico})}"
-                                   class="font-medium text-brand-600 hover:underline">Ver tracking</a>
+                                   class="inline-flex items-center gap-1 font-medium text-brand-400 hover:text-brand-500 hover:underline">
+                                    <i data-lucide="external-link" class="h-3.5 w-3.5"></i> Ver tracking
+                                </a>
                                 <a th:href="@{/cliente/panel/envio/{codigo}/etiqueta(codigo=${envio.codigoUnico})}"
-                                   class="font-medium text-stone-500 hover:text-brand-600 hover:underline">Descargar etiqueta</a>
+                                   class="inline-flex items-center gap-1 font-medium text-zinc-400 hover:text-brand-400 hover:underline">
+                                    <i data-lucide="download" class="h-3.5 w-3.5"></i> Descargar etiqueta
+                                </a>
                             </div>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div th:if="${#lists.isEmpty(panel.envios)}" class="p-10 text-center text-stone-500">
+        <div th:if="${#lists.isEmpty(panel.envios)}" class="p-10 text-center text-zinc-500">
             No tienes envíos registrados todavía.
         </div>
     </div>
