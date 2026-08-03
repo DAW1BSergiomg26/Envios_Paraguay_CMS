@@ -105,7 +105,7 @@ p,
 .form-group input:focus, .login-field input:focus, .legal-editor textarea:focus, .evidencia-input:focus, .evidencia-select:focus {
     border-color: var(--naranja) !important;
     box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important;
-    background: #ffffff !important;
+    background: var(--bg-card) !important;
 }
 
 /* Botones de Login/Submit */
@@ -242,7 +242,7 @@ input, textarea, select {
 input:focus, textarea:focus, select:focus {
     border-color: var(--naranja) !important;
     box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important;
-    background: #ffffff !important;
+    background: var(--bg-card) !important;
 }
 input::placeholder, textarea::placeholder, select::placeholder {
     color: #6b7a6b !important;
@@ -506,7 +506,7 @@ table tr:hover td {
 .form-group input:focus {
     border-color: var(--naranja) !important;
     box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
-    background: #ffffff !important;
+    background: var(--bg-card) !important;
 }
 .form-group input::placeholder {
     color: #888 !important;
@@ -525,7 +525,7 @@ table tr:hover td {
 .legal-editor textarea:focus {
     border-color: var(--naranja) !important;
     box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
-    background: #ffffff !important;
+    background: var(--bg-card) !important;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1403,40 +1403,63 @@ select:focus,
 .login-field input:focus,
 .evidencia-input:focus,
 .evidencia-select:focus {
-    background-color: #18181b !important;
-    color: #f4f4f5 !important;
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
     border-color: var(--naranja) !important;
-    box-shadow: 0 0 0 2px rgba(212, 118, 42, 0.2) !important;
+    box-shadow: 0 0 0 2px var(--accent-glow) !important;
 }
 
 .legal-editor textarea:focus {
-    background-color: #18181b !important;
-    color: #f4f4f5 !important;
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
     border-color: var(--naranja) !important;
-    box-shadow: 0 0 0 3px rgba(212, 118, 42, 0.18) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
 }
 
 .card .legal-editor .tracking-admin-input,
 .card .legal-editor .tracking-admin-select,
 .card .legal-editor .tracking-admin-textarea {
-    background-color: #18181b !important;
-    color: #f4f4f5 !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
 }
 
 .card .legal-editor .tracking-admin-input:focus,
 .card .legal-editor .tracking-admin-select:focus,
 .card .legal-editor .tracking-admin-textarea:focus {
-    background-color: #18181b !important;
-    color: #f4f4f5 !important;
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
     border-color: var(--naranja) !important;
-    box-shadow: 0 0 0 2px rgba(212, 118, 42, 0.2) !important;
+    box-shadow: 0 0 0 2px var(--accent-glow) !important;
 }
 
 /* Desplegables nativos: lista desplegada y opciones en dark */
 select,
 select option {
-    background-color: #18181b !important;
-    color: #f4f4f5 !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background-color: var(--bg-card) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+
+/* =============================================
+   Theme switcher: MODO CLARO (override final)
+   ============================================= */
+:root[data-theme="light"] {
+    --sombra: 0 8px 25px rgba(15, 23, 42, 0.12);
+}
+
+:root[data-theme="light"] .login-wrapper {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+:root[data-theme="light"] .sidebar {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+:root[data-theme="light"] .card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-subtle) !important;
+    box-shadow: var(--glass-shadow);
 }

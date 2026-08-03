@@ -9,38 +9,28 @@
   --color-accent: #d4762a;
   --color-accent-dark: #b8661f;
   --color-accent-hover: #e08c3f;
-  --color-dark: #f4f4f5;
-  --color-charcoal: #18181b;
-  --color-stone: #18181b;
-  --color-parchment: #121215;
-  --color-white: #f4f4f5;
-  --text-primary: #f4f4f5;
-  --text-secondary: #a1a1aa;
-  --text-muted: #71717a;
-  --text-on-accent: #ffffff;
+  --color-dark: var(--text-primary);
+  --color-charcoal: var(--bg-card);
+  --color-stone: var(--bg-card);
+  --color-parchment: var(--bg-surface);
+  --color-white: var(--text-primary);
   --color-text: var(--text-primary);
   --color-muted: var(--text-muted);
   --icon-stroke-width: 1.5px;
   --icon-size: 24px;
   --icon-color: var(--color-accent);
-  --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  --glass-bg-hover: rgba(255, 255, 255, 0.06);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   --glass-blur: 12px;
   --brand-glow: 0 0 40px rgba(212, 118, 42, 0.15);
 
   /* Flip de vars de los premium CSS (mismo :root, hoja posterior gana) */
-  --casa-dark: #f4f4f5;
-  --contacto-green-dark: #f4f4f5;
-  --reservas-green-dark: #f4f4f5;
-  --tracking-logistic-dark: #f4f4f5;
-  --casa-paper: rgba(255, 255, 255, 0.05);
-  --contacto-paper: rgba(255, 255, 255, 0.05);
-  --reservas-paper: rgba(255, 255, 255, 0.05);
-  --tracking-logistic-paper: rgba(255, 255, 255, 0.05);
+  --casa-dark: var(--text-primary);
+  --contacto-green-dark: var(--text-primary);
+  --reservas-green-dark: var(--text-primary);
+  --tracking-logistic-dark: var(--text-primary);
+  --casa-paper: var(--surface-card);
+  --contacto-paper: var(--surface-card);
+  --reservas-paper: var(--surface-card);
+  --tracking-logistic-paper: var(--surface-card);
 }
 
 /* ---- Base ---- */
@@ -49,7 +39,7 @@ html {
 }
 
 body {
-  background-color: #09090b !important;
+  background-color: var(--bg-body) !important;
   background-image: radial-gradient(ellipse at 50% 0%, rgba(212, 118, 42, 0.05) 0%, transparent 70%);
   color: var(--text-primary) !important;
   font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
@@ -486,4 +476,24 @@ label {
   background: rgba(212, 118, 42, 0.15) !important;
   border: 1px solid rgba(212, 118, 42, 0.3) !important;
   color: var(--color-accent) !important;
+}
+
+/* =============================================
+   Theme switcher: MODO CLARO (override final)
+   ============================================= */
+:root[data-theme="light"] {
+    --color-dark: var(--text-primary);
+    --color-charcoal: var(--bg-card);
+    --color-stone: var(--bg-card);
+    --color-parchment: var(--bg-surface);
+    --color-white: var(--text-primary);
+    --casa-dark: var(--text-primary);
+    --contacto-green-dark: var(--text-primary);
+    --reservas-green-dark: var(--text-primary);
+    --tracking-logistic-dark: var(--text-primary);
+    --casa-paper: var(--surface-card);
+    --contacto-paper: var(--surface-card);
+    --reservas-paper: var(--surface-card);
+    --tracking-logistic-paper: var(--surface-card);
+    --brand-glow: 0 0 40px rgba(212, 118, 42, 0.12);
 }
