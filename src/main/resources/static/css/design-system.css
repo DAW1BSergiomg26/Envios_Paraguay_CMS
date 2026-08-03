@@ -1,0 +1,93 @@
+/* =============================================
+   DESIGN SYSTEM TOKENS — Envios Paraguay CMS
+   Dark (Obsidian, default) / Light (Pristine Quartz)
+   Fuente unica de verdad para el theme switcher.
+   Cargar SIEMPRE primero en <head>.
+   ============================================= */
+
+/* Modo Oscuro (Predeterminado — Obsidian SaaS) */
+:root,
+:root[data-theme="dark"] {
+    --bg-body: #09090b;
+    --bg-surface: #121215;
+    --bg-card: #18181b;
+    --bg-card-glass: rgba(24, 24, 27, 0.75);
+    --text-primary: #f4f4f5;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-strong: rgba(255, 255, 255, 0.16);
+    --accent-color: #d4762a;
+    --accent-color-hover: #e08c3f;
+    --accent-glow: rgba(212, 118, 42, 0.25);
+    --text-on-accent: #ffffff;
+    --status-success: #4ade80;
+    --status-warning: #f0a830;
+    --status-danger: #f87171;
+    --status-info: #a5b4fc;
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-bg-hover: rgba(255, 255, 255, 0.06);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --glass-blur: 12px;
+    --surface-header: rgba(9, 9, 11, 0.8);
+    --surface-card: rgba(255, 255, 255, 0.03);
+    --surface-card-strong: rgba(255, 255, 255, 0.06);
+    --surface-card-hover: rgba(255, 255, 255, 0.08);
+    --badge-info: #a5b4fc;
+    --badge-violet: #c4b5fd;
+    --badge-warning: #fcd34d;
+    --badge-sky: #7dd3fc;
+    --badge-success: #6ee7b7;
+    --badge-neutral: #d4d4d8;
+    --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Modo Claro (Pristine Quartz — Ultra Clean Enterprise) */
+:root[data-theme="light"] {
+    --bg-body: #f8fafc;
+    --bg-surface: #ffffff;
+    --bg-card: #ffffff;
+    --bg-card-glass: rgba(255, 255, 255, 0.85);
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border-subtle: rgba(0, 0, 0, 0.08);
+    --border-strong: rgba(0, 0, 0, 0.16);
+    --accent-color: #d4762a;
+    --accent-color-hover: #b8661f;
+    --accent-glow: rgba(212, 118, 42, 0.15);
+    --text-on-accent: #ffffff;
+    --status-success: #16a34a;
+    --status-warning: #d97706;
+    --status-danger: #dc2626;
+    --status-info: #6366f1;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-bg-hover: #ffffff;
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+    --glass-blur: 12px;
+    --surface-header: rgba(248, 250, 252, 0.85);
+    --surface-card: #ffffff;
+    --surface-card-strong: #f1f5f9;
+    --surface-card-hover: #e2e8f0;
+    --badge-info: #4f46e5;
+    --badge-violet: #7c3aed;
+    --badge-warning: #b45309;
+    --badge-sky: #0284c7;
+    --badge-success: #059669;
+    --badge-neutral: #64748b;
+    --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Accesibilidad: respetar prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -159,5 +160,12 @@ class PublicControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("en/contacto"))
                 .andExpect(model().attribute("mensajeEnviado", false));
+    }
+
+    @Test
+    void themeAssets_marketingPage_hasDesignSystemCss() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("/css/design-system.css")));
     }
 }
