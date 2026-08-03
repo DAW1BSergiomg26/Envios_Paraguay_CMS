@@ -13,10 +13,12 @@ import com.monteastur.envios.repository.ImagenRepository;
 import com.monteastur.envios.repository.MensajeContactoRepository;
 import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
+import com.monteastur.envios.service.DocumentoPdfService;
 import com.monteastur.envios.service.EmailService;
 import com.monteastur.envios.service.EnvioTrackingService;
 import com.monteastur.envios.service.EvidenciaEnvioService;
 import com.monteastur.envios.service.EventoTrackingService;
+import com.monteastur.envios.service.batch.BatchImportPersistenceService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +55,8 @@ public class AdminController {
     private final EvidenciaEnvioService evidenciaService;
     private final EventoTrackingService eventoTrackingService;
     private final EnvioTrackingService envioTrackingService;
+    private final BatchImportPersistenceService batchImportPersistenceService;
+    private final DocumentoPdfService documentoPdfService;
 
     @Value("${app.upload.dir}")
     private String uploadDir;
@@ -62,7 +66,9 @@ public class AdminController {
                            EnvioTrackingRepository trackingRepo, EmailService emailService,
                            ClienteRepository clienteRepo, EvidenciaEnvioService evidenciaService,
                            EventoTrackingService eventoTrackingService,
-                           EnvioTrackingService envioTrackingService) {
+                           EnvioTrackingService envioTrackingService,
+                           BatchImportPersistenceService batchImportPersistenceService,
+                           DocumentoPdfService documentoPdfService) {
         this.reservaRepo = reservaRepo;
         this.imagenRepo = imagenRepo;
         this.mensajeRepo = mensajeRepo;
@@ -73,6 +79,8 @@ public class AdminController {
         this.evidenciaService = evidenciaService;
         this.eventoTrackingService = eventoTrackingService;
         this.envioTrackingService = envioTrackingService;
+        this.batchImportPersistenceService = batchImportPersistenceService;
+        this.documentoPdfService = documentoPdfService;
     }
 
     @GetMapping("/dashboard")
@@ -210,6 +218,13 @@ public class AdminController {
     public String listarTracking(Model model) {
         model.addAttribute("envios", trackingRepo.findAllByOrderByUltimaActualizacionDesc());
         return "cms/tracking";
+    }
+
+    @GetMapping("/imports")
+    public String imports(Model model) {
+        model.addAttribute("clientes", clienteRepo.findAll());
+        model.addAttribute("lotes", batchImportPersistenceService.listarLotes());
+        return "cms/imports";
     }
 
     @GetMapping("/tracking/nuevo")

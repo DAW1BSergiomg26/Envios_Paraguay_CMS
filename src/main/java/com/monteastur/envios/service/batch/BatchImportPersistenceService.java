@@ -91,4 +91,8 @@ public class BatchImportPersistenceService {
     public List<BatchImportError> listarErrores(Long batchId) {
         return batchImportErrorRepository.findByBatchIdOrderByLineaNumeroAsc(batchId);
     }
+
+    public List<BatchImport> listarLotes() {
+        return batchImportRepository.findAllByOrderByIdDesc();
+    }
 }

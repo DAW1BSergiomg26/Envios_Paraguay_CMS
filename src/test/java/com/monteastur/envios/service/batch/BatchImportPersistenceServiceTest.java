@@ -49,4 +49,13 @@ class BatchImportPersistenceServiceTest {
         assertThat(e2.getBatchId()).isEqualTo(7L);
         verify(envioTrackingRepository).saveAll(List.of(e1, e2));
     }
+
+    @Test
+    void listarLotes_delegaEnRepositorioOrdenado() {
+        BatchImport lote = new BatchImport(1L, "envios.csv", BatchImportEstado.COMPLETADO);
+        when(batchImportRepository.findAllByOrderByIdDesc()).thenReturn(List.of(lote));
+
+        assertThat(service.listarLotes()).containsExactly(lote);
+        verify(batchImportRepository).findAllByOrderByIdDesc();
+    }
 }

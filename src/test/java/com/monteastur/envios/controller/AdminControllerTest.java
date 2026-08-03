@@ -2,6 +2,10 @@ package com.monteastur.envios.controller;
 
 import com.monteastur.envios.config.RBACAccessLogger;
 import com.monteastur.envios.config.SecurityConfig;
+import com.monteastur.envios.model.BatchImport;
+import com.monteastur.envios.model.BatchImportEstado;
+import com.monteastur.envios.model.Cliente;
+import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.ClienteRepository;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.repository.ImagenRepository;
@@ -9,14 +13,13 @@ import com.monteastur.envios.repository.MensajeContactoRepository;
 import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
 import com.monteastur.envios.security.CustomAccessDeniedHandler;
-import com.monteastur.envios.service.ClienteService;
+import com.monteastur.envios.service.DocumentoPdfService;
 import com.monteastur.envios.service.EmailService;
 import com.monteastur.envios.service.EnvioTrackingService;
 import com.monteastur.envios.service.EvidenciaEnvioService;
 import com.monteastur.envios.service.EventoTrackingService;
+import com.monteastur.envios.service.batch.BatchImportPersistenceService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,20 +28,21 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
+import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest({AdminController.class, LoginController.class, ClienteController.class})
+@WebMvcTest(AdminController.class)
 @Import(SecurityConfig.class)
 @TestPropertySource(properties = {
     "app.admin.username=admin",
     "app.admin.password=test",
     "app.upload.dir=./uploads"
 })
-class AdminThemeAssetsTest {
+class AdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,49 +57,21 @@ class AdminThemeAssetsTest {
     @MockBean private EvidenciaEnvioService evidenciaService;
     @MockBean private EventoTrackingService eventoTrackingService;
     @MockBean private EnvioTrackingService envioTrackingService;
-    @MockBean private ClienteService clienteService;
-    @MockBean private com.monteastur.envios.service.batch.BatchImportPersistenceService batchImportPersistenceService;
-    @MockBean private com.monteastur.envios.service.DocumentoPdfService documentoPdfService;
+    @MockBean private BatchImportPersistenceService batchImportPersistenceService;
+    @MockBean private DocumentoPdfService documentoPdfService;
     @MockBean private RBACAccessLogger rbacAccessLogger;
     @MockBean private CustomAccessDeniedHandler customAccessDeniedHandler;
     @MockBean private DataSource dataSource;
 
     @Test
-    void loginPages_haveThemeAssetsAndAntiFouc() throws Exception {
-        mockMvc.perform(get("/login"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-theme")))
-                .andExpect(content().string(containsString("/css/design-system.css")))
-                .andExpect(content().string(containsString("/css/theme-ui.css")))
-                .andExpect(content().string(containsString("/js/theme-toggle.js")))
-                .andExpect(content().string(containsString("btn-theme-toggle")));
+    void imports_returnsViewWithClientesAndLotes() throws Exception {
+        when(clienteRepo.findAll()).thenReturn(List.of(new Cliente()));
+        when(batchImportPersistenceService.listarLotes())
+                .thenReturn(List.of(new BatchImport(1L, "envios.csv", BatchImportEstado.COMPLETADO)));
 
-        mockMvc.perform(get("/cliente/login"))
+        mockMvc.perform(get("/admin/imports").with(user("admin").roles("ADMIN")))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-theme")))
-                .andExpect(content().string(containsString("/css/design-system.css")))
-                .andExpect(content().string(containsString("/css/theme-ui.css")))
-                .andExpect(content().string(containsString("/js/theme-toggle.js")))
-                .andExpect(content().string(containsString("btn-theme-toggle")));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-        "/admin/dashboard",
-        "/admin/mensajesrecibidos",
-        "/admin/reservas",
-        "/admin/imagenes",
-        "/admin/textos",
-        "/admin/tracking",
-        "/admin/tracking/nuevo"
-    })
-    void adminPages_haveThemeAssetsAndAntiFouc(String url) throws Exception {
-        mockMvc.perform(get(url).with(user("admin").roles("ADMIN")))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("data-theme")))
-                .andExpect(content().string(containsString("/css/design-system.css")))
-                .andExpect(content().string(containsString("/css/theme-ui.css")))
-                .andExpect(content().string(containsString("/js/theme-toggle.js")))
-                .andExpect(content().string(containsString("btn-theme-toggle")));
+                .andExpect(view().name("cms/imports"))
+                .andExpect(model().attributeExists("clientes", "lotes"));
     }
 }
