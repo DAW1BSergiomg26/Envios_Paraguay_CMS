@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/public-head :: head('Seguimiento')}"></head>
-<body class="bg-[#09090b] text-zinc-100 antialiased">
+<body class="bg-[var(--bg-body)] text-[var(--text-primary)] antialiased">
 <header th:replace="~{fragments/public-head :: navbar}"></header>
 
 <main class="max-w-6xl mx-auto px-4">
-    <section class="relative mt-12 overflow-hidden rounded-3xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-8 md:p-12">
+    <section class="relative mt-12 overflow-hidden rounded-3xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-8 md:p-12">
         <div class="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-600/20 blur-3xl"></div>
         <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl"></div>
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-400">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-strong)] bg-[var(--surface-card-strong)] px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-400">
             <i data-lucide="map-pin" class="h-3.5 w-3.5"></i> Asturias &harr; Paraguay
         </span>
         <h1 class="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight">Seguimiento de tu envío</h1>
-        <p class="mt-2 text-zinc-400 max-w-xl">Introduce tu código MONTEASTUR o escanea el QR de la etiqueta para ver el estado actualizado de tu paquete.</p>
+        <p class="mt-2 text-[var(--text-secondary)] max-w-xl">Introduce tu código MONTEASTUR o escanea el QR de la etiqueta para ver el estado actualizado de tu paquete.</p>
 
         <form method="post" th:action="@{/tracking}" class="mt-8 flex flex-col sm:flex-row gap-3 max-w-2xl">
             <input type="text" name="codigo" th:value="${codigo}" required autocomplete="off"
                    placeholder="Introduce tu código MONTEASTUR"
-                   class="flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-brand-600/40 focus:border-brand-600/40">
+                   class="flex-1 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-brand-600/40 focus:border-brand-600/40">
             <button type="submit"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 transition-all duration-300 ease-in-out hover:scale-[1.01] shadow-glow">
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-[var(--text-primary)] font-semibold px-6 py-3 transition-all duration-300 ease-in-out hover:scale-[1.01] shadow-glow">
                 <i data-lucide="search" class="h-4 w-4"></i> Buscar envío
             </button>
             <button type="button" onclick="abrirEscanner()"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/30 text-zinc-100 font-semibold px-6 py-3 transition-all duration-300 ease-in-out">
+                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)] hover:bg-[var(--surface-card-hover)] hover:border-[var(--accent-color)] text-[var(--text-primary)] font-semibold px-6 py-3 transition-all duration-300 ease-in-out">
                 <i data-lucide="qrcode" class="h-4 w-4"></i> Escanear QR
             </button>
         </form>
@@ -39,33 +39,33 @@
     <section class="mt-12">
         <h2 class="text-xl font-bold tracking-tight">¿Cómo funciona?</h2>
         <div class="mt-4 grid gap-4 md:grid-cols-3">
-            <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-white/30 hover:scale-[1.01]">
+            <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)] hover:scale-[1.01]">
                 <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-600/30 bg-brand-600/10 text-brand-400"><i data-lucide="search" class="h-5 w-5"></i></span>
                 <p class="mt-3 text-xs font-bold uppercase tracking-wide text-brand-400">1. Busca</p>
                 <h3 class="mt-1 font-semibold">Introduce el código</h3>
-                <p class="text-sm text-zinc-400 mt-1">El código MONTEASTUR viene en la etiqueta de tu envío (formato MT-AAAA-0001).</p>
+                <p class="text-sm text-[var(--text-secondary)] mt-1">El código MONTEASTUR viene en la etiqueta de tu envío (formato MT-AAAA-0001).</p>
             </div>
-            <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-white/30 hover:scale-[1.01]">
+            <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)] hover:scale-[1.01]">
                 <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-600/30 bg-brand-600/10 text-brand-400"><i data-lucide="qrcode" class="h-5 w-5"></i></span>
                 <p class="mt-3 text-xs font-bold uppercase tracking-wide text-brand-400">2. Escanea</p>
                 <h3 class="mt-1 font-semibold">Usa la cámara</h3>
-                <p class="text-sm text-zinc-400 mt-1">O escanea el código QR de la etiqueta térmica para abrir el seguimiento al instante.</p>
+                <p class="text-sm text-[var(--text-secondary)] mt-1">O escanea el código QR de la etiqueta térmica para abrir el seguimiento al instante.</p>
             </div>
-            <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-white/30 hover:scale-[1.01]">
+            <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)] hover:scale-[1.01]">
                 <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-600/30 bg-brand-600/10 text-brand-400"><i data-lucide="package-check" class="h-5 w-5"></i></span>
                 <p class="mt-3 text-xs font-bold uppercase tracking-wide text-brand-400">3. Sigue</p>
                 <h3 class="mt-1 font-semibold">Consulta el estado</h3>
-                <p class="text-sm text-zinc-400 mt-1">Revisa la línea de tiempo, los eventos y el comprobante de entrega (POD) si ya fue entregado.</p>
+                <p class="text-sm text-[var(--text-secondary)] mt-1">Revisa la línea de tiempo, los eventos y el comprobante de entrega (POD) si ya fue entregado.</p>
             </div>
         </div>
     </section>
 </main>
 
-<div id="qr-modal" class="hidden fixed inset-0 z-50 bg-[#09090b]/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="rounded-2xl border border-white/15 bg-[#121215] max-w-md w-full p-6 shadow-2xl">
+<div id="qr-modal" class="hidden fixed inset-0 z-50 bg-[var(--surface-header)] backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--bg-surface)] max-w-md w-full p-6 shadow-2xl">
         <div class="flex items-center justify-between">
             <h3 class="font-bold tracking-tight">Escanear código QR</h3>
-            <button type="button" onclick="cerrarEscanner()" class="text-zinc-400 hover:text-zinc-100 font-bold transition-colors">Cerrar</button>
+            <button type="button" onclick="cerrarEscanner()" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-bold transition-colors">Cerrar</button>
         </div>
         <div id="qr-reader" class="mt-4 rounded-xl overflow-hidden"></div>
         <p id="qr-error" class="mt-3 text-sm text-red-400 hidden">No se pudo acceder a la cámara. Inténtalo de nuevo o introduce el código manualmente.</p>
