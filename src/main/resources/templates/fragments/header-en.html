@@ -1,6 +1,16 @@
 <head th:fragment="head(titulo)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="/css/design-system.css">
     <link rel="stylesheet" href="/css/theme-ui.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,6 +43,9 @@
                     <a href="/">ES</a>
                     <a href="/en">EN</a>
                 </div>
+                <button type="button" class="btn-theme-toggle" aria-label="Activar modo claro" title="Activar modo claro">
+                    <i data-lucide="sun" class="luxury-icon luxury-icon-sm"></i>
+                </button>
             </div>
         </div>
         <nav>

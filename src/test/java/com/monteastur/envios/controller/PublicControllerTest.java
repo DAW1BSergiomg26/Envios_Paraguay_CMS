@@ -176,4 +176,12 @@ class PublicControllerTest {
                 .andExpect(content().string(containsString("/css/theme-ui.css")))
                 .andExpect(content().string(containsString("/js/theme-toggle.js")));
     }
+
+    @Test
+    void themeAssets_marketingPage_hasAntiFoucAndToggle() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("setAttribute('data-theme'")))
+                .andExpect(content().string(containsString("btn-theme-toggle")));
+    }
 }

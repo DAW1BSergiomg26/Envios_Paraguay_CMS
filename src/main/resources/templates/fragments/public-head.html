@@ -1,6 +1,16 @@
 <head th:fragment="head(titulo)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme') || 'dark';
+                document.documentElement.setAttribute('data-theme', theme);
+            } catch (e) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="/css/design-system.css">
     <link rel="stylesheet" href="/css/theme-ui.css">
     <title th:text="${titulo} + ' - MONTEASTUR ENVIOS'">MONTEASTUR ENVIOS</title>
@@ -54,6 +64,11 @@
             <a href="/tracking" class="text-brand-400 font-semibold">Seguimiento</a>
             <a href="/reservas" class="text-zinc-400 hover:text-brand-400 transition-colors">Reservas</a>
             <a href="/contacto" class="text-zinc-400 hover:text-brand-400 transition-colors">Contacto</a>
+        </div>
+        <div class="flex items-center gap-3">
+            <button type="button" class="btn-theme-toggle" aria-label="Activar modo claro" title="Activar modo claro">
+                <i data-lucide="sun" class="h-5 w-5"></i>
+            </button>
         </div>
     </nav>
 </header>
