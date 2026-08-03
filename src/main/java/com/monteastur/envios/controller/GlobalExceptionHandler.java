@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
@@ -44,6 +45,19 @@ public class GlobalExceptionHandler {
                 .body(new ErrorDto(Instant.now().toString(), 404, ex.getMessage()));
         }
         return mvcError(request, model, HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoResourceFoundException.class)
+    public Object handleNoResourceFound(NoResourceFoundException ex, HttpServletRequest request, Model model) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("text/html")) {
+            return mvcError(request, model, HttpStatus.NOT_FOUND, "Not Found",
+                "Recurso no encontrado: " + ex.getResourcePath());
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorDto(Instant.now().toString(), 404,
+                "Recurso no encontrado: " + ex.getResourcePath()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -1385,3 +1385,58 @@ tr:hover td, .dash-table tr:hover td {
 .sidebar {
     font-family: 'Plus Jakarta Sans', sans-serif !important;
 }
+
+/* =============================================
+   DARK FORM FOCUS OVERRIDE — Micro-Sprint Pulido
+   Elimina los destellos blancos nativos en el foco
+   de inputs/textareas/selects del ecosistema admin
+   y del login de cliente. Vence a las reglas claras
+   de admin.css, admin-tracking.css y admin-evidencias
+   por igual especificidad (!important) y orden de
+   carga posterior.
+   ============================================= */
+
+input:focus,
+textarea:focus,
+select:focus,
+.form-group input:focus,
+.login-field input:focus,
+.evidencia-input:focus,
+.evidencia-select:focus {
+    background-color: #18181b !important;
+    color: #f4f4f5 !important;
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 2px rgba(212, 118, 42, 0.2) !important;
+}
+
+.legal-editor textarea:focus {
+    background-color: #18181b !important;
+    color: #f4f4f5 !important;
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 3px rgba(212, 118, 42, 0.18) !important;
+}
+
+.card .legal-editor .tracking-admin-input,
+.card .legal-editor .tracking-admin-select,
+.card .legal-editor .tracking-admin-textarea {
+    background-color: #18181b !important;
+    color: #f4f4f5 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.card .legal-editor .tracking-admin-input:focus,
+.card .legal-editor .tracking-admin-select:focus,
+.card .legal-editor .tracking-admin-textarea:focus {
+    background-color: #18181b !important;
+    color: #f4f4f5 !important;
+    border-color: var(--naranja) !important;
+    box-shadow: 0 0 0 2px rgba(212, 118, 42, 0.2) !important;
+}
+
+/* Desplegables nativos: lista desplegada y opciones en dark */
+select,
+select option {
+    background-color: #18181b !important;
+    color: #f4f4f5 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
