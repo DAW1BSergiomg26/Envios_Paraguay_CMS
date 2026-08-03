@@ -1,71 +1,74 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{fragments/public-head :: head('Seguimiento')}"></head>
-<body class="bg-stone-50 text-stone-900">
+<body class="bg-[#09090b] text-zinc-100 antialiased">
 <header th:replace="~{fragments/public-head :: navbar}"></header>
 
 <main class="max-w-6xl mx-auto px-4 py-10">
-    <a href="/tracking" class="text-sm font-medium text-brand-600 hover:underline">&larr; Buscar otro envío</a>
+    <a href="/tracking" class="inline-flex items-center gap-1.5 text-sm font-medium text-brand-400 hover:text-brand-500 transition-colors">
+        <i data-lucide="arrow-left" class="h-4 w-4"></i> Buscar otro envío
+    </a>
 
-    <section class="mt-4 bg-white rounded-2xl border border-stone-200 p-6">
+    <section class="relative mt-4 overflow-hidden rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6">
+        <div class="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-brand-600/15 blur-3xl"></div>
         <div class="flex flex-wrap items-center justify-between gap-4">
             <div>
-                <span class="text-xs font-semibold uppercase tracking-wide text-stone-400">Código de envío</span>
-                <h1 class="mt-1 text-2xl font-extrabold text-brand-600" th:text="${view.codigoUnico}">MT-2026-0001</h1>
+                <span class="text-xs font-semibold uppercase tracking-widest text-zinc-500">Código de envío</span>
+                <h1 class="mt-1 text-2xl font-extrabold tracking-tight text-brand-400" th:text="${view.codigoUnico}">MT-2026-0001</h1>
             </div>
-            <span th:switch="${view.estado}" class="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide">
-                <span th:case="'RECIBIDO'" class="bg-slate-200 text-slate-700 rounded-full px-3 py-1">Recibido</span>
-                <span th:case="'EN_ADUANA_ORIGEN'" class="bg-amber-200 text-amber-800 rounded-full px-3 py-1">Aduana de origen</span>
-                <span th:case="'EN_TRANSITO'" class="bg-sky-200 text-sky-800 rounded-full px-3 py-1">En tránsito</span>
-                <span th:case="'EN_ADUANA_DESTINO'" class="bg-violet-200 text-violet-800 rounded-full px-3 py-1">Aduana de destino</span>
-                <span th:case="'EN_REPARTO'" class="bg-orange-200 text-orange-800 rounded-full px-3 py-1">En reparto</span>
-                <span th:case="'ENTREGADO'" class="bg-emerald-200 text-emerald-800 rounded-full px-3 py-1">Entregado</span>
-                <span th:case="*" class="bg-stone-200 text-stone-700 rounded-full px-3 py-1" th:text="${view.estado}">Estado</span>
+            <span th:switch="${view.estado}" class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-xl">
+                <span th:case="'RECIBIDO'" class="border-indigo-400/30 bg-indigo-400/10 text-indigo-300 rounded-full px-3 py-1">Recibido</span>
+                <span th:case="'EN_ADUANA_ORIGEN'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-3 py-1">Aduana de origen</span>
+                <span th:case="'EN_TRANSITO'" class="border-amber-400/40 bg-amber-400/10 text-amber-300 shadow-glow-amber rounded-full px-3 py-1">En tránsito</span>
+                <span th:case="'EN_ADUANA_DESTINO'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-3 py-1">Aduana de destino</span>
+                <span th:case="'EN_REPARTO'" class="border-sky-400/30 bg-sky-400/10 text-sky-300 rounded-full px-3 py-1">En reparto</span>
+                <span th:case="'ENTREGADO'" class="border-emerald-400/40 bg-emerald-400/10 text-emerald-300 shadow-glow-emerald rounded-full px-3 py-1">Entregado</span>
+                <span th:case="*" class="border-white/15 bg-white/[0.06] text-zinc-300 rounded-full px-3 py-1" th:text="${view.estado}">Estado</span>
             </span>
         </div>
-        <p class="mt-4 text-sm text-stone-500">
+        <p class="mt-4 text-sm text-zinc-500">
             Última actualización:
-            <span class="font-medium text-stone-700" th:text="${#temporals.format(view.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</span>
+            <span class="font-medium text-zinc-300" th:text="${#temporals.format(view.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</span>
         </p>
     </section>
 
     <section class="mt-6 grid gap-6 lg:grid-cols-2">
-        <div class="bg-white rounded-2xl border border-stone-200 p-6">
-            <h2 class="text-lg font-bold">Recorrido</h2>
+        <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-white/30">
+            <h2 class="text-lg font-bold tracking-tight">Recorrido</h2>
             <div class="mt-4 flex items-center gap-3">
-                <span class="flex-1 rounded-xl bg-stone-100 px-4 py-3 text-sm">
-                    <span class="block text-xs uppercase text-stone-400">Origen</span>
-                    <span class="font-semibold" th:text="${view.origen}">Asturias, España</span>
+                <span class="flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm">
+                    <span class="block text-xs uppercase text-zinc-500">Origen</span>
+                    <span class="font-semibold text-zinc-100" th:text="${view.origen}">Asturias, España</span>
                 </span>
-                <span class="text-2xl text-brand-600">→</span>
-                <span class="flex-1 rounded-xl bg-stone-100 px-4 py-3 text-sm">
-                    <span class="block text-xs uppercase text-stone-400">Destino</span>
-                    <span class="font-semibold" th:text="${view.destino}">Asunción, Paraguay</span>
+                <span class="text-2xl text-brand-500"><i data-lucide="arrow-right" class="h-6 w-6"></i></span>
+                <span class="flex-1 rounded-xl border border-white/15 bg-white/[0.04] px-4 py-3 text-sm">
+                    <span class="block text-xs uppercase text-zinc-500">Destino</span>
+                    <span class="font-semibold text-zinc-100" th:text="${view.destino}">Asunción, Paraguay</span>
                 </span>
             </div>
             <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
                 <div>
-                    <span class="block text-xs uppercase text-stone-400">Peso</span>
-                    <span class="font-semibold" th:text="${view.peso}">10 kg</span>
+                    <span class="block text-xs uppercase text-zinc-500">Peso</span>
+                    <span class="font-semibold text-zinc-100" th:text="${view.peso}">10 kg</span>
                 </div>
                 <div>
-                    <span class="block text-xs uppercase text-stone-400">Contenido</span>
-                    <span class="font-semibold" th:text="${view.contenido}">Documentos</span>
+                    <span class="block text-xs uppercase text-zinc-500">Contenido</span>
+                    <span class="font-semibold text-zinc-100" th:text="${view.contenido}">Documentos</span>
                 </div>
             </div>
             <p th:if="${view.observaciones != null and !view.observaciones.isEmpty()}"
-               class="mt-4 rounded-xl bg-brand-50 border border-brand-100 px-4 py-3 text-sm text-stone-700" th:text="${view.observaciones}">Nota del operador</p>
+               class="mt-4 rounded-xl border border-brand-600/30 bg-brand-600/10 px-4 py-3 text-sm text-brand-100" th:text="${view.observaciones}">Nota del operador</p>
         </div>
 
-        <div class="bg-white rounded-2xl border border-stone-200 p-6">
-            <h2 class="text-lg font-bold">Progreso del envío</h2>
+        <div class="rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-white/30">
+            <h2 class="text-lg font-bold tracking-tight">Progreso del envío</h2>
             <ol class="mt-6">
                 <li th:each="paso, iter : ${view.pasos}" class="relative flex gap-4 pb-8 last:pb-0">
-                    <span th:class="'mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ' + (${view.pasoActual >= 0 and iter.index < view.pasoActual} ? 'bg-brand-600 text-white' : (${view.pasoActual == iter.index} ? 'ring-2 ring-brand-600 ring-offset-2 bg-white text-brand-700' : 'bg-stone-200 text-stone-500'))"
+                    <span th:class="'mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ' + (${view.pasoActual >= 0 and iter.index < view.pasoActual} ? 'bg-brand-600 text-white' : (${view.pasoActual == iter.index} ? 'ring-2 ring-brand-500 ring-offset-2 ring-offset-[#09090b] bg-brand-600/20 text-brand-300' : 'bg-white/[0.06] text-zinc-500'))"
                           th:text="${iter.index + 1}">1</span>
                     <div class="flex flex-col">
                         <span th:switch="${paso}"
-                              th:class="'font-semibold ' + (${view.pasoActual == iter.index} ? 'text-brand-700' : 'text-stone-800')">
+                              th:class="'font-semibold ' + (${view.pasoActual == iter.index} ? 'text-brand-400' : 'text-zinc-300')">
                             <span th:case="'RECIBIDO'">Recibido en origen</span>
                             <span th:case="'EN_ADUANA_ORIGEN'">Aduana de origen</span>
                             <span th:case="'EN_TRANSITO'">Tránsito internacional</span>
@@ -74,71 +77,71 @@
                             <span th:case="'ENTREGADO'">Entregado</span>
                             <span th:case="*" th:text="${paso}"></span>
                         </span>
-                        <span th:if="${view.pasoActual == iter.index}" class="text-sm font-medium text-brand-600">Estado actual</span>
+                        <span th:if="${view.pasoActual == iter.index}" class="text-sm font-medium text-brand-500">Estado actual</span>
                     </div>
                 </li>
             </ol>
         </div>
     </section>
 
-    <section class="mt-6 bg-white rounded-2xl border border-stone-200 p-6">
-        <h2 class="text-lg font-bold">Historial del envío</h2>
+    <section class="mt-6 rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-white/30">
+        <h2 class="text-lg font-bold tracking-tight">Historial del envío</h2>
         <ul th:if="${not #lists.isEmpty(view.eventos)}" class="mt-4 space-y-3">
-            <li th:each="ev : ${view.eventos}" class="rounded-xl border border-stone-200 p-4">
+            <li th:each="ev : ${view.eventos}" class="rounded-xl border border-white/15 bg-white/[0.02] p-4 transition-colors hover:border-white/25">
                 <button type="button" onclick="toggleEvento(this)"
                         class="w-full flex items-center justify-between gap-3 text-left">
                     <span class="flex items-center gap-3">
                         <span class="flex h-8 w-8 items-center justify-center rounded-full text-lg"
-                              th:style="'background:' + ${ev.color} + '22'" th:text="${ev.icono}">📦</span>
+                              th:style="'background:' + ${ev.color} + '33'" th:text="${ev.icono}">📦</span>
                         <span>
-                            <span class="font-semibold block" th:text="${ev.titulo}">Título del evento</span>
-                            <span class="text-sm text-stone-500" th:text="${#temporals.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                            <span class="font-semibold block text-zinc-100" th:text="${ev.titulo}">Título del evento</span>
+                            <span class="text-sm text-zinc-500" th:text="${#temporals.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}">Fecha</span>
                         </span>
                     </span>
-                    <span class="text-stone-400">▾</span>
+                    <span class="text-zinc-500"><i data-lucide="chevron-down" class="h-4 w-4"></i></span>
                 </button>
-                <div class="hidden mt-3 text-sm text-stone-600 space-y-1">
-                    <p th:if="${ev.ubicacion != null and !ev.ubicacion.isEmpty()}" class="font-medium" th:text="'Ubicación: ' + ${ev.ubicacion}">Ubicación</p>
+                <div class="hidden mt-3 text-sm text-zinc-400 space-y-1">
+                    <p th:if="${ev.ubicacion != null and !ev.ubicacion.isEmpty()}" class="font-medium text-zinc-300" th:text="'Ubicación: ' + ${ev.ubicacion}">Ubicación</p>
                     <p th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" th:text="${ev.descripcion}">Descripción</p>
                 </div>
             </li>
         </ul>
-        <p th:if="${#lists.isEmpty(view.eventos)}" class="mt-4 text-sm text-stone-500">Aún no hay eventos registrados para este envío.</p>
+        <p th:if="${#lists.isEmpty(view.eventos)}" class="mt-4 text-sm text-zinc-500">Aún no hay eventos registrados para este envío.</p>
     </section>
 
-    <section th:if="${view.entrega != null}" class="mt-6 bg-white rounded-2xl border border-emerald-200 p-6">
-        <h2 class="text-lg font-bold text-emerald-800">Comprobante de entrega (POD)</h2>
+    <section th:if="${view.entrega != null}" class="mt-6 rounded-2xl border border-emerald-400/30 bg-emerald-400/[0.04] backdrop-blur-xl p-6">
+        <h2 class="text-lg font-bold tracking-tight text-emerald-300">Comprobante de entrega (POD)</h2>
         <div class="mt-4 grid gap-6 md:grid-cols-2">
             <div class="space-y-2 text-sm">
-                <p><span class="font-semibold">Receptor:</span> <span th:text="${view.entrega.receptorNombre}">Nombre</span></p>
-                <p><span class="font-semibold">Documento:</span> <span th:text="${view.entrega.receptorDocumento}">Doc</span></p>
-                <p><span class="font-semibold">Fecha de entrega:</span> <span th:text="${#temporals.format(view.entrega.fechaEntrega, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
-                <p th:if="${view.entrega.latitud != null}">
-                    <span class="font-semibold">GPS:</span>
+                <p class="text-zinc-300"><span class="font-semibold text-zinc-100">Receptor:</span> <span th:text="${view.entrega.receptorNombre}">Nombre</span></p>
+                <p class="text-zinc-300"><span class="font-semibold text-zinc-100">Documento:</span> <span th:text="${view.entrega.receptorDocumento}">Doc</span></p>
+                <p class="text-zinc-300"><span class="font-semibold text-zinc-100">Fecha de entrega:</span> <span th:text="${#temporals.format(view.entrega.fechaEntrega, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
+                <p th:if="${view.entrega.latitud != null}" class="text-zinc-300">
+                    <span class="font-semibold text-zinc-100">GPS:</span>
                     <span th:text="${view.entrega.latitud} + ', ' + ${view.entrega.longitud}">lat, lon</span>
                 </p>
-                <p th:if="${view.entrega.notas != null and !view.entrega.notas.isEmpty()}" th:text="${view.entrega.notas}">Notas</p>
+                <p th:if="${view.entrega.notas != null and !view.entrega.notas.isEmpty()}" class="text-zinc-300" th:text="${view.entrega.notas}">Notas</p>
             </div>
             <div class="flex flex-col items-center justify-center">
-                <span class="text-sm font-semibold text-stone-500">Firma del receptor</span>
+                <span class="text-sm font-semibold text-zinc-500">Firma del receptor</span>
                 <img th:src="'data:image/png;base64,' + ${view.entrega.firmaBase64}"
                      alt="Firma del receptor"
-                     class="mt-2 max-h-32 rounded-lg border border-stone-200 bg-white">
+                     class="mt-2 max-h-32 rounded-lg border border-white/15 bg-white/[0.04]">
             </div>
         </div>
     </section>
 
-    <section th:if="${not #lists.isEmpty(view.evidencias)}" class="mt-6 bg-white rounded-2xl border border-stone-200 p-6">
-        <h2 class="text-lg font-bold">Evidencias del envío</h2>
+    <section th:if="${not #lists.isEmpty(view.evidencias)}" class="mt-6 rounded-2xl border border-white/15 bg-white/[0.03] backdrop-blur-xl p-6">
+        <h2 class="text-lg font-bold tracking-tight">Evidencias del envío</h2>
         <div class="mt-4 grid gap-3 sm:grid-cols-2">
-            <div th:each="ev : ${view.evidencias}" class="flex items-center gap-3 rounded-xl border border-stone-200 p-3">
+            <div th:each="ev : ${view.evidencias}" class="flex items-center gap-3 rounded-xl border border-white/15 bg-white/[0.02] p-3 transition-colors hover:border-white/25">
                 <img th:if="${ev.tipo == 'FOTO'}" th:src="${ev.urlArchivo}" th:alt="${ev.titulo}"
                      class="h-14 w-14 rounded-lg object-cover">
-                <span th:if="${ev.tipo != 'FOTO'}" class="flex h-14 w-14 items-center justify-center rounded-lg bg-stone-100 text-2xl">📄</span>
+                <span th:if="${ev.tipo != 'FOTO'}" class="flex h-14 w-14 items-center justify-center rounded-lg bg-white/[0.04] text-2xl">📄</span>
                 <span>
-                    <span class="font-semibold block" th:text="${ev.titulo}">Título</span>
-                    <span class="text-sm text-stone-500 block" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy')}">Fecha</span>
-                    <a th:href="${ev.urlArchivo}" target="_blank" class="text-sm font-medium text-brand-600 hover:underline">Ver</a>
+                    <span class="font-semibold block text-zinc-100" th:text="${ev.titulo}">Título</span>
+                    <span class="text-sm text-zinc-500 block" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy')}">Fecha</span>
+                    <a th:href="${ev.urlArchivo}" target="_blank" class="text-sm font-medium text-brand-400 hover:text-brand-500 hover:underline">Ver</a>
                 </span>
             </div>
         </div>
