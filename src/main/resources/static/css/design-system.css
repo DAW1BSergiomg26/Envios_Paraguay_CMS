@@ -1,6 +1,7 @@
 /* =============================================
    DESIGN SYSTEM TOKENS — Envios Paraguay CMS
-   Dark (Obsidian, default) / Light (Pristine Quartz)
+   Dark (Verde Bosque Asturias + Sol Paraguay, default)
+   / Light (Pristine Quartz)
    Fuente unica de verdad para el theme switcher.
    Cargar SIEMPRE primero en <head>.
    ============================================= */
@@ -28,12 +29,14 @@
 
     /* Bordes y foco */
     --border-subtle: rgba(163, 201, 184, 0.2);
+    --border-green-light: rgba(163, 201, 184, 0.2);
     --border-strong: rgba(163, 201, 184, 0.35);
     --border-orange-focus: rgba(230, 126, 34, 0.6);
 
     /* Acentos y botones (sol cálido Paraguay) */
     --accent-color: #E67E22;
     --accent-paraguay: #E67E22;
+    --accent-paraguay-amber: #F59E0B;
     --accent-color-hover: #D97706;
     --accent-paraguay-hover: #D97706;
     --accent-color-active: #B45309;
@@ -96,10 +99,12 @@
     --text-secondary-green: #64748b;
     --text-muted: #94a3b8;
     --border-subtle: rgba(0, 0, 0, 0.08);
+    --border-green-light: rgba(21, 60, 45, 0.15);
     --border-strong: rgba(0, 0, 0, 0.16);
     --border-orange-focus: rgba(230, 126, 34, 0.45);
     --accent-color: #E67E22;
     --accent-paraguay: #E67E22;
+    --accent-paraguay-amber: #F59E0B;
     --accent-color-hover: #C65F12;
     --accent-paraguay-hover: #C65F12;
     --accent-color-active: #B45309;
