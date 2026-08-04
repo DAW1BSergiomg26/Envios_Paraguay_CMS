@@ -5,41 +5,76 @@
    Cargar SIEMPRE primero en <head>.
    ============================================= */
 
-/* Modo Oscuro (Predeterminado — Obsidian SaaS) */
+/* Modo Oscuro (Predeterminado — Verde Bosque Asturias + Naranja Paraguay) */
 :root,
 :root[data-theme="dark"] {
-    --bg-body: #09090b;
-    --bg-surface: #121215;
-    --bg-card: #18181b;
-    --bg-card-glass: rgba(24, 24, 27, 0.75);
-    --text-primary: #f4f4f5;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
-    --border-subtle: rgba(255, 255, 255, 0.08);
-    --border-strong: rgba(255, 255, 255, 0.16);
-    --accent-color: #d4762a;
-    --accent-color-hover: #e08c3f;
-    --accent-glow: rgba(212, 118, 42, 0.25);
+    /* Fondo principal y superficies (verde bosque Asturias) */
+    --bg-body: #0D2319;
+    --bg-body-asturias: #0D2319;
+    --bg-body-gradient: linear-gradient(180deg, #0B1E16 0%, #123524 50%, #0E291C 100%);
+    --bg-surface: #153C2D;
+    --bg-surface-green: #153C2D;
+    --bg-card: #1B4D3B;
+    --bg-card-green: #1B4D3B;
+    --bg-card-glass: rgba(21, 60, 45, 0.85);
+    --bg-card-glass-strong: rgba(21, 60, 45, 0.92);
+
+    /* Texto */
+    --text-primary: #F4F7F5;
+    --text-primary-light: #F4F7F5;
+    --text-secondary: #A3C9B8;
+    --text-secondary-green: #A3C9B8;
+    --text-muted: #7BA897;
+
+    /* Bordes y foco */
+    --border-subtle: rgba(163, 201, 184, 0.2);
+    --border-strong: rgba(163, 201, 184, 0.35);
+    --border-orange-focus: rgba(230, 126, 34, 0.6);
+
+    /* Acentos y botones (sol cálido Paraguay) */
+    --accent-color: #E67E22;
+    --accent-paraguay: #E67E22;
+    --accent-color-hover: #D97706;
+    --accent-paraguay-hover: #D97706;
+    --accent-color-active: #B45309;
+    --accent-paraguay-active: #B45309;
+    --accent-glow: rgba(230, 126, 34, 0.35);
+    --accent-paraguay-glow: rgba(230, 126, 34, 0.35);
+    --accent-paraguay-glow-strong: rgba(230, 126, 34, 0.55);
     --text-on-accent: #ffffff;
+
+    /* Semáforo */
     --status-success: #4ade80;
     --status-warning: #f0a830;
     --status-danger: #f87171;
     --status-info: #a5b4fc;
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-bg-hover: rgba(255, 255, 255, 0.06);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+
+    /* Glass / superficies translúcidas */
+    --glass-bg: rgba(27, 77, 59, 0.6);
+    --glass-bg-hover: rgba(27, 77, 59, 0.78);
+    --glass-border: rgba(163, 201, 184, 0.22);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
     --glass-blur: 12px;
-    --surface-header: rgba(9, 9, 11, 0.8);
-    --surface-card: rgba(255, 255, 255, 0.03);
-    --surface-card-strong: rgba(255, 255, 255, 0.06);
-    --surface-card-hover: rgba(255, 255, 255, 0.08);
+    --surface-header: rgba(11, 30, 22, 0.85);
+    --surface-card: rgba(27, 77, 59, 0.6);
+    --surface-card-strong: rgba(27, 77, 59, 0.78);
+    --surface-card-hover: rgba(27, 77, 59, 0.88);
+
+    /* Badges */
     --badge-info: #a5b4fc;
     --badge-violet: #c4b5fd;
     --badge-warning: #fcd34d;
     --badge-sky: #7dd3fc;
     --badge-success: #6ee7b7;
     --badge-neutral: #d4d4d8;
+
+    /* Sombras, radios y tipografía */
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.25);
+    --shadow-glow-orange: 0 0 24px rgba(230, 126, 34, 0.35);
+    --radius-card: 16px;
+    --radius-btn: 12px;
+    --radius-badge: 9999px;
+    --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -47,17 +82,31 @@
 /* Modo Claro (Pristine Quartz — Ultra Clean Enterprise) */
 :root[data-theme="light"] {
     --bg-body: #f8fafc;
+    --bg-body-asturias: #f8fafc;
+    --bg-body-gradient: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
     --bg-surface: #ffffff;
+    --bg-surface-green: #ffffff;
     --bg-card: #ffffff;
+    --bg-card-green: #ffffff;
     --bg-card-glass: rgba(255, 255, 255, 0.85);
+    --bg-card-glass-strong: rgba(255, 255, 255, 0.92);
     --text-primary: #0f172a;
+    --text-primary-light: #0f172a;
     --text-secondary: #64748b;
+    --text-secondary-green: #64748b;
     --text-muted: #94a3b8;
     --border-subtle: rgba(0, 0, 0, 0.08);
     --border-strong: rgba(0, 0, 0, 0.16);
-    --accent-color: #d4762a;
-    --accent-color-hover: #b8661f;
-    --accent-glow: rgba(212, 118, 42, 0.15);
+    --border-orange-focus: rgba(230, 126, 34, 0.45);
+    --accent-color: #E67E22;
+    --accent-paraguay: #E67E22;
+    --accent-color-hover: #C65F12;
+    --accent-paraguay-hover: #C65F12;
+    --accent-color-active: #B45309;
+    --accent-paraguay-active: #B45309;
+    --accent-glow: rgba(230, 126, 34, 0.18);
+    --accent-paraguay-glow: rgba(230, 126, 34, 0.18);
+    --accent-paraguay-glow-strong: rgba(230, 126, 34, 0.3);
     --text-on-accent: #ffffff;
     --status-success: #16a34a;
     --status-warning: #d97706;
@@ -78,8 +127,22 @@
     --badge-sky: #0284c7;
     --badge-success: #059669;
     --badge-neutral: #64748b;
+    --shadow-card: 0 8px 32px rgba(15, 23, 42, 0.08);
+    --shadow-glow-orange: 0 0 24px rgba(230, 126, 34, 0.18);
+    --radius-card: 16px;
+    --radius-btn: 12px;
+    --radius-badge: 9999px;
+    --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fondo base de la página: gradiente verde bosque (Asturias) */
+body {
+    background: var(--bg-body-gradient) !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-family-base) !important;
+    min-height: 100vh;
 }
 
 /* Accesibilidad: respetar prefers-reduced-motion */

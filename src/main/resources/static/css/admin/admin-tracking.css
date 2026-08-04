@@ -55,7 +55,7 @@
 }
 
 .timeline-mensaje .timeline-icon {
-    background: rgba(212,118,42,0.08);
+    background: rgba(230,126,34,0.08);
 }
 
 .timeline-content {
@@ -160,7 +160,7 @@
 .legal-editor textarea:focus {
     outline: none;
     border-color: var(--naranja);
-    box-shadow: 0 0 0 4px rgba(212,118,42,0.10);
+    box-shadow: 0 0 0 4px rgba(230,126,34,0.10);
     background: white;
 }
 
@@ -189,29 +189,29 @@
 
 /* Reuse public estado colors but ensure admin compat */
 .estado-RECIBIDO { background: linear-gradient(135deg, rgba(63,99,56,0.12), rgba(63,99,56,0.06)); color: #3f6338; box-shadow: 0 2px 12px rgba(63,99,56,0.10); }
-.estado-EN_ADUANA_ORIGEN { background: linear-gradient(135deg, rgba(212,118,42,0.14), rgba(212,118,42,0.06)); color: #b8651f; box-shadow: 0 2px 12px rgba(212,118,42,0.10); }
+.estado-EN_ADUANA_ORIGEN { background: linear-gradient(135deg, rgba(230,126,34,0.14), rgba(230,126,34,0.06)); color: #B45309; box-shadow: 0 2px 12px rgba(230,126,34,0.10); }
 .estado-EN_TRANSITO { background: linear-gradient(135deg, rgba(33,150,243,0.14), rgba(33,150,243,0.06)); color: #1976d2; box-shadow: 0 2px 12px rgba(33,150,243,0.10); }
-.estado-EN_ADUANA_DESTINO { background: linear-gradient(135deg, rgba(212,118,42,0.14), rgba(212,118,42,0.06)); color: #b8651f; box-shadow: 0 2px 12px rgba(212,118,42,0.10); }
+.estado-EN_ADUANA_DESTINO { background: linear-gradient(135deg, rgba(230,126,34,0.14), rgba(230,126,34,0.06)); color: #B45309; box-shadow: 0 2px 12px rgba(230,126,34,0.10); }
 .estado-EN_REPARTO { background: linear-gradient(135deg, rgba(156,39,176,0.14), rgba(156,39,176,0.06)); color: #7b1fa2; box-shadow: 0 2px 12px rgba(156,39,176,0.10); }
 .estado-ENTREGADO { background: linear-gradient(135deg, rgba(39,174,96,0.14), rgba(39,174,96,0.06)); color: #1e8449; box-shadow: 0 2px 12px rgba(39,174,96,0.10); }
 
 .estado-RECIBIDO:hover { box-shadow: 0 4px 20px rgba(63,99,56,0.18); }
-.estado-EN_ADUANA_ORIGEN:hover { box-shadow: 0 4px 20px rgba(212,118,42,0.18); }
+.estado-EN_ADUANA_ORIGEN:hover { box-shadow: 0 4px 20px rgba(230,126,34,0.18); }
 .estado-EN_TRANSITO:hover { box-shadow: 0 4px 20px rgba(33,150,243,0.18); }
-.estado-EN_ADUANA_DESTINO:hover { box-shadow: 0 4px 20px rgba(212,118,42,0.18); }
+.estado-EN_ADUANA_DESTINO:hover { box-shadow: 0 4px 20px rgba(230,126,34,0.18); }
 .estado-EN_REPARTO:hover { box-shadow: 0 4px 20px rgba(156,39,176,0.18); }
 .estado-ENTREGADO:hover { box-shadow: 0 4px 20px rgba(39,174,96,0.18); }
 
 /* ===== TRACKING FORM PREMIUM (scoped override for .card context) ===== */
-.card .legal-editor label { color: #d4762a !important; font-weight: 700 !important; }
+.card .legal-editor label { color: #E67E22 !important; font-weight: 700 !important; }
 .card .legal-editor .tracking-admin-input,
 .card .legal-editor .tracking-admin-select,
-.card .legal-editor .tracking-admin-textarea { background: rgba(255,255,255,0.85) !important; color: #1f2a1f !important; border: 1px solid rgba(212,118,42,0.45) !important; font-size: 14px !important; }
+.card .legal-editor .tracking-admin-textarea { background: rgba(255,255,255,0.85) !important; color: #1f2a1f !important; border: 1px solid rgba(230,126,34,0.45) !important; font-size: 14px !important; }
 .card .legal-editor .tracking-admin-input:focus,
 .card .legal-editor .tracking-admin-select:focus,
-.card .legal-editor .tracking-admin-textarea:focus { border-color: #d4762a !important; box-shadow: 0 0 0 2px rgba(212,118,42,0.25) !important; background: #ffffff !important; outline: none !important; }
-.card .legal-editor .tracking-form-actions a { color: #d4762a !important; text-decoration: none !important; font-weight: 600 !important; font-size: 14px !important; transition: color 0.3s ease !important; }
-.card .legal-editor .tracking-form-actions a:hover { color: #e8914a !important; text-decoration: underline !important; }
+.card .legal-editor .tracking-admin-textarea:focus { border-color: #E67E22 !important; box-shadow: 0 0 0 2px rgba(230,126,34,0.25) !important; background: #ffffff !important; outline: none !important; }
+.card .legal-editor .tracking-form-actions a { color: #E67E22 !important; text-decoration: none !important; font-weight: 600 !important; font-size: 14px !important; transition: color 0.3s ease !important; }
+.card .legal-editor .tracking-form-actions a:hover { color: #F09A54 !important; text-decoration: underline !important; }
 
 /* EVENTO TIMELINE */
 .evento-section, .evento-timeline-public {

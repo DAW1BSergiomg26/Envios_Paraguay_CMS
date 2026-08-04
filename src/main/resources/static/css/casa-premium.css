@@ -371,3 +371,12 @@
         text-align: center;
     }
 }
+
+/* =============================================
+   OVERLAP NAVBAR — La Casa (header sticky)
+   El contenedor principal separa el contenido
+   de la barra de navegación superior.
+   ============================================= */
+.casa-page-main {
+    padding-top: 100px;
+}

@@ -39,7 +39,7 @@
                     <span class="toast-icon"><i data-lucide="alert-circle" class="luxury-icon"></i></span>
                     <span th:text="${error}">Error</span>
                 </div>
-                <h3 class="luxury-heading" style="color: #d4762a; margin-bottom: 15px; font-size: 18px;"><i data-lucide="upload" class="luxury-icon luxury-icon-sm"></i> Subir nueva imagen</h3>
+                <h3 class="luxury-heading" style="color: var(--accent-color); margin-bottom: 15px; font-size: 18px;"><i data-lucide="upload" class="luxury-icon luxury-icon-sm"></i> Subir nueva imagen</h3>
                 <form action="#" th:action="@{/admin/imagenes}" method="post" enctype="multipart/form-data">
                     <div style="margin-bottom: 14px;">
                         <label for="titulo" style="display: block; font-weight: 600; margin-bottom: 5px; color: #333; font-size: 14px;">T&iacute;tulo *</label>
@@ -75,7 +75,7 @@
                     <button type="submit" class="btn-luxury"><i data-lucide="upload" class="luxury-icon luxury-icon-sm"></i> Subir imagen</button>
                 </form>
                 <hr style="margin: 28px 0; border: none; border-top: 1px solid rgba(0,0,0,0.06);">
-                <h3 class="luxury-heading" style="color: #d4762a; margin-bottom: 15px; font-size: 18px;"><i data-lucide="image" class="luxury-icon luxury-icon-sm"></i> Im&aacute;genes subidas</h3>
+                <h3 class="luxury-heading" style="color: var(--accent-color); margin-bottom: 15px; font-size: 18px;"><i data-lucide="image" class="luxury-icon luxury-icon-sm"></i> Im&aacute;genes subidas</h3>
                 <p th:if="${imagenes == null or imagenes.isEmpty()}" class="vacio">No hay im&aacute;genes registradas.</p>
 
                 <div class="grid-fotos" th:if="${imagenes != null and !imagenes.isEmpty()}" id="galeriaGrid">

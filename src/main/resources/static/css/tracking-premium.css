@@ -10,7 +10,7 @@
     padding: 46px 36px 30px;
     border-radius: 28px;
     background:
-        radial-gradient(circle at top left, rgba(212, 118, 42, 0.14), transparent 34%),
+        radial-gradient(circle at top left, rgba(230, 126, 34, 0.14), transparent 34%),
         radial-gradient(circle at bottom right, rgba(63, 99, 56, 0.14), transparent 38%),
         rgba(255, 255, 255, 0.45);
     border: 1px solid rgba(63, 99, 56, 0.10);
@@ -23,7 +23,7 @@
     inset: auto 36px 0;
     height: 4px;
     border-radius: 999px;
-    background: linear-gradient(90deg, #3f6338, #d4762a, #c1121f, #1d4ed8);
+    background: linear-gradient(90deg, #3f6338, #E67E22, #c1121f, #1d4ed8);
     opacity: 0.75;
 }
 
@@ -99,20 +99,20 @@
     left: 0;
     right: 0;
     height: 4px;
-    background: linear-gradient(90deg, #3f6338, #d4762a);
+    background: linear-gradient(90deg, #3f6338, #E67E22);
     opacity: 0.85;
 }
 
 .tracking-help-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(212, 118, 42, 0.28);
+    border-color: rgba(230, 126, 34, 0.28);
     box-shadow: 0 22px 48px rgba(45, 74, 40, 0.14);
 }
 
 .tracking-help-main {
     background:
         linear-gradient(135deg, rgba(63, 99, 56, 0.95), rgba(45, 74, 40, 0.95)),
-        radial-gradient(circle at top right, rgba(212, 118, 42, 0.30), transparent 40%);
+        radial-gradient(circle at top right, rgba(230, 126, 34, 0.30), transparent 40%);
     color: white;
 }
 
@@ -142,7 +142,7 @@
     height: 54px;
     margin-bottom: 16px;
     border-radius: 18px;
-    background: rgba(212, 118, 42, 0.12);
+    background: rgba(230, 126, 34, 0.12);
     font-size: 27px;
 }
 
@@ -205,7 +205,7 @@
 .tracking-result-premium {
     border-radius: 28px;
     background:
-        radial-gradient(circle at top right, rgba(212, 118, 42, 0.12), transparent 36%),
+        radial-gradient(circle at top right, rgba(230, 126, 34, 0.12), transparent 36%),
         rgba(255, 255, 255, 0.78);
     border: 1px solid rgba(63, 99, 56, 0.10);
     box-shadow: 0 20px 60px rgba(45, 74, 40, 0.12);
@@ -261,9 +261,9 @@
     padding: 30px;
     border-radius: 24px;
     background:
-        linear-gradient(135deg, rgba(212, 118, 42, 0.12), rgba(63, 99, 56, 0.08)),
+        linear-gradient(135deg, rgba(230, 126, 34, 0.12), rgba(63, 99, 56, 0.08)),
         #fffaf4;
-    border: 1px solid rgba(212, 118, 42, 0.18);
+    border: 1px solid rgba(230, 126, 34, 0.18);
     text-align: center;
 }
 

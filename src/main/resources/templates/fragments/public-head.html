@@ -24,16 +24,16 @@
                 extend: {
                     colors: {
                         brand: {
-                            DEFAULT: '#d4762a',
-                            50: '#fdf3ea', 100: '#fbe5d1', 400: '#e6a26a',
-                            500: '#e08c3f', 600: '#b9631f', 700: '#9a4f1a'
+                            DEFAULT: '#E67E22',
+                            50: '#fdf3e7', 100: '#fbe5cd', 400: '#ef9f5f',
+                            500: '#D97706', 600: '#B45309', 700: '#92400e'
                         }
                     },
                     fontFamily: {
                         sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif']
                     },
                     boxShadow: {
-                        glow: '0 0 40px rgba(212,118,42,0.15)',
+                        glow: '0 0 40px rgba(230,126,34,0.15)',
                         'glow-amber': '0 0 16px rgba(251,191,36,0.2)',
                         'glow-emerald': '0 0 18px rgba(52,211,153,0.35)'
                     }
@@ -53,7 +53,7 @@
     <script src="/js/theme-toggle.js" defer></script>
 </head>
 
-<header th:fragment="navbar" class="sticky top-0 z-40 bg-[#09090b]/80 backdrop-blur-xl border-b border-white/10">
+<header th:fragment="navbar" class="sticky top-0 z-40 bg-[var(--surface-header)] backdrop-blur-xl border-b border-white/10">
     <nav class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
         <a href="/" class="text-xl font-extrabold tracking-tight">
             <span class="text-brand-500">MONTEASTUR</span> <span class="text-zinc-100">ENVIOS</span>
@@ -73,7 +73,7 @@
     </nav>
 </header>
 
-<footer th:fragment="footer" class="bg-[#121215] text-zinc-400 mt-16 border-t border-white/10">
+<footer th:fragment="footer" class="bg-[var(--bg-surface)] text-zinc-400 mt-16 border-t border-white/10">
     <div class="max-w-6xl mx-auto px-4 py-10 grid gap-6 md:grid-cols-3">
         <div>
             <p class="font-bold text-zinc-100">MONTEASTUR ENVIOS</p>

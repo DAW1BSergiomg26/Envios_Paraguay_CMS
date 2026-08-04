@@ -15,7 +15,7 @@
 }
 .evidencia-input:focus, .evidencia-select:focus {
     border-color: var(--naranja) !important;
-    box-shadow: 0 0 0 4px rgba(212,118,42,0.15) !important;
+    box-shadow: 0 0 0 4px rgba(230,126,34,0.15) !important;
     background: rgba(255,255,255,0.1) !important;
 }
 .btn-evidencia-upload {
@@ -109,7 +109,7 @@
 }
 .upload-section:hover {
     border-color: var(--naranja) !important;
-    background: rgba(212,118,42,0.05) !important;
+    background: rgba(230,126,34,0.05) !important;
 }
 .foto-item {
     background: rgba(255,255,255,0.03) !important;
@@ -117,7 +117,7 @@
 }
 .foto-item.selected {
     border-color: var(--naranja) !important;
-    box-shadow: 0 0 0 2px rgba(212,118,42,0.25), 0 12px 32px rgba(0,0,0,0.14) !important;
+    box-shadow: 0 0 0 2px rgba(230,126,34,0.25), 0 12px 32px rgba(0,0,0,0.14) !important;
 }
 .foto-item span {
     background: rgba(0,0,0,0.6) !important;
@@ -290,7 +290,7 @@
 }
 .foto-item.selected {
     border-color: var(--naranja);
-    box-shadow: 0 0 0 2px rgba(212,118,42,0.25), 0 12px 32px rgba(0,0,0,0.14);
+    box-shadow: 0 0 0 2px rgba(230,126,34,0.25), 0 12px 32px rgba(0,0,0,0.14);
 }
 
 /* ===== PREVIEW PANEL (Full Layout) ===== */
@@ -417,7 +417,7 @@
 .evidencia-card { background: #16162a; border: 1px solid #2a2a4e; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; }
 .evidencia-controls { padding: 8px; display: flex; gap: 8px; justify-content: center; }
 .badge-visible { font-size: 10px; background: rgba(76, 175, 130, 0.2); color: #4caf82; padding: 2px 8px; border-radius: 10px; }
-.badge-oculta { font-size: 10px; background: rgba(212, 118, 42, 0.2); color: #d4762a; padding: 2px 8px; border-radius: 10px; }
+.badge-oculta { font-size: 10px; background: rgba(230, 126, 34, 0.2); color: #E67E22; padding: 2px 8px; border-radius: 10px; }
 .btn-toggle-evidencia { font-size: 11px; padding: 4px 8px; border-radius: 6px; border: 1px solid #2a2a4e; background: #1e1e32; color: #fff; cursor: pointer; transition: 0.3s; }
 .btn-toggle-evidencia:hover { background: #2a2a4e; }
 .evidencia-preview { height: 120px; background: #0e0e1a; display: flex; align-items: center; justify-content: center; overflow: hidden; }

@@ -34,7 +34,7 @@
     --texto-descriptivo: var(--text-primary);
 
     /* Borde del punto de timeline (fondo dark) */
-    --blanco: #09090b;
+    --blanco: var(--bg-body);
 }
 
 /* Theme switcher: modo claro */

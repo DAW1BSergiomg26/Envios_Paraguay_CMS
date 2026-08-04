@@ -26,7 +26,7 @@
 
 <div class="main-content">
     <div class="card glass-card">
-        <h1 class="luxury-heading-lg" style="color: #d4762a;">Listado de Env&iacute;os</h1>
+        <h1 class="luxury-heading-lg" style="color: var(--accent-color);">Listado de Env&iacute;os</h1>
         <p th:if="${#lists.size(reservas) == 0}" class="vacio" style="color: #3f6338; font-weight: 600;">No hay env&iacute;os registrados.</p>
         <div class="table-wrap" th:if="${#lists.size(reservas) > 0}">
             <table>
