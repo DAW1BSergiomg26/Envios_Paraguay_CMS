@@ -159,7 +159,7 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `03d5c34` (`feat(ui): rebrand a verde bosque asturias + naranja paraguay sin negros planos`). Pendiente de push a `origin/main`.
+- **HEAD:** `7bc66a4` (`docs(handoff): registrar theme switcher, paginas admin imports/documentos y rebrand verde+naranja`). **Sincronizado con `origin/main`** (push completado: `fe14e4f..7bc66a4`, 16 commits).
 - **Bloque 16 (Theme Switcher + Pulido Visual + Rebrand):** spec `010749b`, plan `9135ce2`, 13 commits de implementación `9135ce2..1318e47` y rebrand `03d5c34`. Suite en verde (**233 tests, BUILD SUCCESS** en contenedor Docker) y smoke en `:8081` con health UP y assets del rebrand servidos.
 - **Migraciones Flyway aplicadas:** V1–V8 (V8 crea `entregas_evidencia` con `envio_id UNIQUE`, FK `ON DELETE CASCADE`, firma PNG `LONGTEXT` y coordenadas `DECIMAL(10,8)`/`DECIMAL(11,8)`).
 - **Suite completa:** **233 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP`.
