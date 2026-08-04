@@ -5,7 +5,7 @@ Guía de trabajo para agentes de IA y desarrolladores en este repositorio. Estab
 ## 🌐 Contexto del Proyecto
 
 - **Stack tecnológico:** Spring Boot 3.3.5 + Thymeleaf + Spring Data JPA + Hibernate + MySQL 8 + Bootstrap 5.
-- **Versión de Java:** **Java 17** (verificado en `pom.xml`; se compila con `maven:3.9-eclipse-temurin-17`). Inyección de dependencias por constructor, cero `@Autowired` en campos.
+- **Versión de Java:** **Java 25** (verificado en `pom.xml`; se compila con `maven:3.9-eclipse-temurin-25`). Inyección de dependencias por constructor, cero `@Autowired` en campos.
 - **Color corporativo / identidad:** `#d4762a`.
 - **Arquitectura de eventos y concurrencia:**
   - Despacho de eventos de dominio transaccionales (`@TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)`).
@@ -48,7 +48,7 @@ Guía de trabajo para agentes de IA y desarrolladores en este repositorio. Estab
   docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
     -e SPRING_DATASOURCE_URL="jdbc:mysql://db:3306/envios_paraguay_cms_test?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" `
     -e DB_USERNAME=root -e DB_PASSWORD=root -e SPRING_DATA_REDIS_HOST=redis `
-    -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-17 mvn clean test
+    -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-25 mvn clean test
   ```
 
 ## 📌 Estado y Flujo de Trabajo
