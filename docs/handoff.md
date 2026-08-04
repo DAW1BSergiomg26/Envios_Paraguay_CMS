@@ -140,6 +140,8 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 
   Debe devolver `syntax is ok` y `test is successful`.
 
+- **Arranque 1-Click (recomendado en Windows):** doble clic en `start-app.bat` (invoca `start-app.ps1` con `-ExecutionPolicy Bypass`). Levanta la infraestructura Docker, espera a `/actuator/health` (hasta 180 s) y abre pestañas con la landing, el login y Mailpit. Lee `PORT`/`MAILPIT_UI_PORT`/`ADMIN_*` de `.env` (fallbacks `8080`/`8025`/`admin`). Alternativas: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\start-app.ps1` o `pwsh -File ./start-app.ps1 -NoBrowser`.
+
 - **Levantar el stack completo:**
 
   ```powershell
@@ -159,8 +161,9 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `7bc66a4` (`docs(handoff): registrar theme switcher, paginas admin imports/documentos y rebrand verde+naranja`). **Sincronizado con `origin/main`** (push completado: `fe14e4f..7bc66a4`, 16 commits).
-- **Bloque 16 (Theme Switcher + Pulido Visual + Rebrand):** spec `010749b`, plan `9135ce2`, 13 commits de implementación `9135ce2..1318e47` y rebrand `03d5c34`. Suite en verde (**233 tests, BUILD SUCCESS** en contenedor Docker) y smoke en `:8081` con health UP y assets del rebrand servidos.
+- **HEAD:** `76e1802` (`feat(ops): arranque 1-click docker (start-app.ps1 + start-app.bat)`) + commit de handoff. **Sincronizado con `origin/main`** (push completado: `fe14e4f..19fcdc0`; pendiente de push: `76e1802` y el commit de este handoff).
+- **Bloque 16 (Theme Switcher + Pulido Visual + Rebrand):** spec `010749b`, plan `9135ce2`, 13 commits de implementación `9135ce2..1318e47` y rebrand `03d5c34`. Suite en verde (**233 tests, BUILD SUCCESS** en contenedor Docker) y smoke en `:8081` con health UP y assets del rebrand servidos (contenedor smoke eliminado tras validar el stack compose en `:8080`).
+- **Ops (arranque 1-Click):** commit `76e1802` añade `start-app.ps1` (Docker: daemon → `docker compose up -d` → espera health → pestañas; lee `.env`) y `start-app.bat`. Stack completa validada en local: 8 contenedores healthy, `/actuator/health` UP en `http://localhost:8080`, endpoints `/`, `/login`, `/casa`, Mailpit `:8025` y Nginx `:8090` → 200.
 - **Migraciones Flyway aplicadas:** V1–V8 (V8 crea `entregas_evidencia` con `envio_id UNIQUE`, FK `ON DELETE CASCADE`, firma PNG `LONGTEXT` y coordenadas `DECIMAL(10,8)`/`DECIMAL(11,8)`).
 - **Suite completa:** **233 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP`.
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
