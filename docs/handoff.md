@@ -102,6 +102,14 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - Suite completa en contenedor Maven Linux: **BUILD SUCCESS, 217 tests, 0 fallos**.
     - **Validado en GitHub Actions (cierre):** mismo run `30769845155` de CI/CD (ver Bloque 14); el pipeline completo pasó en la nube sobre el estado final de `main` con el Bloque 15 incluido.
 
+12. **Theme Switcher Dark/Light + Pulido Visual + Páginas Admin Imports/Documentos** (completado, 2026-08-03):
+    - Spec de diseño: commit `010749b` (`docs/superpowers/specs/2026-08-03-theme-switcher-pulido-visual-spec.md`); plan de implementación: commit `9135ce2` (`docs/superpowers/plans/2026-08-03-theme-switcher-pulido-visual.md`).
+    - `design-system.css` con tokens `:root[data-theme="dark"]` (por defecto) y `[data-theme="light"]` (Pristine Quartz), `theme-toggle.js` (toggle localStorage + `prefers-color-scheme` inicial + anti-FOUC inline en los `<head>`), `theme-ui.css`; vínculo en heads públicos y admin (12 templates). `prefers-reduced-motion` respetado.
+    - `luxury-core.css`/`style.css`/`admin.css` re-mapeados a los tokens del design-system (glass, superficies, texto sobre acento con `--text-on-accent`, glow) y páginas admin nuevas `imports` y `documentos` con carga CSV asíncrona (polling) y etiquetas/manifiestos PDF: commits `a62fb13..1318e47` (13 commits).
+    - **Rebrand aprobado por el usuario (decisión "Rebrand completo verde+naranja")**: sustituye la identidad obsidiana `#09090b` + `#d4762a` por **verde bosque Asturias `#0D2319` + naranja Paraguay `#E67E22`**, sin negros planos en ningún tema. Tokens dark nuevos (`--bg-body-gradient` `linear-gradient(180deg,#0B1E16,#123524,#0E291C)`, `--bg-surface:#153C2D`, `--bg-card:#1B4D3B`, `--bg-card-glass:rgba(21,60,45,.85)`, texto `#F4F7F5/#A3C9B8/#7BA897`, bordes `rgba(163,201,184,.2/.35)`, `--shadow-card`, `--shadow-glow-orange`, radios y fuente `Plus Jakarta Sans`); `body { background: var(--bg-body-gradient) !important; ... }`. Light: acento `#E67E22`/hover `#C65F12`. Barrido de hardcodes en `luxury-core`, `style`, `admin.css`, `admin-theme`, `hero/tracking/operaciones/casa/contacto/reservas-premium`, `admin-{tracking,sidebar,login,evidencias,client-panel}`, `public-head.html` (paleta Tailwind brand + navbar/footer con `var(--surface-header)`/`var(--bg-surface)`), headings inline CMS → `var(--accent-color)`: commit `03d5c34`.
+    - **Gate `/casa` (brief):** `<main class="casa-page-main">` con `padding-top:100px` en `lacasa.html` y `en/lacasa.html` (regla en `casa-premium.css`) para no quedar tapado por la cabecera fija.
+    - Verificación: greps de identidad vieja en CSS/plantillas **0 restos**; suite completa **233 tests, 0 fallos, BUILD SUCCESS** en contenedor Docker (MySQL/Redis); smoke en `http://127.0.0.1:8081` (contenedor `monteastur-smoke-ui` recreado) con `/actuator/health` → **UP** (db, redis 7.4.10, mail/mailpit, ping, liveness/readiness) y rutas `/`, `/casa` (con `casa-page-main`), `/login` (con `theme-toggle.js` + anti-FOUC), `/tracking` → 200; `/admin/*` → 401 sin login.
+
 ---
 
 ## 🚀 Guía de Arranque Rápido para Desarrolladores
@@ -151,10 +159,10 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ## 📌 Estado Git Actual
 
 - **Rama:** `main` (estable).
-- **HEAD:** `9c57351` (`docs(plan): mark all Bloque 15 tasks as completed`). **Sincronizado con `origin/main`** (push completado: `982d36b..9c57351`). Working tree limpio; sin contenedores huérfanos locales (eliminados 6 exited de otros proyectos; stack `monteastur-*` intacta y sana, compose project `envios_paraguay_cms`).
-- **CI/CD validado en la nube:** run `30769845155` (workflow `CI/CD Enterprise Pipeline - Envios Paraguay CMS`) → **success** en `Test suite (MySQL 8 + Redis 7)` (217 tests, 0 fallos) y `Docker image build + smoke test` (`/actuator/health` → `UP`, HTTP 200 en el intento 4).
+- **HEAD:** `03d5c34` (`feat(ui): rebrand a verde bosque asturias + naranja paraguay sin negros planos`). Pendiente de push a `origin/main`.
+- **Bloque 16 (Theme Switcher + Pulido Visual + Rebrand):** spec `010749b`, plan `9135ce2`, 13 commits de implementación `9135ce2..1318e47` y rebrand `03d5c34`. Suite en verde (**233 tests, BUILD SUCCESS** en contenedor Docker) y smoke en `:8081` con health UP y assets del rebrand servidos.
 - **Migraciones Flyway aplicadas:** V1–V8 (V8 crea `entregas_evidencia` con `envio_id UNIQUE`, FK `ON DELETE CASCADE`, firma PNG `LONGTEXT` y coordenadas `DECIMAL(10,8)`/`DECIMAL(11,8)`).
-- **Suite completa:** **217 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis y en GitHub Actions). Smoke test de la imagen en frío: `/actuator/health` → `UP`.
+- **Suite completa:** **233 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP`.
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
