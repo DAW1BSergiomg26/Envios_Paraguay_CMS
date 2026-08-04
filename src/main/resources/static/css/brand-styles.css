@@ -1,0 +1,46 @@
+/* src/main/resources/static/css/brand-styles.css */
+
+:root {
+  --monte-amarillo: #E67E22; /* Amarillo anaranjado corporativo elegante */
+  --en-rojo: #C8102E;       /* Rojo vivo institucional (Bandera de Paraguay) */
+  --vi-blanco: #FFFFFF;      /* Blanco puro brillante (Bandera de Paraguay) */
+  --os-azul: #0047AB;        /* Azul vivo institucional (Bandera de Paraguay) */
+  --bg-dark: #0D2319;        /* Fondo corporativo oscuro */
+}
+
+/* Estilo unificado para el Logotipo Tricolor MONTEASTUR ENVIOS */
+.brand-logo {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.4rem;
+}
+
+.brand-monteastur {
+  color: var(--monte-amarillo) !important;
+}
+
+.brand-envios-en {
+  color: var(--en-rojo) !important;
+}
+
+.brand-envios-vi {
+  color: var(--vi-blanco) !important;
+}
+
+.brand-envios-os {
+  color: var(--os-azul) !important;
+}
+
+/* Eliminación absoluta de textos grises / opacos para garantizar contraste nivel DIOS */
+body, p, span, h1, h2, h3, h4, h5, h6, th, td, label {
+  color: #F8F9FA; /* Blanco marfil de alta legibilidad */
+}
+
+.text-muted, .text-secondary, small {
+  color: #D1D5DB !important; /* Gris claro muy legible, nunca tenue */
+}
