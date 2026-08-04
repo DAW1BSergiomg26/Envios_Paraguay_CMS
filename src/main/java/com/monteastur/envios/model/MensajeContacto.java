@@ -27,6 +27,9 @@ public class MensajeContacto {
     @Column(name = "fecha_envio", nullable = false)
     private LocalDateTime fechaEnvio;
 
+    @Column(name = "leido", nullable = false)
+    private boolean leido = false;
+
     public MensajeContacto() {}
 
     public MensajeContacto(String nombre, String email, String telefono, String mensaje) {
@@ -49,4 +52,6 @@ public class MensajeContacto {
     public void setMensaje(String mensaje) { this.mensaje = mensaje; }
     public LocalDateTime getFechaEnvio() { return fechaEnvio; }
     public void setFechaEnvio(LocalDateTime fechaEnvio) { this.fechaEnvio = fechaEnvio; }
+    public boolean isLeido() { return leido; }
+    public void setLeido(boolean leido) { this.leido = leido; }
 }

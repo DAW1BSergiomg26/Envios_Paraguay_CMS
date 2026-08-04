@@ -6,6 +6,7 @@ import com.monteastur.envios.model.BatchImport;
 import com.monteastur.envios.model.BatchImportEstado;
 import com.monteastur.envios.model.Cliente;
 import com.monteastur.envios.model.EnvioTracking;
+import com.monteastur.envios.model.MensajeContacto;
 import com.monteastur.envios.repository.ClienteRepository;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.repository.ImagenRepository;
@@ -85,5 +86,17 @@ class AdminControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("cms/documentos"))
                 .andExpect(model().attributeExists("envios", "lotes", "emisiones"));
+    }
+
+    @Test
+    void mensajesRecibidos_returnsViewWithMensajes() throws Exception {
+        MensajeContacto mensaje = new MensajeContacto("Ana", "ana@example.com", "123456", "Hola");
+        mensaje.setFechaEnvio(java.time.LocalDateTime.of(2026, 5, 15, 12, 0));
+        when(mensajeRepo.findAllByOrderByFechaEnvioDesc()).thenReturn(List.of(mensaje));
+
+        mockMvc.perform(get("/admin/mensajesrecibidos").with(user("admin").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("cms/contactos"))
+                .andExpect(model().attributeExists("mensajes"));
     }
 }
