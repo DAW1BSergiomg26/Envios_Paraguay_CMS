@@ -66,16 +66,18 @@ class AdminThemeAssetsTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("data-theme")))
                 .andExpect(content().string(containsString("/css/design-system.css")))
-                .andExpect(content().string(containsString("/css/theme-ui.css")))
+                .andExpect(content().string(containsString("/js/vendor/lucide.min.js")))
                 .andExpect(content().string(containsString("/js/theme-toggle.js")))
+                .andExpect(content().string(containsString("brand-monteastur")))
                 .andExpect(content().string(containsString("btn-theme-toggle")));
 
         mockMvc.perform(get("/cliente/login"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("data-theme")))
                 .andExpect(content().string(containsString("/css/design-system.css")))
-                .andExpect(content().string(containsString("/css/theme-ui.css")))
+                .andExpect(content().string(containsString("/js/vendor/lucide.min.js")))
                 .andExpect(content().string(containsString("/js/theme-toggle.js")))
+                .andExpect(content().string(containsString("brand-monteastur")))
                 .andExpect(content().string(containsString("btn-theme-toggle")));
     }
 
@@ -94,7 +96,7 @@ class AdminThemeAssetsTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("data-theme")))
                 .andExpect(content().string(containsString("/css/design-system.css")))
-                .andExpect(content().string(containsString("/css/theme-ui.css")))
+                .andExpect(content().string(containsString("/js/vendor/lucide.min.js")))
                 .andExpect(content().string(containsString("/js/theme-toggle.js")))
                 .andExpect(content().string(containsString("btn-theme-toggle")));
     }

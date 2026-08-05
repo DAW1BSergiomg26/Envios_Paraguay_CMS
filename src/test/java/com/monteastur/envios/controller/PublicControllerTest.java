@@ -173,8 +173,9 @@ class PublicControllerTest {
     void themeAssets_marketingPage_hasToggleAssets() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("/css/theme-ui.css")))
-                .andExpect(content().string(containsString("/js/theme-toggle.js")));
+                .andExpect(content().string(containsString("/js/vendor/lucide.min.js")))
+                .andExpect(content().string(containsString("/js/theme-toggle.js")))
+                .andExpect(content().string(containsString("brand-monteastur")));
     }
 
     @Test
