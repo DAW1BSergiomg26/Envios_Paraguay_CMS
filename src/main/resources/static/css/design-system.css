@@ -8243,6 +8243,87 @@ select:focus {
     color: var(--text-muted);
 }
 
+/* ---- Login (panel cliente y acceso CMS) ---- */
+.login-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background:
+        radial-gradient(1200px 600px at 15% 0%, rgba(230, 126, 34, 0.08), transparent 60%),
+        var(--bg-body);
+}
+
+.login-wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem 2rem;
+}
+
+.login-wrapper .brand-logo {
+    margin-bottom: 1.25rem;
+}
+
+.login-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.login-header p {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.login-field {
+    margin-bottom: 1.25rem;
+    text-align: left;
+}
+
+.login-field label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.login-field input {
+    width: 100%;
+}
+
+.login-footer {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+.login-footer a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--accent-text);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.login-footer a:hover {
+    color: var(--accent-hover);
+    text-decoration: underline;
+}
+
 /* ---- Página de error genérica ---- */
 
 .qr-modal .modal-content {
