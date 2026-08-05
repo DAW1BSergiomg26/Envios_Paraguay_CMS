@@ -1,57 +1,43 @@
 <!DOCTYPE html>
 <html lang="es" th:lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - Envios Paraguay CMS</title>
-  <script>
-    (function () {
-      var theme = 'dark';
-      try {
-        theme = localStorage.getItem('theme') || 'dark';
-      } catch (e) { theme = 'dark'; }
-      document.documentElement.setAttribute('data-theme', theme);
-      document.documentElement.classList.toggle('light-mode', theme === 'light');
-      document.documentElement.classList.toggle('dark-mode', theme === 'dark');
-    })();
-  </script>
-  <link rel="stylesheet" th:href="@{/css/design-system.css}" />
-  <link rel="stylesheet" th:href="@{/css/theme-ui.css}" />
-  <link rel="stylesheet" th:href="@{/css/brand-styles.css}" />
-  <script th:src="@{/js/vendor/lucide.min.js}" defer></script>
-  <script th:src="@{/js/theme-toggle.js}" defer></script>
-</head>
-<body>
-  <button type="button" class="btn-theme-toggle btn-theme-toggle--floating" aria-label="Activar modo claro" title="Activar modo claro">
+<head th:replace="~{fragments/header :: head('Acceso CMS')}"></head>
+<body class="login-body">
+
+<button type="button" class="btn-theme-toggle btn-theme-toggle--floating" aria-label="Activar modo claro" title="Activar modo claro">
     <i data-lucide="sun" class="luxury-icon luxury-icon-sm"></i>
-  </button>
+</button>
 
-  <header>
+<div class="login-wrapper glass-card">
     <a th:href="@{/}" class="brand-logo">
-      <span class="brand-monteastur">MONTEASTUR</span>
-      <span>
-        <span class="brand-envios-en">EN</span>
-        <span class="brand-envios-vi">VI</span>
-        <span class="brand-envios-os">OS</span>
-      </span>
+        <span class="brand-monteastur">MONTEASTUR</span>
+        <span>
+            <span class="brand-envios-en">EN</span>
+            <span class="brand-envios-vi">VI</span>
+            <span class="brand-envios-os">OS</span>
+        </span>
     </a>
-  </header>
-
-  <main class="login-content">
-    <div class="card login-card">
-      <h1>Iniciar sesión</h1>
-      <form action="#" th:action="@{/login}" method="post">
-        <div class="form-group">
-          <label for="username">Usuario</label>
-          <input type="text" id="username" name="username" class="form-control" required autofocus />
-        </div>
-        <div class="form-group">
-          <label for="password">Contraseña</label>
-          <input type="password" id="password" name="password" class="form-control" required />
-        </div>
-        <button type="submit" class="btn-login">Entrar</button>
-      </form>
+    <div class="login-header">
+        <i data-lucide="shield-check" class="luxury-icon luxury-icon-lg"></i>
+        <h1 class="luxury-heading-lg">Centro de Operaciones</h1>
+        <p>MONTEASTUR ENVIOS</p>
     </div>
-  </main>
+
+    <form action="#" th:action="@{/login}" method="post">
+        <div class="login-field">
+            <label for="username">Usuario</label>
+            <input type="text" id="username" name="username" class="form-control" required autofocus />
+        </div>
+        <div class="login-field">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" name="password" class="form-control" required />
+        </div>
+        <button type="submit" class="btn-luxury">Entrar</button>
+    </form>
+
+    <div class="login-footer">
+        <a th:href="@{/}"><i data-lucide="arrow-left" class="luxury-icon luxury-icon-sm"></i> Volver a la web</a>
+    </div>
+</div>
+
 </body>
 </html>
