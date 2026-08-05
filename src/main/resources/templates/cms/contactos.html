@@ -1,25 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CMS - Consultas | MONTEASTUR ENVIOS</title>
-    <script>
-      (function () {
-        try {
-          var theme = localStorage.getItem("theme") || "dark";
-          document.documentElement.setAttribute("data-theme", theme);
-        } catch (e) {
-          document.documentElement.setAttribute("data-theme", "dark");
-        }
-      })();
-    </script>
-    <link rel="stylesheet" th:href="@{/css/design-system.css}" />
-    <link rel="stylesheet" th:href="@{/css/admin.css}" />
-    <link rel="stylesheet" th:href="@{/css/theme-ui.css}" />
-    <script src="/js/app.js" defer></script>
-    <script src="/js/theme-toggle.js" defer></script>
-  </head>
+  <head th:replace="~{fragments/header :: cms-head('CMS - Consultas')}"></head>
   <body>
     <div
       th:replace="~{fragments/admin-sidebar :: admin-sidebar(seccionActiva='mensajes')}"
