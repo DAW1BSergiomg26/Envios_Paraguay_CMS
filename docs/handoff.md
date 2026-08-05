@@ -1,13 +1,8 @@
 # HANDOFF - Envios_Paraguay_CMS
-
 ## 📋 Resumen del Proyecto
-
 **Envios_Paraguay_CMS** es una aplicación full-stack desarrollada en **Spring Boot** (Backend) y **Thymeleaf** (Frontend server-side) para gestionar envíos y operaciones logísticas entre Asturias/España y Paraguay: perfil de administración seguro, gestión de envíos, tracking público, notificaciones y control por roles.
-
 ---
-
 ## 🏗️ Arquitectura y Tecnologías
-
 - **Backend:** Java 25, Spring Boot 3.3.5, Spring Security, Spring Data JPA, Hibernate, Flyway.
 - **Base de Datos:** MySQL 8 (perfil de producción apunta a TiDB Cloud y valida el esquema con `ddl-auto=validate`).
 - **Caché / Sesiones:** Redis (sesiones distribuidas y caché del tracking público).
@@ -15,13 +10,9 @@
 - **Email:** JavaMailSender (SMTP) con soporte para Mailpit en desarrollo.
 - **Observabilidad:** Prometheus, Grafana y uptime-kuma (definidos en `docker-compose.yml`).
 - **Contenedores:** Docker y Docker Compose (`docker-compose.yml`, `start-all.ps1`).
-
 Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `grafana`, `uptime-kuma`, `redis`.
-
 ---
-
 ## 🔒 Mejoras de Hardening y Seguridad Recientes (Sprint Actual)
-
 1. **Endurecimiento de Producción (`application-prod.properties`)** — commit `595818e`:
    - Eliminados los fallbacks inseguros por defecto para las credenciales de base de datos (`DB_USERNAME`, `DB_PASSWORD`) y del administrador (`ADMIN_USERNAME`, `ADMIN_PASSWORD`). Ahora son variables obligatorias sin valor por defecto.
    - Forzado de `spring.jpa.hibernate.ddl-auto=validate` para evitar alteraciones automáticas de esquemas en producción.
@@ -82,7 +73,6 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
    - Nuevo test de integración `EnvioTrackingCacheIntegrationTest` (populate/evict/TTL de `envios.tracking` + verificación del pool Lettuce vía `LettuceConnectionFactory.getClientConfiguration()`): commit de Task 3 (`2d21e78`). Corrección sobre el plan: Spring Boot 3.3.5 no registra un bean `GenericObjectPoolConfig`; el assert usa la client configuration del factory (4/4 tests OK).
    - Corregido el `REPORT.md` de k6 (afirmación obsoleta: tracking ya usaba caché desde `4407c07`): commit de Task 4 (`f77a9bc`).
    - Verificado: `mvn clean test` en verde (63 tests).
-10. **Bloque 14: Pipeline CI/CD Enterprise (GitHub Actions + Docker & healthchecks)** (completado, 2026-08-02):
     - Spec de diseño: commits `b7421b4` y `57a4361` (`docs/superpowers/specs/2026-08-02-bloque14-cicd-enterprise-design.md`); plan de implementación: commit `e13888d` (`docs/superpowers/plans/2026-08-02-bloque14-ci-cd-enterprise-plan.md`).
     - Maven Wrapper 3.9.9 (`mvnw`, `mvnw.cmd`, `.mvn/wrapper/maven-wrapper.properties`) + `.gitattributes` (LF para `mvnw`, CRLF para `mvnw.cmd`): commit `e76b39d`.
     - Workflow `.github/workflows/ci.yml` con `permissions: contents: read` y `concurrency` por `github.ref` (`cancel-in-progress: true`): job `test` (MySQL 8 `envios_paraguay_cms_test` + Redis 7-alpine con healthchecks, `setup-java@v4` Temurin 17 + cache Maven, `chmod +x mvnw`, `./mvnw clean test -B` con `SPRING_PROFILES_ACTIVE=test`, upload de Surefire con `if: always()`) → job `docker-build` (`needs: test`, solo en `push` a `main`/`develop`): commit `5bea243`.
@@ -101,7 +91,6 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - Test de integración E2E `PortalTrackingDashboardIntegrationTest` (9 tests: rutas web, POD, 404, ownership PDF, caché Redis con TTL 1–300 s): commit `8be0aa9`.
     - Suite completa en contenedor Maven Linux: **BUILD SUCCESS, 217 tests, 0 fallos**.
     - **Validado en GitHub Actions (cierre):** mismo run `30769845155` de CI/CD (ver Bloque 14); el pipeline completo pasó en la nube sobre el estado final de `main` con el Bloque 15 incluido.
-
 12. **Theme Switcher Dark/Light + Pulido Visual + Páginas Admin Imports/Documentos** (completado, 2026-08-03):
     - Spec de diseño: commit `010749b` (`docs/superpowers/specs/2026-08-03-theme-switcher-pulido-visual-spec.md`); plan de implementación: commit `9135ce2` (`docs/superpowers/plans/2026-08-03-theme-switcher-pulido-visual.md`).
     - `design-system.css` con tokens `:root[data-theme="dark"]` (por defecto) y `[data-theme="light"]` (Pristine Quartz), `theme-toggle.js` (toggle localStorage + `prefers-color-scheme` inicial + anti-FOUC inline en los `<head>`), `theme-ui.css`; vínculo en heads públicos y admin (12 templates). `prefers-reduced-motion` respetado.
@@ -125,72 +114,48 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - **9 heads CMS unificados** en un fragmento nuevo `cms-head` (dentro de `fragments/header.html`) que añade `app.js` a la base común: `dashboard`, `contactos`, `documentos`, `imagenes`, `imports`, `reservas`, `textos`, `tracking`, `tracking-form` (título condicional `Editar/Nuevo Envío` vía expresión).
     - **Stubs huérfanos eliminados** (verificado con grep que no había referencias): `contact.html`, `error-404.html`, `index.html`, `admin-layout.html`, `header.html` raíz y `fragments/public-head.html`: commit `21d20d8`.
     - **Tests actualizados**: `AdminThemeAssetsTest` y `PublicControllerTest` dejaron de exigir `theme-ui.css` y ahora verifican `design-system.css` + `lucide.min.js` + `theme-toggle.js` + marca (`brand-monteastur`). `TemplateAssetIntegrityTest` (whitelist de CSS, stubs eliminados, sin `public-head`) y `DesignSystemCssTest` en verde.
-    - Verificación: suite completa en contenedor Docker (`maven:3.9-eclipse-temurin-25`, MySQL 8 + Redis 7) → **BUILD SUCCESS, 243 tests, 0 fallos, 0 errores** (también en local: 243 tests). Barrido final sin referencias a Tailwind ni a hojas CSS eliminadas.
+    - Verificaci�n: suite completa en contenedor Docker (maven:3.9-eclipse-temurin-25, MySQL 8 + Redis 7)  **BUILD SUCCESS, 263 tests, 0 fallos, 0 errores** (tambi�n en local: 263 tests). Barrido final sin referencias a Tailwind ni a hojas CSS eliminadas.
     - ⚠ **Regla para futuras sesiones**: el ensamblado de `design-system.css` añade el contenido del archivo actual a sí mismo; **nunca** ejecutar el ensamblado dos veces sobre el mismo archivo y reconstruir siempre desde las 6 fuentes de `%TEMP%\opencode`. Reglas del `css_base_core.css` (cabecera global, franjas admin solo con `html:has(body > .sidebar)`, `body:has(> .sidebar)` flex row, `.glass-card`, `.btn-luxury`, `.status-badge--*`, `.error-*`, `.login-*`, `.tracking-*`, `.panel-*`, `.stat-*`, utilidades `mt-4/mt-6/mt-12`) documentadas en el plan.
-
 ---
-
 ## 🚀 Guía de Arranque Rápido para Desarrolladores
-
 ### 1. Requisitos previos
-
 - Tener instalado **Docker** y **Docker Compose**.
 - Java 25 + Maven (solo si se compila localmente; también se puede compilar con el contenedor `maven:3.9-eclipse-temurin-25`).
-
 ### 2. Variables de Entorno
-
 Asegúrate de definir las variables de entorno críticas antes de levantar el perfil de producción (`prod`), especialmente:
-
 - `DB_USERNAME`
 - `DB_PASSWORD`
 - `ADMIN_USERNAME`
 - `ADMIN_PASSWORD`
-
 En local, la mayoría están en `.env` (no versionado). El arranque valida su presencia en el perfil `prod`.
-
 ### 3. Comprobación y Arranque
-
 - **Validar sintaxis de Nginx:**
-
   ```powershell
   docker compose run --rm nginx nginx -t
   ```
-
   Debe devolver `syntax is ok` y `test is successful`.
-
 - **Arranque 1-Click (recomendado en Windows):** doble clic en `start-app.bat` (invoca `start-app.ps1` con `-ExecutionPolicy Bypass`). Levanta la infraestructura Docker, espera a `/actuator/health` (hasta 180 s) y abre pestañas con la landing, el login y Mailpit. Lee `PORT`/`MAILPIT_UI_PORT`/`ADMIN_*` de `.env` (fallbacks `8080`/`8025`/`admin`). Alternativas: `powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\start-app.ps1` o `pwsh -File ./start-app.ps1 -NoBrowser`.
-
 - **Levantar el stack completo:**
-
   ```powershell
   docker compose up -d --build
   ```
-
   o usar el script `start-all.ps1`.
-
 - **Compilar (sin JDK local):**
-
   ```powershell
   docker run --rm -v "${PWD}:/app" -w /app -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-25 mvn clean compile -q
   ```
-
 ---
-
 ## 📌 Estado Git Actual
-
 - **Rama:** `main` (estable) — trabajo local; **sin push ni merge sin confirmación explícita del usuario**.
-- **HEAD:** `d5acd1f` (`fix(ui): utilidad mt-6 para tracking-result`) — cierre de la Cirugía de Unificación Visual.
-- **Cierre de la unificación visual (2026-08-05):** único CSS `design-system.css`, cabecera/logo tricolor únicos (fragmentos `header`/`header-en`), 9 heads CMS vía `cms-head`, tracking/panel/login/errores sin Tailwind CDN, stubs huérfanos y `public-head.html` eliminados, 26 hojas CSS legacy borradas.
-- **Suite completa:** **243 tests, 0 fallos, BUILD SUCCESS** verificados en contenedor Docker (Temurin-25, MySQL 8 + Redis 7) y también en local.
+- **HEAD:** fcf4f (eat(analytics): test de integraci�n del BI Dashboard (agregaciones y cach�)) — �ltimo commit de Bloque 14, pendiente push final.
+- **Cierre de la unificaci�n visual (2026-08-05):** �nico CSS design-system.css, cabecera/logo tricolor �nicos (fragmentos header/header-en), 9 heads CMS v�a cms-head, tracking/panel/login/errores sin Tailwind CDN, stubs hu�rfanos y public-head.html eliminados, 26 hojas CSS legacy borradas.
+- **Bloque 14 — BI Dashboard (2026-08-05):** m�dulo de anal�tica avanzada con 5 KPIs, 4 gr�ficos Chart.js (donut por estado, l�nea 14 d�as, barras top 5 rutas, l�nea �xito webhooks/d�a), agregaciones SQL nativas indexadas (V10), cach� Redis nvios.analytics (TTL 2 min), endpoints REST /api/v1/admin/analytics/resumen (GET) y /refresh (POST), controlador AnalyticsRestController con @PreAuthorize("hasRole('ROLE_ADMIN')"), AnalyticsQueryService con JdbcTemplate, AnalyticsDashboardService con @Cacheable/@CacheEvict, CacheAuditErrorHandler resiliente, frontend nalytics.js (IIFE ES5), Chart.js 4.5.1 vendoreado.
+- **Suite completa:** **263 tests, 0 fallos, BUILD SUCCESS** verificados en contenedor Docker (Temurin-25, MySQL 8 + Redis 7) y tambi�n en local.
 - **Migraciones Flyway aplicadas:** V1–V9 (V9 añade `leido` a `mensajes_contacto`).
-- **Ops (arranque):** `start-app.ps1` simplificado para configurar `JAVA_HOME` al JDK 25 local, `mvn clean compile` y `mvn spring-boot:run`.
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
-
 ---
-
 ## 📝 Reglas de Trabajo
-
 1. No empezar el proyecto desde cero.
 2. No cambiar arquitectura sin explicar riesgos.
 3. No mezclar demasiadas mejoras en una sola tarea.
