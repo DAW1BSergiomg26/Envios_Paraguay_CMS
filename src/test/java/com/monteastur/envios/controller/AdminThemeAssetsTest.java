@@ -100,4 +100,15 @@ class AdminThemeAssetsTest {
                 .andExpect(content().string(containsString("/js/theme-toggle.js")))
                 .andExpect(content().string(containsString("btn-theme-toggle")));
     }
+
+    @Test
+    void dashboard_incluyeSeccionBiYAssetsChartjs() throws Exception {
+        mockMvc.perform(get("/admin/dashboard").with(user("admin").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("bi-analytics-section")))
+                .andExpect(content().string(containsString("/js/vendor/chart.umd.min.js")))
+                .andExpect(content().string(containsString("/js/analytics.js")))
+                .andExpect(content().string(containsString("bi-chart-estado")))
+                .andExpect(content().string(containsString("Refrescar")));
+    }
 }

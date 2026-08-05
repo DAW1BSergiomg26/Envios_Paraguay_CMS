@@ -64,6 +64,66 @@
         </div>
     </div>
 
+    <!-- Sección BI Dashboard -->
+    <div id="bi-analytics-section" class="bi-analytics">
+        <div class="bi-analytics-header">
+            <h3 class="luxury-heading">Anal&iacute;tica &mdash; Centro de Control BI</h3>
+            <button type="button" id="bi-refresh" class="bi-refresh-btn">Refrescar</button>
+        </div>
+        <div id="bi-error" class="bi-error" style="display:none;">
+            <span id="bi-error-text"></span>
+            <button type="button" id="bi-retry">Reintentar</button>
+        </div>
+        <div id="bi-carga" class="bi-carga">Cargando m&eacute;tricas&hellip;</div>
+
+        <div id="bi-kpis" class="stats-grid">
+            <div class="stat-item">
+                <span class="bi-kpi-dot" id="bi-kpi-dot-0"></span>
+                <span id="bi-kpi-label-0">Total env&iacute;os</span>
+                <strong id="bi-kpi-value-0">--</strong>
+            </div>
+            <div class="stat-item">
+                <span class="bi-kpi-dot" id="bi-kpi-dot-1"></span>
+                <span id="bi-kpi-label-1">En tr&aacute;sito</span>
+                <strong id="bi-kpi-value-1">--</strong>
+            </div>
+            <div class="stat-item">
+                <span class="bi-kpi-dot" id="bi-kpi-dot-2"></span>
+                <span id="bi-kpi-label-2">Entregados</span>
+                <strong id="bi-kpi-value-2">--</strong>
+            </div>
+            <div class="stat-item">
+                <span class="bi-kpi-dot" id="bi-kpi-dot-3"></span>
+                <span id="bi-kpi-label-3">&Eacute;xito webhooks</span>
+                <strong id="bi-kpi-value-3">--</strong>
+            </div>
+            <div class="stat-item">
+                <span class="bi-kpi-dot" id="bi-kpi-dot-4"></span>
+                <span id="bi-kpi-label-4">Reservas pendientes</span>
+                <strong id="bi-kpi-value-4">--</strong>
+            </div>
+        </div>
+
+        <div class="bi-charts-grid">
+            <div class="card glass-card bi-chart-card">
+                <h3 class="luxury-heading">Env&iacute;os por estado</h3>
+                <div class="bi-chart-wrap"><canvas id="bi-chart-estado"></canvas></div>
+            </div>
+            <div class="card glass-card bi-chart-card">
+                <h3 class="luxury-heading">Evoluci&oacute;n &uacute;ltimos 14 d&iacute;as</h3>
+                <div class="bi-chart-wrap"><canvas id="bi-chart-tendencia"></canvas></div>
+            </div>
+            <div class="card glass-card bi-chart-card">
+                <h3 class="luxury-heading">Top rutas</h3>
+                <div class="bi-chart-wrap"><canvas id="bi-chart-rutas"></canvas></div>
+            </div>
+            <div class="card glass-card bi-chart-card">
+                <h3 class="luxury-heading">&Eacute;xito de webhooks</h3>
+                <div class="bi-chart-wrap"><canvas id="bi-chart-webhooks"></canvas></div>
+            </div>
+        </div>
+    </div>
+
     <div class="dashboard-bottom">
         <div class="card glass-card">
             <h3 class="luxury-heading">Estado del Sistema</h3>
@@ -120,5 +180,7 @@
 
 </div>
 
+<script src="/js/vendor/chart.umd.min.js"></script>
+<script src="/js/analytics.js"></script>
 </body>
 </html>
