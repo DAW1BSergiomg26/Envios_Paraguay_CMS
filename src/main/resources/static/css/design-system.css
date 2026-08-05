@@ -1130,11 +1130,13 @@ label, small, strong, em {
 .brand-monteastur,
 .logo-monteastur { color: var(--monte-amarillo) !important; }
 .logo-en,
-.brand-envios-en { color: var(--en-rojo) !important; }
+.tri-rojo { color: var(--tri-rojo) !important; }
 .logo-vi,
-.brand-envios-vi { color: var(--vi-blanco) !important; }
+.tri-blanco { color: var(--tri-blanco) !important; }
 .logo-os,
-.brand-envios-os { color: var(--os-azul) !important; }
+.tri-azul { color: var(--tri-azul) !important; }
+.logo-tricolor { display: inline-flex; white-space: nowrap; letter-spacing: 0; }
+.logo-tricolor > span { display: inline-block; }
 
 .paraguay-top-bar,
 .cultural-strip-paraguay {
@@ -1142,9 +1144,9 @@ label, small, strong, em {
     height: 6px;
     width: 100%;
 }
-.paraguay-top-bar .stripe-red { background-color: var(--en-rojo); flex: 1; }
-.paraguay-top-bar .stripe-white { background-color: var(--vi-blanco); flex: 1; border-left: 1px solid rgba(0,0,0,0.1); border-right: 1px solid rgba(0,0,0,0.1); }
-.paraguay-top-bar .stripe-blue { background-color: var(--os-azul); flex: 1; }
+.paraguay-top-bar .stripe-red { background-color: var(--tri-rojo); flex: 1; }
+.paraguay-top-bar .stripe-white { background-color: var(--tri-blanco); flex: 1; border-left: 1px solid rgba(0,0,0,0.1); border-right: 1px solid rgba(0,0,0,0.1); }
+.paraguay-top-bar .stripe-blue { background-color: var(--tri-azul); flex: 1; }
 
 .btn-theme-toggle {
     display: inline-flex;
@@ -8696,9 +8698,9 @@ select option {
 /* Identidad corporativa tricolor Paraguay + Sol Monteastur */
 :root,
 :root[data-theme="dark"] {
-    --en-rojo: #C8102E;
-    --vi-blanco: #FFFFFF;
-    --os-azul: #0047AB;
+    --tri-rojo: #C8102E;
+    --tri-blanco: #FFFFFF;
+    --tri-azul: #0047AB;
     --monte-amarillo: #E67E22;
     --btn-text: #0F281E;
     --btn-text-dark: #071510;
@@ -8734,9 +8736,9 @@ body.dark-mode {
     width: 100%;
     flex-shrink: 0;
     background: linear-gradient(to bottom,
-        var(--en-rojo) 0 33.3%,
-        var(--vi-blanco) 33.3% 66.6%,
-        var(--os-azul) 66.6% 100%);
+        var(--tri-rojo) 0 33.3%,
+        var(--tri-blanco) 33.3% 66.6%,
+        var(--tri-azul) 66.6% 100%);
 }
 
 .cultural-strip-asturias {
@@ -8757,9 +8759,9 @@ html:has(body > .sidebar)::before {
     right: 0;
     height: 6px;
     background: linear-gradient(to bottom,
-        var(--en-rojo) 0 33.3%,
-        var(--vi-blanco) 33.3% 66.6%,
-        var(--os-azul) 66.6% 100%);
+        var(--tri-rojo) 0 33.3%,
+        var(--tri-blanco) 33.3% 66.6%,
+        var(--tri-azul) 66.6% 100%);
     z-index: 10000;
     pointer-events: none;
 }
@@ -8885,21 +8887,21 @@ nav a {
     color: var(--monte-amarillo) !important;
 }
 
-.brand-envios-en {
-    color: var(--en-rojo) !important;
+.tri-rojo {
+    color: var(--tri-rojo) !important;
 }
 
-.brand-envios-vi {
-    color: var(--vi-blanco) !important;
+.tri-blanco {
+    color: var(--tri-blanco) !important;
 }
 
-.brand-envios-os {
-    color: var(--os-azul) !important;
+.tri-azul {
+    color: var(--tri-azul) !important;
 }
 
-html.light-mode .brand-envios-vi,
-body.light-mode .brand-envios-vi,
-:root[data-theme="light"] .brand-envios-vi {
+html.light-mode .tri-blanco,
+body.light-mode .tri-blanco,
+:root[data-theme="light"] .tri-blanco {
     color: #0F172A !important;
 }
 
@@ -10064,8 +10066,8 @@ select:focus-visible {
 .bi-refresh-btn { padding: 10px 18px; border: none; border-radius: 12px; background: linear-gradient(135deg, var(--accent-color), #F09A54); color: #fff; font-weight: 700; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; box-shadow: 0 6px 16px rgba(230,126,34,.3); }
 .bi-refresh-btn:hover { transform: translateY(-2px); }
 .bi-refresh-btn:disabled { opacity: .6; cursor: progress; }
-.bi-error { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(200,16,46,.12); border: 1px solid rgba(200,16,46,.35); color: var(--en-rojo); font-weight: 600; }
-.bi-error button { padding: 6px 14px; border: 1px solid var(--en-rojo); background: transparent; color: var(--en-rojo); border-radius: 8px; cursor: pointer; }
+.bi-error { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-radius: 12px; background: rgba(200,16,46,.12); border: 1px solid rgba(200,16,46,.35); color: var(--tri-rojo); font-weight: 600; }
+.bi-error button { padding: 6px 14px; border: 1px solid var(--tri-rojo); background: transparent; color: var(--tri-rojo); border-radius: 8px; cursor: pointer; }
 .bi-carga { color: var(--text-secondary, #9aa3ad); font-style: italic; }
 .bi-kpi-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--accent-color); }
 .bi-charts-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -10073,3 +10075,4 @@ select:focus-visible {
 .bi-chart-wrap { position: relative; height: 280px; }
 .bi-vacio { color: var(--text-secondary, #9aa3ad); text-align: center; padding: 24px 8px; font-style: italic; }
 @media (max-width: 900px) { .bi-charts-grid { grid-template-columns: 1fr; } }
+
