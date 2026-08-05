@@ -1,92 +1,87 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/public-head :: head('Mi Panel')}"></head>
-<body class="bg-[var(--bg-body)] text-[var(--text-primary)] antialiased">
-<header class="sticky top-0 z-40 bg-[var(--surface-header)] backdrop-blur-xl border-b border-[var(--border-subtle)]">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <span class="text-xl font-extrabold tracking-tight">
-            <span class="text-brand-500">MONTEASTUR</span> <span class="text-[var(--text-primary)]">ENVIOS</span>
-        </span>
-        <div class="flex items-center gap-4">
-            <span class="text-sm font-medium text-[var(--text-primary)]" th:text="'Hola, ' + ${panel.clienteNombre}">Hola, Nombre</span>
-            <form method="post" th:action="@{/cliente/logout}">
-                <button type="submit" class="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--text-secondary)] hover:text-red-400 transition-colors">
-                    <i data-lucide="log-out" class="h-4 w-4"></i> Cerrar sesión
-                </button>
-            </form>
-        </div>
+<head th:replace="~{fragments/header :: head('Mi Panel')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
+
+<main class="public-container">
+    <div class="panel-toolbar">
+        <span class="panel-greeting" th:text="'Hola, ' + ${panel.clienteNombre}">Hola, Nombre</span>
+        <form method="post" th:action="@{/cliente/logout}">
+            <button type="submit" class="panel-logout">
+                <i data-lucide="log-out" class="luxury-icon luxury-icon-sm"></i> Cerrar sesión
+            </button>
+        </form>
     </div>
-</header>
 
-<main class="max-w-6xl mx-auto px-4 py-10">
-    <h1 class="text-2xl font-bold tracking-tight">Mis envíos</h1>
+    <h1 class="page-title">Mis envíos</h1>
 
-    <div class="mt-6 grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
-        <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Total</p>
-            <p class="mt-1 text-2xl font-extrabold text-brand-400" th:text="${panel.totalEnvios}">0</p>
+    <div class="panel-stats">
+        <div class="stat-card">
+            <span class="stat-label">Total</span>
+            <span class="stat-value stat-value--accent" th:text="${panel.totalEnvios}">0</span>
         </div>
-        <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Envíos activos</p>
-            <p class="mt-1 text-2xl font-extrabold text-[var(--text-primary)]" th:text="${panel.enviosActivos}">0</p>
+        <div class="stat-card">
+            <span class="stat-label">Envíos activos</span>
+            <span class="stat-value" th:text="${panel.enviosActivos}">0</span>
         </div>
-        <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Entregados</p>
-            <p class="mt-1 text-2xl font-extrabold text-emerald-300" th:text="${panel.enviosEntregados}">0</p>
+        <div class="stat-card">
+            <span class="stat-label">Entregados</span>
+            <span class="stat-value stat-value--success" th:text="${panel.enviosEntregados}">0</span>
         </div>
-        <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Peso total (kg)</p>
-            <p class="mt-1 text-2xl font-extrabold text-[var(--text-primary)]" th:text="${#numbers.formatDecimal(panel.pesoTotalKg, 1, 1)}">0.0</p>
+        <div class="stat-card">
+            <span class="stat-label">Peso total (kg)</span>
+            <span class="stat-value" th:text="${#numbers.formatDecimal(panel.pesoTotalKg, 1, 1)}">0.0</span>
         </div>
-        <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-4 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-            <p class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Peso activo (kg)</p>
-            <p class="mt-1 text-2xl font-extrabold text-[var(--text-primary)]" th:text="${#numbers.formatDecimal(panel.pesoActivoKg, 1, 1)}">0.0</p>
+        <div class="stat-card">
+            <span class="stat-label">Peso activo (kg)</span>
+            <span class="stat-value" th:text="${#numbers.formatDecimal(panel.pesoActivoKg, 1, 1)}">0.0</span>
         </div>
     </div>
 
-    <div class="mt-8 overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl">
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-[var(--surface-card-strong)] text-[var(--text-muted)] text-left">
+    <div class="panel-table-card">
+        <div class="panel-table-wrap">
+            <table class="panel-table">
+                <thead>
                     <tr>
-                        <th class="px-4 py-3 font-semibold">Código</th>
-                        <th class="px-4 py-3 font-semibold">Destino</th>
-                        <th class="px-4 py-3 font-semibold">Contenido</th>
-                        <th class="px-4 py-3 font-semibold">Peso</th>
-                        <th class="px-4 py-3 font-semibold">Estado</th>
-                        <th class="px-4 py-3 font-semibold">Última actualización</th>
-                        <th class="px-4 py-3 font-semibold">Acciones</th>
+                        <th>Código</th>
+                        <th>Destino</th>
+                        <th>Contenido</th>
+                        <th>Peso</th>
+                        <th>Estado</th>
+                        <th>Última actualización</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr th:each="envio : ${panel.envios}" class="border-t border-[var(--border-subtle)] hover:bg-[var(--surface-card)] transition-colors">
-                        <td class="px-4 py-3 font-semibold text-brand-400">
+                    <tr th:each="envio : ${panel.envios}">
+                        <td class="panel-table-code">
                             <a th:href="@{/tracking/{codigo}(codigo=${envio.codigoUnico})}" th:text="${envio.codigoUnico}">MT-2026-0001</a>
                         </td>
-                        <td class="px-4 py-3" th:text="${envio.destino}">Asunción, Paraguay</td>
-                        <td class="px-4 py-3" th:text="${envio.contenido}">Documentos</td>
-                        <td class="px-4 py-3" th:text="${envio.peso}">10 kg</td>
-                        <td class="px-4 py-3">
-                            <span th:switch="${envio.estado}" class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-xl">
-                                <span th:case="'RECIBIDO'" class="border-indigo-400/30 bg-indigo-400/10 text-indigo-300 rounded-full px-2.5 py-0.5">Recibido</span>
-                                <span th:case="'EN_ADUANA_ORIGEN'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-2.5 py-0.5">Aduana origen</span>
-                                <span th:case="'EN_TRANSITO'" class="border-amber-400/40 bg-amber-400/10 text-amber-300 shadow-glow-amber rounded-full px-2.5 py-0.5">Tránsito</span>
-                                <span th:case="'EN_ADUANA_DESTINO'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-2.5 py-0.5">Aduana destino</span>
-                                <span th:case="'EN_REPARTO'" class="border-sky-400/30 bg-sky-400/10 text-sky-300 rounded-full px-2.5 py-0.5">Reparto</span>
-                                <span th:case="'ENTREGADO'" class="border-emerald-400/40 bg-emerald-400/10 text-emerald-300 shadow-glow-emerald rounded-full px-2.5 py-0.5">Entregado</span>
-                                <span th:case="*" class="border-[var(--border-strong)] bg-[var(--surface-card-strong)] text-[var(--text-primary)] rounded-full px-2.5 py-0.5" th:text="${envio.estado}">Estado</span>
+                        <td th:text="${envio.destino}">Asunción, Paraguay</td>
+                        <td th:text="${envio.contenido}">Documentos</td>
+                        <td th:text="${envio.peso}">10 kg</td>
+                        <td>
+                            <span th:switch="${envio.estado}">
+                                <span th:case="'RECIBIDO'" class="status-badge status-badge--recibido">Recibido</span>
+                                <span th:case="'EN_ADUANA_ORIGEN'" class="status-badge status-badge--en_aduan_orig">Aduana origen</span>
+                                <span th:case="'EN_TRANSITO'" class="status-badge status-badge--en_transito">Tránsito</span>
+                                <span th:case="'EN_ADUANA_DESTINO'" class="status-badge status-badge--en_aduan_dest">Aduana destino</span>
+                                <span th:case="'EN_REPARTO'" class="status-badge status-badge--en_reparto">Reparto</span>
+                                <span th:case="'ENTREGADO'" class="status-badge status-badge--entregado">Entregado</span>
+                                <span th:case="*" class="status-badge status-badge--default" th:text="${envio.estado}">Estado</span>
                             </span>
                         </td>
-                        <td class="px-4 py-3" th:text="${#temporals.format(envio.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
+                        <td th:text="${#temporals.format(envio.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</td>
+                        <td>
+                            <div class="panel-table-actions">
                                 <a th:href="@{/tracking/{codigo}(codigo=${envio.codigoUnico})}"
-                                   class="inline-flex items-center gap-1 font-medium text-brand-400 hover:text-brand-500 hover:underline">
-                                    <i data-lucide="external-link" class="h-3.5 w-3.5"></i> Ver tracking
+                                   class="panel-table-action panel-table-action--primary">
+                                    <i data-lucide="external-link" class="luxury-icon luxury-icon-sm"></i> Ver tracking
                                 </a>
                                 <a th:href="@{/cliente/panel/envio/{codigo}/etiqueta(codigo=${envio.codigoUnico})}"
-                                   class="inline-flex items-center gap-1 font-medium text-[var(--text-secondary)] hover:text-brand-400 hover:underline">
-                                    <i data-lucide="download" class="h-3.5 w-3.5"></i> Descargar etiqueta
+                                   class="panel-table-action panel-table-action--secondary">
+                                    <i data-lucide="download" class="luxury-icon luxury-icon-sm"></i> Descargar etiqueta
                                 </a>
                             </div>
                         </td>
@@ -94,12 +89,12 @@
                 </tbody>
             </table>
         </div>
-        <div th:if="${#lists.isEmpty(panel.envios)}" class="p-10 text-center text-[var(--text-muted)]">
+        <div th:if="${#lists.isEmpty(panel.envios)}" class="panel-table-empty">
             No tienes envíos registrados todavía.
         </div>
     </div>
 </main>
 
-<footer th:replace="~{fragments/public-head :: footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>
