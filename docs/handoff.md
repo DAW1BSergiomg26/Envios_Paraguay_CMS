@@ -8,7 +8,7 @@
 
 ## 🏗️ Arquitectura y Tecnologías
 
-- **Backend:** Java 17, Spring Boot 3.3.5, Spring Security, Spring Data JPA, Hibernate, Flyway.
+- **Backend:** Java 25, Spring Boot 3.3.5, Spring Security, Spring Data JPA, Hibernate, Flyway.
 - **Base de Datos:** MySQL 8 (perfil de producción apunta a TiDB Cloud y valida el esquema con `ddl-auto=validate`).
 - **Caché / Sesiones:** Redis (sesiones distribuidas y caché del tracking público).
 - **Servidor Web / Reverse Proxy:** Nginx (caché estático agresivo, cabeceras de seguridad y Let's Encrypt).
@@ -109,6 +109,14 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - **Rebrand aprobado por el usuario (decisión "Rebrand completo verde+naranja")**: sustituye la identidad obsidiana `#09090b` + `#d4762a` por **verde bosque Asturias `#0D2319` + naranja Paraguay `#E67E22`**, sin negros planos en ningún tema. Tokens dark nuevos (`--bg-body-gradient` `linear-gradient(180deg,#0B1E16,#123524,#0E291C)`, `--bg-surface:#153C2D`, `--bg-card:#1B4D3B`, `--bg-card-glass:rgba(21,60,45,.85)`, texto `#F4F7F5/#A3C9B8/#7BA897`, bordes `rgba(163,201,184,.2/.35)`, `--shadow-card`, `--shadow-glow-orange`, radios y fuente `Plus Jakarta Sans`); `body { background: var(--bg-body-gradient) !important; ... }`. Light: acento `#E67E22`/hover `#C65F12`. Barrido de hardcodes en `luxury-core`, `style`, `admin.css`, `admin-theme`, `hero/tracking/operaciones/casa/contacto/reservas-premium`, `admin-{tracking,sidebar,login,evidencias,client-panel}`, `public-head.html` (paleta Tailwind brand + navbar/footer con `var(--surface-header)`/`var(--bg-surface)`), headings inline CMS → `var(--accent-color)`: commit `03d5c34`.
     - **Gate `/casa` (brief):** `<main class="casa-page-main">` con `padding-top:100px` en `lacasa.html` y `en/lacasa.html` (regla en `casa-premium.css`) para no quedar tapado por la cabecera fija.
     - Verificación: greps de identidad vieja en CSS/plantillas **0 restos**; suite completa **233 tests, 0 fallos, BUILD SUCCESS** en contenedor Docker (MySQL/Redis); smoke en `http://127.0.0.1:8081` (contenedor `monteastur-smoke-ui` recreado) con `/actuator/health` → **UP** (db, redis 7.4.10, mail/mailpit, ping, liveness/readiness) y rutas `/`, `/casa` (con `casa-page-main`), `/login` (con `theme-toggle.js` + anti-FOUC), `/tracking` → 200; `/admin/*` → 401 sin login.
+13. **Unificación Visual Final del Theme + Upgrade Java 25 + Corrección de Esquema** (completado y sincronizado en `origin/main`, 2026-08-05):
+    - `theme-toggle.js` reescrito con **mecanismo dual**: atributo `data-theme` en `<html>` **y** clases `light-mode`/`dark-mode` duplicadas en `<html>` y `<body>`, persistencia en `localStorage['theme']`, binding de `.btn-theme-toggle` y sync de iconos Lucide (sun/moon) vía `lucide.createIcons()`.
+    - `brand-styles.css` reescrito como fuente de verdad de la marca: tokens de identidad tricolor (`--monte-amarillo:#E67E22`, `--en-rojo:#C8102E`, `--vi-blanco:#FFFFFF`, `--os-azul:#0047AB`), variables de ambos modos con selectores `:root[data-theme=...]` **y** `html.dark-mode`/`html.light-mode` (+`body.…`), overrides `!important` globales (body, header/navbar, cards, h1–h6/p/span/a, footer) y estilos de login/error/iconos Lucide. `design-system.css` y `style.css` actualizados con los mismos selectores de clase y variables en lugar de colores duros (se conservan los acentos `#3f6338` solo en componentes menores).
+    - Plantillas stub servidas por controladores (`login.html` en `/login`, `index.html` en `/dashboard`/`/login-react`) y las no referenciadas (`contact`, `error-404`, `admin-layout`, `header` raíz) unificadas: anti-FOUC inline + `design-system.css` + `theme-ui.css` + `brand-styles.css` + `lucide.min.js` + `theme-toggle.js` + botón flotante `.btn-theme-toggle--floating`. Eliminado `theme.js` huérfano (sin referencias, verificadas con grep).
+    - **Fix de esquema**: la columna `leido` existía en `MensajeContacto` (desde `a845d04`) pero no en ninguna migración → creada `V9__add_leido_to_mensajes_contacto.sql` (`BOOLEAN NOT NULL DEFAULT FALSE`) y sincronizado `data/schema.sql`. Resuelve el `Schema-validation: missing column [leido]` en `mensajes_contacto` con `ddl-auto=validate`.
+    - **Fix de test `AdminThemeAssetsTest`**: `/login` debía servir `design-system.css` y `theme-ui.css`; los stubs solo cargaban `brand-styles.css` → se añadieron los CSS al orden canónico.
+    - Verificación: suite completa en contenedor Docker (`maven:3.9-eclipse-temurin-25`, MySQL/Redis) → **BUILD SUCCESS, 236 tests, 0 fallos, 0 errores** (2 ejecuciones: la primera con fallos corregidos, la segunda confirmatoria tras los fixes).
+    - Commits de la rama `appmod/java-upgrade-20260804155425` integrados por fast-forward en `main`: `d63e1b3` (Java 25), `a845d04` (bootstrap de tests), `56b4658` (apariencia), `a6a4f88` (logotipo tricolor + brand-styles), `27ef1ec` (tema dual + migración V9). `origin/main` actualizado.
 
 ---
 
@@ -117,7 +125,7 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
 ### 1. Requisitos previos
 
 - Tener instalado **Docker** y **Docker Compose**.
-- Java 17 + Maven (solo si se compila localmente; también se puede compilar con el contenedor `maven:3.9-eclipse-temurin-17`).
+- Java 25 + Maven (solo si se compila localmente; también se puede compilar con el contenedor `maven:3.9-eclipse-temurin-25`).
 
 ### 2. Variables de Entorno
 
@@ -153,19 +161,19 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 - **Compilar (sin JDK local):**
 
   ```powershell
-  docker run --rm -v "${PWD}:/app" -w /app -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-17 mvn clean compile -q
+  docker run --rm -v "${PWD}:/app" -w /app -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-25 mvn clean compile -q
   ```
 
 ---
 
 ## 📌 Estado Git Actual
 
-- **Rama:** `main` (estable).
-- **HEAD:** `76e1802` (`feat(ops): arranque 1-click docker (start-app.ps1 + start-app.bat)`) + commit de handoff. **Sincronizado con `origin/main`** (push completado: `fe14e4f..19fcdc0`; pendiente de push: `76e1802` y el commit de este handoff).
-- **Bloque 16 (Theme Switcher + Pulido Visual + Rebrand):** spec `010749b`, plan `9135ce2`, 13 commits de implementación `9135ce2..1318e47` y rebrand `03d5c34`. Suite en verde (**233 tests, BUILD SUCCESS** en contenedor Docker) y smoke en `:8081` con health UP y assets del rebrand servidos (contenedor smoke eliminado tras validar el stack compose en `:8080`).
-- **Ops (arranque 1-Click):** commit `76e1802` añade `start-app.ps1` (Docker: daemon → `docker compose up -d` → espera health → pestañas; lee `.env`) y `start-app.bat`. Stack completa validada en local: 8 contenedores healthy, `/actuator/health` UP en `http://localhost:8080`, endpoints `/`, `/login`, `/casa`, Mailpit `:8025` y Nginx `:8090` → 200.
-- **Migraciones Flyway aplicadas:** V1–V8 (V8 crea `entregas_evidencia` con `envio_id UNIQUE`, FK `ON DELETE CASCADE`, firma PNG `LONGTEXT` y coordenadas `DECIMAL(10,8)`/`DECIMAL(11,8)`).
-- **Suite completa:** **233 tests** en verde (`BUILD SUCCESS` verificado en contenedor Docker con MySQL/Redis). Smoke test de la imagen en frío: `/actuator/health` → `UP`.
+- **Rama:** `main` (estable) — **sincronizada con `origin/main`** tras la unificación visual final.
+- **HEAD:** `27ef1ec` (`fix(theme): unifica sistema de temas dual light/dark en stubs y corrige esquema mensajes_contacto`), integrado por fast-forward desde la rama `appmod/java-upgrade-20260804155425`.
+- **Cierre de la unificación visual (2026-08-05):** `theme-toggle.js` con mecanismo dual (`data-theme` + clases `light/dark-mode`), `brand-styles.css` reescrito, stubs (`login`/`index`/`contact`/`error-404`/`admin-layout`/`header`) con anti-FOUC + toggle, `theme.js` huérfano eliminado, migración Flyway **V9** (`mensajes_contacto.leido`) y `schema.sql` sincronizado.
+- **Suite completa:** **236 tests, 0 fallos, BUILD SUCCESS** verificados en contenedor Docker (Temurin-25, MySQL 8 + Redis 7). La primera ejecución detectó 2 causas raíz (columna `leido` sin migración + `AdminThemeAssetsTest` esperando `design-system.css`/`theme-ui.css` en `/login`), ambas corregidas y reconfirmadas.
+- **Migraciones Flyway aplicadas:** V1–V9 (V9 añade `leido` a `mensajes_contacto`).
+- **Ops (arranque):** `start-app.ps1` simplificado para configurar `JAVA_HOME` al JDK 25 local, `mvn clean compile` y `mvn spring-boot:run`.
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 
