@@ -1,9 +1,33 @@
-/* Theme Switcher — Envios Paraguay CMS */
+/* Theme Switcher — Envios Paraguay CMS
+ * Mecanismo dual: atributo data-theme en <html> + clases light-mode/dark-mode en <html> y <body>.
+ * La preferencia se persiste en localStorage bajo la clave 'theme'.
+ */
 (function () {
     'use strict';
 
+    var STORAGE_KEY = 'theme';
+
     function currentTheme() {
-        return document.documentElement.getAttribute('data-theme') || 'dark';
+        var attr = document.documentElement.getAttribute('data-theme');
+        if (attr === 'light' || attr === 'dark') {
+            return attr;
+        }
+        return document.documentElement.classList.contains('light-mode') ? 'light' : 'dark';
+    }
+
+    function applyTheme(theme) {
+        var root = document.documentElement;
+        root.setAttribute('data-theme', theme);
+
+        /* Clases duplicadas en <html> y <body> para soportar selectores .light-mode / .dark-mode */
+        root.classList.toggle('light-mode', theme === 'light');
+        root.classList.toggle('dark-mode', theme === 'dark');
+        if (document.body) {
+            document.body.classList.toggle('light-mode', theme === 'light');
+            document.body.classList.toggle('dark-mode', theme === 'dark');
+        }
+
+        syncIcon(theme);
     }
 
     function syncIcon(theme) {
@@ -24,13 +48,12 @@
 
     function toggleTheme() {
         var next = currentTheme() === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
+        applyTheme(next);
         try {
-            localStorage.setItem('theme', next);
+            localStorage.setItem(STORAGE_KEY, next);
         } catch (e) {
             /* almacenamiento no disponible */
         }
-        syncIcon(next);
     }
 
     function bindButtons() {
@@ -45,8 +68,20 @@
         });
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        syncIcon(currentTheme());
+    function init() {
+        var saved = null;
+        try {
+            saved = localStorage.getItem(STORAGE_KEY);
+        } catch (e) {
+            saved = null;
+        }
+        applyTheme(saved === 'light' || saved === 'dark' ? saved : 'dark');
         bindButtons();
-    });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
 })();

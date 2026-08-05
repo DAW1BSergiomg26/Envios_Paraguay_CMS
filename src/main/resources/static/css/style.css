@@ -10,9 +10,9 @@ html {
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: #ece9e2;
+    background-color: var(--bg-main, #ece9e2);
     background-image: radial-gradient(ellipse at 50% 0%, rgba(63, 99, 56, 0.04) 0%, transparent 70%);
-    color: #222;
+    color: var(--text-main, #222);
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
@@ -40,7 +40,8 @@ main {
 
 /* HEADER */
 header {
-    background: linear-gradient(135deg, #3f6338, #557c45);
+    background: var(--surface-header, linear-gradient(135deg, #3f6338, #557c45));
+    color: var(--text-main, #fff);
     padding: 20px 50px;
     box-shadow: 0 4px 18px rgba(0,0,0,0.18);
     position: relative;
@@ -70,20 +71,20 @@ header::after {
 }
 
 .telefono {
-    color: white;
+    color: var(--text-main, white);
     font-size: 18px;
     font-weight: bold;
 }
 
 .logo {
-    color: white;
+    color: var(--text-main, white);
     font-size: 36px;
     font-weight: bold;
     text-decoration: none;
 }
 
 .idiomas a {
-    color: white;
+    color: var(--text-main, white);
     text-decoration: none;
     padding: 6px 12px;
     border-radius: 6px;
@@ -108,7 +109,7 @@ nav {
 }
 
 nav a {
-    color: white;
+    color: var(--text-main, white);
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
@@ -186,8 +187,8 @@ nav a:hover {
    FOOTER PREMIUM
    ================================ */
 footer {
-    background: #2d4a28;
-    color: rgba(255,255,255,0.85);
+    background: var(--bg-surface, #2d4a28);
+    color: var(--text-main, rgba(255,255,255,0.85));
     padding: 50px 50px 0;
     margin-top: auto;
 }
@@ -203,7 +204,7 @@ footer {
 
 .footer-col h3, .footer-col h4 {
     font-size: 18px;
-    color: white;
+    color: var(--text-main, white);
     margin-bottom: 16px;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -215,13 +216,13 @@ footer {
 }
 
 .footer-col p {
-    color: rgba(255,255,255,0.7);
+    color: var(--text-muted, rgba(255,255,255,0.7));
     margin-bottom: 8px;
 }
 
 .footer-col a {
     display: block;
-    color: rgba(255,255,255,0.75);
+    color: var(--text-main, rgba(255,255,255,0.75));
     text-decoration: none;
     margin-bottom: 8px;
     transition: all 0.3s ease;
@@ -263,11 +264,11 @@ footer {
 }
 
 .footer-bottom {
-    border-top: 1px solid rgba(255,255,255,0.15);
+    border-top: 1px solid var(--border-color, rgba(255,255,255,0.15));
     padding: 20px 0;
     text-align: center;
     font-size: 14px;
-    color: rgba(255,255,255,0.5);
+    color: var(--text-muted, rgba(255,255,255,0.5));
 }
 
 

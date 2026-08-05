@@ -8,7 +8,10 @@
 
 /* Modo Oscuro (Predeterminado — Verde Bosque Asturias + Naranja Paraguay) */
 :root,
-:root[data-theme="dark"] {
+:root[data-theme="dark"],
+html.dark-mode,
+html.dark-mode body,
+body.dark-mode {
     /* Fondo principal y superficies (verde bosque Asturias) */
     --bg-body: #0D2319;
     --bg-body-asturias: #0D2319;
@@ -83,7 +86,10 @@
 }
 
 /* Modo Claro (Pristine Quartz — Ultra Clean Enterprise) */
-:root[data-theme="light"] {
+:root[data-theme="light"],
+html.light-mode,
+html.light-mode body,
+body.light-mode {
     --bg-body: #f8fafc;
     --bg-body-asturias: #f8fafc;
     --bg-body-gradient: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);

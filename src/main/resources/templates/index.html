@@ -1,11 +1,31 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" th:lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Envios Paraguay CMS</title>
+  <script>
+    (function () {
+      var theme = 'dark';
+      try {
+        theme = localStorage.getItem('theme') || 'dark';
+      } catch (e) { theme = 'dark'; }
+      document.documentElement.setAttribute('data-theme', theme);
+      document.documentElement.classList.toggle('light-mode', theme === 'light');
+      document.documentElement.classList.toggle('dark-mode', theme === 'dark');
+    })();
+  </script>
+  <link rel="stylesheet" th:href="@{/css/design-system.css}" />
+  <link rel="stylesheet" th:href="@{/css/theme-ui.css}" />
   <link rel="stylesheet" th:href="@{/css/brand-styles.css}" />
+  <script th:src="@{/js/vendor/lucide.min.js}" defer></script>
+  <script th:src="@{/js/theme-toggle.js}" defer></script>
 </head>
 <body>
+  <button type="button" class="btn-theme-toggle btn-theme-toggle--floating" aria-label="Activar modo claro" title="Activar modo claro">
+    <i data-lucide="sun" class="luxury-icon luxury-icon-sm"></i>
+  </button>
+
   <header>
     <a th:href="@{/}" class="brand-logo">
       <span class="brand-monteastur">MONTEASTUR</span>

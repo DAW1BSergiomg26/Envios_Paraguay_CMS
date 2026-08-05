@@ -52,7 +52,8 @@ CREATE TABLE IF NOT EXISTS mensajes_contacto (
     email       VARCHAR(255)    NOT NULL,
     telefono    VARCHAR(20),
     mensaje     TEXT            NOT NULL,
-    fecha_envio DATETIME        NOT NULL
+    fecha_envio DATETIME        NOT NULL,
+    leido       BOOLEAN         NOT NULL DEFAULT FALSE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================
