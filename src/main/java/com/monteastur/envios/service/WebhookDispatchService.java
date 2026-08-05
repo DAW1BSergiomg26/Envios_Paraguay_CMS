@@ -10,6 +10,7 @@ import com.monteastur.envios.repository.WebhookLogRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -45,6 +46,7 @@ public class WebhookDispatchService {
         this.webhookRestClient = webhookRestClient;
     }
 
+    @CacheEvict(value = "envios.analytics", allEntries = true)
     public void despachar(EstadoEnvioActualizadoEvent event) {
         EnvioTracking envio = envioTrackingRepository
                 .findWithClienteByCodigoUnico(event.codigoRastreo())

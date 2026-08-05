@@ -38,7 +38,7 @@ public class EnvioTrackingService {
         return repo.findAllByOrderByUltimaActualizacionDesc();
     }
 
-    @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
+    @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard", "envios.analytics"}, allEntries = true)
     public EnvioTracking guardar(EnvioTracking envio) {
         envio.setUltimaActualizacion(LocalDateTime.now());
         if (envio.getFechaCreacion() == null) {
@@ -48,7 +48,7 @@ public class EnvioTrackingService {
     }
 
     @Transactional
-    @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
+    @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard", "envios.analytics"}, allEntries = true)
     public EnvioTracking actualizarEstado(String codigo, String nuevoEstado) {
         EnvioTracking envio = repo.findWithClienteByCodigoUnico(codigo.trim().toUpperCase())
                 .orElseThrow(() -> new ResourceNotFoundException("Tracking no encontrado: " + codigo));
@@ -63,7 +63,7 @@ public class EnvioTrackingService {
         return actualizado;
     }
 
-    @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
+    @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard", "envios.analytics"}, allEntries = true)
     public void eliminar(Long id) {
         repo.deleteById(id);
     }

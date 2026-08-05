@@ -44,7 +44,7 @@ public class BatchImportPersistenceService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @CacheEvict(value = {"envios.dashboard", "envios.tracking.pagina", "envios.cliente.dashboard"}, allEntries = true)
+    @CacheEvict(value = {"envios.dashboard", "envios.tracking.pagina", "envios.cliente.dashboard", "envios.analytics"}, allEntries = true)
     public void procesarChunk(Long batchId, List<EnvioTracking> envios, List<CsvImportLineError> errores) {
         BatchImport lote = obtenerLote(batchId);
         lote.setProcesados(lote.getProcesados() + envios.size() + errores.size());
@@ -63,7 +63,7 @@ public class BatchImportPersistenceService {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    @CacheEvict(value = "envios.dashboard", allEntries = true)
+    @CacheEvict(value = {"envios.dashboard", "envios.analytics"}, allEntries = true)
     public void finalizar(Long batchId, int totalRegistros, String errorResumen) {
         BatchImport lote = obtenerLote(batchId);
         lote.setTotalRegistros(totalRegistros);
