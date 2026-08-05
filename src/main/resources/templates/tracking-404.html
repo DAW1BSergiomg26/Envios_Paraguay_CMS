@@ -1,31 +1,33 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/public-head :: head('Envío no encontrado')}"></head>
-<body class="bg-[var(--bg-body)] text-[var(--text-primary)] antialiased">
-<header th:replace="~{fragments/public-head :: navbar}"></header>
+<head th:replace="~{fragments/header :: head('Envío no encontrado')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
 
-<main class="max-w-2xl mx-auto px-4 py-20 text-center">
-    <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)]">
-        <i data-lucide="package-search" class="h-8 w-8 text-brand-400"></i>
+<main class="public-container tracking-404-page">
+    <div class="glass-card tracking-404-card">
+        <div class="tracking-404-icon">
+            <i data-lucide="package-search" class="luxury-icon"></i>
+        </div>
+        <p class="tracking-404-code">404</p>
+        <h1 class="tracking-404-title">Envío no encontrado</h1>
+        <p class="tracking-404-text">
+            No encontramos ningún envío con el código
+            <span class="font-bold" th:text="${codigo}">MT-...</span>. Verifícalo e inténtalo de nuevo.
+        </p>
+        <form method="post" th:action="@{/tracking}" class="tracking-search-form">
+            <input type="text" name="codigo" th:value="${codigo}" required
+                   placeholder="Introduce tu código MONTEASTUR" class="form-control">
+            <button type="submit" class="btn-luxury">
+                <i data-lucide="rotate-ccw" class="luxury-icon luxury-icon-sm"></i> Reintentar
+            </button>
+        </form>
+        <a href="/tracking" class="tracking-404-link">
+            <i data-lucide="qrcode" class="luxury-icon luxury-icon-sm"></i> Escanear otro QR
+        </a>
     </div>
-    <p class="mt-6 text-6xl font-extrabold tracking-tight text-brand-500">404</p>
-    <h1 class="mt-4 text-2xl font-bold tracking-tight">Envío no encontrado</h1>
-    <p class="mt-2 text-[var(--text-secondary)]">
-        No encontramos ningún envío con el código
-        <span class="font-semibold text-[var(--text-primary)]" th:text="${codigo}">MT-...</span>. Verifícalo e inténtalo de nuevo.
-    </p>
-    <form method="post" th:action="@{/tracking}" class="mt-8 flex flex-col sm:flex-row gap-3">
-        <input type="text" name="codigo" th:value="${codigo}" required
-               class="flex-1 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-brand-600/40 focus:border-brand-600/40">
-        <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-[var(--text-on-accent)] font-semibold px-6 py-3 transition-all duration-300 ease-in-out hover:scale-[1.01] shadow-glow">
-            <i data-lucide="rotate-ccw" class="h-4 w-4"></i> Reintentar
-        </button>
-    </form>
-    <a href="/tracking" class="mt-6 inline-flex items-center gap-1.5 text-sm font-medium text-brand-400 hover:text-brand-500 hover:underline">
-        <i data-lucide="qrcode" class="h-4 w-4"></i> Escanear otro QR
-    </a>
 </main>
 
-<footer th:replace="~{fragments/public-head :: footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 </body>
 </html>

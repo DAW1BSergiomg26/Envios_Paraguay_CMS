@@ -7566,6 +7566,76 @@ select:focus {
     font-weight: 700;
 }
 
+/* ---- Página de seguimiento: envío no encontrado (404) ---- */
+.tracking-404-page {
+    display: flex;
+    justify-content: center;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    text-align: center;
+}
+
+.tracking-404-card {
+    max-width: 640px;
+    width: 100%;
+}
+
+.tracking-404-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-card-strong);
+    color: var(--accent-text);
+}
+
+.tracking-404-code {
+    margin-top: 1.5rem;
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--accent-text);
+}
+
+.tracking-404-title {
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.tracking-404-text {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+}
+
+.tracking-404-card .tracking-search-form {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tracking-404-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--accent-text);
+    text-decoration: none;
+}
+
+.tracking-404-link:hover {
+    text-decoration: underline;
+    color: var(--accent-hover);
+}
+
+/* ---- Página de error genérica ---- */
+
 .qr-modal .modal-content {
     width: min(420px, 92vw);
     background: var(--bg-card);
