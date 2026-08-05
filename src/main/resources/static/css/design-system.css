@@ -7354,6 +7354,7 @@ body.light-mode .brand-envios-vi,
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     transition: var(--transition-default);
+    padding: 1.5rem;
 }
 
 .glass-card:hover {
@@ -7542,6 +7543,29 @@ select:focus {
     display: none;
 }
 
+.hidden {
+    display: none;
+}
+
+.qr-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.mt-4 {
+    margin-top: 1rem;
+}
+
+.mt-12 {
+    margin-top: 3rem;
+}
+
+.font-bold {
+    font-weight: 700;
+}
+
 .qr-modal .modal-content {
     width: min(420px, 92vw);
     background: var(--bg-card);
@@ -7549,6 +7573,124 @@ select:focus {
     border-radius: 14px;
     box-shadow: var(--glass-shadow);
     padding: 1.25rem;
+}
+
+/* ---- Utilidades tipográficas de página ---- */
+.page-title {
+    margin-top: 1rem;
+    font-size: clamp(1.75rem, 4vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--text-primary);
+}
+
+.page-subtitle {
+    margin-top: 0.5rem;
+    max-width: 640px;
+    color: var(--text-secondary);
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+}
+
+/* ---- Página de seguimiento: búsqueda ---- */
+.tracking-hero-search {
+    margin-top: 3rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.tracking-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--border-strong);
+    background: var(--surface-card-strong);
+    color: var(--accent-text);
+    padding: 4px 12px;
+    border-radius: var(--radius-badge);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.tracking-search-form {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 640px;
+}
+
+@media (min-width: 640px) {
+    .tracking-search-form {
+        flex-direction: row;
+        align-items: stretch;
+    }
+    .tracking-search-form .form-control {
+        flex: 1;
+    }
+}
+
+.tracking-steps-grid {
+    margin-top: 1rem;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+    .tracking-steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.tracking-step-card {
+    transition: var(--transition-default);
+}
+
+.tracking-step-card:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.01);
+}
+
+.tracking-step-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(230, 126, 34, 0.3);
+    background: rgba(230, 126, 34, 0.1);
+    color: var(--accent-text);
+}
+
+.tracking-step-label {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent-text);
+}
+
+.tracking-step-title {
+    margin-top: 0.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.tracking-step-text {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
 }
 
 /* ---- Layout base: público en columna, admin con sidebar en fila ---- */

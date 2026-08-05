@@ -1,78 +1,73 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/public-head :: head('Seguimiento')}"></head>
-<body class="bg-[var(--bg-body)] text-[var(--text-primary)] antialiased">
-<header th:replace="~{fragments/public-head :: navbar}"></header>
+<head th:replace="~{fragments/header :: head('Seguimiento')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
 
-<main class="max-w-6xl mx-auto px-4">
-    <section class="relative mt-12 overflow-hidden rounded-3xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-8 md:p-12">
-        <div class="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-brand-600/20 blur-3xl"></div>
-        <div class="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl"></div>
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-[var(--border-strong)] bg-[var(--surface-card-strong)] px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-400">
-            <i data-lucide="map-pin" class="h-3.5 w-3.5"></i> Asturias &harr; Paraguay
+<main class="public-container">
+    <section class="glass-card tracking-hero-search">
+        <span class="tracking-pill">
+            <i data-lucide="map-pin" class="luxury-icon luxury-icon-sm"></i> Asturias &harr; Paraguay
         </span>
-        <h1 class="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight">Seguimiento de tu envío</h1>
-        <p class="mt-2 text-[var(--text-secondary)] max-w-xl">Introduce tu código MONTEASTUR o escanea el QR de la etiqueta para ver el estado actualizado de tu paquete.</p>
+        <h1 class="page-title">Seguimiento de tu envío</h1>
+        <p class="page-subtitle">Introduce tu código MONTEASTUR o escanea el QR de la etiqueta para ver el estado actualizado de tu paquete.</p>
 
-        <form method="post" th:action="@{/tracking}" class="mt-8 flex flex-col sm:flex-row gap-3 max-w-2xl">
+        <form method="post" th:action="@{/tracking}" class="tracking-search-form">
             <input type="text" name="codigo" th:value="${codigo}" required autocomplete="off"
                    placeholder="Introduce tu código MONTEASTUR"
-                   class="flex-1 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)] px-4 py-3 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-brand-600/40 focus:border-brand-600/40">
-            <button type="submit"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-[var(--text-on-accent)] font-semibold px-6 py-3 transition-all duration-300 ease-in-out hover:scale-[1.01] shadow-glow">
-                <i data-lucide="search" class="h-4 w-4"></i> Buscar envío
+                   class="form-control">
+            <button type="submit" class="btn-luxury">
+                <i data-lucide="search" class="luxury-icon luxury-icon-sm"></i> Buscar envío
             </button>
-            <button type="button" onclick="abrirEscanner()"
-                    class="inline-flex items-center justify-center gap-2 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)] hover:bg-[var(--surface-card-hover)] hover:border-[var(--accent-color)] text-[var(--text-primary)] font-semibold px-6 py-3 transition-all duration-300 ease-in-out">
-                <i data-lucide="qrcode" class="h-4 w-4"></i> Escanear QR
+            <button type="button" onclick="abrirEscanner()" class="btn-luxury btn-luxury-secondary">
+                <i data-lucide="qrcode" class="luxury-icon luxury-icon-sm"></i> Escanear QR
             </button>
         </form>
 
-        <p th:if="${buscado and error}"
-           class="mt-4 inline-flex items-center gap-2 rounded-lg border border-red-400/30 bg-red-400/10 text-red-300 text-sm font-medium px-4 py-2">
-            <i data-lucide="alert-circle" class="h-4 w-4"></i>
+        <p th:if="${buscado and error}" class="alert alert-error">
+            <i data-lucide="alert-circle" class="luxury-icon luxury-icon-sm"></i>
             No encontramos ningún envío con el código
             <span class="font-bold" th:text="${codigo}">MT-...</span>. Verifícalo e inténtalo de nuevo.
         </p>
     </section>
 
     <section class="mt-12">
-        <h2 class="text-xl font-bold tracking-tight">¿Cómo funciona?</h2>
-        <div class="mt-4 grid gap-4 md:grid-cols-3">
-            <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)] hover:scale-[1.01]">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-600/30 bg-brand-600/10 text-brand-400"><i data-lucide="search" class="h-5 w-5"></i></span>
-                <p class="mt-3 text-xs font-bold uppercase tracking-wide text-brand-400">1. Busca</p>
-                <h3 class="mt-1 font-semibold">Introduce el código</h3>
-                <p class="text-sm text-[var(--text-secondary)] mt-1">El código MONTEASTUR viene en la etiqueta de tu envío (formato MT-AAAA-0001).</p>
+        <h2 class="section-title">¿Cómo funciona?</h2>
+        <div class="tracking-steps-grid">
+            <div class="glass-card tracking-step-card">
+                <span class="tracking-step-icon"><i data-lucide="search" class="luxury-icon"></i></span>
+                <p class="tracking-step-label">1. Busca</p>
+                <h3 class="tracking-step-title">Introduce el código</h3>
+                <p class="tracking-step-text">El código MONTEASTUR viene en la etiqueta de tu envío (formato MT-AAAA-0001).</p>
             </div>
-            <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)] hover:scale-[1.01]">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-600/30 bg-brand-600/10 text-brand-400"><i data-lucide="qrcode" class="h-5 w-5"></i></span>
-                <p class="mt-3 text-xs font-bold uppercase tracking-wide text-brand-400">2. Escanea</p>
-                <h3 class="mt-1 font-semibold">Usa la cámara</h3>
-                <p class="text-sm text-[var(--text-secondary)] mt-1">O escanea el código QR de la etiqueta térmica para abrir el seguimiento al instante.</p>
+            <div class="glass-card tracking-step-card">
+                <span class="tracking-step-icon"><i data-lucide="qrcode" class="luxury-icon"></i></span>
+                <p class="tracking-step-label">2. Escanea</p>
+                <h3 class="tracking-step-title">Usa la cámara</h3>
+                <p class="tracking-step-text">O escanea el código QR de la etiqueta térmica para abrir el seguimiento al instante.</p>
             </div>
-            <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)] hover:scale-[1.01]">
-                <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-brand-600/30 bg-brand-600/10 text-brand-400"><i data-lucide="package-check" class="h-5 w-5"></i></span>
-                <p class="mt-3 text-xs font-bold uppercase tracking-wide text-brand-400">3. Sigue</p>
-                <h3 class="mt-1 font-semibold">Consulta el estado</h3>
-                <p class="text-sm text-[var(--text-secondary)] mt-1">Revisa la línea de tiempo, los eventos y el comprobante de entrega (POD) si ya fue entregado.</p>
+            <div class="glass-card tracking-step-card">
+                <span class="tracking-step-icon"><i data-lucide="package-check" class="luxury-icon"></i></span>
+                <p class="tracking-step-label">3. Sigue</p>
+                <h3 class="tracking-step-title">Consulta el estado</h3>
+                <p class="tracking-step-text">Revisa la línea de tiempo, los eventos y el comprobante de entrega (POD) si ya fue entregado.</p>
             </div>
         </div>
     </section>
 </main>
 
-<div id="qr-modal" class="hidden fixed inset-0 z-50 bg-[var(--surface-header)] backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--bg-surface)] max-w-md w-full p-6 shadow-2xl">
-        <div class="flex items-center justify-between">
-            <h3 class="font-bold tracking-tight">Escanear código QR</h3>
-            <button type="button" onclick="cerrarEscanner()" class="text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-bold transition-colors">Cerrar</button>
+<div id="qr-modal" class="qr-modal hidden">
+    <div class="modal-content">
+        <div class="qr-modal-header">
+            <h3 class="font-bold">Escanear código QR</h3>
+            <button type="button" onclick="cerrarEscanner()" class="btn-luxury btn-luxury-secondary btn-sm">Cerrar</button>
         </div>
-        <div id="qr-reader" class="mt-4 rounded-xl overflow-hidden"></div>
-        <p id="qr-error" class="mt-3 text-sm text-red-400 hidden">No se pudo acceder a la cámara. Inténtalo de nuevo o introduce el código manualmente.</p>
+        <div id="qr-reader" class="mt-4"></div>
+        <p id="qr-error" class="alert alert-error hidden">No se pudo acceder a la cámara. Inténtalo de nuevo o introduce el código manualmente.</p>
     </div>
 </div>
 
-<footer th:replace="~{fragments/public-head :: footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
