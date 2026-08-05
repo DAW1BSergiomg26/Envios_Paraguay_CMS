@@ -18,8 +18,8 @@ body.dark-mode {
     --bg-body-gradient: linear-gradient(180deg, #0B1E16 0%, #123524 50%, #0E291C 100%);
     --bg-surface: #153C2D;
     --bg-surface-green: #153C2D;
-    --bg-card: #1B4D3B;
-    --bg-card-green: #1B4D3B;
+    --bg-card: #133324;
+    --bg-card-green: #133324;
     --bg-card-glass: rgba(21, 60, 45, 0.85);
     --bg-card-glass-strong: rgba(21, 60, 45, 0.92);
 
@@ -99,8 +99,8 @@ body.light-mode {
     --bg-card-green: #ffffff;
     --bg-card-glass: rgba(255, 255, 255, 0.85);
     --bg-card-glass-strong: rgba(255, 255, 255, 0.92);
-    --text-primary: #0f172a;
-    --text-primary-light: #0f172a;
+    --text-primary: #0F172A;
+    --text-primary-light: #0F172A;
     --text-secondary: #64748b;
     --text-secondary-green: #64748b;
     --text-muted: #94a3b8;
@@ -128,7 +128,7 @@ body.light-mode {
     --glass-border: rgba(0, 0, 0, 0.08);
     --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
     --glass-blur: 12px;
-    --surface-header: rgba(248, 250, 252, 0.85);
+    --surface-header: rgba(248, 250, 252, 0.95);
     --surface-card: #ffffff;
     --surface-card-strong: #f1f5f9;
     --surface-card-hover: #e2e8f0;
@@ -146,6 +146,9 @@ body.light-mode {
     --font-family-base: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    --nav-text: #0F172A;
+    --nav-text-hover: #E67E22;
+    --nav-hover-bg: rgba(230, 126, 34, 0.08);
 }
 
 /* Fondo base de la página: gradiente verde bosque (Asturias) */
@@ -10074,5 +10077,171 @@ select:focus-visible {
 .bi-chart-card { min-width: 0; }
 .bi-chart-wrap { position: relative; height: 280px; }
 .bi-vacio { color: var(--text-secondary, #9aa3ad); text-align: center; padding: 24px 8px; font-style: italic; }
-@media (max-width: 900px) { .bi-charts-grid { grid-template-columns: 1fr; } }
+/* ================================ */
+/* FORM GLASSMORPHIC STYLES */
+/* ================================ */
+.contacto-form-card.glass-card,
+.reserva-formulario.glass-card {
+    background: rgba(21, 60, 45, 0.85) !important;
+    border: 1px solid rgba(163, 201, 184, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+.contacto-form-card.glass-card h3,
+.reserva-formulario.glass-card h3 {
+    color: #FFFFFF !important;
+}
+.contacto-form-card.glass-card .rf-group label,
+.reserva-formulario.glass-card .rf-group label {
+    color: #A3C9B8 !important;
+}
+.contacto-form-card.glass-card .rf-control,
+.reserva-formulario.glass-card .rf-control {
+    background: #123524 !important;
+    color: #F4F7F5 !important;
+    border: 1px solid rgba(163, 201, 184, 0.3) !important;
+}
+.contacto-form-card.glass-card .rf-control::placeholder,
+.reserva-formulario.glass-card .rf-control::placeholder {
+    color: #7BA897 !important;
+}
+.contacto-form-card.glass-card .rf-control:focus,
+.reserva-formulario.glass-card .rf-control:focus {
+    border-color: #E67E22 !important;
+    box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.55) !important;
+    background: #123524 !important;
+}
+.contacto-form-card.glass-card .btn-block,
+.reserva-formulario.glass-card .btn-block {
+    background: linear-gradient(135deg, #E67E22, #F59E0B) !important;
+    border: none !important;
+}
+.contacto-form-card.glass-card .reserva-confianza,
+.reservas-trust-strip .reserva-confianza {
+    background: rgba(21, 60, 45, 0.4) !important;
+    border-color: rgba(163, 201, 184, 0.3) !important;
+    color: #A3C9B8 !important;
+}
+
+/* ================================ */
+/* LIGHT MODE HEADER OVERRIDES */
+/* ================================ */
+@media (prefers-color-scheme: light), [data-theme="light"] {
+    html.light-mode header,
+    html.light-mode .header-top,
+    html.light-mode .header-derecha .telefono,
+    html.light-mode .brand-logo,
+    html.light-mode nav a,
+    html.light-mode .idiomas a {
+        color: #0F172A !important;
+    }
+    html.light-mode header a:hover,
+    html.light-mode nav a:hover,
+    html.light-mode .idiomas a:hover {
+        color: #E67E22 !important;
+        background-color: rgba(230, 126, 34, 0.08) !important;
+    }
+    html.light-mode .telefono {
+        color: #0F172A !important;
+        font-weight: 600;
+    }
+    html.light-mode .header-derecha .telefono:first-child {
+        color: #0D2319 !important;
+    }
+    html.light-mode header::after {
+        background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.06), transparent);
+    }
+}
+
+/* ================================ */
+/* DARK MODE INPUT STYLES */
+/* ================================ */
+@media (prefers-color-scheme: dark) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    input:focus,
+    textarea:focus,
+    select:focus,
+    .rf-control:focus {
+        background-color: #123524 !important;
+        color: #F4F7F5 !important;
+        border-color: #E67E22 !important;
+        box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.25) !important;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    select,
+    textarea,
+    .rf-control {
+        background-color: #123524 !important;
+        color: #F4F7F5 !important;
+        border: 1px solid rgba(163, 201, 184, 0.3) !important;
+    }
+}
+
+/* ================================ */
+/* CARD UNIFICATION STYLES */
+/* ================================ */
+.card,
+.card-green,
+.contacto-info-card,
+.contacto-form-card,
+.reserva-calendario,
+.reserva-formulario,
+.tracking-form-glass,
+.glass-card.card {
+    border-radius: 16px !important;
+}
+
+@media (prefers-color-scheme: dark) {
+    .card,
+    .card-green,
+    .contacto-info-card,
+    .contacto-form-card,
+    .reserva-calendario,
+    .reserva-formulario,
+    .tracking-form-glass,
+    .glass-card.card {
+        background: #133324 !important;
+        border: 1px solid rgba(163, 201, 184, 0.2) !important;
+    }
+    .card,
+    .card-green,
+    .contacto-info-card,
+    .contacto-form-card,
+    .reserva-calendario,
+    .reserva-formulario,
+    .tracking-form-glass,
+    .glass-card.card {
+        color: #FFFFFF !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    .card h1,
+    .card h2,
+    .card h3,
+    .card h4,
+    .card h5,
+    .card h6,
+    .card h3,
+    .card h4 {
+        color: #FFFFFF !important;
+    }
+    .card p,
+    .card span,
+    .card small,
+    .card .card-title {
+        color: #A3C9B8 !important;
+    }
+}
 
