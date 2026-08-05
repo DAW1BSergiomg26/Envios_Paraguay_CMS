@@ -1,74 +1,73 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/public-head :: head('Seguimiento')}"></head>
-<body class="bg-[var(--bg-body)] text-[var(--text-primary)] antialiased">
-<header th:replace="~{fragments/public-head :: navbar}"></header>
+<head th:replace="~{fragments/header :: head('Seguimiento')}"></head>
+<body>
+<header th:replace="~{fragments/header :: header}"></header>
 
-<main class="max-w-6xl mx-auto px-4 py-10">
-    <a href="/tracking" class="inline-flex items-center gap-1.5 text-sm font-medium text-brand-400 hover:text-brand-500 transition-colors">
-        <i data-lucide="arrow-left" class="h-4 w-4"></i> Buscar otro envío
+<main class="public-container tracking-result-page">
+    <a href="/tracking" class="tracking-back-link">
+        <i data-lucide="arrow-left" class="luxury-icon luxury-icon-sm"></i> Buscar otro envío
     </a>
 
-    <section class="relative mt-4 overflow-hidden rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6">
-        <div class="pointer-events-none absolute -top-20 -right-20 h-56 w-56 rounded-full bg-brand-600/15 blur-3xl"></div>
-        <div class="flex flex-wrap items-center justify-between gap-4">
+    <section class="glass-card mt-4 tracking-result-header">
+        <div class="tracking-result-head">
             <div>
-                <span class="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)]">Código de envío</span>
-                <h1 class="mt-1 text-2xl font-extrabold tracking-tight text-brand-400" th:text="${view.codigoUnico}">MT-2026-0001</h1>
+                <span class="tracking-code-label">Código de envío</span>
+                <h1 class="tracking-code" th:text="${view.codigoUnico}">MT-2026-0001</h1>
             </div>
-            <span th:switch="${view.estado}" class="inline-flex items-center rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-xl">
-                <span th:case="'RECIBIDO'" class="border-indigo-400/30 bg-indigo-400/10 text-indigo-300 rounded-full px-3 py-1">Recibido</span>
-                <span th:case="'EN_ADUANA_ORIGEN'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-3 py-1">Aduana de origen</span>
-                <span th:case="'EN_TRANSITO'" class="border-amber-400/40 bg-amber-400/10 text-amber-300 shadow-glow-amber rounded-full px-3 py-1">En tránsito</span>
-                <span th:case="'EN_ADUANA_DESTINO'" class="border-violet-400/30 bg-violet-400/10 text-violet-300 rounded-full px-3 py-1">Aduana de destino</span>
-                <span th:case="'EN_REPARTO'" class="border-sky-400/30 bg-sky-400/10 text-sky-300 rounded-full px-3 py-1">En reparto</span>
-                <span th:case="'ENTREGADO'" class="border-emerald-400/40 bg-emerald-400/10 text-emerald-300 shadow-glow-emerald rounded-full px-3 py-1">Entregado</span>
-                <span th:case="*" class="border-[var(--border-strong)] bg-[var(--surface-card-strong)] text-[var(--text-primary)] rounded-full px-3 py-1" th:text="${view.estado}">Estado</span>
+            <span th:switch="${view.estado}">
+                <span th:case="'RECIBIDO'" class="status-badge status-badge--recibido">Recibido</span>
+                <span th:case="'EN_ADUANA_ORIGEN'" class="status-badge status-badge--en_aduan_orig">Aduana de origen</span>
+                <span th:case="'EN_TRANSITO'" class="status-badge status-badge--en_transito">En tránsito</span>
+                <span th:case="'EN_ADUANA_DESTINO'" class="status-badge status-badge--en_aduan_dest">Aduana de destino</span>
+                <span th:case="'EN_REPARTO'" class="status-badge status-badge--en_reparto">En reparto</span>
+                <span th:case="'ENTREGADO'" class="status-badge status-badge--entregado">Entregado</span>
+                <span th:case="*" class="status-badge status-badge--default" th:text="${view.estado}">Estado</span>
             </span>
         </div>
-        <p class="mt-4 text-sm text-[var(--text-muted)]">
+        <p class="tracking-last-update">
             Última actualización:
-            <span class="font-medium text-[var(--text-primary)]" th:text="${#temporals.format(view.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</span>
+            <span class="tracking-last-update-value" th:text="${#temporals.format(view.ultimaActualizacion, 'dd/MM/yyyy HH:mm')}">15/05/2026 14:30</span>
         </p>
     </section>
 
-    <section class="mt-6 grid gap-6 lg:grid-cols-2">
-        <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-            <h2 class="text-lg font-bold tracking-tight">Recorrido</h2>
-            <div class="mt-4 flex items-center gap-3">
-                <span class="flex-1 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)] px-4 py-3 text-sm">
-                    <span class="block text-xs uppercase text-[var(--text-muted)]">Origen</span>
-                    <span class="font-semibold text-[var(--text-primary)]" th:text="${view.origen}">Asturias, España</span>
+    <section class="tracking-grid">
+        <div class="glass-card tracking-info-card">
+            <h2 class="section-title">Recorrido</h2>
+            <div class="tracking-route-grid">
+                <span class="tracking-route-box">
+                    <span class="tracking-route-label">Origen</span>
+                    <span class="tracking-route-value" th:text="${view.origen}">Asturias, España</span>
                 </span>
-                <span class="text-2xl text-brand-500"><i data-lucide="arrow-right" class="h-6 w-6"></i></span>
-                <span class="flex-1 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card-strong)] px-4 py-3 text-sm">
-                    <span class="block text-xs uppercase text-[var(--text-muted)]">Destino</span>
-                    <span class="font-semibold text-[var(--text-primary)]" th:text="${view.destino}">Asunción, Paraguay</span>
+                <span class="tracking-route-arrow"><i data-lucide="arrow-right" class="luxury-icon"></i></span>
+                <span class="tracking-route-box">
+                    <span class="tracking-route-label">Destino</span>
+                    <span class="tracking-route-value" th:text="${view.destino}">Asunción, Paraguay</span>
                 </span>
             </div>
-            <div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+            <div class="tracking-meta-grid">
                 <div>
-                    <span class="block text-xs uppercase text-[var(--text-muted)]">Peso</span>
-                    <span class="font-semibold text-[var(--text-primary)]" th:text="${view.peso}">10 kg</span>
+                    <span class="tracking-meta-label">Peso</span>
+                    <span class="tracking-meta-value" th:text="${view.peso}">10 kg</span>
                 </div>
                 <div>
-                    <span class="block text-xs uppercase text-[var(--text-muted)]">Contenido</span>
-                    <span class="font-semibold text-[var(--text-primary)]" th:text="${view.contenido}">Documentos</span>
+                    <span class="tracking-meta-label">Contenido</span>
+                    <span class="tracking-meta-value" th:text="${view.contenido}">Documentos</span>
                 </div>
             </div>
             <p th:if="${view.observaciones != null and !view.observaciones.isEmpty()}"
-               class="mt-4 rounded-xl border border-brand-600/30 bg-brand-600/10 px-4 py-3 text-sm text-brand-100" th:text="${view.observaciones}">Nota del operador</p>
+               class="tracking-note" th:text="${view.observaciones}">Nota del operador</p>
         </div>
 
-        <div class="rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-            <h2 class="text-lg font-bold tracking-tight">Progreso del envío</h2>
-            <ol class="mt-6">
-                <li th:each="paso, iter : ${view.pasos}" class="relative flex gap-4 pb-8 last:pb-0">
-                    <span th:class="'mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ' + (${view.pasoActual >= 0 and iter.index < view.pasoActual} ? 'bg-brand-600 text-[var(--text-on-accent)]' : (${view.pasoActual == iter.index} ? 'step-pulse ring-2 ring-brand-500 ring-offset-2 ring-offset-[var(--bg-body)] bg-brand-600/20 text-brand-300' : 'bg-[var(--surface-card-strong)] text-[var(--text-muted)]'))"
+        <div class="glass-card tracking-info-card">
+            <h2 class="section-title">Progreso del envío</h2>
+            <ol class="tracking-steps">
+                <li th:each="paso, iter : ${view.pasos}" class="tracking-step">
+                    <span th:class="'tracking-step-number ' + (${view.pasoActual >= 0 and iter.index < view.pasoActual} ? 'tracking-step-number--completed' : (${view.pasoActual == iter.index} ? 'tracking-step-number--active' : 'tracking-step-number--pending'))"
                           th:text="${iter.index + 1}">1</span>
-                    <div class="flex flex-col">
+                    <div>
                         <span th:switch="${paso}"
-                              th:class="'font-semibold ' + (${view.pasoActual == iter.index} ? 'text-brand-400' : 'text-[var(--text-primary)]')">
+                              th:class="'tracking-step-name ' + (${view.pasoActual == iter.index} ? 'tracking-step-name--current' : '')">
                             <span th:case="'RECIBIDO'">Recibido en origen</span>
                             <span th:case="'EN_ADUANA_ORIGEN'">Aduana de origen</span>
                             <span th:case="'EN_TRANSITO'">Tránsito internacional</span>
@@ -77,78 +76,77 @@
                             <span th:case="'ENTREGADO'">Entregado</span>
                             <span th:case="*" th:text="${paso}"></span>
                         </span>
-                        <span th:if="${view.pasoActual == iter.index}" class="text-sm font-medium text-brand-500">Estado actual</span>
+                        <span th:if="${view.pasoActual == iter.index}" class="tracking-step-current-label">Estado actual</span>
                     </div>
                 </li>
             </ol>
         </div>
     </section>
 
-    <section class="mt-6 rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6 transition-all duration-300 ease-in-out hover:border-[var(--accent-color)]">
-        <h2 class="text-lg font-bold tracking-tight">Historial del envío</h2>
-        <ul th:if="${not #lists.isEmpty(view.eventos)}" class="mt-4 space-y-3">
-            <li th:each="ev : ${view.eventos}" class="rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card)] p-4 transition-colors hover:border-[var(--accent-color)]">
-                <button type="button" onclick="toggleEvento(this)"
-                        class="w-full flex items-center justify-between gap-3 text-left">
-                    <span class="flex items-center gap-3">
-                        <span class="flex h-8 w-8 items-center justify-center rounded-full text-lg"
+    <section class="glass-card mt-6 tracking-info-card">
+        <h2 class="section-title">Historial del envío</h2>
+        <ul th:if="${not #lists.isEmpty(view.eventos)}" class="tracking-history-list">
+            <li th:each="ev : ${view.eventos}" class="tracking-event">
+                <button type="button" onclick="toggleEvento(this)" class="tracking-event-toggle">
+                    <span class="tracking-event-main">
+                        <span class="tracking-event-icon"
                               th:style="'background:' + ${ev.color} + '33'" th:text="${ev.icono}">📦</span>
                         <span>
-                            <span class="font-semibold block text-[var(--text-primary)]" th:text="${ev.titulo}">Título del evento</span>
-                            <span class="text-sm text-[var(--text-muted)]" th:text="${#temporals.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}">Fecha</span>
+                            <span class="tracking-event-title" th:text="${ev.titulo}">Título del evento</span>
+                            <span class="tracking-event-date" th:text="${#temporals.format(ev.fechaEvento, 'dd/MM/yyyy HH:mm')}">Fecha</span>
                         </span>
                     </span>
-                    <span class="text-[var(--text-muted)]"><i data-lucide="chevron-down" class="h-4 w-4"></i></span>
+                    <span class="tracking-event-chevron"><i data-lucide="chevron-down" class="luxury-icon luxury-icon-sm"></i></span>
                 </button>
-                <div class="hidden mt-3 text-sm text-[var(--text-secondary)] space-y-1">
-                    <p th:if="${ev.ubicacion != null and !ev.ubicacion.isEmpty()}" class="font-medium text-[var(--text-primary)]" th:text="'Ubicación: ' + ${ev.ubicacion}">Ubicación</p>
+                <div class="tracking-event-details hidden">
+                    <p th:if="${ev.ubicacion != null and !ev.ubicacion.isEmpty()}" class="tracking-event-location" th:text="'Ubicación: ' + ${ev.ubicacion}">Ubicación</p>
                     <p th:if="${ev.descripcion != null and !ev.descripcion.isEmpty()}" th:text="${ev.descripcion}">Descripción</p>
                 </div>
             </li>
         </ul>
-        <p th:if="${#lists.isEmpty(view.eventos)}" class="mt-4 text-sm text-[var(--text-muted)]">Aún no hay eventos registrados para este envío.</p>
+        <p th:if="${#lists.isEmpty(view.eventos)}" class="mt-4 tracking-empty">Aún no hay eventos registrados para este envío.</p>
     </section>
 
-    <section th:if="${view.entrega != null}" class="mt-6 rounded-2xl border border-emerald-400/30 bg-emerald-400/[0.04] backdrop-blur-xl p-6">
-        <h2 class="text-lg font-bold tracking-tight text-emerald-300">Comprobante de entrega (POD)</h2>
-        <div class="mt-4 grid gap-6 md:grid-cols-2">
-            <div class="space-y-2 text-sm">
-                <p class="text-[var(--text-primary)]"><span class="font-semibold text-[var(--text-primary)]">Receptor:</span> <span th:text="${view.entrega.receptorNombre}">Nombre</span></p>
-                <p class="text-[var(--text-primary)]"><span class="font-semibold text-[var(--text-primary)]">Documento:</span> <span th:text="${view.entrega.receptorDocumento}">Doc</span></p>
-                <p class="text-[var(--text-primary)]"><span class="font-semibold text-[var(--text-primary)]">Fecha de entrega:</span> <span th:text="${#temporals.format(view.entrega.fechaEntrega, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
-                <p th:if="${view.entrega.latitud != null}" class="text-[var(--text-primary)]">
-                    <span class="font-semibold text-[var(--text-primary)]">GPS:</span>
+    <section th:if="${view.entrega != null}" class="tracking-pod">
+        <h2 class="tracking-pod-title">Comprobante de entrega (POD)</h2>
+        <div class="tracking-pod-grid">
+            <div class="tracking-pod-text">
+                <p><span class="tracking-pod-label">Receptor:</span> <span th:text="${view.entrega.receptorNombre}">Nombre</span></p>
+                <p><span class="tracking-pod-label">Documento:</span> <span th:text="${view.entrega.receptorDocumento}">Doc</span></p>
+                <p><span class="tracking-pod-label">Fecha de entrega:</span> <span th:text="${#temporals.format(view.entrega.fechaEntrega, 'dd/MM/yyyy HH:mm')}">Fecha</span></p>
+                <p th:if="${view.entrega.latitud != null}">
+                    <span class="tracking-pod-label">GPS:</span>
                     <span th:text="${view.entrega.latitud} + ', ' + ${view.entrega.longitud}">lat, lon</span>
                 </p>
-                <p th:if="${view.entrega.notas != null and !view.entrega.notas.isEmpty()}" class="text-[var(--text-primary)]" th:text="${view.entrega.notas}">Notas</p>
+                <p th:if="${view.entrega.notas != null and !view.entrega.notas.isEmpty()}" th:text="${view.entrega.notas}">Notas</p>
             </div>
-            <div class="flex flex-col items-center justify-center">
-                <span class="text-sm font-semibold text-[var(--text-muted)]">Firma del receptor</span>
+            <div class="tracking-pod-firma">
+                <span class="tracking-pod-firma-label">Firma del receptor</span>
                 <img th:src="'data:image/png;base64,' + ${view.entrega.firmaBase64}"
                      alt="Firma del receptor"
-                     class="mt-2 max-h-32 rounded-lg border border-[var(--border-strong)] bg-[var(--surface-card-strong)]">
+                     class="tracking-pod-firma-img">
             </div>
         </div>
     </section>
 
-    <section th:if="${not #lists.isEmpty(view.evidencias)}" class="mt-6 rounded-2xl border border-[var(--border-strong)] bg-[var(--surface-card)] backdrop-blur-xl p-6">
-        <h2 class="text-lg font-bold tracking-tight">Evidencias del envío</h2>
-        <div class="mt-4 grid gap-3 sm:grid-cols-2">
-            <div th:each="ev : ${view.evidencias}" class="flex items-center gap-3 rounded-xl border border-[var(--border-strong)] bg-[var(--surface-card)] p-3 transition-colors hover:border-[var(--accent-color)]">
+    <section th:if="${not #lists.isEmpty(view.evidencias)}" class="glass-card mt-6 tracking-info-card">
+        <h2 class="section-title">Evidencias del envío</h2>
+        <div class="tracking-evidencias-list">
+            <div th:each="ev : ${view.evidencias}" class="tracking-evidencia">
                 <img th:if="${ev.tipo == 'FOTO'}" th:src="${ev.urlArchivo}" th:alt="${ev.titulo}"
-                     class="h-14 w-14 rounded-lg object-cover">
-                <span th:if="${ev.tipo != 'FOTO'}" class="flex h-14 w-14 items-center justify-center rounded-lg bg-[var(--surface-card-strong)] text-2xl">📄</span>
+                     class="tracking-evidencia-img">
+                <span th:if="${ev.tipo != 'FOTO'}" class="tracking-evidencia-file">📄</span>
                 <span>
-                    <span class="font-semibold block text-[var(--text-primary)]" th:text="${ev.titulo}">Título</span>
-                    <span class="text-sm text-[var(--text-muted)] block" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy')}">Fecha</span>
-                    <a th:href="${ev.urlArchivo}" target="_blank" class="text-sm font-medium text-brand-400 hover:text-brand-500 hover:underline">Ver</a>
+                    <span class="tracking-evidencia-title" th:text="${ev.titulo}">Título</span>
+                    <span class="tracking-evidencia-date" th:text="${#temporals.format(ev.fechaSubida, 'dd/MM/yyyy')}">Fecha</span>
+                    <a th:href="${ev.urlArchivo}" target="_blank" class="tracking-evidencia-link">Ver</a>
                 </span>
             </div>
         </div>
     </section>
 </main>
 
-<footer th:replace="~{fragments/public-head :: footer}"></footer>
+<footer th:replace="~{fragments/footer :: footer}"></footer>
 
 <script>
     function toggleEvento(boton) {
