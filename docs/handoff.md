@@ -116,6 +116,10 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - **Tests actualizados**: `AdminThemeAssetsTest` y `PublicControllerTest` dejaron de exigir `theme-ui.css` y ahora verifican `design-system.css` + `lucide.min.js` + `theme-toggle.js` + marca (`brand-monteastur`). `TemplateAssetIntegrityTest` (whitelist de CSS, stubs eliminados, sin `public-head`) y `DesignSystemCssTest` en verde.
     - Verificaci�n: suite completa en contenedor Docker (maven:3.9-eclipse-temurin-25, MySQL 8 + Redis 7)  **BUILD SUCCESS, 263 tests, 0 fallos, 0 errores** (tambi�n en local: 263 tests). Barrido final sin referencias a Tailwind ni a hojas CSS eliminadas.
     - ⚠ **Regla para futuras sesiones**: el ensamblado de `design-system.css` añade el contenido del archivo actual a sí mismo; **nunca** ejecutar el ensamblado dos veces sobre el mismo archivo y reconstruir siempre desde las 6 fuentes de `%TEMP%\opencode`. Reglas del `css_base_core.css` (cabecera global, franjas admin solo con `html:has(body > .sidebar)`, `body:has(> .sidebar)` flex row, `.glass-card`, `.btn-luxury`, `.status-badge--*`, `.error-*`, `.login-*`, `.tracking-*`, `.panel-*`, `.stat-*`, utilidades `mt-4/mt-6/mt-12`) documentadas en el plan.
+15. **Sprint de Reparación de Usabilidad, Fix 500 y Pulido Visual Nivel DIOS** (completado, 2026-08-06):
+    - **Auditoría Fix 500 (backend):** todos los controladores web verificados null-safe — `PublicController` con flags `reservaEnviada`/`mensajeEnviado` que las plantillas guardan con `th:if`; `AdminController` con `.orElse(null)` + redirects flash y `envios`/`lotes`/`emisiones` ya añadidos al modelo de `/admin/documentos` (HTTP 200, sin 500); `LoginController`/`ClienteController`/`TrackingWebController`/`ClientDashboardController` + `GlobalExceptionHandler` (AccessDenied, DateTimeParseException, etc.) y `EmailService` log-only (fallos SMTP no rompen formularios públicos). Sin fixes de código necesarios.
+    - **Cirugía CSS** en `src/main/resources/static/css/design-system.css` (commit `2a16bfe`, +95/−26): cajas blancas eliminadas en `/casa` (`.casa-metric-card`/`.casa-trust-strip` → `#1B4D3B`, textos `#E67E22`/`#F4F7F5`/`#A3C9B8`), calendario `/reservas` oscuro (`#123524`, días `#F4F7F5`, seleccionado `#E67E22`/`#0F281E`, leyenda), formularios `/contacto` glass (`.contacto-info-card`/`.contacto-form-card` → `#1B4D3B`, items `#123524`) y nav alineada a la izquierda (`justify-content: flex-start`, 1.15rem/600). Solo CSS: el proyecto no tiene configuración Tailwind (verificado: no existe `tailwind.config.*`).
+    - Verificación: suite local **264 tests, 0 fallos, BUILD SUCCESS** (pom Java 25 restaurado tras compilar temporalmente con JDK 24) y **CI/CD en verde** (run `31090036075`: test suite MySQL 8 + Redis 7 + Docker build + smoke `/actuator/health` → UP). `main` sincronizada en `origin/main`.
 ---
 ## 🚀 Guía de Arranque Rápido para Desarrolladores
 ### 1. Requisitos previos
@@ -146,12 +150,11 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
   ```
 ---
 ## 📌 Estado Git Actual
-- **Rama:** `main` (estable) — trabajo local; **sin push ni merge sin confirmación explícita del usuario**.
-- **HEAD:** fcf4f (eat(analytics): test de integraci�n del BI Dashboard (agregaciones y cach�)) — �ltimo commit de Bloque 14, pendiente push final.
-- **Cierre de la unificaci�n visual (2026-08-05):** �nico CSS design-system.css, cabecera/logo tricolor �nicos (fragmentos header/header-en), 9 heads CMS v�a cms-head, tracking/panel/login/errores sin Tailwind CDN, stubs hu�rfanos y public-head.html eliminados, 26 hojas CSS legacy borradas.
-- **Bloque 14 — BI Dashboard (2026-08-05):** m�dulo de anal�tica avanzada con 5 KPIs, 4 gr�ficos Chart.js (donut por estado, l�nea 14 d�as, barras top 5 rutas, l�nea �xito webhooks/d�a), agregaciones SQL nativas indexadas (V10), cach� Redis nvios.analytics (TTL 2 min), endpoints REST /api/v1/admin/analytics/resumen (GET) y /refresh (POST), controlador AnalyticsRestController con @PreAuthorize("hasRole('ROLE_ADMIN')"), AnalyticsQueryService con JdbcTemplate, AnalyticsDashboardService con @Cacheable/@CacheEvict, CacheAuditErrorHandler resiliente, frontend nalytics.js (IIFE ES5), Chart.js 4.5.1 vendoreado.
-- **Suite completa:** **263 tests, 0 fallos, BUILD SUCCESS** verificados en contenedor Docker (Temurin-25, MySQL 8 + Redis 7) y tambi�n en local.
-- **Migraciones Flyway aplicadas:** V1–V9 (V9 añade `leido` a `mensajes_contacto`).
+- **Rama:** `main` (estable) — **sincronizada con `origin/main`** en `2a16bfe` (2026-08-06). Sin push ni merge sin confirmación explícita del usuario.
+- **HEAD:** `2a16bfe` — `fix(ui): surgical CSS polish for casa, reservas calendar, contact form and left-aligned nav`.
+- **Sprint actual (2026-08-06):** cirugía CSS final — cajas blancas eliminadas (`/casa`, `/contacto` → `#1B4D3B`), calendario `/reservas` oscuro (`#123524`), nav a la izquierda (`flex-start`, 1.15rem/600), logo tricolor ya unificado. Auditoría backend de 500 completada sin fixes necesarios (`/admin/documentos` → HTTP 200).
+- **Suite completa:** **264 tests, 0 fallos, BUILD SUCCESS** (local, pom Java 25 restaurado) y **CI/CD en verde** (run `31090036075`: test suite MySQL 8 + Redis 7 + Docker build + smoke `/actuator/health` → UP).
+- **Migraciones Flyway aplicadas:** V1–V10 (V10 agrega las agregaciones SQL del BI dashboard).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
 ---
