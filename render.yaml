@@ -50,10 +50,18 @@ services:
       # ---- Redis externo (sesiones distribuidas + caché) ----
       # Plan free no incluye Redis gestionado; usar un Redis gratuito
       # (ej. Upstash) y pegar su HOST aquí. Puerto habitual: 6379.
+      # Upstash exige TLS siempre activo (no se puede desactivar) y el
+      # TOKEN como contraseña (Details/Connect, NO el UPSTASH_REDIS_REST_TOKEN).
+      # Sin SSL la conexión falla -> RedisHealthIndicator DOWN -> /actuator/health
+      # 503 -> Render marcaría el servicio unhealthy y fallaría el deploy.
       - key: REDIS_HOST
         sync: false
       - key: REDIS_PORT
         value: "6379"
+      - key: SPRING_DATA_REDIS_SSL_ENABLED
+        value: "true"
+      - key: SPRING_DATA_REDIS_PASSWORD
+        sync: false
 
       # ---- Credenciales de administración ----
       - key: ADMIN_USERNAME
