@@ -158,10 +158,10 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
   ```
 ---
 ## 📌 Estado Git Actual
-- **Rama:** `main` (estable) — **sincronizada con `origin/main`** en `e00baad` (2026-08-06). Sin push ni merge sin confirmación explícita del usuario.
-- **HEAD:** `e00baad` — `feat(cloud): official Render free-tier docker blueprint`.
-- **Sprint actual (2026-08-06):** despliegue Render.com — conversor JDBC automático (`SPRING_DATASOURCE_URL`/`DATABASE_URL` → `jdbc:`), perfil prod fail-fast sin fallback TiDB, Dockerfile con `$JAVA_OPTS` y HEALTHCHECK `{PORT:-8080}`, blueprint `render.yaml` docker free (credenciales `sync:false`, Redis externo Upstash, mail off con `MANAGEMENT_HEALTH_MAIL_ENABLED=false`).
-- **Suite completa:** **276 tests, 0 fallos, BUILD SUCCESS** (local, contenedor `maven:3.9-eclipse-temurin-25`) y **CI/CD en la nube** en curso para `e00baad` (runs anteriores `31090036075`, `31091604721` y `31095169953` en verde, `conclusion=success` en ambos jobs).
+- **Rama:** `main` (estable) — **sincronizada con `origin/main`** en `55eeb22` (2026-08-06). Sin push ni merge sin confirmación explícita del usuario.
+- **HEAD:** `55eeb22` — `chore: update production render.yaml for MySQL 8 and production environment variables`.
+- **Sprint actual (2026-08-06):** despliegue Render.com — conversor JDBC automático (`SPRING_DATASOURCE_URL`/`DATABASE_URL` → `jdbc:`), perfil prod fail-fast sin fallback TiDB, Dockerfile con `$JAVA_OPTS` y HEALTHCHECK `{PORT:-8080}`, blueprint `render.yaml` docker free (credenciales `sync:false`, Redis externo Upstash, mail off con `MANAGEMENT_HEALTH_MAIL_ENABLED=false`). Último ajuste: `render.yaml` pulido para MySQL 8 (`region: frankfurt`, `autoDeploy: true`, grupos de env vars comentados y ejemplo PostgreSQL/Neon del template descartado por no aplicar).
+- **Suite completa:** **276 tests, 0 fallos, BUILD SUCCESS** (local, contenedor `maven:3.9-eclipse-temurin-25`) y **CI/CD en la nube en verde** para `55eeb22` (run `31107460877`: `conclusion=success` en ambos jobs — `Test suite (MySQL 8 + Redis 7)` y `Docker image build + smoke test`).
 - **Migraciones Flyway aplicadas:** V1–V10 (V10 agrega las agregaciones SQL del BI dashboard).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
