@@ -36,9 +36,12 @@
                 <button type="button" class="btn-theme-toggle" aria-label="Activar modo claro" title="Activar modo claro">
                     <i data-lucide="sun" class="luxury-icon luxury-icon-sm"></i>
                 </button>
+                <button type="button" id="btn-hamburguesa" class="btn-hamburguesa" aria-label="Open menu" aria-expanded="false" aria-controls="nav-principal">
+                    <i data-lucide="menu" class="luxury-icon"></i>
+                </button>
             </div>
         </div>
-        <nav>
+        <nav id="nav-principal">
             <a href="/en">Home</a>
             <a href="/en/casa">The House</a>
             <a href="/en/tracking">Tracking</a>
@@ -62,6 +65,22 @@
         document.addEventListener('DOMContentLoaded', function() {
             if (localStorage.getItem('cookies_aceptadas') === 'true') {
                 document.getElementById('cookie-banner').style.display = 'none';
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var burger = document.getElementById('btn-hamburguesa');
+            var nav = document.getElementById('nav-principal');
+            if (burger && nav) {
+                burger.addEventListener('click', function() {
+                    var abierto = nav.classList.toggle('abierto');
+                    burger.setAttribute('aria-expanded', abierto ? 'true' : 'false');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!burger.contains(e.target) && !nav.contains(e.target)) {
+                        nav.classList.remove('abierto');
+                        burger.setAttribute('aria-expanded', 'false');
+                    }
+                });
             }
         });
     </script>
