@@ -50,5 +50,5 @@ WORKDIR /app
 COPY --from=build /build/target/*.jar app.jar
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD curl -fsS http://localhost:8080/actuator/health || exit 1
-ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
+  CMD ["sh", "-c", "curl -fsS \"http://localhost:${PORT:-8080}/actuator/health\" || exit 1"]
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app.jar --spring.profiles.active=prod"]
