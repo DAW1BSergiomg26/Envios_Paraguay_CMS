@@ -22,4 +22,38 @@ class BootstrapPropertyNormalizerTest {
 
         assertThat(BootstrapPropertyNormalizer.normalizeJdbcUrl(original)).isEqualTo(original);
     }
+
+    @Test
+    void normalizeJdbcUrlPrependsJdbcPrefixWhenMissing() {
+        String normalized = BootstrapPropertyNormalizer.normalizeJdbcUrl(
+            "mysql://host:3306/envios_paraguay_cms?useSSL=false"
+        );
+
+        assertThat(normalized)
+            .isEqualTo("jdbc:mysql://host:3306/envios_paraguay_cms?useSSL=false");
+    }
+
+    @Test
+    void normalizeJdbcUrlPrependsPrefixAndReplacesSemicolons() {
+        String normalized = BootstrapPropertyNormalizer.normalizeJdbcUrl(
+            "mysql://host:3306/envios_paraguay_cms?useSSL=false;serverTimezone=UTC"
+        );
+
+        assertThat(normalized)
+            .isEqualTo("jdbc:mysql://host:3306/envios_paraguay_cms?useSSL=false&serverTimezone=UTC");
+    }
+
+    @Test
+    void normalizeJdbcUrlDoesNotDoublePrefixOnUppercaseJdbc() {
+        String original = "JDBC:mysql://host:3306/envios_paraguay_cms";
+
+        assertThat(BootstrapPropertyNormalizer.normalizeJdbcUrl(original)).isEqualTo(original);
+    }
+
+    @Test
+    void normalizeJdbcUrlLeavesBlankAndNullUntouched() {
+        assertThat(BootstrapPropertyNormalizer.normalizeJdbcUrl(null)).isNull();
+        assertThat(BootstrapPropertyNormalizer.normalizeJdbcUrl("")).isEmpty();
+        assertThat(BootstrapPropertyNormalizer.normalizeJdbcUrl("   ")).isEqualTo("   ");
+    }
 }
