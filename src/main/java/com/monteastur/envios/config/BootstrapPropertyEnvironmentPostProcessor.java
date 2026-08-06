@@ -18,12 +18,11 @@ public class BootstrapPropertyEnvironmentPostProcessor implements EnvironmentPos
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         Map<String, Object> overrides = new LinkedHashMap<>();
 
-        String datasourceUrl = environment.getProperty("spring.datasource.url");
-        if (StringUtils.hasText(datasourceUrl)) {
-            String normalized = BootstrapPropertyNormalizer.normalizeJdbcUrl(datasourceUrl);
-            if (!datasourceUrl.equals(normalized)) {
-                overrides.put("spring.datasource.url", normalized);
-            }
+        String springUrl = environment.getProperty("SPRING_DATASOURCE_URL");
+        String databaseUrl = environment.getProperty("DATABASE_URL");
+        String selectedUrl = StringUtils.hasText(springUrl) ? springUrl : databaseUrl;
+        if (StringUtils.hasText(selectedUrl)) {
+            overrides.put("spring.datasource.url", BootstrapPropertyNormalizer.normalizeJdbcUrl(selectedUrl));
         }
 
         String redisHost = environment.getProperty("spring.data.redis.host");
