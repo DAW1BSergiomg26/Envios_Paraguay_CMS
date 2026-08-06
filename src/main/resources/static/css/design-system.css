@@ -1942,9 +1942,9 @@ label {
 .casa-metric-card {
     padding: 18px;
     border-radius: 16px;
-    background: #fff;
-    border: 1px solid var(--casa-border);
-    box-shadow: 0 14px 34px rgba(69, 47, 18, 0.10);
+    background: #1B4D3B;
+    border: 1px solid rgba(163, 201, 184, 0.2);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25);
 }
 
 .casa-trust-strip span,
@@ -1962,21 +1962,36 @@ label {
     font-size: 20px;
 }
 
-.casa-trust-strip strong,
+.casa-trust-strip strong {
+    display: block;
+    margin-top: 8px;
+    color: #FFFFFF;
+    font-weight: 900;
+}
+
 .casa-metric-card strong {
     display: block;
     margin-top: 8px;
-    color: var(--casa-dark);
-    font-weight: 950;
+    color: #E67E22;
+    font-weight: 800;
+    font-size: 1.5rem;
+    line-height: 1.2;
 }
 
-.casa-trust-strip small,
+.casa-trust-strip small {
+    display: block;
+    margin-top: 5px;
+    color: #A3C9B8;
+    line-height: 1.45;
+    font-weight: 600;
+}
+
 .casa-metric-card span {
     display: block;
     margin-top: 5px;
-    color: #6d675f;
+    color: #F4F7F5;
     line-height: 1.45;
-    font-weight: 800;
+    font-weight: 600;
 }
 
 .casa-route-premium {
@@ -2746,13 +2761,13 @@ label {
     margin-top: 18px;
     padding: 16px;
     border-radius: 14px;
-    background: #fffdf6;
-    border: 1px solid rgba(255, 212, 74, 0.66);
+    background: #123524 !important;
+    border: 1px solid rgba(163, 201, 184, 0.2) !important;
 }
 
 .calendario-mes h4 {
     margin: 0 0 12px;
-    color: var(--reservas-green-dark);
+    color: #FFFFFF;
     font-weight: 900;
 }
 
@@ -2763,7 +2778,7 @@ label {
 }
 
 .calendario-mes th {
-    color: #706246;
+    color: #A3C9B8;
     font-size: 12px;
     font-weight: 900;
     text-transform: uppercase;
@@ -2785,19 +2800,28 @@ label {
 }
 
 .dia-libre {
-    background: #dcfce7;
-    color: #166534;
-    box-shadow: inset 0 0 0 1px rgba(22, 101, 52, 0.14);
+    background: rgba(163, 201, 184, 0.12);
+    color: #F4F7F5;
+    box-shadow: inset 0 0 0 1px rgba(163, 201, 184, 0.25);
 }
 
 .dia-ocupado {
-    background: #fee2e2;
-    color: #991b1b;
+    background: rgba(230, 126, 34, 0.28);
+    color: #F4F7F5;
+    box-shadow: inset 0 0 0 1px rgba(230, 126, 34, 0.45);
 }
 
 .dia-pasado {
-    background: #f3f4f6;
-    color: #9ca3af;
+    background: rgba(255, 255, 255, 0.06);
+    color: #7BA897;
+}
+
+.dia-seleccionado,
+.dia-libre.selected {
+    background: #E67E22;
+    color: #0F281E;
+    font-weight: 800;
+    box-shadow: none;
 }
 
 .calendario-leyenda {
@@ -2805,7 +2829,7 @@ label {
     flex-wrap: wrap;
     gap: 12px;
     margin-top: 18px;
-    color: #6d675f;
+    color: #A3C9B8;
     font-size: 13px;
     font-weight: 800;
 }
@@ -2818,9 +2842,9 @@ label {
     margin-right: 4px;
 }
 
-.leyenda.libre { background: #22c55e; }
-.leyenda.ocupado { background: #ef4444; }
-.leyenda.pasado { background: #9ca3af; }
+.leyenda.libre { background: #A3C9B8; }
+.leyenda.ocupado { background: #E67E22; }
+.leyenda.pasado { background: #7BA897; }
 
 .reserva-formulario form {
     display: grid;
@@ -8859,16 +8883,19 @@ header .idiomas a:hover {
 
 nav {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 28px;
     padding: 10px 24px 14px;
     flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 nav a {
     text-decoration: none;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1.15rem;
     padding: 4px 2px;
     border-bottom: 2px solid transparent;
     transition: color 0.2s ease, border-color 0.2s ease;
@@ -10242,6 +10269,48 @@ select:focus-visible {
     .card small,
     .card .card-title {
         color: #A3C9B8 !important;
+    }
+}
+
+/* ================================ */
+/* CIRUGIA: ELIMINAR CAJAS BLANCAS  */
+/* ================================ */
+
+/* /contacto: tarjetas verde musgo sólido en ambos modos */
+.contacto-info-card,
+.contacto-form-card,
+.contacto-form-card.glass-card {
+    background: #1B4D3B !important;
+    border: 1px solid rgba(163, 201, 184, 0.2) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.25) !important;
+}
+
+.contacto-info-card h3,
+.contacto-form-card h3 {
+    color: #FFFFFF !important;
+}
+
+.contacto-info-item {
+    background: #123524 !important;
+    border: 1px solid rgba(163, 201, 184, 0.15) !important;
+}
+
+.contacto-info-texto strong {
+    color: #FFFFFF !important;
+}
+
+.contacto-info-texto p,
+.contacto-info-texto a {
+    color: #A3C9B8 !important;
+}
+
+/* Titulo "Contacto" blanco crema solo en modo oscuro (fondo oscuro) */
+@media (prefers-color-scheme: dark), [data-theme="dark"] {
+    .pagina-titulo h2,
+    .pagina-titulo h2.luxury-heading-lg {
+        color: #FFFFFF !important;
+        font-weight: 800 !important;
     }
 }
 
