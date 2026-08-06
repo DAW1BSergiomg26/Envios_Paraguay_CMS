@@ -35,6 +35,10 @@ LABEL org.opencontainers.image.authors="Grupo B2"
 LABEL org.opencontainers.image.vendor="Monteastur"
 LABEL org.opencontainers.image.created=""
 
+# Install curl for the container healthcheck
+RUN apt-get update && apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
+
 # Create non-root user and writable directories
 RUN useradd -m appuser && \
     mkdir -p /app/uploads /app/logs && \
@@ -46,5 +50,5 @@ WORKDIR /app
 COPY --from=build /build/target/*.jar app.jar
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD wget -qO- http://localhost:8080/actuator/health || exit 1
+  CMD curl -fsS http://localhost:8080/actuator/health || exit 1
 ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]
