@@ -1,56 +1,67 @@
 # =============================================
-# MONTEASTUR ENVIOS — Render Blueprint
+# MONTEASTUR ENVIOS — Render Blueprint (Docker)
 # =============================================
-# Deploy:  Dashboard → New Web Service → Connect GitHub repo
-# Runtime: Docker (detecta Dockerfile automáticamente)
-# DB:      TiDB Serverless (MySQL compatible, free tier)
+# Despliegue: Dashboard → New Web Service → Connect GitHub repo
+# (o Render Blueprint: push a main con este render.yaml en la raíz).
+# Runtime: Docker (Dockerfile multi-stage en la raíz).
+# Plan: free — el servicio duerme tras inactividad y los uploads (/tmp)
+# NO persisten entre redeploys.
+# Credenciales sync:false — rellenar en el dashboard en el primer deploy.
+# La URL MySQL puede pegarse como mysql://... (la app añade jdbc: sola).
+# SMTP: no disponible en free; mail desactivado y excluido del healthcheck
+# para que /actuator/health devuelva UP sin servidor de correo.
 # =============================================
 
 services:
   - type: web
-    name: monteastur-envios
-    runtime: image
+    name: envios-paraguay-cms
+    env: docker
     plan: free
+    branch: main
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /actuator/health
+    numInstances: 1
     envVars:
       # ---- Spring Profile ----
       - key: SPRING_PROFILES_ACTIVE
         value: prod
 
+      # ---- MySQL externo (Render no ofrece MySQL gestionado) ----
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+
+      # ---- Redis externo free (ej. Upstash) ----
+      - key: REDIS_HOST
+        sync: false
+      - key: REDIS_PORT
+        value: "6379"
+
+      # ---- Admin ----
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+
+      # ---- URLs / notificaciones ----
+      - key: APP_TRACKING_BASE_URL
+        sync: false
+      - key: APP_NOTIFICATION_MAIL_ENABLED
+        value: "false"
+      - key: MANAGEMENT_HEALTH_MAIL_ENABLED
+        value: "false"
+
       # ---- JVM Tuning (free tier: 512 MB) ----
       - key: JAVA_OPTS
         value: "-Xms256m -Xmx384m -XX:+UseG1GC -XX:+UseStringDeduplication"
 
-      # ---- MySQL externo — TiDB Serverless ----
-      - key: SPRING_DATASOURCE_URL
-        value: "jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/envios_paraguay_cms?useSSL=true&requireSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull"
-      - key: DB_USERNAME
-        value: "<TU_USUARIO_TIDB>"
-      - key: DB_PASSWORD
-        value: "<TU_PASSWORD_TIDB>"
-      - key: DB_DDL_AUTO
-        value: update
-
-      # ---- JPA / Hibernate ----
-      - key: JPA_SHOW_SQL
-        value: "false"
-
-      # ---- Admin Credentials ----
-      - key: ADMIN_USERNAME
-        value: admin
-      - key: ADMIN_PASSWORD
-        value: "<CAMBIAR_EN_PRODUCCION>"
-
-      # ---- App Config ----
-      - key: APP_DEMO_DATA
-        value: "false"
-      - key: UPLOAD_DIR
-        value: /tmp/uploads
-
-      # ---- Thymeleaf ----
+      # ---- App / Thymeleaf ----
       - key: THYMELEAF_CACHE
         value: "true"
-
-      # ---- Actuator ----
-      - key: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE
-        value: "health,info,metrics,prometheus"
+      - key: UPLOAD_DIR
+        value: "/tmp/uploads"
+      - key: JPA_SHOW_SQL
+        value: "false"
