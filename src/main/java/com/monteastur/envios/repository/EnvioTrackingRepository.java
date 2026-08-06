@@ -15,6 +15,9 @@ public interface EnvioTrackingRepository extends JpaRepository<EnvioTracking, Lo
     Optional<EnvioTracking> findByCodigoUnico(String codigoUnico);
     boolean existsByCodigoUnico(String codigoUnico);
     List<EnvioTracking> findAllByOrderByUltimaActualizacionDesc();
+
+    @EntityGraph(attributePaths = "cliente")
+    List<EnvioTracking> findAllWithClienteByOrderByUltimaActualizacionDesc();
     List<EnvioTracking> findByClienteIdOrderByUltimaActualizacionDesc(Long clienteId);
 
     List<EnvioTracking> findByBatchIdOrderByCodigoUnicoAsc(Long batchId);

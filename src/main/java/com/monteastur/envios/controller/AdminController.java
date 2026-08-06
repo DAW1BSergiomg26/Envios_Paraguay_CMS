@@ -229,7 +229,7 @@ public class AdminController {
 
     @GetMapping("/documentos")
     public String documentos(Model model) {
-        model.addAttribute("envios", trackingRepo.findAllByOrderByUltimaActualizacionDesc());
+        model.addAttribute("envios", trackingRepo.findAllWithClienteByOrderByUltimaActualizacionDesc());
         model.addAttribute("lotes", batchImportPersistenceService.listarLotes());
         model.addAttribute("emisiones", documentoPdfService.listarEmisiones(null));
         return "cms/documentos";

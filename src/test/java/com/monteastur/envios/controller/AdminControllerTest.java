@@ -78,7 +78,7 @@ class AdminControllerTest {
 
     @Test
     void documentos_returnsViewWithModel() throws Exception {
-        when(trackingRepo.findAllByOrderByUltimaActualizacionDesc()).thenReturn(List.of(new EnvioTracking()));
+        when(trackingRepo.findAllWithClienteByOrderByUltimaActualizacionDesc()).thenReturn(List.of(new EnvioTracking()));
         when(batchImportPersistenceService.listarLotes()).thenReturn(List.of());
         when(documentoPdfService.listarEmisiones(null)).thenReturn(List.of());
 

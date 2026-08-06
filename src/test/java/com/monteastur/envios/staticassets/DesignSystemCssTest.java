@@ -44,4 +44,19 @@ class DesignSystemCssTest {
         String css = css();
         assertThat(css).contains("--radius-card: 16px");
     }
+
+    @Test
+    void designSystem_modalHonorsHiddenAttribute() throws IOException {
+        String css = css();
+        assertThat(css).contains(".modal[hidden]");
+    }
+
+    @Test
+    void designSystem_modalHiddenHidesModal() throws IOException {
+        String css = css();
+        int idx = css.indexOf(".modal[hidden]");
+        assertThat(idx).isGreaterThanOrEqualTo(0);
+        int end = css.indexOf("}", idx);
+        assertThat(css.substring(idx, end)).contains("display: none");
+    }
 }
