@@ -84,7 +84,7 @@ public class AnalyticsQueryService {
     }
 
     public List<TendenciaDto> tendenciaUltimosDias(int dias) {
-        LocalDate desde = LocalDate.now().minusDays(dias - 1L);
+        LocalDate desde = hoySegunBaseDeDatos().minusDays(dias - 1L);
         Map<LocalDate, Long> porDia = new LinkedHashMap<>();
         jdbcTemplate.query(SQL_TENDENCIA, rs -> {
             porDia.put(rs.getDate("d").toLocalDate(), rs.getLong("total"));
@@ -110,7 +110,7 @@ public class AnalyticsQueryService {
     }
 
     public List<WebhookPuntoDto> webhookPorDia(int dias) {
-        LocalDate desde = LocalDate.now().minusDays(dias - 1L);
+        LocalDate desde = hoySegunBaseDeDatos().minusDays(dias - 1L);
         Map<LocalDate, WebhookPuntoDto> porDia = new LinkedHashMap<>();
         jdbcTemplate.query(SQL_WEBHOOK_POR_DIA, rs -> {
             LocalDate d = rs.getDate("d").toLocalDate();
@@ -132,5 +132,9 @@ public class AnalyticsQueryService {
 
     private long count(String sql, Object... args) {
         return jdbcTemplate.queryForObject(sql, Long.class, args);
+    }
+
+    private LocalDate hoySegunBaseDeDatos() {
+        return jdbcTemplate.queryForObject("SELECT CURRENT_DATE", LocalDate.class);
     }
 }
