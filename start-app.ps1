@@ -1,12 +1,7 @@
 ﻿# ==============================================================================
 # ENVIOS PARAGUAY CMS - SCRIPT MAESTRO DE ARRANQUE 1-CLICK NIVEL DIOS
 # Infraestructura Docker completa (8 servicios) + espera de salud +
-# pestañas automáticas en el navegador.
-# ------------------------------------------------------------------------------
-# Uso:
-#   .\start-app.ps1                # arranque completo (rebuild + navegador)
-#   .\start-app.ps1 -NoBuild       # sin reconstruir la imagen (arranque rápido)
-#   .\start-app.ps1 -NoBrowser     # sin abrir el navegador
+# pestañas automáticas en el navegador (Público + Admin BI + Mailpit).
 # ==============================================================================
 
 param(
@@ -71,7 +66,7 @@ if (-not (Test-Path -LiteralPath ".env")) {
     Read-Host "Pulsa ENTER cuando hayas revisado .env..."
 }
 
-# 5. Leer la configuración real desde .env (nunca valores hardcodeados)
+# 5. Leer la configuración real desde .env
 $port        = Get-EnvValue "PORT" "8080"
 $nginxPort   = Get-EnvValue "NGINX_PORT" "80"
 $mailpitPort = Get-EnvValue "MAILPIT_UI_PORT" "8025"
@@ -84,7 +79,7 @@ if ($NoBuild) {
     Write-Host " 🚀 Arrancando contenedores (sin reconstruir la imagen)..." -ForegroundColor Gray
     docker compose up -d
 } else {
-    Write-Host " 🏗️ Reconstruyendo la imagen (aplica CSS/estáticos y código) y arrancando..." -ForegroundColor Gray
+    Write-Host " 🏗️ Reconstruyendo la imagen (aplica CSS/estáticos y código nuevo) y arrancando..." -ForegroundColor Gray
     docker compose up -d --build
 }
 if ($LASTEXITCODE -ne 0) {
@@ -121,8 +116,7 @@ Write-Host ""
 if ($isHealthy) {
     Write-Host " [✔] ¡El backend y los servicios están 100% ONLINE y respondiendo! ($healthUrl)" -ForegroundColor Green
 } else {
-    Write-Host " [!] El backend aún no responde tras el tiempo de espera. Abriendo el navegador mientras se completa el inicio..." -ForegroundColor Yellow
-    Write-Host "     Diagnóstico: docker compose ps | docker compose logs -f app" -ForegroundColor Gray
+    Write-Host " [!] El backend aún no responde tras el tiempo de espera. Abriendo el navegador..." -ForegroundColor Yellow
 }
 
 Write-Host ""
@@ -134,6 +128,7 @@ if (-not $NoBrowser) {
         "http://localhost:$port/casa",
         "http://localhost:$port/tracking",
         "http://localhost:$port/login",
+        "http://localhost:$port/admin/dashboard",
         "http://localhost:$mailpitPort"
     )
     foreach ($url in $urls) {
@@ -147,15 +142,16 @@ Write-Host "====================================================================
 Write-Host " 🎉 ¡SISTEMA ENVIOS PARAGUAY CMS OPERATIVO EN TU NAVEGADOR! " -ForegroundColor Yellow
 Write-Host "==============================================================================" -ForegroundColor Green
 Write-Host ""
-Write-Host " 🌐 ACCESOS DIRECTOS:" -ForegroundColor White
-Write-Host "  - 🌲 Web Principal / Landing:   http://localhost:$port" -ForegroundColor Green
-Write-Host "  - 🏡 Sección La Casa:           http://localhost:$port/casa" -ForegroundColor Green
-Write-Host "  - 📦 Tracking Público:         http://localhost:$port/tracking" -ForegroundColor Green
-Write-Host "  - 🔐 Login Administrativo:      http://localhost:$port/login" -ForegroundColor Green
-Write-Host "  - 📄 Ingesta Masiva CSV:        http://localhost:$port/admin/imports" -ForegroundColor Green
-Write-Host "  - 🖨️ Documentos & Etiquetas:   http://localhost:$port/admin/documentos" -ForegroundColor Green
-Write-Host "  - 🌐 Vía Nginx (si NGINX_PORT): http://localhost:$nginxPort" -ForegroundColor Green
-Write-Host "  - 📬 Buzón de Email (Mailpit):  http://localhost:$mailpitPort" -ForegroundColor Green
+Write-Host " 🌐 ACCESOS DIRECTOS ABIERTOS:" -ForegroundColor White
+Write-Host "  - 🌲 Web Principal / Landing:    http://localhost:$port" -ForegroundColor Green
+Write-Host "  - 🏡 Sección La Casa:            http://localhost:$port/casa" -ForegroundColor Green
+Write-Host "  - 📦 Tracking Público:          http://localhost:$port/tracking" -ForegroundColor Green
+Write-Host "  - 🔐 Login Administrativo:       http://localhost:$port/login" -ForegroundColor Green
+Write-Host "  - 📊 BI Dashboard & Analítica:   http://localhost:$port/admin/dashboard" -ForegroundColor Green
+Write-Host "  - 📄 Ingesta Masiva CSV:         http://localhost:$port/admin/imports" -ForegroundColor Green
+Write-Host "  - 🖨️ Documentos & Etiquetas:    http://localhost:$port/admin/documentos" -ForegroundColor Green
+Write-Host "  - 🌐 Vía Nginx (si NGINX_PORT):  http://localhost:$nginxPort" -ForegroundColor Green
+Write-Host "  - 📬 Buzón de Email (Mailpit):   http://localhost:$mailpitPort" -ForegroundColor Green
 Write-Host ""
 Write-Host " 🔑 CREDENCIALES DE ACCESO ADMIN (leídas de .env):" -ForegroundColor White
 Write-Host "  - Usuario:     $adminUser" -ForegroundColor Yellow
