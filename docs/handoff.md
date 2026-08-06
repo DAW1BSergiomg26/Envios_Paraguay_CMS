@@ -120,6 +120,7 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - **Auditoría Fix 500 (backend):** todos los controladores web verificados null-safe — `PublicController` con flags `reservaEnviada`/`mensajeEnviado` que las plantillas guardan con `th:if`; `AdminController` con `.orElse(null)` + redirects flash y `envios`/`lotes`/`emisiones` ya añadidos al modelo de `/admin/documentos` (HTTP 200, sin 500); `LoginController`/`ClienteController`/`TrackingWebController`/`ClientDashboardController` + `GlobalExceptionHandler` (AccessDenied, DateTimeParseException, etc.) y `EmailService` log-only (fallos SMTP no rompen formularios públicos). Sin fixes de código necesarios.
     - **Cirugía CSS** en `src/main/resources/static/css/design-system.css` (commit `2a16bfe`, +95/−26): cajas blancas eliminadas en `/casa` (`.casa-metric-card`/`.casa-trust-strip` → `#1B4D3B`, textos `#E67E22`/`#F4F7F5`/`#A3C9B8`), calendario `/reservas` oscuro (`#123524`, días `#F4F7F5`, seleccionado `#E67E22`/`#0F281E`, leyenda), formularios `/contacto` glass (`.contacto-info-card`/`.contacto-form-card` → `#1B4D3B`, items `#123524`) y nav alineada a la izquierda (`justify-content: flex-start`, 1.15rem/600). Solo CSS: el proyecto no tiene configuración Tailwind (verificado: no existe `tailwind.config.*`).
     - Verificación: suite local **264 tests, 0 fallos, BUILD SUCCESS** (pom Java 25 restaurado tras compilar temporalmente con JDK 24) y **CI/CD en verde** (run `31090036075`: test suite MySQL 8 + Redis 7 + Docker build + smoke `/actuator/health` → UP). `main` sincronizada en `origin/main`.
+    - **Cierre DevOps (commit `9781847`):** `Dockerfile` — instalado `curl` en la etapa runtime y HEALTHCHECK cambiado de `wget` a `curl -fsS` (imagen `eclipse-temurin:25-jre` no trae `wget`; el contenedor local marcaba `unhealthy` pese a `/actuator/health` UP). Despliegue local `docker compose up -d --build` verificado: `monteastur-app` **healthy** y rutas `/`, `/casa`, `/reservas`, `/contacto`, `/login`, `/tracking` → **200**. **CI/CD en verde en la nube** (run `31091604721`): `conclusion=success` en ambos jobs (`Test suite (MySQL 8 + Redis 7)` y `Docker image build + smoke test`, `/actuator/health` → UP).
 ---
 ## 🚀 Guía de Arranque Rápido para Desarrolladores
 ### 1. Requisitos previos
@@ -150,10 +151,10 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
   ```
 ---
 ## 📌 Estado Git Actual
-- **Rama:** `main` (estable) — **sincronizada con `origin/main`** en `2a16bfe` (2026-08-06). Sin push ni merge sin confirmación explícita del usuario.
-- **HEAD:** `2a16bfe` — `fix(ui): surgical CSS polish for casa, reservas calendar, contact form and left-aligned nav`.
-- **Sprint actual (2026-08-06):** cirugía CSS final — cajas blancas eliminadas (`/casa`, `/contacto` → `#1B4D3B`), calendario `/reservas` oscuro (`#123524`), nav a la izquierda (`flex-start`, 1.15rem/600), logo tricolor ya unificado. Auditoría backend de 500 completada sin fixes necesarios (`/admin/documentos` → HTTP 200).
-- **Suite completa:** **264 tests, 0 fallos, BUILD SUCCESS** (local, pom Java 25 restaurado) y **CI/CD en verde** (run `31090036075`: test suite MySQL 8 + Redis 7 + Docker build + smoke `/actuator/health` → UP).
+- **Rama:** `main` (estable) — **sincronizada con `origin/main`** en `9781847` (2026-08-06). Sin push ni merge sin confirmación explícita del usuario.
+- **HEAD:** `9781847` — `fix(docker): use curl instead of wget for runtime healthcheck in temurin-25-jre`.
+- **Sprint actual (2026-08-06):** cirugía CSS final — cajas blancas eliminadas (`/casa`, `/contacto` → `#1B4D3B`), calendario `/reservas` oscuro (`#123524`), nav a la izquierda (`flex-start`, 1.15rem/600), logo tricolor ya unificado. Auditoría backend de 500 completada sin fixes necesarios (`/admin/documentos` → HTTP 200). Cierre DevOps: HEALTHCHECK Dockerfile `wget`→`curl`.
+- **Suite completa:** **264 tests, 0 fallos, BUILD SUCCESS** (local, pom Java 25 restaurado) y **CI/CD en verde en la nube** (runs `31090036075` y `31091604721`: test suite MySQL 8 + Redis 7 + Docker build + smoke `/actuator/health` → UP, `conclusion=success` en ambos jobs).
 - **Migraciones Flyway aplicadas:** V1–V10 (V10 agrega las agregaciones SQL del BI dashboard).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.
