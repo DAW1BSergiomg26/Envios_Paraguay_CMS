@@ -1,32 +1,45 @@
-# =============================================
-# MONTEASTUR ENVIOS — Render Blueprint (Docker)
-# =============================================
-# Despliegue: Dashboard → New Web Service → Connect GitHub repo
-# (o Render Blueprint: push a main con este render.yaml en la raíz).
-# Runtime: Docker (Dockerfile multi-stage en la raíz).
-# Plan: free — el servicio duerme tras inactividad y los uploads (/tmp)
-# NO persisten entre redeploys.
-# Credenciales sync:false — rellenar en el dashboard en el primer deploy.
-# La URL MySQL puede pegarse como mysql://... (la app añade jdbc: sola).
-# SMTP: no disponible en free; mail desactivado y excluido del healthcheck
-# para que /actuator/health devuelva UP sin servidor de correo.
-# =============================================
+# ==========================================================
+# MONTEASTUR ENVIOS — Render Blueprint (IaC) — envios-paraguay-cms
+# ==========================================================
+# Despliegue automático como Web Service Docker sobre la rama `main`.
+# Aplica en el primer push a main con este render.yaml en la raíz,
+# o creando el servicio desde el Dashboard de Render (Connect GitHub repo).
+#
+# Seguridad:
+#  - Las credenciales sensibles (DB_PASSWORD, ADMIN_PASSWORD, etc.) se marcan
+#    con `sync: false` y se rellenan en Environment del Dashboard de Render,
+#    NUNCA en este archivo (el repositorio es público/compartido).
+#  - La URL MySQL puede pegarse como `mysql://...`; la aplicación añade el
+#    prefijo `jdbc:` automáticamente (EnvironmentPostProcessor del proyecto).
+#
+# Notas del plan gratuito:
+#  - El servicio duerme tras inactividad y reinicia en frío (~50 h/mes).
+#  - La RAM es 512 MB: ajuste de JVM en JAVA_OPTS.
+#  - Sin disco persistente: UPLOAD_DIR=/tmp/uploads NO sobrevive a redeploys.
+#  - Sin SMTP gestionado: notificaciones de email desactivadas y el indicador
+#    de salud de mail excluido para que /actuator/health responda UP.
+# ==========================================================
 
 services:
   - type: web
     name: envios-paraguay-cms
     env: docker
+    region: frankfurt
     plan: free
     branch: main
+    autoDeploy: true
     dockerfilePath: ./Dockerfile
     healthCheckPath: /actuator/health
     numInstances: 1
     envVars:
-      # ---- Spring Profile ----
+      # ---- Perfil de Spring Boot ----
       - key: SPRING_PROFILES_ACTIVE
         value: prod
 
-      # ---- MySQL externo (Render no ofrece MySQL gestionado) ----
+      # ---- Base de datos MySQL externa ----
+      # Render no ofrece MySQL gestionado; usar un proveedor externo
+      # (ej. TiDB Cloud Serverless, Aiven, Railway o una VPS propia).
+      # Formato aceptado: jdbc:mysql://host:puerto/bd?params  o  mysql://host:...
       - key: SPRING_DATASOURCE_URL
         sync: false
       - key: DB_USERNAME
@@ -34,19 +47,25 @@ services:
       - key: DB_PASSWORD
         sync: false
 
-      # ---- Redis externo free (ej. Upstash) ----
+      # ---- Redis externo (sesiones distribuidas + caché) ----
+      # Plan free no incluye Redis gestionado; usar un Redis gratuito
+      # (ej. Upstash) y pegar su HOST aquí. Puerto habitual: 6379.
       - key: REDIS_HOST
         sync: false
       - key: REDIS_PORT
         value: "6379"
 
-      # ---- Admin ----
+      # ---- Credenciales de administración ----
       - key: ADMIN_USERNAME
         sync: false
       - key: ADMIN_PASSWORD
         sync: false
 
-      # ---- URLs / notificaciones ----
+      # ---- URLs de la aplicación / notificaciones ----
+      # APP_TRACKING_BASE_URL: base pública del tracking (https://...onrender.com/tracking).
+      # SMTP desactivado en free (sin servidor de correo); para habilitarlo
+      # añadir SPRING_MAIL_HOST/PORT/USERNAME/PASSWORD, poner
+      # APP_NOTIFICATION_MAIL_ENABLED=true y MANAGEMENT_HEALTH_MAIL_ENABLED=true.
       - key: APP_TRACKING_BASE_URL
         sync: false
       - key: APP_NOTIFICATION_MAIL_ENABLED
@@ -54,11 +73,11 @@ services:
       - key: MANAGEMENT_HEALTH_MAIL_ENABLED
         value: "false"
 
-      # ---- JVM Tuning (free tier: 512 MB) ----
+      # ---- Tuning JVM (free tier: 512 MB) ----
       - key: JAVA_OPTS
         value: "-Xms256m -Xmx384m -XX:+UseG1GC -XX:+UseStringDeduplication"
 
-      # ---- App / Thymeleaf ----
+      # ---- Aplicación / Thymeleaf ----
       - key: THYMELEAF_CACHE
         value: "true"
       - key: UPLOAD_DIR
