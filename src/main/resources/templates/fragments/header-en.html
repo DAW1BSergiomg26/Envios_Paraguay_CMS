@@ -11,7 +11,7 @@
             }
         })();
     </script>
-    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" th:href="@{/css/design-system.css(v=${@environment.getProperty('app.web.css-version')})}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <title th:text="${titulo} + ' - MONTEASTUR ENVIOS'">MONTEASTUR ENVIOS</title>

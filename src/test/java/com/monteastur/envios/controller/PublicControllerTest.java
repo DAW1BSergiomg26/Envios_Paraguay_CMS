@@ -170,6 +170,13 @@ class PublicControllerTest {
     }
 
     @Test
+    void themeAssets_marketingPage_hasVersionedDesignSystemCss() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("/css/design-system.css?v=1")));
+    }
+
+    @Test
     void themeAssets_marketingPage_hasToggleAssets() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())

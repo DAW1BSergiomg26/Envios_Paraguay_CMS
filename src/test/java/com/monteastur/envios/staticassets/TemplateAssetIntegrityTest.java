@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TemplateAssetIntegrityTest {
 
     private static final Path TEMPLATES = Paths.get("src/main/resources/templates").toAbsolutePath();
-    private static final Pattern CSS_REF = Pattern.compile("(?:th:href=\"@\\{)?/css/([a-zA-Z0-9\\-]+(?:\\.css))\"");
+    private static final Pattern CSS_REF = Pattern.compile("(?:th:href=\"@\\{)?/css/([a-zA-Z0-9\\-]+(?:\\.css))(?=[(?\"])");
 
     private static final Set<String> ALLOWED_CSS = Set.of("design-system.css");
 
