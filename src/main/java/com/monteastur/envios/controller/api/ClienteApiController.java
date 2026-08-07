@@ -1,18 +1,20 @@
 package com.monteastur.envios.controller.api;
 
 import com.monteastur.envios.dto.api.*;
+import com.monteastur.envios.exception.ForbiddenException;
+import com.monteastur.envios.exception.ResourceNotFoundException;
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.service.ClienteService;
 import com.monteastur.envios.service.EvidenciaEnvioService;
 import com.monteastur.envios.service.EventoTrackingService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -55,16 +57,12 @@ public class ClienteApiController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Lista de envíos del cliente",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ClienteEnvioResumenDto.class))),
-        @ApiResponse(responseCode = "403", description = "No autenticado",
+        @ApiResponse(responseCode = "401", description = "No autenticado",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
     })
     @GetMapping("/envios")
-    public ResponseEntity<?> listarEnvios(HttpSession session) {
-        Long clienteId = (Long) session.getAttribute("clienteId");
-        if (clienteId == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
-        }
+    public ResponseEntity<?> listarEnvios(Authentication authentication) {
+        Long clienteId = (Long) authentication.getPrincipal();
         List<EnvioTracking> envios = trackingRepo.findByClienteIdOrderByUltimaActualizacionDesc(clienteId);
         List<ClienteEnvioResumenDto> dtos = envios.stream().map(e -> {
             ClienteEnvioResumenDto dto = new ClienteEnvioResumenDto();
@@ -82,23 +80,20 @@ public class ClienteApiController {
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Detalle del envío",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.TrackingDto.class))),
-        @ApiResponse(responseCode = "403", description = "No autenticado o no autorizado",
+        @ApiResponse(responseCode = "401", description = "No autenticado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class))),
+        @ApiResponse(responseCode = "403", description = "No autorizado (envío de otro cliente)",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class))),
         @ApiResponse(responseCode = "404", description = "Envío no encontrado",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
     })
     @GetMapping("/envios/{codigo}")
-    public ResponseEntity<?> detalleEnvio(@PathVariable String codigo, HttpSession session) {
-        Long clienteId = (Long) session.getAttribute("clienteId");
-        if (clienteId == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
-        }
+    public ResponseEntity<?> detalleEnvio(@PathVariable String codigo, Authentication authentication) {
+        Long clienteId = (Long) authentication.getPrincipal();
         EnvioTracking envio = trackingRepo.findWithClienteByCodigoUnico(codigo.trim().toUpperCase())
-            .orElseThrow(() -> new com.monteastur.envios.exception.ResourceNotFoundException("Tracking no encontrado: " + codigo));
+            .orElseThrow(() -> new ResourceNotFoundException("Tracking no encontrado: " + codigo));
         if (envio.getCliente() == null || !envio.getCliente().getId().equals(clienteId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
+            throw new ForbiddenException("El envío no pertenece al cliente autenticado");
         }
         TrackingDto dto = new TrackingDto();
         dto.setCodigoUnico(envio.getCodigoUnico());
@@ -131,42 +126,36 @@ public class ClienteApiController {
     @Operation(summary = "Descargar evidencia", description = "Descarga un archivo de evidencia asociado a un envío del cliente")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Archivo descargado"),
-        @ApiResponse(responseCode = "403", description = "No autenticado, archivo no visible o nombre no permitido",
+        @ApiResponse(responseCode = "401", description = "No autenticado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class))),
+        @ApiResponse(responseCode = "403", description = "No autorizado, archivo no visible o nombre no permitido",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class))),
         @ApiResponse(responseCode = "404", description = "Evidencia o archivo no encontrado",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
     })
     @GetMapping("/evidencias/{id}/archivo")
-    public ResponseEntity<?> descargarEvidencia(@PathVariable Long id, HttpSession session) {
-        Long clienteId = (Long) session.getAttribute("clienteId");
-        if (clienteId == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
-        }
+    public ResponseEntity<?> descargarEvidencia(@PathVariable Long id, Authentication authentication) {
+        Long clienteId = (Long) authentication.getPrincipal();
 
         var evidencia = evidenciaService.buscar(id)
-            .orElseThrow(() -> new com.monteastur.envios.exception.ResourceNotFoundException("Evidencia no encontrada: " + id));
+            .orElseThrow(() -> new ResourceNotFoundException("Evidencia no encontrada: " + id));
         if (!Boolean.TRUE.equals(evidencia.getVisibleCliente())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
+            throw new ForbiddenException("La evidencia no está visible para el cliente");
         }
 
         var envio = evidencia.getEnvioTracking();
         if (envio == null || envio.getCliente() == null || !envio.getCliente().getId().equals(clienteId)) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorDto(Instant.now().toString(), 403, "Acceso denegado"));
+            throw new ForbiddenException("La evidencia no pertenece a un envío del cliente autenticado");
         }
 
         String urlArchivo = evidencia.getUrlArchivo();
         if (urlArchivo == null || !urlArchivo.startsWith("/uploads/evidencias/")) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorDto(Instant.now().toString(), 404, "Archivo no encontrado"));
+            throw new ResourceNotFoundException("Archivo no encontrado");
         }
 
         String fileName = urlArchivo.substring("/uploads/evidencias/".length());
         if (fileName.contains("..") || fileName.contains("/") || fileName.contains("\\")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorDto(Instant.now().toString(), 403, "Nombre de archivo no permitido"));
+            throw new ForbiddenException("Nombre de archivo no permitido");
         }
 
         String baseDir = uploadDir.endsWith("/") || uploadDir.endsWith("\\") ? uploadDir : uploadDir + "/";
@@ -175,16 +164,15 @@ public class ClienteApiController {
         try {
             Resource resource = new UrlResource(filePath.toUri());
             if (!resource.exists() || !resource.isReadable()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ErrorDto(Instant.now().toString(), 404, "Archivo no encontrado"));
+                throw new ResourceNotFoundException("Archivo no encontrado");
             }
 
             return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_PLAIN)
                     .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + fileName + "\"")
                     .body(resource);
         } catch (MalformedURLException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorDto(Instant.now().toString(), 404, "Archivo no encontrado"));
+            throw new ResourceNotFoundException("Archivo no encontrado");
         }
     }
 }

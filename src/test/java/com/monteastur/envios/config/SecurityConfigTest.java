@@ -1,13 +1,22 @@
 package com.monteastur.envios.config;
 
 import com.monteastur.envios.config.RBACAccessLogger;
+import com.monteastur.envios.controller.api.ClienteApiController;
 import com.monteastur.envios.controller.api.PushSubscriptionController;
+import com.monteastur.envios.controller.web.ClientDashboardController;
+import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.security.CustomAccessDeniedHandler;
+import com.monteastur.envios.service.ClienteService;
+import com.monteastur.envios.service.DocumentoPdfService;
+import com.monteastur.envios.service.EvidenciaEnvioService;
+import com.monteastur.envios.service.EventoTrackingService;
+import com.monteastur.envios.service.web.ClientDashboardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,14 +24,17 @@ import javax.sql.DataSource;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrlPattern;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {PushSubscriptionController.class})
+@WebMvcTest(controllers = {PushSubscriptionController.class,
+        ClienteApiController.class, ClientDashboardController.class})
 @Import(SecurityConfig.class)
 @TestPropertySource(properties = {
     "app.admin.username=admin",
-    "app.admin.password=test"
+    "app.admin.password=test",
+    "app.upload.dir=src/test/resources/uploads"
 })
 class SecurityConfigTest {
 
@@ -38,6 +50,24 @@ class SecurityConfigTest {
     @MockBean
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    @MockBean
+    private EnvioTrackingRepository envioTrackingRepository;
+
+    @MockBean
+    private ClienteService clienteService;
+
+    @MockBean
+    private EvidenciaEnvioService evidenciaEnvioService;
+
+    @MockBean
+    private EventoTrackingService eventoTrackingService;
+
+    @MockBean
+    private ClientDashboardService dashboardService;
+
+    @MockBean
+    private DocumentoPdfService documentoPdfService;
+
     @Test
     void apiPublico_accesibleSinAuth() throws Exception {
         mockMvc.perform(post("/api/v1/push/test"))
@@ -49,7 +79,7 @@ class SecurityConfigTest {
         mockMvc.perform(get("/admin/dashboard")
                 .accept(org.springframework.http.MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
@@ -57,7 +87,7 @@ class SecurityConfigTest {
         mockMvc.perform(get("/api/v1/admin/envios")
                 .accept(org.springframework.http.MediaType.TEXT_HTML))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrlPattern("**/login"));
+                .andExpect(redirectedUrl("/login"));
     }
 
     @Test
@@ -65,5 +95,29 @@ class SecurityConfigTest {
         mockMvc.perform(get("/api/v1/deliveries/MT-1/pod")
                 .accept(org.springframework.http.MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void apiClienteSinAuth_devuelve401Json() throws Exception {
+        mockMvc.perform(get("/api/v1/cliente/envios")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401));
+    }
+
+    @Test
+    void panelClienteSinAuth_redirigeLogin() throws Exception {
+        mockMvc.perform(get("/cliente/panel")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/cliente/login"));
+    }
+
+    @Test
+    void apiClienteConSesion_accesible() throws Exception {
+        mockMvc.perform(get("/api/v1/cliente/envios")
+                .sessionAttr("clienteId", 7L)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 }

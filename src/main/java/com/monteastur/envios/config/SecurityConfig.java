@@ -1,6 +1,9 @@
 package com.monteastur.envios.config;
 
+import com.monteastur.envios.security.ClienteSessionAuthenticationFilter;
 import com.monteastur.envios.security.CustomAccessDeniedHandler;
+import com.monteastur.envios.security.RestAuthenticationEntryPoint;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -11,6 +14,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 import javax.sql.DataSource;
@@ -22,16 +26,22 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
-                                           CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
+                                           CustomAccessDeniedHandler customAccessDeniedHandler,
+                                           RBACAccessLogger rbacAccessLogger,
+                                           ObjectMapper objectMapper) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/cliente/login", "/cliente/assets/**").permitAll()
                 .requestMatchers("/admin/**", "/api/v1/admin/**", "/api/v1/deliveries/**").authenticated()
                 .requestMatchers("/api/v1/docs", "/api/v1/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
+                .requestMatchers("/cliente/**", "/api/v1/cliente/**").hasRole("CLIENTE")
                 .anyRequest().permitAll()
             )
             .exceptionHandling(handling -> handling
                 .accessDeniedHandler(customAccessDeniedHandler)
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint(rbacAccessLogger, objectMapper))
             )
+            .addFilterBefore(new ClienteSessionAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/admin/dashboard")

@@ -9,11 +9,11 @@ import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.service.ClienteService;
 import com.monteastur.envios.service.DocumentoPdfService;
 import com.monteastur.envios.service.web.ClientDashboardService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.net.URI;
 
 /**
- * Panel de cliente autenticado por sesión (clienteId en HttpSession).
+ * Panel de cliente autenticado a través de la Authentication (ROLE_CLIENTE)
+ * creada por ClienteSessionAuthenticationFilter a partir del clienteId de sesión.
  * El dashboard se cachea en Redis y la etiqueta PDF solo es descargable
  * por el propietario del envío (ajeno -> 403, inexistente -> 404).
  */
@@ -47,8 +48,8 @@ public class ClientDashboardController {
     }
 
     @GetMapping("/panel")
-    public String panel(HttpSession session, Model model) {
-        Cliente cliente = clienteAutenticado(session);
+    public String panel(Authentication authentication, Model model) {
+        Cliente cliente = clienteAutenticado(authentication);
         if (cliente == null) {
             return "redirect:/cliente/login";
         }
@@ -58,8 +59,8 @@ public class ClientDashboardController {
     }
 
     @GetMapping("/panel/envio/{codigo}/etiqueta")
-    public ResponseEntity<byte[]> descargarEtiqueta(@PathVariable String codigo, HttpSession session) {
-        Cliente cliente = clienteAutenticado(session);
+    public ResponseEntity<byte[]> descargarEtiqueta(@PathVariable String codigo, Authentication authentication) {
+        Cliente cliente = clienteAutenticado(authentication);
         if (cliente == null) {
             return ResponseEntity.status(HttpStatus.FOUND).location(URI.create("/cliente/login")).build();
         }
@@ -77,15 +78,14 @@ public class ClientDashboardController {
                 .body(pdf);
     }
 
-    private Cliente clienteAutenticado(HttpSession session) {
-        Long clienteId = (Long) session.getAttribute("clienteId");
-        if (clienteId == null) {
+    private Cliente clienteAutenticado(Authentication authentication) {
+        if (authentication == null) {
             return null;
         }
-        return clienteService.buscarPorId(clienteId)
-                .orElseGet(() -> {
-                    session.invalidate();
-                    return null;
-                });
+        Object principal = authentication.getPrincipal();
+        if (!(principal instanceof Long clienteId)) {
+            return null;
+        }
+        return clienteService.buscarPorId(clienteId).orElse(null);
     }
 }

@@ -1,5 +1,6 @@
 package com.monteastur.envios.controller.api;
 
+import com.monteastur.envios.dto.api.ErrorDto;
 import com.monteastur.envios.dto.api.PushSubscriptionRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.Instant;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,8 +24,11 @@ public class PushSubscriptionController {
 
     private final Map<String, Object> subscriptions = new ConcurrentHashMap<>();
 
-    @Value("${spring.profiles.active:default}")
-    private String activeProfile;
+    private final boolean pushTestEnabled;
+
+    public PushSubscriptionController(@Value("${app.push.test-enabled:true}") boolean pushTestEnabled) {
+        this.pushTestEnabled = pushTestEnabled;
+    }
 
     @Operation(summary = "Suscribir a notificaciones push", description = "Registra un endpoint de suscripción push para recibir notificaciones")
     @ApiResponses({
@@ -47,17 +52,17 @@ public class PushSubscriptionController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Probar notificaciones push", description = "Simula el envío de una notificación a todos los dispositivos suscritos (no disponible en producción)")
+    @Operation(summary = "Probar notificaciones push", description = "Simula el envío de una notificación a todos los dispositivos suscritos (controlado por app.push.test-enabled)")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Simulación ejecutada"),
-        @ApiResponse(responseCode = "403", description = "Endpoint deshabilitado en producción",
+        @ApiResponse(responseCode = "403", description = "Endpoint deshabilitado (app.push.test-enabled=false)",
             content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
     })
     @PostMapping("/test")
     public ResponseEntity<?> testPush() {
-        if (activeProfile != null && activeProfile.contains("prod")) {
+        if (!pushTestEnabled) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(Map.of("error", "Push test endpoint disabled in production"));
+                    .body(new ErrorDto(Instant.now().toString(), 403, "Push test endpoint disabled"));
         }
         System.out.println("Simulating push notification for " + subscriptions.size() + " subscribers");
         // In a real PWA/Push server, we would send the payload here.
