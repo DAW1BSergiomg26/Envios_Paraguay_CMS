@@ -439,6 +439,16 @@ Accion recomendada:
 Crear indice docs/README_DOCS.md o DOCS_INDEX.md.
 ```
 
+Resultado:
+
+```text
+✅ CERRADO (2026-08-10)
+Creado docs/README_DOCS.md: indice maestro que clasifica los 65 documentos del directorio
+docs/ en 9 categorias (maestros, specs/plans, auditorias/hardening, despliegue/VPS/produccion,
+dominio/DNS/SSL, QA/testing, backup/operaciones, demo/lanzamiento, desarrollo) con enlace
+relativo a cada documento y reglas de mantenimiento para evitar nueva duplicidad.
+```
+
 ---
 
 ### P3.2 — Mejorar mapa de flujos visual
@@ -468,8 +478,8 @@ Crear diagrama Mermaid o PlantUML.
 6. Unificar ruta de evidencias/uploads.                      ✅ P1.5
 7. Fijar DTO publico de tracking.                            ✅ P1.6
 8. Sustituir System.out.println por SLF4J.                   ✅ P2.4
-9. Documentar decision Thymeleaf + React.                    ⏳ P2.2
-10. Crear indice de documentacion.                           ⏳ P3.1
+9. Documentar decision Thymeleaf + React.                    ✅ P2.2
+10. Crear indice de documentacion.                           ✅ P3.1
 ```
 
 ---
@@ -501,10 +511,10 @@ refactor naming
 ## Decision actual
 
 ```text
-Estado: P0 y P1 del backlog cerrados; P2.4, P2.3 y P2.2 completados
+Estado: P0, P1, P2.4, P2.3, P2.2 y P3.1 cerrados
 Riesgo general: medio controlado
-Pendiente: P3.1, P3.2 (documentacion) y P2.1
-Siguiente paso: crear indice de documentacion (P3.1) y revision de privacidad (P2.1)
+Pendiente: P2.1 (revision de privacidad) y P3.2 (diagrama de flujos)
+Siguiente paso: anadir diagrama de flujos visual (P3.2) y revision de privacidad (P2.1)
 ```
 
 ---
