@@ -17,7 +17,7 @@ ENV VITE_BASE=/react-dashboard/
 RUN npm run build
 
 # ---- Stage 2: Build backend ----
-FROM maven:3.9-eclipse-temurin-17 AS build
+FROM maven:3.9-eclipse-temurin-25 AS build
 WORKDIR /build
 COPY pom.xml .
 RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline -B
@@ -26,7 +26,7 @@ COPY --from=frontend /frontend/dist ./src/main/resources/static/react-dashboard/
 RUN --mount=type=cache,target=/root/.m2 mvn package -DskipTests -q
 
 # ---- Stage 3: Runtime ----
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:25-jre
 
 # OCI labels
 LABEL org.opencontainers.image.title="Monteastur Envios"
