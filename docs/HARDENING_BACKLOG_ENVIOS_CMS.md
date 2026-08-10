@@ -465,6 +465,17 @@ Accion recomendada:
 Crear diagrama Mermaid o PlantUML.
 ```
 
+Resultado:
+
+```text
+✅ CERRADO (2026-08-10)
+Añadido el diagrama oficial de arquitectura híbrida en formato Mermaid (flowchart LR) a la
+sección 0 de docs/ARQUITECTURA_INTERFACES.md: navegador (SPA React, Web SSR, CMS legacy, APIs),
+Spring Security con sesión JSESSIONID, controllers, servicios @Transactional con eventos
+AFTER_COMMIT, MySQL 8 (Flyway) y Redis (sesiones + caché). Complementa el flowchart de flujo de
+acceso admin ya existente en la sección 3.2 del spec de P2.2.
+```
+
 ---
 
 ## Orden recomendado de ejecucion
@@ -480,6 +491,7 @@ Crear diagrama Mermaid o PlantUML.
 8. Sustituir System.out.println por SLF4J.                   ✅ P2.4
 9. Documentar decision Thymeleaf + React.                    ✅ P2.2
 10. Crear indice de documentacion.                           ✅ P3.1
+11. Anadir diagrama de flujos visual.                        ✅ P3.2
 ```
 
 ---
@@ -511,10 +523,10 @@ refactor naming
 ## Decision actual
 
 ```text
-Estado: P0, P1, P2.4, P2.3, P2.2 y P3.1 cerrados
+Estado: P0, P1, P2.4, P2.3, P2.2, P3.1 y P3.2 cerrados
 Riesgo general: medio controlado
-Pendiente: P2.1 (revision de privacidad) y P3.2 (diagrama de flujos)
-Siguiente paso: anadir diagrama de flujos visual (P3.2) y revision de privacidad (P2.1)
+Pendiente: P2.1 (revision de privacidad)
+Siguiente paso: revision de privacidad (P2.1)
 ```
 
 ---

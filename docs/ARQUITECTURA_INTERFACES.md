@@ -2,10 +2,59 @@
 
 **Estado:** Vigente (actualizado el 2026-08-10, hito P2.2).
 **Referencias:** `docs/superpowers/specs/2026-08-10-arquitectura-interfaces-thymeleaf-react-design.md`,
-`docs/HARDENING_BACKLOG_ENVIOS_CMS.md` (P2.2, cerrado).
+`docs/HARDENING_BACKLOG_ENVIOS_CMS.md` (P2.2, cerrado), `docs/README_DOCS.md` (índice de documentación).
 
 Documenta la clasificación de las interfaces de la aplicación y la hoja de ruta de migración
 del CMS Thymeleaf a la SPA React.
+
+---
+
+## 0. Diagrama de arquitectura híbrida (oficial)
+
+Vista de alto nivel: una sola aplicación Spring Boot sirve la SPA React y el SSR Thymeleaf,
+compartiendo sesión Spring Security (`JSESSIONID`), con MySQL como base de datos relacional y
+Redis para sesiones distribuidas y caché.
+
+```mermaid
+flowchart LR
+    subgraph Browser
+        SPA["SPA React dashboard<br/>(panel admin oficial)"]
+        WEB["Web Thymeleaf SSR<br/>, casa, contacto, reservas,<br/>tracking, cliente (público)"]
+        CMS["CMS Thymeleaf admin<br/>(legacy en migración)"]
+        API["Cliente externo API v1"]
+    end
+
+    subgraph SpringBoot["Spring Boot 3.3.5 (app)"]
+        SEC["Spring Security<br/>form login + roles<br/>ADMIN / CLIENTE"]
+        CTRL["Controllers<br/>Web + REST API v1"]
+        SVC["Servicios de dominio<br/>@Transactional + eventos AFTER_COMMIT"]
+        SPAF["Frontend estático React<br/>react-dashboard (302 tras login)"]
+        SPAF --> CTRL
+    end
+
+    subgraph Data
+        MYSQL[("MySQL 8<br/>Flyway migraciones")]
+        REDIS[("Redis<br/>sesiones + caché envios.tracking")]
+    end
+
+    SPA -- "JSON admin APIs" --> CTRL
+    WEB -- "form login (SSR)" --> SEC
+    CMS -- "paginas cms" --> SEC
+    API -- "HTTP Basic / JSON" --> SEC
+    SEC --> CTRL
+    CTRL --> SVC
+    SVC --> MYSQL
+    SVC --> REDIS
+    SEC -- "302 react-dashboard" --> SPA
+```
+
+**Notas de lectura:**
+
+- El navegador entra por la SPA (oficial) o por la web pública (SSR); el login resuelve la sesión
+  en Spring Security y redirige la SPA a `/react-dashboard/`.
+- El CMS `/admin/**` sigue sirviendo `cms/*.html` mientras la migración F1–F6 no complete cada
+  pantalla equivalente en React (ver sección 3).
+- Las APIs `/api/v1/**` sirven a la SPA, al portal y a clientes externos bajo el mismo `SecurityConfig`.
 
 ---
 
