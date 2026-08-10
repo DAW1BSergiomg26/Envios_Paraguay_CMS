@@ -2,6 +2,7 @@ package com.monteastur.envios.controller.api;
 
 import com.monteastur.envios.dto.api.*;
 import com.monteastur.envios.model.EnvioTracking;
+import com.monteastur.envios.repository.ClienteRepository;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.service.EvidenciaEnvioService;
 import com.monteastur.envios.service.EventoTrackingService;
@@ -35,15 +36,18 @@ public class AdminApiController {
     private final EvidenciaEnvioService evidenciaService;
     private final EventoTrackingService eventoTrackingService;
     private final EnvioTrackingService envioTrackingService;
+    private final ClienteRepository clienteRepository;
 
     public AdminApiController(EnvioTrackingRepository trackingRepo,
                               EvidenciaEnvioService evidenciaService,
                               EventoTrackingService eventoTrackingService,
-                              EnvioTrackingService envioTrackingService) {
+                              EnvioTrackingService envioTrackingService,
+                              ClienteRepository clienteRepository) {
         this.trackingRepo = trackingRepo;
         this.evidenciaService = evidenciaService;
         this.eventoTrackingService = eventoTrackingService;
         this.envioTrackingService = envioTrackingService;
+        this.clienteRepository = clienteRepository;
     }
 
     @Operation(summary = "Listar envíos", description = "Devuelve una página de envíos filtrable por estado, código, rango de fechas o búsqueda general")
@@ -113,6 +117,21 @@ public class AdminApiController {
                     return dto;
                 });
         return ResponseEntity.ok(page);
+    }
+
+    @Operation(summary = "Listar clientes", description = "Catálogo de clientes para selectores (solo id y nombre, sin datos sensibles)")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de clientes",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ClienteResumenDto.class))),
+        @ApiResponse(responseCode = "401", description = "No autenticado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
+    @GetMapping("/clientes")
+    public ResponseEntity<List<ClienteResumenDto>> listarClientes() {
+        List<ClienteResumenDto> clientes = clienteRepository.findAll().stream()
+                .map(ClienteResumenDto::from)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(clientes);
     }
 
     @Operation(summary = "Detalle de envío", description = "Obtiene el detalle completo de un envío con eventos y evidencias")

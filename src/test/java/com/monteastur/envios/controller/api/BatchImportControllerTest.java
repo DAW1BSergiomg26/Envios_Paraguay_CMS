@@ -178,11 +178,44 @@ class BatchImportControllerTest {
     }
 
     @Test
+    void listarLotes_retorna200ConLotes() throws Exception {
+        BatchImport lote = new BatchImport(7L, "envios.csv", BatchImportEstado.COMPLETADO);
+        lote.setId(10L);
+        lote.setProcesados(50);
+        lote.setExitosos(48);
+        lote.setFallidos(2);
+        when(persistence.listarLotes()).thenReturn(List.of(lote));
+
+        mockMvc.perform(get("/api/v1/admin/imports"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(10))
+                .andExpect(jsonPath("$[0].nombreArchivo").value("envios.csv"))
+                .andExpect(jsonPath("$[0].estado").value("COMPLETADO"))
+                .andExpect(jsonPath("$[0].exitosos").value(48));
+    }
+
+    @Test
+    void listarLotes_sinLotes_retorna200ListaVacia() throws Exception {
+        when(persistence.listarLotes()).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/v1/admin/imports"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(0));
+    }
+
+    @Test
     @WithAnonymousUser
     void sinAutenticacion_devuelve401() throws Exception {
         mockMvc.perform(multipart("/api/v1/admin/imports/csv")
                         .file(ficheroCsv("codigo,estado,destinatario\nMT-1,RECIBIDO,María"))
                         .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithAnonymousUser
+    void listarLotes_sinAutenticacion_devuelve401() throws Exception {
+        mockMvc.perform(get("/api/v1/admin/imports"))
                 .andExpect(status().isUnauthorized());
     }
 }

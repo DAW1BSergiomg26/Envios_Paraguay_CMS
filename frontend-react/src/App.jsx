@@ -5,6 +5,7 @@ import ToastContainer from './components/ToastContainer';
 import MainLayout from './layouts/MainLayout';
 import AdminDashboard from './pages/AdminDashboard';
 import ShipmentDetailPage from './pages/ShipmentDetailPage';
+import ImportBatchPage from './pages/ImportBatchPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './pages/ProtectedRoute';
 
@@ -22,6 +23,9 @@ export default function App() {
             } />
             <Route path="/dashboard/envio/:codigo" element={
               <ProtectedRoute><ShipmentDetailPage /></ProtectedRoute>
+            } />
+            <Route path="/dashboard/imports" element={
+              <ProtectedRoute><ImportBatchPage /></ProtectedRoute>
             } />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

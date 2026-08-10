@@ -76,6 +76,15 @@ public class BatchImportController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(BatchImportResponseDto.from(lote));
     }
 
+    @Operation(summary = "Listado de lotes", description = "Historial de cargas masivas ordenado por fecha descendente")
+    @ApiResponse(responseCode = "200", description = "Lista de lotes")
+    @GetMapping
+    public ResponseEntity<List<BatchImportResponseDto>> listarLotes() {
+        return ResponseEntity.ok(persistence.listarLotes().stream()
+                .map(BatchImportResponseDto::from)
+                .toList());
+    }
+
     @Operation(summary = "Estado del lote", description = "Progreso y contadores del lote en tiempo real")
     @ApiResponse(responseCode = "200", description = "Estado del lote")
     @ApiResponse(responseCode = "404", description = "Lote inexistente")

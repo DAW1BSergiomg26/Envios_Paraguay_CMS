@@ -27,6 +27,9 @@ export default function MainLayout() {
             Monteastur
           </span>
           <div className="navbar-right">
+            <button className="btn-nav-link" onClick={() => navigate('/dashboard/imports')}>
+              Importar envíos
+            </button>
             <InstallPWAButton />
             <PushNotificationButton />
             <span className="navbar-user">{user.username}</span>

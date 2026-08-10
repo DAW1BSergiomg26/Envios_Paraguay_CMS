@@ -33,6 +33,29 @@ export function putAdminEnvioEstado(codigo, estado) {
   return api.put(`/admin/envios/${codigo}/estado`, { estado });
 }
 
+export function getAdminImports() {
+  return api.get('/admin/imports');
+}
+
+export function getAdminImporte(id) {
+  return api.get(`/admin/imports/${id}`);
+}
+
+export function getImportErrores(id) {
+  return api.get(`/admin/imports/${id}/errors`);
+}
+
+export function getAdminClientes() {
+  return api.get('/admin/clientes');
+}
+
+export function uploadImportCsv(file, clienteId) {
+  const formData = new FormData();
+  formData.append('file', file);
+  if (clienteId) formData.append('clienteId', clienteId);
+  return api.post('/admin/imports/csv', formData);
+}
+
 export async function getCsrfToken() {
   const res = await fetch('/login', { credentials: 'include' });
   const html = await res.text();
