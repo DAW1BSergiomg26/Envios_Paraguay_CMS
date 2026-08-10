@@ -128,4 +128,40 @@ export function formatPesoBytes(bytes) {
   return `${(bytes / 1024).toFixed(1)} KB`;
 }
 
+export function getAdminReservas(estado) {
+  const params = {};
+  if (estado) params.estado = estado;
+  return api.get('/admin/reservas', { params });
+}
+
+export function getAdminReservaDetalle(id) {
+  return api.get(`/admin/reservas/${id}`);
+}
+
+export function putAdminReserva(id, body) {
+  return api.put(`/admin/reservas/${id}`, body);
+}
+
+export function patchAdminReservaEstado(id, estado) {
+  return api.patch(`/admin/reservas/${id}/estado`, { estado });
+}
+
+export function deleteAdminReserva(id) {
+  return api.delete(`/admin/reservas/${id}`);
+}
+
+export function getAdminMensajes(leido) {
+  const params = {};
+  if (leido !== undefined && leido !== null) params.leido = leido;
+  return api.get('/admin/mensajes', { params });
+}
+
+export function patchAdminMensajeLeido(id, leido) {
+  return api.patch(`/admin/mensajes/${id}/leido`, { leido });
+}
+
+export function deleteAdminMensaje(id) {
+  return api.delete(`/admin/mensajes/${id}`);
+}
+
 export default api;

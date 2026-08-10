@@ -1,3 +1,13 @@
+import api, {
+  getAdminReservas,
+  getAdminReservaDetalle,
+  putAdminReserva,
+  patchAdminReservaEstado,
+  deleteAdminReserva,
+  getAdminMensajes,
+  patchAdminMensajeLeido,
+  deleteAdminMensaje,
+} from './api';
 import { getDocumentoUrl, descargarDocumento, formatPesoBytes } from './api'
 
 describe('api helpers de documentos', () => {
@@ -33,5 +43,60 @@ describe('api helpers de documentos', () => {
   it('formatea bytes a KB con 1 decimal', () => {
     expect(formatPesoBytes(1536)).toBe('1.5 KB')
     expect(formatPesoBytes(0)).toBe('0.0 KB')
+  })
+})
+
+describe('api helpers de reservas y mensajes', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('getAdminReservas llama a GET /admin/reservas con estado', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await getAdminReservas('aprobada')
+    expect(spy).toHaveBeenCalledWith('/admin/reservas', expect.objectContaining({ params: { estado: 'aprobada' } }))
+    spy.mockRestore()
+  })
+
+  it('getAdminReservas sin estado omite el param', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await getAdminReservas(undefined)
+    expect(spy).toHaveBeenCalledWith('/admin/reservas', expect.objectContaining({ params: {} }))
+    spy.mockRestore()
+  })
+
+  it('patchAdminReservaEstado llama a PATCH con el estado', async () => {
+    const spy = vi.spyOn(api, 'patch').mockResolvedValue({ data: {} })
+    await patchAdminReservaEstado(1, 'aprobada')
+    expect(spy).toHaveBeenCalledWith('/admin/reservas/1/estado', { estado: 'aprobada' })
+    spy.mockRestore()
+  })
+
+  it('getAdminMensajes sin filtro no envía leido', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await getAdminMensajes(undefined)
+    expect(spy).toHaveBeenCalledWith('/admin/mensajes', expect.objectContaining({ params: {} }))
+    spy.mockRestore()
+  })
+
+  it('getAdminMensajes con filtro envía leido', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await getAdminMensajes(true)
+    expect(spy).toHaveBeenCalledWith('/admin/mensajes', expect.objectContaining({ params: { leido: true } }))
+    spy.mockRestore()
+  })
+
+  it('patchAdminMensajeLeido llama a PATCH con leido', async () => {
+    const spy = vi.spyOn(api, 'patch').mockResolvedValue({ data: {} })
+    await patchAdminMensajeLeido(5, true)
+    expect(spy).toHaveBeenCalledWith('/admin/mensajes/5/leido', { leido: true })
+    spy.mockRestore()
+  })
+
+  it('deleteAdminMensaje llama a DELETE', async () => {
+    const spy = vi.spyOn(api, 'delete').mockResolvedValue({ data: {} })
+    await deleteAdminMensaje(5)
+    expect(spy).toHaveBeenCalledWith('/admin/mensajes/5')
+    spy.mockRestore()
   })
 })
