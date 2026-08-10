@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getAdminEnvioDetalle } from '../services/api';
+import { getAdminEnvioDetalle, getDocumentoUrl } from '../services/api';
 import usePolling from '../hooks/usePolling';
 import { useToast } from '../context/NotificationContext';
 import RefreshIndicator from '../components/RefreshIndicator';
@@ -141,7 +141,16 @@ export default function ShipmentDetailPage() {
     <div className="detail-page">
       <div className="detail-topbar">
         <button className="btn-back" onClick={() => navigate('/')}>← Volver al dashboard</button>
-        <RefreshIndicator lastUpdated={lastUpdated} polling={polling} refreshError={refreshError} onRefresh={refreshNow} />
+        <div className="detail-topbar-actions">
+          <button
+            type="button"
+            className="btn-pdf"
+            onClick={() => window.open(getDocumentoUrl('etiqueta', codigo), '_blank')}
+          >
+            🏷 Etiqueta térmica PDF
+          </button>
+          <RefreshIndicator lastUpdated={lastUpdated} polling={polling} refreshError={refreshError} onRefresh={refreshNow} />
+        </div>
       </div>
 
       <div className="detail-hero">
