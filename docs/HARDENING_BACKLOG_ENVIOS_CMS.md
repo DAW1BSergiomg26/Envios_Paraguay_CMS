@@ -323,6 +323,8 @@ Crear decision log: conservar, renombrar o separar modulos.
 
 ### P2.2 — Thymeleaf + React dashboard
 
+Estado: ✅ Cerrado.
+
 Descripcion:
 
 ```text
@@ -339,6 +341,20 @@ Accion recomendada:
 
 ```text
 Documentar que pantallas son oficiales, legacy o complementarias.
+```
+
+Resultado:
+
+```text
+- Matriz oficial/legacy/complementaria documentada en docs/ARQUITECTURA_INTERFACES.md.
+- Login admin (GET /login) y POST /login correcto -> 302 /react-dashboard/.
+- GET /admin/dashboard con sesion -> 302 /react-dashboard/; anonimo -> /login.
+- Resto de /admin/** sigue sirviendo cms/*.html con banner "Interfaz heredada"
+  (.legacy-banner autocontenido en admin-sidebar.html + design-system.css).
+- Suite sin infraestructura en verde (307 tests, 0 failures; 37 errores ambientales
+  de *IntegrationTest requieren Docker).
+- Observacion (hallazgo H8): design-system.css no contiene .sidebar/.nav-links/.main-content
+  (regresion previa de e72def6). No reparado en P2.2; pendiente para un bloque de pulido visual.
 ```
 
 ---
@@ -485,10 +501,10 @@ refactor naming
 ## Decision actual
 
 ```text
-Estado: P0 y P1 del backlog cerrados; P2.4 y P2.3 completados
+Estado: P0 y P1 del backlog cerrados; P2.4, P2.3 y P2.2 completados
 Riesgo general: medio controlado
-Pendiente: P2.1, P2.2 (decisiones) y P3.1, P3.2 (documentacion)
-Siguiente paso: documentar decision Thymeleaf + React y crear indice de documentacion
+Pendiente: P3.1, P3.2 (documentacion) y P2.1
+Siguiente paso: crear indice de documentacion (P3.1) y revision de privacidad (P2.1)
 ```
 
 ---
