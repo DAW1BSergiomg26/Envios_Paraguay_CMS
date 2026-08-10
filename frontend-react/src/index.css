@@ -2384,3 +2384,18 @@ body {
 }
 
 
+
+/* ---- F4: Reservas y mensajes ---- */
+.acciones-fila { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.acciones-fila .btn-nav-link { padding: 0.35rem 0.6rem; font-size: 0.8rem; }
+.cell-nombre { font-weight: 600; color: #e1e5ee; }
+.cell-sub { font-size: 0.8rem; color: #8b93a7; }
+.cell-mensaje { max-width: 320px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #c3c9d6; }
+.form-edicion { display: flex; flex-direction: column; gap: 0.5rem; padding: 0.5rem 0; }
+.import-input {
+  width: 100%; padding: 0.5rem 0.75rem; border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15); background: rgba(255, 255, 255, 0.06);
+  color: #e1e5ee; font-size: 0.9rem;
+}
+.import-input:focus { outline: none; border-color: #d4762a; }
+.import-input::placeholder { color: #8b93a7; }
