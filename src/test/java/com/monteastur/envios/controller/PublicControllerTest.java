@@ -83,6 +83,13 @@ class PublicControllerTest {
     }
 
     @Test
+    void laCasa_aliasAntiguo_redirigePermanenteACasa() throws Exception {
+        mockMvc.perform(get("/lacasa"))
+                .andExpect(status().isMovedPermanently())
+                .andExpect(header().string("Location", "/casa"));
+    }
+
+    @Test
     void laCasa_en_returnsViewWithImages() throws Exception {
         when(imagenRepo.findAllByOrderByOrdenAsc()).thenReturn(List.of(new Imagen()));
 

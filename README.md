@@ -252,7 +252,7 @@ La aplicación estará disponible en el puerto definido en `PORT` (por defecto 8
 
 ```powershell
 # Paso 1: Arrancar MySQL Docker (si no existe crear con:)
-docker run -d --name monteastur-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=casarural mysql:8.0
+docker run -d --name monteastur-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=envios_paraguay_cms mysql:8.0
 # (si ya existe) docker start monteastur-mysql
 
 # Paso 2: Configurar variables de entorno (PowerShell)
@@ -262,7 +262,7 @@ $env:JPA_SHOW_SQL="true"
 $env:UPLOAD_DIR="./uploads"
 $env:ADMIN_USERNAME="admin"
 $env:ADMIN_PASSWORD="admin123"
-$env:SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/casarural?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
+$env:SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/envios_paraguay_cms?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"
 $env:DB_USERNAME="root"
 $env:DB_PASSWORD="root"
 

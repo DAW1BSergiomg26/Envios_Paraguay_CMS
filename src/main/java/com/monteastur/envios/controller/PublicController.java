@@ -10,12 +10,15 @@ import com.monteastur.envios.repository.ReservaRepository;
 import com.monteastur.envios.repository.TextoLegalRepository;
 import com.monteastur.envios.service.EmailService;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -50,10 +53,17 @@ public class PublicController {
         return template("home", request);
     }
 
-    @GetMapping({"/casa", "/lacasa", "/en/casa"})
+    @GetMapping({"/casa", "/en/casa"})
     public String laCasa(Model model, HttpServletRequest request) {
         model.addAttribute("imagenes", imagenRepo.findAllByOrderByOrdenAsc());
         return template("lacasa", request);
+    }
+
+    @GetMapping("/lacasa")
+    public ResponseEntity<Void> redirigirAliasLaCasa() {
+        return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY)
+                .location(URI.create("/casa"))
+                .build();
     }
 
     @GetMapping({"/entorno", "/en/entorno"})
