@@ -3993,3 +3993,40 @@ body {
 .modal[hidden] {
   display: none !important;
 }
+
+/* ---- Banner de vista clásica (legacy) del CMS ---- */
+.legacy-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 10px 12px;
+  border: 1px solid #d4762a;
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: #fff4e8;
+  color: #5a3a12;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+.legacy-banner-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+  line-height: 1;
+  color: #d4762a;
+}
+
+.legacy-banner-text {
+  margin: 0;
+}
+
+.legacy-banner-text a {
+  color: #d4762a;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.legacy-banner-text a:hover {
+  color: #a85f1f;
+}

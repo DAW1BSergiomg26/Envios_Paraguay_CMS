@@ -4,6 +4,10 @@
         <small>Centro de Operaciones</small>
         <span class="refugio-tag">Log&iacute;stica Premium</span>
     </div>
+    <div class="legacy-banner" role="note">
+        <span class="legacy-banner-icon" aria-hidden="true">&#9888;</span>
+        <p class="legacy-banner-text">Vista cl&aacute;sica del CMS. El panel principal ahora vive en el nuevo panel React (<a th:href="@{/react-dashboard/}">acceder al panel</a>).</p>
+    </div>
     <nav class="nav-links">
         <a href="/admin/dashboard" th:class="${seccionActiva == 'dashboard'} ? 'active' : ''"><i data-lucide="layout-dashboard" class="luxury-icon luxury-icon-sm"></i> Panel de Inicio</a>
         <a href="/admin/tracking" th:class="${seccionActiva == 'tracking'} ? 'active' : ''"><i data-lucide="package-search" class="luxury-icon luxury-icon-sm"></i> Tracking Env&iacute;os</a>
