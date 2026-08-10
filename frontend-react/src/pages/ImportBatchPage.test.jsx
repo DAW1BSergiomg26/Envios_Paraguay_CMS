@@ -10,6 +10,8 @@ const mockGetImportErrores = vi.fn()
 const mockRefreshNow = vi.fn()
 const mockShowSuccess = vi.fn()
 const mockShowError = vi.fn()
+const mockGetDocumentoUrl = vi.fn()
+const mockDescargarDocumento = vi.fn()
 
 vi.mock('../services/api', () => ({
   getAdminImports: (...args) => mockGetAdminImports(...args),
@@ -17,6 +19,8 @@ vi.mock('../services/api', () => ({
   uploadImportCsv: (...args) => mockUploadImportCsv(...args),
   getAdminImporte: (...args) => mockGetAdminImporte(...args),
   getImportErrores: (...args) => mockGetImportErrores(...args),
+  getDocumentoUrl: (...args) => mockGetDocumentoUrl(...args),
+  descargarDocumento: (...args) => mockDescargarDocumento(...args),
 }))
 
 vi.mock('../hooks/usePolling', () => ({
@@ -115,5 +119,32 @@ describe('ImportBatchPage', () => {
     mockGetAdminClientes.mockRejectedValue(new Error('Error de conexión'))
     render(<ImportBatchPage />)
     await waitFor(() => expect(mockShowError).toHaveBeenCalled())
+  })
+
+  it('descarga etiquetas y manifiesto del lote activo', async () => {
+    const user = userEvent.setup()
+    mockUploadImportCsv.mockResolvedValue({ data: { id: 99, estado: 'PROCESANDO' } })
+    mockGetAdminImporte.mockResolvedValue({ data: {
+      id: 99, estado: 'COMPLETADO', procesados: 10, exitosos: 10, fallidos: 0,
+      totalRegistros: 10, nombreArchivo: 'envios.csv',
+    } })
+
+    render(<ImportBatchPage />)
+    const file = new File(['codigo,estado\nMT-1,RECIBIDO'], 'envios.csv', { type: 'text/csv' })
+    await user.upload(screen.getByLabelText('Fichero CSV'), file)
+    await user.click(screen.getByRole('button', { name: /importar csv/i }))
+    await screen.findByText('Lote #99')
+
+    mockGetDocumentoUrl
+      .mockReturnValueOnce('/admin/documentos/lotes/99/etiquetas')
+      .mockReturnValueOnce('/admin/documentos/lotes/99/manifiesto')
+
+    await user.click(screen.getByRole('button', { name: /etiquetas del lote/i }))
+    expect(mockGetDocumentoUrl).toHaveBeenCalledWith('etiquetas-lote', 99)
+    expect(mockDescargarDocumento).toHaveBeenCalledWith('/admin/documentos/lotes/99/etiquetas')
+
+    await user.click(screen.getByRole('button', { name: /manifiesto/i }))
+    expect(mockGetDocumentoUrl).toHaveBeenCalledWith('manifiesto', 99)
+    expect(mockDescargarDocumento).toHaveBeenCalledWith('/admin/documentos/lotes/99/manifiesto')
   })
 })

@@ -4,7 +4,9 @@ import {
   getAdminClientes,
   getAdminImporte,
   getImportErrores,
-  uploadImportCsv
+  uploadImportCsv,
+  getDocumentoUrl,
+  descargarDocumento
 } from '../services/api';
 import usePolling from '../hooks/usePolling';
 import { useToast } from '../context/NotificationContext';
@@ -189,6 +191,22 @@ export default function ImportBatchPage() {
             {loteActivo.estado} — procesados {loteActivo.procesados} / exitosos {loteActivo.exitosos} / fallidos {loteActivo.fallidos}
             {loteActivo.errorResumen ? ` — ${loteActivo.errorResumen}` : ''}
           </p>
+          <div className="import-form-row">
+            <button
+              type="button"
+              className="btn-importar btn-importar--small"
+              onClick={() => descargarDocumento(getDocumentoUrl('etiquetas-lote', loteActivo.id))}
+            >
+              Etiquetas del lote
+            </button>
+            <button
+              type="button"
+              className="btn-importar btn-importar--small"
+              onClick={() => descargarDocumento(getDocumentoUrl('manifiesto', loteActivo.id))}
+            >
+              Manifiesto
+            </button>
+          </div>
         </section>
       )}
 
