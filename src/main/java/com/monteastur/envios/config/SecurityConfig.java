@@ -44,7 +44,7 @@ public class SecurityConfig {
             .addFilterBefore(new ClienteSessionAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/admin/dashboard")
+                .defaultSuccessUrl("/react-dashboard/", true)
                 .permitAll()
             )
             .httpBasic(Customizer.withDefaults())

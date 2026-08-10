@@ -84,14 +84,8 @@ public class AdminController {
     }
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
-        model.addAttribute("totalReservas", reservaRepo.count());
-        model.addAttribute("reservasPendientes", reservaRepo.countByEstado("pendiente"));
-        model.addAttribute("totalMensajes", mensajeRepo.count());
-        model.addAttribute("totalImagenes", imagenRepo.count());
-        model.addAttribute("ultimasReservas", reservaRepo.findTop5ByOrderByCreatedAtDesc());
-        model.addAttribute("ultimosMensajes", mensajeRepo.findTop5ByOrderByFechaEnvioDesc());
-        return "cms/dashboard";
+    public String dashboard() {
+        return "redirect:/react-dashboard/";
     }
 
     @GetMapping("/mensajesrecibidos")

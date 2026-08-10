@@ -17,11 +17,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,6 +47,9 @@ class SecurityConfigTest {
 
     @MockBean
     private DataSource dataSource;
+
+    @MockBean
+    private JdbcUserDetailsManager userDetailsManager;
 
     @MockBean
     private RBACAccessLogger rbacAccessLogger;
@@ -119,5 +126,21 @@ class SecurityConfigTest {
                 .sessionAttr("clienteId", 7L)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void loginCorrecto_redirigeAlPanelReact() throws Exception {
+        String encodedPassword = new BCryptPasswordEncoder().encode("test");
+        org.springframework.security.core.userdetails.UserDetails adminUser =
+                org.springframework.security.core.userdetails.User
+                        .withUsername("admin")
+                        .password(encodedPassword)
+                        .roles("ADMIN")
+                        .build();
+        when(userDetailsManager.loadUserByUsername("admin")).thenReturn(adminUser);
+
+        mockMvc.perform(formLogin("/login").user("admin").password("test"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/react-dashboard/"));
     }
 }

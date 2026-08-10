@@ -83,7 +83,6 @@ class AdminThemeAssetsTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
-        "/admin/dashboard",
         "/admin/mensajesrecibidos",
         "/admin/reservas",
         "/admin/imagenes",
@@ -102,13 +101,9 @@ class AdminThemeAssetsTest {
     }
 
     @Test
-    void dashboard_incluyeSeccionBiYAssetsChartjs() throws Exception {
+    void dashboard_conSesion_redirigeAlPanelReact() throws Exception {
         mockMvc.perform(get("/admin/dashboard").with(user("admin").roles("ADMIN")))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("bi-analytics-section")))
-                .andExpect(content().string(containsString("/js/vendor/chart.umd.min.js")))
-                .andExpect(content().string(containsString("/js/analytics.js")))
-                .andExpect(content().string(containsString("bi-chart-estado")))
-                .andExpect(content().string(containsString("Refrescar")));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/react-dashboard/"));
     }
 }

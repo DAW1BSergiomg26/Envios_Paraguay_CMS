@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -63,6 +64,30 @@ class AdminControllerTest {
     @MockBean private RBACAccessLogger rbacAccessLogger;
     @MockBean private CustomAccessDeniedHandler customAccessDeniedHandler;
     @MockBean private DataSource dataSource;
+
+    @Test
+    void dashboard_conSesion_redirigeAlPanelReact() throws Exception {
+        mockMvc.perform(get("/admin/dashboard").with(user("admin").roles("ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/react-dashboard/"));
+    }
+
+    @Test
+    void dashboard_sinSesion_redirigeALogin() throws Exception {
+        mockMvc.perform(get("/admin/dashboard")
+                .accept(MediaType.TEXT_HTML))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+    }
+
+    @Test
+    void reservas_conSesion_sigueSirviendoCms() throws Exception {
+        when(reservaRepo.findAllByOrderByCreatedAtDesc()).thenReturn(List.of());
+
+        mockMvc.perform(get("/admin/reservas").with(user("admin").roles("ADMIN")))
+                .andExpect(status().isOk())
+                .andExpect(view().name("cms/reservas"));
+    }
 
     @Test
     void imports_returnsViewWithClientesAndLotes() throws Exception {
