@@ -1,5 +1,7 @@
 package com.monteastur.envios.service;
 
+import com.monteastur.envios.exception.BadRequestException;
+import com.monteastur.envios.exception.ConflictException;
 import com.monteastur.envios.model.Reserva;
 import com.monteastur.envios.repository.ReservaRepository;
 import org.junit.jupiter.api.Test;
@@ -67,5 +69,53 @@ class ReservaServiceTest {
         Optional<Reserva> resultado = reservaService.buscarPorId(99L);
 
         assertFalse(resultado.isPresent());
+    }
+
+    @Test
+    void cambiarEstado_aceptaMinusculas() {
+        Reserva reserva = new Reserva();
+        reserva.setId(1L);
+        reserva.setEstado("pendiente");
+
+        when(reservaRepository.findById(1L)).thenReturn(Optional.of(reserva));
+        when(reservaRepository.save(any(Reserva.class))).thenReturn(reserva);
+
+        Optional<Reserva> resultado = reservaService.cambiarEstado(1L, "aprobada");
+
+        assertTrue(resultado.isPresent());
+        assertEquals("aprobada", resultado.get().getEstado());
+    }
+
+    @Test
+    void cambiarEstado_normalizaMayusculasEntrada() {
+        Reserva reserva = new Reserva();
+        reserva.setId(1L);
+        reserva.setEstado("pendiente");
+
+        when(reservaRepository.findById(1L)).thenReturn(Optional.of(reserva));
+        when(reservaRepository.save(any(Reserva.class))).thenReturn(reserva);
+
+        Optional<Reserva> resultado = reservaService.cambiarEstado(1L, "APROBADA");
+
+        assertTrue(resultado.isPresent());
+        assertEquals("aprobada", resultado.get().getEstado());
+    }
+
+    @Test
+    void cambiarEstado_estadoInvalido_lanzaBadRequest() {
+        assertThrows(BadRequestException.class,
+            () -> reservaService.cambiarEstado(1L, "NO_EXISTE"));
+    }
+
+    @Test
+    void cambiarEstado_transicionIlegal_lanzaConflict() {
+        Reserva reserva = new Reserva();
+        reserva.setId(1L);
+        reserva.setEstado("confirmada");
+
+        when(reservaRepository.findById(1L)).thenReturn(Optional.of(reserva));
+
+        assertThrows(ConflictException.class,
+            () -> reservaService.cambiarEstado(1L, "aprobada"));
     }
 }

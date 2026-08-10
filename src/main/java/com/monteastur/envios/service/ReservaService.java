@@ -17,12 +17,12 @@ import java.util.*;
 @Service
 public class ReservaService {
 
-    private static final Set<String> ESTADOS_VALIDOS = Set.of("PENDIENTE", "APROBADA", "CONFIRMADA", "CANCELADA");
+    private static final Set<String> ESTADOS_VALIDOS = Set.of("pendiente", "aprobada", "confirmada", "cancelada");
 
     private static final Map<String, Set<String>> TRANSICIONES_PERMITIDAS = Map.of(
-        "PENDIENTE", Set.of("APROBADA", "CANCELADA"),
-        "APROBADA", Set.of("CONFIRMADA", "CANCELADA"),
-        "CONFIRMADA", Set.of("CANCELADA")
+        "pendiente", Set.of("aprobada", "cancelada"),
+        "aprobada", Set.of("confirmada", "cancelada"),
+        "confirmada", Set.of("cancelada")
     );
 
     private final ReservaRepository repo;
@@ -111,12 +111,15 @@ public class ReservaService {
     @CacheEvict(value = "envios.reservas", allEntries = true)
     @Transactional
     public Optional<Reserva> cambiarEstado(Long id, String nuevoEstado) {
-        String estadoNormalizado = nuevoEstado.trim().toUpperCase();
+        String estadoNormalizado = nuevoEstado.trim().toLowerCase();
         if (!ESTADOS_VALIDOS.contains(estadoNormalizado)) {
             throw new BadRequestException("Estado no válido: " + nuevoEstado);
         }
 
         return repo.findById(id).map(r -> {
+            if (!TRANSICIONES_PERMITIDAS.containsKey(r.getEstado())) {
+                throw new ConflictException("Transición no permitida desde estado terminal: " + r.getEstado());
+            }
             Set<String> permitidos = TRANSICIONES_PERMITIDAS.getOrDefault(r.getEstado(), Set.of());
             if (!permitidos.contains(estadoNormalizado)) {
                 throw new ConflictException(

@@ -39,7 +39,7 @@ public class ReservaApiController {
         List<Reserva> reservas = reservaService.listarTodas();
 
         if (estado != null && !estado.isBlank()) {
-            String estadoNormalizado = estado.trim().toUpperCase();
+            String estadoNormalizado = estado.trim().toLowerCase();
             reservas = reservas.stream()
                 .filter(r -> r.getEstado().equals(estadoNormalizado))
                 .collect(Collectors.toList());
