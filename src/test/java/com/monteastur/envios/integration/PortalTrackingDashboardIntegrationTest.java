@@ -22,14 +22,19 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -38,7 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class PortalTrackingDashboardIntegrationTest {
 
     private static final String PNG_1X1 =
@@ -112,6 +117,11 @@ class PortalTrackingDashboardIntegrationTest {
         eventoTrackingRepository.save(evento);
     }
 
+    private RequestPostProcessor autenticacionCliente(Long idCliente) {
+        return authentication(new UsernamePasswordAuthenticationToken(
+                idCliente, null, List.of(new SimpleGrantedAuthority("ROLE_CLIENTE"))));
+    }
+
     @Test
     void paginaTracking_retorna200ConTimeline() throws Exception {
         String codigo = "PY-PORTAL-" + System.nanoTime();
@@ -143,7 +153,7 @@ class PortalTrackingDashboardIntegrationTest {
 
     @Test
     void paginaTracking_inexistente_retorna404() throws Exception {
-        mockMvc.perform(get("/tracking/PY-NOPE"))
+        mockMvc.perform(get("/tracking/PY-NOPE").with(csrf()))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name("tracking-404"));
     }
@@ -153,7 +163,7 @@ class PortalTrackingDashboardIntegrationTest {
         String codigo = "PY-DASH-" + System.nanoTime();
         seedClienteYEnvio(codigo, "RECIBIDO");
 
-        mockMvc.perform(get("/cliente/panel").sessionAttr("clienteId", clienteId))
+        mockMvc.perform(get("/cliente/panel").with(autenticacionCliente(clienteId)).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("cliente/panel"))
                 .andExpect(model().attributeExists("panel"));
@@ -164,7 +174,7 @@ class PortalTrackingDashboardIntegrationTest {
         String codigo = "PY-PDF-" + System.nanoTime();
         seedClienteYEnvio(codigo, "RECIBIDO");
 
-        mockMvc.perform(get("/cliente/panel/envio/" + codigo + "/etiqueta").sessionAttr("clienteId", clienteId))
+        mockMvc.perform(get("/cliente/panel/envio/" + codigo + "/etiqueta").with(autenticacionCliente(clienteId)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/pdf"));
     }
@@ -176,7 +186,7 @@ class PortalTrackingDashboardIntegrationTest {
         Long otroClienteId = clienteRepository.save(
                 new Cliente("ajeno-" + System.nanoTime() + "@test.com", "pass", "Otro", null)).getId();
 
-        mockMvc.perform(get("/cliente/panel/envio/" + codigo + "/etiqueta").sessionAttr("clienteId", otroClienteId))
+        mockMvc.perform(get("/cliente/panel/envio/" + codigo + "/etiqueta").with(autenticacionCliente(otroClienteId)))
                 .andExpect(status().isForbidden());
 
         clienteRepository.deleteById(otroClienteId);
