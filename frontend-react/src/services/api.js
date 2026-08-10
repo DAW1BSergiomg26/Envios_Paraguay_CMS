@@ -100,4 +100,32 @@ export async function checkSession() {
   }
 }
 
+export function getDocumentoUrl(tipo, referencia) {
+  if (tipo === 'etiqueta') {
+    return `/admin/documentos/envios/${referencia}/etiqueta`;
+  }
+  if (tipo === 'etiquetas-lote') {
+    return `/admin/documentos/lotes/${referencia}/etiquetas`;
+  }
+  return `/admin/documentos/lotes/${referencia}/manifiesto`;
+}
+
+export function descargarDocumento(url) {
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.download = '';
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+}
+
+export function getAdminDocumentos(tipo) {
+  return api.get('/admin/documentos', { params: { tipo } });
+}
+
+export function formatPesoBytes(bytes) {
+  if (!bytes || bytes <= 0) return '0.0 KB';
+  return `${(bytes / 1024).toFixed(1)} KB`;
+}
+
 export default api;
