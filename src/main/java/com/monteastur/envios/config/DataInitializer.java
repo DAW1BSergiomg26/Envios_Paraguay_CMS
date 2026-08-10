@@ -220,7 +220,7 @@ public class DataInitializer implements CommandLineRunner {
             repo.save(new TextoLegal("aviso-legal", "Aviso Legal",
                 "<h3>1. Datos identificativos</h3>\n" +
                 "<p>El presente sitio web es propiedad del Grupo B2, con domicilio en Asturias, España.</p>\n" +
-                "<p>Correo electrónico de contacto: info@casarrural.com</p>\n" +
+                "<p>Correo electrónico de contacto: info@monteastur.com</p>\n" +
                 "<h3>2. Propiedad intelectual</h3>\n" +
                 "<p>Todos los contenidos del sitio web (textos, imágenes, logotipos, diseño) están protegidos por derechos de propiedad intelectual. Queda prohibida su reproducción total o parcial sin autorización expresa.</p>\n" +
                 "<h3>3. Uso del sitio web</h3>\n" +

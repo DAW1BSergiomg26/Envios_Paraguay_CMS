@@ -21,7 +21,7 @@ public class OpenApiConfig {
                 .version("3.2")
                 .contact(new Contact()
                     .name("Monteastur Envíos")
-                    .email("admin@casarrural.com")))
+                    .email("admin@monteastur.com")))
             .components(new Components()
                 .addSecuritySchemes("basicAuth", new SecurityScheme()
                     .type(SecurityScheme.Type.HTTP)
