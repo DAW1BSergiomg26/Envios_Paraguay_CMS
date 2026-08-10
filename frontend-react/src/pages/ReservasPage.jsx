@@ -11,10 +11,10 @@ import EmptyState from '../components/EmptyState';
 
 const ESTADOS = [
   { value: '', label: 'Todos los estados' },
-  { value: 'pendiente', label: 'pendiente' },
-  { value: 'aprobada', label: 'aprobada' },
-  { value: 'confirmada', label: 'confirmada' },
-  { value: 'cancelada', label: 'cancelada' },
+  { value: 'pendiente', label: 'Pendiente' },
+  { value: 'aprobada', label: 'Aprobada' },
+  { value: 'confirmada', label: 'Confirmada' },
+  { value: 'cancelada', label: 'Cancelada' },
 ];
 
 const ESTADO_BADGE = {

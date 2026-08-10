@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, within, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import ReservasPage from './ReservasPage'
 
@@ -47,8 +47,9 @@ describe('ReservasPage', () => {
     expect(mockGetAdminReservas).toHaveBeenCalledWith(undefined)
     expect(await screen.findByText('Juan Pérez')).toBeInTheDocument()
     expect(screen.getByText('Laura Martínez')).toBeInTheDocument()
-    expect(screen.getByText('Pendiente')).toBeInTheDocument()
-    expect(screen.getByText('Confirmada')).toBeInTheDocument()
+    const table = screen.getByRole('table')
+    expect(await within(table).findByText('Pendiente')).toBeInTheDocument()
+    expect(within(table).getByText('Confirmada')).toBeInTheDocument()
   })
 
   it('filtra por estado al cambiar el select', async () => {
