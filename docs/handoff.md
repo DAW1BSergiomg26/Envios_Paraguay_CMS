@@ -9,7 +9,7 @@
 - **Servidor Web / Reverse Proxy:** Nginx (caché estático agresivo, cabeceras de seguridad y Let's Encrypt).
 - **Email:** JavaMailSender (SMTP) con soporte para Mailpit en desarrollo.
 - **Observabilidad:** Prometheus, Grafana y uptime-kuma (definidos en `docker-compose.yml`).
-- **Contenedores:** Docker y Docker Compose (`docker-compose.yml`, `start-all.ps1`).
+- **Contenedores:** Docker y Docker Compose (`docker-compose.yml`, `start-app.ps1`).
 Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `grafana`, `uptime-kuma`, `redis`.
 ---
 ## 🔒 Mejoras de Hardening y Seguridad Recientes (Sprint Actual)
@@ -158,7 +158,7 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
   ```powershell
   docker compose up -d --build
   ```
-  o usar el script `start-all.ps1`.
+  o usar el script `start-app.ps1`.
 - **Compilar (sin JDK local):**
   ```powershell
   docker run --rm -v "${PWD}:/app" -w /app -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-25 mvn clean compile -q
@@ -166,9 +166,9 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
 ---
 ## 📌 Estado Git Actual
 - **Rama:** `main` (estable) — **sincronizada con `origin/main`** en `55eeb22` (2026-08-06). Sin push ni merge sin confirmación explícita del usuario.
-- **HEAD:** `5baf904` — `feat(seguridad): clienteId de sesión en Spring Security y gate de push test`.
-- **Sprint actual (2026-08-07):** fase Verde P1.3/P1.4 — `clienteId` de sesión integrado en Spring Security (`ClienteSessionAuthenticationFilter` + `RestAuthenticationEntryPoint`), controllers de cliente refactorizados a `Authentication`, gate `app.push.test-enabled` para `/api/v1/push/test` (off en prod), descarga de evidencias fijada a `text/plain`. Batería objetivo 31/31 verde; suite completa 293 run/0 failures (los 37 errores son los `@SpringBootTest` de integración que necesitan Docker/MySQL/Redis apagados).
-- **Suite completa:** **293 tests, 0 failures** en local sin contenedores (los 37 errores son los `@SpringBootTest` de integración que requieren MySQL/Redis levantados vía Docker; sin regresiones). Batería objetivo de la fase P1.3/P1.4: **31 tests, 0 fallos, 0 errores**.
+- **HEAD:** `1fd914f` — `chore(build): alinea runtime Java a 25 en pom.xml y Dockerfile`.
+- **Sprint actual (2026-08-10):** cierre de fase P2/P3 — P2.1 (naming Casa Rural) cerrado, runtime alineado a **Java 25** (pom + Dockerfile, build/run con `maven:3.9-eclipse-temurin-25` y `eclipse-temurin:25-jre`), Docker validado local (build + up + `/actuator/health` UP), residuales limpiados (`HANDOFF.md`, `Handoff_2.md`, `render.yaml - Envios_Paraguay_CMS.txt`, `start-all.*`, `generate_handoff.py`, logs `app*.log`).
+- **Suite completa:** **311 tests, 3 failures** (los 3 son del portal de tracking: `PortalTrackingDashboardIntegrationTest` con `addFilters=false` recibe 302 hacia login; preexistentes, no relacionados con T1/T2 — verificados idénticos con y sin el cambio de Java). Los `@SpringBootTest` de integración que requieren Docker/MySQL/Redis levantan sin errores con los contenedores corriendo.
 - **Migraciones Flyway aplicadas:** V1–V10 (V10 agrega las agregaciones SQL del BI dashboard).
 - Flujo de ramas: `main` = estable, `develop` = integración, `feature/*` = mejoras concretas.
 - No hacer push ni merge sin confirmación explícita del usuario.

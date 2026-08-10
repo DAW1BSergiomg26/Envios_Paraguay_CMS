@@ -319,6 +319,25 @@ Accion recomendada:
 Crear decision log: conservar, renombrar o separar modulos.
 ```
 
+Estado: ✅ Cerrado (2026-08-10, commit `669a185`).
+
+Resultado:
+
+```text
+Eliminados los emails heredados de Casa Rural (`info@casarrural.com`, `admin@casarrural.com`)
+en `DataInitializer` (Aviso Legal) y `OpenApiConfig` (contacto OpenAPI), reemplazados por
+`info@monteastur.com` y `admin@monteastur.com`. Tests TDD nuevos (`DataInitializerTest`,
+`OpenApiConfigTest`) verifican el cambio y la ausencia de la marca heredada. Sin más
+referencias a `casarrural` en el codigo.
+```
+
+Criterio de aceptacion:
+
+```text
+[✅] Sin referencias a casarrural.com en codigo fuente.
+[✅] Tests verdes: DataInitializerTest y OpenApiConfigTest (4 tests).
+
+
 ---
 
 ### P2.2 — Thymeleaf + React dashboard
@@ -523,10 +542,10 @@ refactor naming
 ## Decision actual
 
 ```text
-Estado: P0, P1, P2.4, P2.3, P2.2, P3.1 y P3.2 cerrados
+Estado: P0, P1, P2.4, P2.3, P2.2, P2.1, P3.1 y P3.2 cerrados
 Riesgo general: medio controlado
-Pendiente: P2.1 (revision de privacidad)
-Siguiente paso: revision de privacidad (P2.1)
+Pendiente: ninguna tarea P2/P3 del backlog
+Siguiente paso: verificacion final de produccion (T4)
 ```
 
 ---
