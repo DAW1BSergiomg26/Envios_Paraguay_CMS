@@ -30,6 +30,9 @@ export default function MainLayout() {
             <button className="btn-nav-link" onClick={() => navigate('/dashboard/imports')}>
               Importar envíos
             </button>
+            <button className="btn-nav-link" onClick={() => navigate('/dashboard/documentos')}>
+              Documentos
+            </button>
             <InstallPWAButton />
             <PushNotificationButton />
             <span className="navbar-user">{user.username}</span>

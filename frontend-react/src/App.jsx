@@ -6,6 +6,7 @@ import MainLayout from './layouts/MainLayout';
 import AdminDashboard from './pages/AdminDashboard';
 import ShipmentDetailPage from './pages/ShipmentDetailPage';
 import ImportBatchPage from './pages/ImportBatchPage';
+import DocumentosPage from './pages/DocumentosPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './pages/ProtectedRoute';
 
@@ -26,6 +27,9 @@ export default function App() {
             } />
             <Route path="/dashboard/imports" element={
               <ProtectedRoute><ImportBatchPage /></ProtectedRoute>
+            } />
+            <Route path="/dashboard/documentos" element={
+              <ProtectedRoute><DocumentosPage /></ProtectedRoute>
             } />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
