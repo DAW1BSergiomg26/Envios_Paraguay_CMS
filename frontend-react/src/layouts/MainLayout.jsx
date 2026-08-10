@@ -36,6 +36,9 @@ export default function MainLayout() {
             <button className="btn-nav-link" onClick={() => navigate('/dashboard/documentos')}>
               Documentos
             </button>
+            <button className="btn-nav-link" onClick={() => navigate('/dashboard/mensajes')}>
+              Mensajes
+            </button>
             <InstallPWAButton />
             <PushNotificationButton />
             <span className="navbar-user">{user.username}</span>
