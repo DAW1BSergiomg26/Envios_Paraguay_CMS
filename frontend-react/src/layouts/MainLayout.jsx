@@ -30,6 +30,9 @@ export default function MainLayout() {
             <button className="btn-nav-link" onClick={() => navigate('/dashboard/imports')}>
               Importar envíos
             </button>
+            <button className="btn-nav-link" onClick={() => navigate('/dashboard/reservas')}>
+              Reservas
+            </button>
             <button className="btn-nav-link" onClick={() => navigate('/dashboard/documentos')}>
               Documentos
             </button>

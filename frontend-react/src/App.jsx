@@ -7,6 +7,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import ShipmentDetailPage from './pages/ShipmentDetailPage';
 import ImportBatchPage from './pages/ImportBatchPage';
 import DocumentosPage from './pages/DocumentosPage';
+import ReservasPage from './pages/ReservasPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './pages/ProtectedRoute';
 
@@ -27,6 +28,9 @@ export default function App() {
             } />
             <Route path="/dashboard/imports" element={
               <ProtectedRoute><ImportBatchPage /></ProtectedRoute>
+            } />
+            <Route path="/dashboard/reservas" element={
+              <ProtectedRoute><ReservasPage /></ProtectedRoute>
             } />
             <Route path="/dashboard/documentos" element={
               <ProtectedRoute><DocumentosPage /></ProtectedRoute>
