@@ -13,6 +13,7 @@ COPY frontend-react/package.json frontend-react/package-lock.json ./
 RUN npm install
 COPY frontend-react/ .
 ENV VITE_START_URL=/login-react
+ENV VITE_BASE=/react-dashboard/
 RUN npm run build
 
 # ---- Stage 2: Build backend ----
@@ -21,7 +22,7 @@ WORKDIR /build
 COPY pom.xml .
 RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline -B
 COPY src ./src
-COPY --from=frontend /frontend/dist ./src/main/resources/static/
+COPY --from=frontend /frontend/dist ./src/main/resources/static/react-dashboard/
 RUN --mount=type=cache,target=/root/.m2 mvn package -DskipTests -q
 
 # ---- Stage 3: Runtime ----

@@ -345,6 +345,8 @@ Documentar que pantallas son oficiales, legacy o complementarias.
 
 ### P2.3 — Build React dentro de static
 
+Estado: ✅ Cerrado.
+
 Descripcion:
 
 ```text
@@ -361,6 +363,16 @@ Accion recomendada:
 
 ```text
 Definir proceso oficial de build y copia.
+```
+
+Resultado:
+
+```text
+Enrutamiento SPA corregido: SpaForwardController reenvia /login-react, /dashboard y
+/dashboard/** a /react-dashboard/index.html (antes /index.html, rompiendo deep-links
+en produccion). Dockerfile alineado: VITE_BASE=/react-dashboard/ en el stage frontend
+y COPY del dist a src/main/resources/static/react-dashboard/ (antes raiz de static/,
+colisionando con el root Thymeleaf). Cubierto por SpaForwardControllerTest (3/3).
 ```
 
 ---
@@ -473,9 +485,9 @@ refactor naming
 ## Decision actual
 
 ```text
-Estado: P0 y P1 del backlog cerrados; P2.4 completado
+Estado: P0 y P1 del backlog cerrados; P2.4 y P2.3 completados
 Riesgo general: medio controlado
-Pendiente: P2.1, P2.2, P2.3 (decisiones) y P3.1, P3.2 (documentacion)
+Pendiente: P2.1, P2.2 (decisiones) y P3.1, P3.2 (documentacion)
 Siguiente paso: documentar decision Thymeleaf + React y crear indice de documentacion
 ```
 
