@@ -37,6 +37,8 @@ P3 → mejora de calidad, documentacion o refinamiento futuro
 
 ### P0.1 — Verificar historial de secretos
 
+Estado: ✅ Cerrado.
+
 Descripcion:
 
 ```text
@@ -62,11 +64,19 @@ Criterio de cierre:
 Confirmado que no hay secretos reales en historial.
 ```
 
+Resultado:
+
+```text
+git log --all -- .env devuelve vacio. .env esta en .gitignore y nunca fue commiteado.
+```
+
 ---
 
 ## P1 — Hardening importante
 
 ### P1.1 — Perfil de produccion obligatorio
+
+Estado: ✅ Cerrado.
 
 Descripcion:
 
@@ -93,9 +103,18 @@ Criterio de cierre:
 Runbook de deploy exige perfil prod y smoke test lo comprueba.
 ```
 
+Resultado:
+
+```text
+BootstrapPropertyEnvironmentPostProcessor hace fail-fast si el entorno no es dev y el perfil prod no esta activo.
+Cubierto por BootstrapPropertyNormalizerTest y BootstrapPropertyEnvironmentPostProcessorTest.
+```
+
 ---
 
 ### P1.2 — Defaults admin de desarrollo
+
+Estado: ✅ Cerrado.
 
 Descripcion:
 
@@ -121,9 +140,17 @@ Criterio de cierre:
 Produccion falla si no se definen credenciales admin seguras.
 ```
 
+Resultado:
+
+```text
+En entornos no-dev, arrancar sin credenciales admin definidas lanza excepcion (mismo fail-fast de BootstrapPropertyEnvironmentPostProcessor).
+```
+
 ---
 
 ### P1.3 — API cliente basada en sesion manual
+
+Estado: ✅ Cerrado (commit 5baf904).
 
 Descripcion:
 
@@ -149,9 +176,18 @@ Criterio de cierre:
 Tests automatizados cubren acceso cliente permitido y denegado.
 ```
 
+Resultado:
+
+```text
+Spring Security autentica el clienteId de la sesion en cada request de /api/v1/cliente/**.
+ClienteApiControllerTest cubre acceso permitido y denegado sin sesion o contra envios ajenos.
+```
+
 ---
 
 ### P1.4 — Push endpoints publicos
+
+Estado: ✅ Cerrado (commit 5baf904).
 
 Descripcion:
 
@@ -178,9 +214,18 @@ Criterio de cierre:
 /test no esta abierto en produccion real.
 ```
 
+Resultado:
+
+```text
+/app.push.test-enabled=false desactiva /api/v1/push/test en produccion (responde 403).
+PushSubscriptionControllerTest cubre el gate habilitado y deshabilitado.
+```
+
 ---
 
 ### P1.5 — Uploads de evidencias con ruta distinta
+
+Estado: ✅ Cerrado (verificado en AdminController, subirEvidencia).
 
 Descripcion:
 
@@ -206,9 +251,18 @@ Criterio de cierre:
 Imagenes y evidencias usan configuracion externa coherente.
 ```
 
+Resultado:
+
+```text
+AdminController.subirEvidencia() usa app.upload.dir + "evidencias/" para guardar y eliminar.
+EVIDENCE_UPLOADS_AUDIT.md y KNOWN_ISSUES_PREPROD.md actualizados (Hallazgo 5 e item 10).
+```
+
 ---
 
 ### P1.6 — Tracking publico y datos expuestos
+
+Estado: ✅ Cerrado (test de contrato en PublicTrackingDtoTest).
 
 Descripcion:
 
@@ -232,6 +286,13 @@ Criterio de cierre:
 
 ```text
 Tracking publico solo expone informacion aprobada para cliente final.
+```
+
+Resultado:
+
+```text
+PublicTrackingDto expone exclusivamente codigoUnico, estado, origen, destino y ultimaActualizacion.
+PublicTrackingDtoTest fija el contrato: serializa solo esas 5 claves y nunca destinatario, peso, contenido, cliente o id.
 ```
 
 ---
@@ -306,6 +367,8 @@ Definir proceso oficial de build y copia.
 
 ### P2.4 — System.out.println en PushSubscriptionController
 
+Estado: ✅ Cerrado.
+
 Descripcion:
 
 ```text
@@ -322,6 +385,12 @@ Accion recomendada:
 
 ```text
 Cambiar a logger en fase pequena de limpieza.
+```
+
+Resultado:
+
+```text
+Los tres mensajes (subscribe, unsubscribe, testPush) usan LoggerFactory (SLF4J) con placeholders {}.
 ```
 
 ---
@@ -363,14 +432,16 @@ Crear diagrama Mermaid o PlantUML.
 ## Orden recomendado de ejecucion
 
 ```text
-1. Verificar historial de secretos.
-2. Revisar perfil prod obligatorio.
-3. Revisar endpoints push demo.
-4. Crear tests de API cliente.
-5. Unificar ruta de evidencias/uploads.
-6. Revisar DTO publico de tracking.
-7. Documentar decision Thymeleaf + React.
-8. Crear indice de documentacion.
+1. Verificar historial de secretos.                          ✅ P0.1
+2. Revisar perfil prod obligatorio.                          ✅ P1.1
+3. Revisar defaults admin de desarrollo.                     ✅ P1.2
+4. Crear tests de API cliente.                               ✅ P1.3 (5baf904)
+5. Gate de push test en produccion.                          ✅ P1.4 (5baf904)
+6. Unificar ruta de evidencias/uploads.                      ✅ P1.5
+7. Fijar DTO publico de tracking.                            ✅ P1.6
+8. Sustituir System.out.println por SLF4J.                   ✅ P2.4
+9. Documentar decision Thymeleaf + React.                    ⏳ P2.2
+10. Crear indice de documentacion.                           ⏳ P3.1
 ```
 
 ---
@@ -402,9 +473,10 @@ refactor naming
 ## Decision actual
 
 ```text
-Estado: backlog de hardening creado
+Estado: P0 y P1 del backlog cerrados; P2.4 completado
 Riesgo general: medio controlado
-Siguiente paso: cerrar PR de auditoria inicial o crear docs/SECURITY_AUDIT_NOTES.md si se quiere mas detalle
+Pendiente: P2.1, P2.2, P2.3 (decisiones) y P3.1, P3.2 (documentacion)
+Siguiente paso: documentar decision Thymeleaf + React y crear indice de documentacion
 ```
 
 ---

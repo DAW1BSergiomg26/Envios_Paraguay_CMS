@@ -113,17 +113,26 @@ Si alguien conoce la URL exacta, podria intentar abrirla directamente.
 
 ## Hallazgo 5 - rutas de guardado no unificadas
 
-En el controlador admin se observa una diferencia:
+Estado: ✅ Resuelto.
+
+En el controlador admin se observaba una diferencia:
 
 ```text
 Imagenes normales usan app.upload.dir.
-Evidencias usan System.getProperty("user.dir") + "/uploads/evidencias/".
+Evidencias usaban System.getProperty("user.dir") + "/uploads/evidencias/".
 ```
 
 Riesgo:
 
 ```text
-La ruta real de evidencias puede no coincidir perfectamente con app.upload.dir en Docker, VPS o produccion.
+La ruta real de evidencias podia no coincidir perfectamente con app.upload.dir en Docker, VPS o produccion.
+```
+
+Resolucion:
+
+```text
+AdminController.subirEvidencia() unifica el guardado usando app.upload.dir como base y el subdirectorio evidencias/.
+El mismo cambio aplica a la eliminacion fisica del archivo.
 ```
 
 ---
@@ -146,14 +155,16 @@ Una evidencia no visible podria seguir siendo accesible si se conoce o filtra la
 
 ### P2 - Rutas de subida no unificadas
 
+Estado: ✅ Resuelto — evidencias e imagenes usan `app.upload.dir` como base comun.
+
 ```text
-Evidencias no usan directamente app.upload.dir como base.
+Evidencias e imagenes usan app.upload.dir como base.
 ```
 
 Impacto:
 
 ```text
-Mayor riesgo de comportamiento distinto entre local, Docker y VPS.
+Se elimina el riesgo de comportamiento distinto entre local, Docker y VPS para rutas de evidencias.
 ```
 
 ---
@@ -178,10 +189,10 @@ Separar dos problemas:
 
 ### 1. Coherencia de rutas
 
-Primera mejora tecnica recomendada:
+Estado: ✅ Completado.
 
 ```text
-Unificar guardado de evidencias usando app.upload.dir como base.
+Evidencias e imagenes usan app.upload.dir como base.
 ```
 
 ### 2. Proteccion real de archivos sensibles
@@ -200,6 +211,8 @@ Crear endpoint controlado que valide sesion, cliente y visibleCliente antes de e
 ```text
 feature/unificar-ruta-evidencias-upload-dir
 ```
+
+Estado: ✅ Completado.
 
 Objetivo:
 
@@ -252,6 +265,7 @@ No mezclar evidencias con imagenes del CMS.
 - [x] Revisar servicio de evidencias.
 - [x] Revisar uso de visibleCliente.
 - [x] Detectar diferencia entre app.upload.dir y user.dir.
+- [x] Unificar ruta de evidencias con app.upload.dir.
 - [x] Definir primera rama tecnica segura.
 
 ---
@@ -259,8 +273,9 @@ No mezclar evidencias con imagenes del CMS.
 ## Decision actual
 
 Estado: auditoria de evidencias y uploads creada.  
-Riesgo general: medio-alto si las evidencias contienen informacion sensible.  
-Siguiente paso: unificar ruta de evidencias con app.upload.dir.
+Riesgo general: medio, pendiente de proteger el archivo fisico tras /uploads/**.  
+Progreso: rutas de evidencias unificadas con `app.upload.dir`.  
+Siguiente paso: crear endpoint controlado de descarga que valide sesion, cliente y visibleCliente antes de entregar el archivo.
 
 ---
 

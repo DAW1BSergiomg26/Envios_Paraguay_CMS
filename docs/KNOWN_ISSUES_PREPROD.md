@@ -17,7 +17,7 @@
 | 7 | **docker compose down -v borra datos** | El flag `-v` elimina volúmenes MySQL, prometheus, grafana. Si hay datos reales, se pierden irreversiblemente. | Media | Documentar advertencia (ya hecho en README). Considerar backups periódicos de `mysql_data`. | Fase 19.5 |
 | 8 | **Tabla `textos_legales` columna `slug` vs `clave`** | La entidad JPA usa `slug` pero `schema.sql` usa `clave`. Con `ddl-auto=update` Hibernate crea `slug`. Con `spring.sql.init.mode=always` se crea `clave`. | Baja | Unificar: cambiar `schema.sql` para usar `slug` o viceversa. | Fase 19.2 |
 | 9 | **Reserva estado "aprobada" vs "confirmada"** | El `AdminController` usa `"aprobada"` en `aprobarReserva()` pero el `schema.sql` define CHECK constraint con `"confirmada"`. Con `ddl-auto=update` no hay problema. | Baja | Alinear el valor en el controller con el del schema, o eliminar el CHECK obsoleto de `schema.sql`. | Fase 19.2 |
-| 10 | **Evidencia subida hardcodea directorio** | `AdminController.subirEvidencia()` usa `System.getProperty("user.dir") + "/uploads/evidencias/"` en lugar de `app.upload.dir`. | Baja | Usar `app.upload.dir` + subdirectorio `evidencias/` para mantener consistencia. | Fase 19.6 |
+| 10 | **Evidencia subida hardcodea directorio** | ✅ Resuelto — `AdminController.subirEvidencia()` usa `app.upload.dir` + subdirectorio `evidencias/`. | — | — | — |
 
 ---
 
