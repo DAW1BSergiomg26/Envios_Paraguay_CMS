@@ -2399,3 +2399,133 @@ body {
 }
 .import-input:focus { outline: none; border-color: #d4762a; }
 .import-input::placeholder { color: #8b93a7; }
+
+/* ---- F5: Imágenes y textos legales ---- */
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.imagen-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.imagen-thumb-container {
+  width: 100%;
+  height: 180px;
+  background: #0f1117;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #2a2d3a;
+}
+
+.imagen-card-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.imagen-card-thumb:hover {
+  transform: scale(1.03);
+}
+
+.imagen-card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.imagen-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.imagen-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e1e5ee;
+  margin: 0;
+}
+
+.badge-cat {
+  background: rgba(212, 118, 42, 0.15);
+  color: #d4762a;
+  border: 1px solid rgba(212, 118, 42, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.imagen-card-desc {
+  font-size: 0.85rem;
+  color: #8b93a7;
+  margin-bottom: 1rem;
+  flex: 1;
+}
+
+.imagen-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.orden-control {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: #8b93a7;
+}
+
+.orden-input {
+  width: 60px;
+  padding: 0.25rem 0.4rem;
+  text-align: center;
+}
+
+.textos-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .textos-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.master-item {
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.master-item--selected {
+  background: rgba(212, 118, 42, 0.15) !important;
+  border-color: rgba(212, 118, 42, 0.4) !important;
+  color: #d4762a !important;
+}
+
+.badge-slug {
+  background: #1a1d27;
+  color: #8b93a7;
+  border: 1px solid #2a2d3a;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+

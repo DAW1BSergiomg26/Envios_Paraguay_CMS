@@ -84,11 +84,11 @@ No hay JWT. La SPA React comparte la sesión **Spring Security** vía cookie `JS
 
 | Fase | Contenido | Equivalente React | Estado |
 |---|---|---|---|
-| F1 | Envíos, tracking, detalle, analytics, export | `AdminDashboard`, `ShipmentDetailPage`, APIs `/api/v1/admin/*` | **Hecho (P2.3)** |
-| F2 | Importación batch (CSV) y su monitorización | Nueva página React sobre `BatchImportController` | Pendiente |
-| F3 | Documentos / evidencias | Nueva página React sobre `DocumentosController`/`EntregaEvidenciaController` | Pendiente |
-| F4 | Reservas y contactos (mensajes) | Nueva página React sobre `ReservaApiController` | Pendiente |
-| F5 | Imágenes (galería) y textos legales | Nueva página React sobre `AdminApiController` | Pendiente |
+| F1 | Envíos, tracking, detalle, analytics, export | `AdminDashboard`, `ShipmentDetailPage`, APIs `/api/v1/admin/*` | **Completa** |
+| F2 | Importación batch (CSV) y su monitorización | `ImportBatchPage` sobre `BatchImportController` | **Completa** |
+| F3 | Documentos / evidencias | `DocumentosPage`, `EvidenciasGrid` sobre `DocumentosController`/`EntregaEvidenciaController` | **Completa** |
+| F4 | Reservas y contactos (mensajes) | `ReservasPage`, `MensajesPage` sobre `ReservaApiController`/`MensajeContactoApiController` | **Completa** |
+| F5 | Imágenes (galería) y textos legales | `AdminImagesPage`, `AdminLegalTextsPage` sobre `ImagenApiController`/`TextoLegalApiController` | **Completa** |
 | F6 | Deprecación: `/admin/**` → redirect total a `/dashboard` + borrado de templates `cms/*.html` | — | Pendiente |
 
 ## 4. Reglas de convivencia

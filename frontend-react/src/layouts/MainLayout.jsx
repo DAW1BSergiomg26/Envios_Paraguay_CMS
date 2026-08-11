@@ -39,6 +39,12 @@ export default function MainLayout() {
             <button className="btn-nav-link" onClick={() => navigate('/dashboard/mensajes')}>
               Mensajes
             </button>
+            <button className="btn-nav-link" onClick={() => navigate('/dashboard/imagenes')}>
+              Imágenes
+            </button>
+            <button className="btn-nav-link" onClick={() => navigate('/dashboard/textos')}>
+              Textos legales
+            </button>
             <InstallPWAButton />
             <PushNotificationButton />
             <span className="navbar-user">{user.username}</span>

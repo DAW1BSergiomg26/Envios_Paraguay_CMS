@@ -9,6 +9,8 @@ import ImportBatchPage from './pages/ImportBatchPage';
 import DocumentosPage from './pages/DocumentosPage';
 import ReservasPage from './pages/ReservasPage';
 import MensajesPage from './pages/MensajesPage';
+import AdminImagesPage from './pages/AdminImagesPage';
+import AdminLegalTextsPage from './pages/AdminLegalTextsPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './pages/ProtectedRoute';
 
@@ -38,6 +40,12 @@ export default function App() {
             } />
             <Route path="/dashboard/mensajes" element={
               <ProtectedRoute><MensajesPage /></ProtectedRoute>
+            } />
+            <Route path="/dashboard/imagenes" element={
+              <ProtectedRoute><AdminImagesPage /></ProtectedRoute>
+            } />
+            <Route path="/dashboard/textos" element={
+              <ProtectedRoute><AdminLegalTextsPage /></ProtectedRoute>
             } />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

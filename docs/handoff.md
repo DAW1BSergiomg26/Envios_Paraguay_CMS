@@ -193,6 +193,14 @@ En local, la mayoría están en `.env` (no versionado). El arranque valida su pr
   - **T5 (frontend):** `MensajesPage` + 6 tests + ruta `/dashboard/mensajes` + nav. Commit `9394920`.
   - **T6 (frontend):** estilos F4 (`.acciones-fila`, `.cell-*`, `.form-edicion`, `.import-input`). `npm run build` OK.
   - **Verificación final:** `mvn clean test` (JDK 25) → **BUILD SUCCESS, 333 tests** (F4 aporta 16 nuevos en backend: 4 casing + 12 mensajes; base 317); `npx vitest run` (workdir `frontend-react`) → **57 tests / 12 files, 0 failures** (F4 aporta 21: 7 helpers + 8 ReservasPage + 6 MensajesPage; base 36); `npm run build` → OK. Migración Flyway V1–V10 intacta. Sin push.
+- **Avance F5 — "Imágenes y textos legales" (2026-08-11):** fase F5 de migración CMS → SPA (ver `docs/superpowers/plans/2026-08-11-f5-imagenes-textos-legales-spa.md` + `docs/superpowers/specs/2026-08-11-f5-imagenes-textos-legales-design.md`).
+  - **T1 (backend):** `UploadService` reutilizable para subida/borrado de archivos en `app.upload.dir` (`subirArchivo`, `eliminarArchivo`, extensiones permitidas `jpg|jpeg|png|webp|gif|svg`). Commit `4da9a2b`.
+  - **T2 (backend):** `ImagenApiController` (`/api/v1/admin/imagenes`) + `ImagenDto` + `ActualizarOrdenImagenRequest` (8 tests WebMvcTest). Commit `228ffd4`.
+  - **T3 (backend):** `TextoLegalApiController` (`/api/v1/admin/textos`) + `TextoLegalDto` + `ActualizarTextoRequest` (7 tests WebMvcTest). Commit `9beb18b`.
+  - **T4 (frontend):** 7 helpers de API en `api.js` (`getAdminImagenes`, `uploadAdminImagen`, `patchAdminImagenOrden`, `deleteAdminImagen`, `getAdminTextos`, `getTextoLegal`, `putTextoLegal`) + 7 tests unitarios en `api.test.js`. Commit `be1e918`.
+  - **T5 (frontend):** `AdminImagesPage` + 7 tests en `AdminImagesPage.test.jsx`. Commit `cf7803e`.
+  - **T6 (frontend):** `AdminLegalTextsPage` + 6 tests en `AdminLegalTextsPage.test.jsx`. Commit `24c3135`.
+  - **T7 (frontend/docs):** Rutas en `App.jsx` (`/dashboard/imagenes`, `/dashboard/textos`), botones de nav en `MainLayout.jsx`, estilos CSS F5 en `index.css`, estado F5 actualizado en `ARQUITECTURA_INTERFACES.md`.
 ---
 ## 📝 Reglas de Trabajo
 1. No empezar el proyecto desde cero.
