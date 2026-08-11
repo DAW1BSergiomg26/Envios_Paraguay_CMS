@@ -10,4 +10,9 @@ public class SpaForwardController {
     public String forward() {
         return "forward:/react-dashboard/index.html";
     }
+
+    @GetMapping({"/admin", "/admin/**"})
+    public String legacyAdminRedirect() {
+        return "redirect:/dashboard";
+    }
 }

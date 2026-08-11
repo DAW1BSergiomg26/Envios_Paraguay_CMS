@@ -14,8 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(SpaForwardController.class)
@@ -45,5 +47,13 @@ class SpaForwardControllerTest {
         mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/react-dashboard/index.html"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"/admin", "/admin/whatever"})
+    void adminRedirectsToDashboard(String url) throws Exception {
+        mockMvc.perform(get(url).with(user("admin").roles("ADMIN")))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/dashboard"));
     }
 }
