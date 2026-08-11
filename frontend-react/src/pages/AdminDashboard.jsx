@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getAdminEnvios } from '../services/api';
+import { getAdminEnvios, deleteAdminEnvio } from '../services/api';
 import usePolling from '../hooks/usePolling';
 import { useToast } from '../context/NotificationContext';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
@@ -100,6 +100,17 @@ export default function AdminDashboard() {
     showSuccess('Datos actualizados');
   }, [baseRefresh, showSuccess]);
 
+  const handleEliminar = useCallback(async (envio) => {
+    if (!window.confirm(`¿Eliminar el envío ${envio.codigoUnico}?`)) return;
+    try {
+      await deleteAdminEnvio(envio.codigoUnico);
+      showSuccess('Envío eliminado');
+      await refreshFn();
+    } catch (err) {
+      showErrToast(err.message || 'Error al eliminar el envío');
+    }
+  }, [refreshFn, showSuccess, showErrToast]);
+
   useEffect(() => {
     setLoading(true);
     fetchEnvios(page, estados, query, fechaDesde, fechaHasta).finally(() => setLoading(false));
@@ -151,7 +162,10 @@ export default function AdminDashboard() {
           <h1>Panel de Envíos</h1>
           <p className="dashboard-subtitle">Gestión de tracking internacional España ↔ Paraguay</p>
         </div>
-        <RefreshIndicator lastUpdated={lastUpdated} polling={polling} refreshError={refreshError} onRefresh={refreshNow} />
+        <div className="dashboard-header-actions">
+          <button type="button" className="btn-nuevo" onClick={() => navigate('/dashboard/envios/nuevo')}>＋ Nuevo envío</button>
+          <RefreshIndicator lastUpdated={lastUpdated} polling={polling} refreshError={refreshError} onRefresh={refreshNow} />
+        </div>
       </header>
 
       {error && needsLogin && (
@@ -201,39 +215,55 @@ export default function AdminDashboard() {
         </div>
 
         {loading ? (
-          <table className="envios-table">
-            <thead>
-              <tr>
-                <th>Código</th><th>Estado</th><th>Destinatario</th><th>Origen</th><th>Destino</th><th>Fecha</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Array.from({ length: 5 }, (_, i) => <SkeletonRow key={i} />)}
-            </tbody>
-          </table>
-        ) : envios.length === 0 ? (
-          <EmptyState message={query || estados.length > 0 || fechaDesde || fechaHasta ? 'No se encontraron envíos con esos filtros' : 'No hay envíos registrados'} />
-        ) : (
-          <>
             <table className="envios-table">
               <thead>
                 <tr>
-                  <th>Código</th><th>Estado</th><th>Destinatario</th><th>Origen</th><th>Destino</th><th>Fecha</th>
+                  <th>Código</th><th>Estado</th><th>Destinatario</th><th>Origen</th><th>Destino</th><th>Fecha</th><th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
-                {envios.map(e => (
-                  <tr key={e.codigoUnico} className="envio-row" onClick={() => navigate(`/dashboard/envio/${e.codigoUnico}`)}>
-                    <td className="cell-code">{e.codigoUnico}</td>
-                    <td><StatusBadge estado={e.estado} /></td>
-                    <td>{e.destinatario}</td>
-                    <td>{e.origen}</td>
-                    <td>{e.destino}</td>
-                    <td className="cell-date">{new Date(e.ultimaActualizacion).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
-                  </tr>
-                ))}
+                {Array.from({ length: 5 }, (_, i) => <SkeletonRow key={i} />)}
               </tbody>
             </table>
+          ) : envios.length === 0 ? (
+            <EmptyState message={query || estados.length > 0 || fechaDesde || fechaHasta ? 'No se encontraron envíos con esos filtros' : 'No hay envíos registrados'} />
+          ) : (
+            <>
+              <table className="envios-table">
+                <thead>
+                  <tr>
+                    <th>Código</th><th>Estado</th><th>Destinatario</th><th>Origen</th><th>Destino</th><th>Fecha</th><th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {envios.map(e => (
+                    <tr key={e.codigoUnico} className="envio-row" onClick={() => navigate(`/dashboard/envio/${e.codigoUnico}`)}>
+                      <td className="cell-code">{e.codigoUnico}</td>
+                      <td><StatusBadge estado={e.estado} /></td>
+                      <td>{e.destinatario}</td>
+                      <td>{e.origen}</td>
+                      <td>{e.destino}</td>
+                      <td className="cell-date">{new Date(e.ultimaActualizacion).toLocaleDateString('es-ES', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                      <td className="cell-actions">
+                        <button
+                          type="button"
+                          className="acciones-fila"
+                          onClick={ev => { ev.stopPropagation(); navigate(`/dashboard/envios/${e.codigoUnico}/editar`); }}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          type="button"
+                          className="acciones-fila acciones-fila--danger"
+                          onClick={ev => { ev.stopPropagation(); handleEliminar(e); }}
+                        >
+                          Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             <Pagination page={page} totalPages={totalPages} totalElements={total} pageSize={PAGE_SIZE} onChange={handlePage} />
           </>
         )}

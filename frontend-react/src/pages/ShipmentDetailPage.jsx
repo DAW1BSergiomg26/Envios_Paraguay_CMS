@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getAdminEnvioDetalle, getDocumentoUrl } from '../services/api';
+import { getAdminEnvioDetalle, getDocumentoUrl, deleteAdminEnvio, uploadAdminEvidencia, patchAdminEvidenciaVisibilidad, deleteAdminEvidencia } from '../services/api';
 import usePolling from '../hooks/usePolling';
 import { useToast } from '../context/NotificationContext';
 import RefreshIndicator from '../components/RefreshIndicator';
@@ -68,6 +68,7 @@ export default function ShipmentDetailPage() {
   const [envio, setEnvio] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [archivoEvidencia, setArchivoEvidencia] = useState(null);
   const estadoRef = useRef(null);
 
   const refreshFn = useCallback(async () => {
@@ -81,6 +82,53 @@ export default function ShipmentDetailPage() {
     await baseRefresh();
     showSuccess('Datos actualizados');
   }, [baseRefresh, showSuccess]);
+
+  const handleEliminar = useCallback(async () => {
+    if (!window.confirm(`¿Eliminar el envío ${codigo}?`)) return;
+    try {
+      await deleteAdminEnvio(codigo);
+      showSuccess('Envío eliminado');
+      navigate('/');
+    } catch (err) {
+      showErrToast(err.message || 'Error al eliminar el envío');
+    }
+  }, [codigo, navigate, showSuccess, showErrToast]);
+
+  const handleUpload = useCallback(async (e) => {
+    e.preventDefault();
+    if (!archivoEvidencia) return;
+    const formData = new FormData();
+    formData.append('archivo', archivoEvidencia);
+    try {
+      await uploadAdminEvidencia(codigo, formData);
+      showSuccess('Evidencia subida');
+      setArchivoEvidencia(null);
+      await refreshNow();
+    } catch (err) {
+      showErrToast(err.message || 'Error al subir la evidencia');
+    }
+  }, [archivoEvidencia, codigo, refreshNow, showSuccess, showErrToast]);
+
+  const handleToggleVisibilidad = useCallback(async (ev) => {
+    try {
+      await patchAdminEvidenciaVisibilidad(ev.id, !ev.visibleCliente);
+      showSuccess('Visibilidad actualizada');
+      await refreshNow();
+    } catch (err) {
+      showErrToast(err.message || 'Error al actualizar la visibilidad');
+    }
+  }, [refreshNow, showSuccess, showErrToast]);
+
+  const handleEliminarEvidencia = useCallback(async (ev) => {
+    if (!window.confirm(`¿Eliminar la evidencia ${ev.titulo || ''}?`)) return;
+    try {
+      await deleteAdminEvidencia(ev.id);
+      showSuccess('Evidencia eliminada');
+      await refreshNow();
+    } catch (err) {
+      showErrToast(err.message || 'Error al eliminar la evidencia');
+    }
+  }, [refreshNow, showSuccess, showErrToast]);
 
   useEffect(() => {
     setLoading(true);
@@ -142,6 +190,8 @@ export default function ShipmentDetailPage() {
       <div className="detail-topbar">
         <button className="btn-back" onClick={() => navigate('/')}>← Volver al dashboard</button>
         <div className="detail-topbar-actions">
+          <button type="button" className="acciones-fila" onClick={() => navigate(`/dashboard/envios/${envio.codigoUnico}/editar`)}>✏️ Editar envío</button>
+          <button type="button" className="acciones-fila acciones-fila--danger" onClick={handleEliminar}>🗑 Eliminar envío</button>
           <button
             type="button"
             className="btn-pdf"
@@ -235,7 +285,24 @@ export default function ShipmentDetailPage() {
 
       <section>
         <h2 className="section-title">Evidencias</h2>
-        <EvidenciasGrid evidencias={envio.evidencias} />
+        <div className="evidencias-admin-panel">
+          <form className="upload-form" onSubmit={handleUpload}>
+            <input
+              type="file"
+              id="evidencia-upload"
+              aria-label="Archivo de evidencia"
+              accept="image/*,.pdf"
+              onChange={e => setArchivoEvidencia(e.target.files?.[0] || null)}
+            />
+            <button type="submit" className="btn-primary" disabled={!archivoEvidencia}>Subir evidencia</button>
+          </form>
+        </div>
+        <EvidenciasGrid
+          evidencias={envio.evidencias}
+          modoAdmin
+          onToggleVisibilidad={handleToggleVisibilidad}
+          onEliminar={handleEliminarEvidencia}
+        />
       </section>
     </div>
   );

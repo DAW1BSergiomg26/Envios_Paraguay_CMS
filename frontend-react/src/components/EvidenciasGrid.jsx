@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { descargarDocumento } from '../services/api';
 
-export default function EvidenciasGrid({ evidencias = [] }) {
+export default function EvidenciasGrid({ evidencias = [], modoAdmin = false, onToggleVisibilidad, onEliminar }) {
   const [preview, setPreview] = useState(null);
 
   if (!evidencias.length) {
@@ -17,7 +17,7 @@ export default function EvidenciasGrid({ evidencias = [] }) {
     <div className="evidencias-section">
       <div className="evidencias-grid">
         {evidencias.map((ev, i) => (
-          <div key={i} className="evidencia-card">
+          <div key={ev.id ?? i} className="evidencia-card">
             <div className="evidencia-image-wrapper" onClick={() => setPreview(ev)}>
               <img
                 src={ev.urlArchivo}
@@ -39,6 +39,26 @@ export default function EvidenciasGrid({ evidencias = [] }) {
               >
                 ⬇ Descargar
               </button>
+              {modoAdmin && (
+                <>
+                  <button
+                    type="button"
+                    className="evidencia-admin-toggle"
+                    aria-label={`Alternar visibilidad de ${ev.titulo || 'evidencia'}`}
+                    onClick={() => onToggleVisibilidad(ev)}
+                  >
+                    {ev.visibleCliente ? '👁 Visible' : '👁 Oculto'}
+                  </button>
+                  <button
+                    type="button"
+                    className="evidencia-admin-delete"
+                    aria-label={`Eliminar ${ev.titulo || 'evidencia'}`}
+                    onClick={() => onEliminar(ev)}
+                  >
+                    🗑 Eliminar
+                  </button>
+                </>
+              )}
             </div>
           </div>
         ))}

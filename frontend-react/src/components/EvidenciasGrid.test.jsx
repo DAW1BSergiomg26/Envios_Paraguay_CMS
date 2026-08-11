@@ -8,8 +8,8 @@ vi.mock('../services/api', () => ({
 }))
 
 const EVIDENCIAS = [
-  { titulo: 'Guía de embarque', descripcion: 'Firmada por el capitán', tipo: 'DOCUMENTO', urlArchivo: '/uploads/evidencias/guia.pdf' },
-  { titulo: 'Foto del envío', descripcion: 'Estado de la mercancía', tipo: 'FOTO', urlArchivo: '/uploads/evidencias/foto.jpg' },
+  { id: 1, titulo: 'Guía de embarque', descripcion: 'Firmada por el capitán', tipo: 'DOCUMENTO', urlArchivo: '/uploads/evidencias/guia.pdf', visibleCliente: true },
+  { id: 2, titulo: 'Foto del envío', descripcion: 'Estado de la mercancía', tipo: 'FOTO', urlArchivo: '/uploads/evidencias/foto.jpg', visibleCliente: false },
 ]
 
 describe('EvidenciasGrid', () => {
@@ -41,5 +41,23 @@ describe('EvidenciasGrid', () => {
     expect(screen.getByRole('dialog')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: '✕' }))
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('modoAdmin_muestraBotonToggle y llama al callback', async () => {
+    const user = userEvent.setup()
+    const onToggle = vi.fn()
+    render(<EvidenciasGrid evidencias={EVIDENCIAS} modoAdmin onToggleVisibilidad={onToggle} />)
+    const btn = screen.getAllByRole('button', { name: /visibilidad/i })[0]
+    await user.click(btn)
+    expect(onToggle).toHaveBeenCalledWith(EVIDENCIAS[0])
+  })
+
+  it('modoAdmin_eliminarLlamaCallback', async () => {
+    const user = userEvent.setup()
+    const onEliminar = vi.fn()
+    render(<EvidenciasGrid evidencias={EVIDENCIAS} modoAdmin onEliminar={onEliminar} />)
+    const btn = screen.getAllByRole('button', { name: /eliminar/i })[0]
+    await user.click(btn)
+    expect(onEliminar).toHaveBeenCalledWith(EVIDENCIAS[0])
   })
 })
