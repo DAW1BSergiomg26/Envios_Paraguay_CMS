@@ -164,4 +164,32 @@ export function deleteAdminMensaje(id) {
   return api.delete(`/admin/mensajes/${id}`);
 }
 
+export function getAdminImagenes() {
+  return api.get('/admin/imagenes');
+}
+
+export function uploadAdminImagen(formData) {
+  return api.post('/admin/imagenes', formData);
+}
+
+export function patchAdminImagenOrden(id, orden) {
+  return api.patch(`/admin/imagenes/${id}/orden`, { orden });
+}
+
+export function deleteAdminImagen(id) {
+  return api.delete(`/admin/imagenes/${id}`);
+}
+
+export function getAdminTextos() {
+  return api.get('/admin/textos');
+}
+
+export function getTextoLegal(slug) {
+  return api.get(`/admin/textos/${slug}`);
+}
+
+export function putTextoLegal(slug, { titulo, contenido }) {
+  return api.put(`/admin/textos/${slug}`, { titulo, contenido });
+}
+
 export default api;

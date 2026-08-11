@@ -7,6 +7,13 @@ import api, {
   getAdminMensajes,
   patchAdminMensajeLeido,
   deleteAdminMensaje,
+  getAdminImagenes,
+  uploadAdminImagen,
+  patchAdminImagenOrden,
+  deleteAdminImagen,
+  getAdminTextos,
+  getTextoLegal,
+  putTextoLegal,
 } from './api';
 import { getDocumentoUrl, descargarDocumento, formatPesoBytes } from './api'
 
@@ -100,3 +107,60 @@ describe('api helpers de reservas y mensajes', () => {
     spy.mockRestore()
   })
 })
+
+describe('api helpers de imagenes y textos legales', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('getAdminImagenes llama a GET /admin/imagenes', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await getAdminImagenes()
+    expect(spy).toHaveBeenCalledWith('/admin/imagenes')
+    spy.mockRestore()
+  })
+
+  it('uploadAdminImagen llama a POST /admin/imagenes con FormData', async () => {
+    const spy = vi.spyOn(api, 'post').mockResolvedValue({ data: {} })
+    const fd = new FormData()
+    await uploadAdminImagen(fd)
+    expect(spy).toHaveBeenCalledWith('/admin/imagenes', fd)
+    spy.mockRestore()
+  })
+
+  it('patchAdminImagenOrden llama a PATCH /admin/imagenes/:id/orden', async () => {
+    const spy = vi.spyOn(api, 'patch').mockResolvedValue({ data: {} })
+    await patchAdminImagenOrden(3, 5)
+    expect(spy).toHaveBeenCalledWith('/admin/imagenes/3/orden', { orden: 5 })
+    spy.mockRestore()
+  })
+
+  it('deleteAdminImagen llama a DELETE /admin/imagenes/:id', async () => {
+    const spy = vi.spyOn(api, 'delete').mockResolvedValue({ data: {} })
+    await deleteAdminImagen(3)
+    expect(spy).toHaveBeenCalledWith('/admin/imagenes/3')
+    spy.mockRestore()
+  })
+
+  it('getAdminTextos llama a GET /admin/textos', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await getAdminTextos()
+    expect(spy).toHaveBeenCalledWith('/admin/textos')
+    spy.mockRestore()
+  })
+
+  it('getTextoLegal llama a GET /admin/textos/:slug', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: {} })
+    await getTextoLegal('aviso-legal')
+    expect(spy).toHaveBeenCalledWith('/admin/textos/aviso-legal')
+    spy.mockRestore()
+  })
+
+  it('putTextoLegal llama a PUT /admin/textos/:slug', async () => {
+    const spy = vi.spyOn(api, 'put').mockResolvedValue({ data: {} })
+    await putTextoLegal('aviso-legal', { titulo: 'T', contenido: 'C' })
+    expect(spy).toHaveBeenCalledWith('/admin/textos/aviso-legal', { titulo: 'T', contenido: 'C' })
+    spy.mockRestore()
+  })
+})
+
