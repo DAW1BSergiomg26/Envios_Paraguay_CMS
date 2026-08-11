@@ -1,6 +1,6 @@
 # Arquitectura de Interfaces — Envios_Paraguay_CMS
 
-**Estado:** Vigente (actualizado el 2026-08-11, hito F6).
+**Estado:** Vigente (actualizado el 2026-08-12, hito F7).
 **Referencias:** `docs/superpowers/specs/2026-08-10-arquitectura-interfaces-thymeleaf-react-design.md`,
 `docs/HARDENING_BACKLOG_ENVIOS_CMS.md` (P2.2, cerrado), `docs/README_DOCS.md` (índice de documentación).
 
@@ -77,7 +77,7 @@ No hay JWT. La SPA React comparte la sesión **Spring Security** vía cookie `JS
 - `POST /login` correcto → `302 /react-dashboard/` (`defaultSuccessUrl`).
 - `GET /admin` o `/admin/**` con sesión admin → `302 /dashboard` (retirado en F6); anónimo → `302 /login`.
 
-## 3. Migración CMS → SPA (fases F1–F6, completada)
+## 3. Migración CMS → SPA (fases F1–F7, completada)
 
 | Fase | Contenido | Equivalente React | Estado |
 |---|---|---|---|
@@ -87,6 +87,7 @@ No hay JWT. La SPA React comparte la sesión **Spring Security** vía cookie `JS
 | F4 | Reservas y contactos (mensajes) | `ReservasPage`, `MensajesPage` sobre `ReservaApiController`/`MensajeContactoApiController` | **Completa** |
 | F5 | Imágenes (galería) y textos legales | `AdminImagesPage`, `AdminLegalTextsPage` sobre `ImagenApiController`/`TextoLegalApiController` | **Completa** |
 | F6 | Deprecación: `/admin/**` → redirect a `/dashboard` + borrado de `AdminController`, templates `cms/*.html` y `admin-sidebar.html` | CRUD envíos en `EnvioFormPage` + acciones en `AdminDashboard`/`ShipmentDetailPage` | **Completa** |
+| F7 | Webhooks y notificaciones de estado | `WebhooksPage` (CRUD + historial de despachos), `NotificacionesPage` (filtro por estado, detalle expandible, reintento) sobre `WebhookConfigController` extendido y `NotificacionApiController` | **Completa** |
 
 ## 4. Estado final tras la migración
 

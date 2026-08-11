@@ -234,29 +234,29 @@ export function reintentarNotificacion(id)                   { return api.post(`
 
 **Files:** Modify `App.jsx`, `layouts/MainLayout.jsx`, `index.css`; Modify `docs/ARQUITECTURA_INTERFACES.md`, `docs/handoff.md`.
 
-- [ ] **Step 1: App.jsx** — import `WebhooksPage`, `NotificacionesPage`; add 2 routes inside `MainLayout` + `ProtectedRoute` (mirror F4/F5):
+- [x] **Step 1: App.jsx** — import `WebhooksPage`, `NotificacionesPage`; add 2 routes inside `MainLayout` + `ProtectedRoute` (mirror F4/F5):
   ```jsx
   <Route path="/dashboard/webhooks" element={<ProtectedRoute><WebhooksPage /></ProtectedRoute>} />
   <Route path="/dashboard/notificaciones" element={<ProtectedRoute><NotificacionesPage /></ProtectedRoute>} />
   ```
-- [ ] **Step 2: MainLayout.jsx** — add 2 `btn-nav-link` buttons after "Textos legales": `Webhooks` → `/dashboard/webhooks`, `Notificaciones` → `/dashboard/notificaciones`.
-- [ ] **Step 3: index.css** — append F7 classes (`WebhooksPage`/`NotificacionesPage` scoped: `.webhook-card`, `.webhook-logs`, `.notificaciones-list`, reuse `.acciones-fila`, `.badge-*`, `.empty-state`, `--accent-color` #d4762a). No brand override.
-- [ ] **Step 4: ARQUITECTURA_INTERFACES.md** — F7 row → "Completa" + short paragraph (webhooks + notificaciones gestionados en SPA).
-- [ ] **Step 5: handoff.md** — append F7 entry (commits + verificación final) following the F6 block format.
-- [ ] **Step 6: Frontend gates** — `cd frontend-react && npx vitest run` (all green, ~117), `npm run build` → OK.
-- [ ] **Step 7: Full backend gate** — `$env:JAVA_HOME="$env:USERPROFILE\.jdks\openjdk-25.0.2"; & C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd clean test "-Dtest=!*IntegrationTest"` → **BUILD SUCCESS**, ~343 `@Test`, 0 failures, 0 errors.
-- [ ] **Step 8: Commit.** `git add frontend-react/src/App.jsx frontend-react/src/layouts/MainLayout.jsx frontend-react/src/index.css docs/ARQUITECTURA_INTERFACES.md docs/handoff.md` → `docs: rutas, navegación, estilos F7 y handoff`.
+- [x] **Step 2: MainLayout.jsx** — add 2 `btn-nav-link` buttons after "Textos legales": `Webhooks` → `/dashboard/webhooks`, `Notificaciones` → `/dashboard/notificaciones`.
+- [x] **Step 3: index.css** — append F7 classes (`WebhooksPage`/`NotificacionesPage` scoped: `.webhook-card`, `.webhook-logs`, `.notificaciones-list`, reuse `.acciones-fila`, `.badge-*`, `.empty-state`, `--accent-color` #d4762a). No brand override. *(Nota: las páginas commiteadas usan `.card`, `.logs-webhook`, `.fila-expandible`, `.notificacion-detalle` más las utilidades genéricas `.btn-luxury`, `.btn-outline`, `.input`, `.w-full`, `.label`, `.font-medium`, `.block`, `.mb-*`, `.mt-4`, `.ms-3`, `.form-actions`, `.alert-danger` que F5–F7 referencian; se añadieron esas clases con los tokens SPA existentes.)*
+- [x] **Step 4: ARQUITECTURA_INTERFACES.md** — F7 row → "Completa" + short paragraph (webhooks + notificaciones gestionados en SPA).
+- [x] **Step 5: handoff.md** — append F7 entry (commits + verificación final) following the F6 block format.
+- [x] **Step 6: Frontend gates** — `cd frontend-react && npx vitest run` (all green, ~117), `npm run build` → OK.
+- [x] **Step 7: Full backend gate** — `$env:JAVA_HOME="$env:USERPROFILE\.jdks\openjdk-25.0.2"; & C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd clean test "-Dtest=!*IntegrationTest"` → **BUILD SUCCESS**, ~343 `@Test`, 0 failures, 0 errors.
+- [x] **Step 8: Commit.** `git add frontend-react/src/App.jsx frontend-react/src/layouts/MainLayout.jsx frontend-react/src/index.css docs/ARQUITECTURA_INTERFACES.md docs/handoff.md` → `docs: rutas, navegación, estilos F7 y handoff`.
 
 ---
 
 ### Task 7: Final verification + closing gate
 
-- [ ] `mvn clean test "-Dtest=!*IntegrationTest"` (JDK 25) → **BUILD SUCCESS**, ~343 tests, 0 failures, 0 errors.
-- [ ] `cd frontend-react && npx vitest run` → **~117 tests**, 0 failures.
-- [ ] `cd frontend-react && npm run build` → OK.
-- [ ] `git log --oneline <base>..HEAD` → 6 commits atómicos F7; `git diff --stat` sane; `git status` clean (solo `node_modules/` pre-existente).
-- [ ] Confirm none of the pre-existing `WebhookConfigController` tests broke: `mvn test -Dtest=WebhookConfigControllerTest` → 16 PASS.
-- [ ] Nada hecho `git push`.
+- [x] `mvn clean test "-Dtest=!*IntegrationTest"` (JDK 25) → **BUILD SUCCESS**, ~343 tests, 0 failures, 0 errors.
+- [x] `cd frontend-react && npx vitest run` → **~117 tests**, 0 failures.
+- [x] `cd frontend-react && npm run build` → OK.
+- [x] `git log --oneline <base>..HEAD` → 6 commits atómicos F7; `git diff --stat` sane; `git status` clean (solo `node_modules/` pre-existente).
+- [x] Confirm none of the pre-existing `WebhookConfigController` tests broke: `mvn test -Dtest=WebhookConfigControllerTest` → 16 PASS.
+- [x] Nada hecho `git push`.
 
 ---
 

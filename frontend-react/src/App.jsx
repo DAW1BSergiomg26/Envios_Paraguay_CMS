@@ -12,6 +12,8 @@ import ReservasPage from './pages/ReservasPage';
 import MensajesPage from './pages/MensajesPage';
 import AdminImagesPage from './pages/AdminImagesPage';
 import AdminLegalTextsPage from './pages/AdminLegalTextsPage';
+import WebhooksPage from './pages/WebhooksPage';
+import NotificacionesPage from './pages/NotificacionesPage';
 import LoginPage from './pages/LoginPage';
 import ProtectedRoute from './pages/ProtectedRoute';
 
@@ -53,6 +55,12 @@ export default function App() {
             } />
             <Route path="/dashboard/textos" element={
               <ProtectedRoute><AdminLegalTextsPage /></ProtectedRoute>
+            } />
+            <Route path="/dashboard/webhooks" element={
+              <ProtectedRoute><WebhooksPage /></ProtectedRoute>
+            } />
+            <Route path="/dashboard/notificaciones" element={
+              <ProtectedRoute><NotificacionesPage /></ProtectedRoute>
             } />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />

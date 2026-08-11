@@ -2652,4 +2652,157 @@ body {
   color: #ff8a8a;
 }
 
+/* ---- F7: Webhooks y notificaciones ---- */
+.card {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #e1e5ee;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.btn-luxury {
+  background: #d4762a;
+  border: 1px solid #d4762a;
+  color: #fff;
+}
+
+.btn-luxury:hover {
+  background: #e08535;
+  border-color: #e08535;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid #2a2d3a;
+  color: #e1e5ee;
+}
+
+.btn-outline:hover {
+  border-color: #d4762a;
+  color: #fff;
+}
+
+.input {
+  background: #0f1117;
+  border: 1px solid #2a2d3a;
+  color: #e1e5ee;
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.85rem;
+  transition: border-color 0.15s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #d4762a;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.label {
+  font-size: 0.82rem;
+  color: #c3c9d6;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.block {
+  display: block;
+}
+
+.mb-0 { margin-bottom: 0; }
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+.ms-3 { margin-left: 0.75rem; }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  border: 1px solid transparent;
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.logs-webhook {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #161922;
+  border: 1px solid #2a2d3a;
+  border-radius: 10px;
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #c3c9d6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.fila-expandible {
+  cursor: pointer;
+}
+
+.fila-expandible:hover {
+  background: #1e212c;
+}
+
+.notificacion-detalle {
+  margin: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
+  background: #161922;
+  border: 1px solid #2a2d3a;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #c3c9d6;
+}
+
+.notificacion-detalle p {
+  margin: 0.25rem 0;
+}
+
 
