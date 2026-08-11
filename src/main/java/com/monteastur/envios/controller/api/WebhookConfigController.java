@@ -1,12 +1,16 @@
 package com.monteastur.envios.controller.api;
 
+import com.monteastur.envios.dto.api.ActualizarWebhookRequest;
 import com.monteastur.envios.dto.api.WebhookConfigDto;
 import com.monteastur.envios.dto.api.WebhookConfigRequest;
+import com.monteastur.envios.dto.api.WebhookLogDto;
 import com.monteastur.envios.exception.BadRequestException;
 import com.monteastur.envios.exception.ResourceNotFoundException;
 import com.monteastur.envios.model.WebhookConfig;
+import com.monteastur.envios.model.WebhookLog;
 import com.monteastur.envios.repository.ClienteRepository;
 import com.monteastur.envios.repository.WebhookConfigRepository;
+import com.monteastur.envios.repository.WebhookLogRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -30,11 +34,14 @@ public class WebhookConfigController {
 
     private final WebhookConfigRepository webhookConfigRepository;
     private final ClienteRepository clienteRepository;
+    private final WebhookLogRepository webhookLogRepository;
 
     public WebhookConfigController(WebhookConfigRepository webhookConfigRepository,
-                                   ClienteRepository clienteRepository) {
+                                   ClienteRepository clienteRepository,
+                                   WebhookLogRepository webhookLogRepository) {
         this.webhookConfigRepository = webhookConfigRepository;
         this.clienteRepository = clienteRepository;
+        this.webhookLogRepository = webhookLogRepository;
     }
 
     @Operation(summary = "Listar configuraciones de webhook", description = "Devuelve todos los webhooks o los de un cliente (nunca expone el secret_token)")
@@ -98,6 +105,53 @@ public class WebhookConfigController {
         if (uri.getHost() == null) {
             throw new BadRequestException("url no es válida");
         }
+    }
+
+    @Operation(summary = "Actualizar configuración de webhook", description = "Modifica url, secretToken y/o activo; los campos en blanco se ignoran")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Webhook actualizado",
+            content = @Content(schema = @Schema(implementation = WebhookConfigDto.class))),
+        @ApiResponse(responseCode = "400", description = "Datos inválidos",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class))),
+        @ApiResponse(responseCode = "404", description = "Webhook no encontrado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
+    @PutMapping("/{id}")
+    public ResponseEntity<WebhookConfigDto> actualizar(@PathVariable Long id,
+                                                       @RequestBody ActualizarWebhookRequest request) {
+        WebhookConfig config = webhookConfigRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Webhook no encontrado: " + id));
+        if (request.getUrl() != null && !request.getUrl().isBlank()) {
+            validarUrl(request.getUrl());
+            config.setUrl(request.getUrl());
+        }
+        if (request.getSecretToken() != null && !request.getSecretToken().isBlank()) {
+            config.setSecretToken(request.getSecretToken());
+        }
+        if (request.getActivo() != null) {
+            config.setActivo(request.getActivo());
+        }
+        return ResponseEntity.ok(WebhookConfigDto.from(webhookConfigRepository.save(config)));
+    }
+
+    @Operation(summary = "Historial de despachos de un webhook", description = "Devuelve los registros de despacho (sin payload), opcionalmente filtrados por éxito")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Historial de despachos",
+            content = @Content(schema = @Schema(implementation = WebhookLogDto.class))),
+        @ApiResponse(responseCode = "404", description = "Webhook no encontrado",
+            content = @Content(schema = @Schema(implementation = com.monteastur.envios.dto.api.ErrorDto.class)))
+    })
+    @GetMapping("/{id}/logs")
+    public ResponseEntity<List<WebhookLogDto>> logs(@PathVariable Long id,
+                                                    @RequestParam(required = false) Boolean exitoso) {
+        if (!webhookConfigRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Webhook no encontrado: " + id);
+        }
+        List<WebhookLog> logs = webhookLogRepository.findByWebhookIdOrderByFechaCreacionDesc(id);
+        if (exitoso != null) {
+            logs = logs.stream().filter(log -> log.isExitoso() == exitoso).collect(Collectors.toList());
+        }
+        return ResponseEntity.ok(logs.stream().map(WebhookLogDto::from).collect(Collectors.toList()));
     }
 
     @Operation(summary = "Eliminar configuración de webhook", description = "Borra la configuración; los logs asociados se eliminan en cascada")
