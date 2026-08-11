@@ -1,6 +1,8 @@
 package com.monteastur.envios.service;
 
 import com.monteastur.envios.repository.EnvioTrackingRepository;
+import com.monteastur.envios.repository.EventoTrackingRepository;
+import com.monteastur.envios.repository.EvidenciaEnvioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -34,13 +36,33 @@ class EnvioTrackingServiceCacheTest {
         }
 
         @Bean
+        EventoTrackingRepository eventoTrackingRepository() {
+            return Mockito.mock(EventoTrackingRepository.class);
+        }
+
+        @Bean
+        EvidenciaEnvioRepository evidenciaEnvioRepository() {
+            return Mockito.mock(EvidenciaEnvioRepository.class);
+        }
+
+        @Bean
+        EventoTrackingService eventoTrackingService(EventoTrackingRepository eventoTrackingRepository) {
+            return new EventoTrackingService(eventoTrackingRepository);
+        }
+
+        @Bean
         ApplicationEventPublisher applicationEventPublisher() {
             return Mockito.mock(ApplicationEventPublisher.class);
         }
 
         @Bean
-        EnvioTrackingService envioTrackingService(EnvioTrackingRepository repo, ApplicationEventPublisher publisher) {
-            return new EnvioTrackingService(repo, publisher);
+        EnvioTrackingService envioTrackingService(EnvioTrackingRepository repo,
+                                                  ApplicationEventPublisher publisher,
+                                                  EventoTrackingService eventoTrackingService,
+                                                  EventoTrackingRepository eventoTrackingRepository,
+                                                  EvidenciaEnvioRepository evidenciaEnvioRepository) {
+            return new EnvioTrackingService(repo, publisher, eventoTrackingService,
+                    eventoTrackingRepository, evidenciaEnvioRepository);
         }
 
         @Bean

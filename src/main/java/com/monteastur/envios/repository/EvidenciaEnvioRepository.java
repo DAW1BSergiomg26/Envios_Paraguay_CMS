@@ -10,4 +10,5 @@ import java.util.List;
 public interface EvidenciaEnvioRepository extends JpaRepository<EvidenciaEnvio, Long> {
     List<EvidenciaEnvio> findByEnvioTrackingIdOrderByFechaSubidaDesc(Long envioId);
     List<EvidenciaEnvio> findByEnvioTrackingIdAndVisibleClienteTrueOrderByFechaSubidaDesc(Long envioId);
+    void deleteByEnvioTrackingId(Long envioId);
 }

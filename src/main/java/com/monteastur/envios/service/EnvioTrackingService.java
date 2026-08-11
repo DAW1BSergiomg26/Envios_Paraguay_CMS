@@ -5,6 +5,8 @@ import com.monteastur.envios.event.EstadoEnvioActualizadoEvent;
 import com.monteastur.envios.exception.ResourceNotFoundException;
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
+import com.monteastur.envios.repository.EventoTrackingRepository;
+import com.monteastur.envios.repository.EvidenciaEnvioRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ApplicationEventPublisher;
@@ -20,10 +22,27 @@ public class EnvioTrackingService {
 
     private final EnvioTrackingRepository repo;
     private final ApplicationEventPublisher eventPublisher;
+    private final EventoTrackingService eventoTrackingService;
+    private final EventoTrackingRepository eventoRepo;
+    private final EvidenciaEnvioRepository evidenciaRepo;
 
-    public EnvioTrackingService(EnvioTrackingRepository repo, ApplicationEventPublisher eventPublisher) {
+    public EnvioTrackingService(EnvioTrackingRepository repo,
+                                ApplicationEventPublisher eventPublisher,
+                                EventoTrackingService eventoTrackingService,
+                                EventoTrackingRepository eventoRepo,
+                                EvidenciaEnvioRepository evidenciaRepo) {
         this.repo = repo;
         this.eventPublisher = eventPublisher;
+        this.eventoTrackingService = eventoTrackingService;
+        this.eventoRepo = eventoRepo;
+        this.evidenciaRepo = evidenciaRepo;
+    }
+
+    @Transactional
+    public EnvioTracking crear(EnvioTracking envio) {
+        EnvioTracking guardado = guardar(envio);
+        eventoTrackingService.crearEventoInicial(guardado);
+        return guardado;
     }
 
     @Cacheable(value = "envios.tracking", unless = "#result == null")
@@ -63,8 +82,11 @@ public class EnvioTrackingService {
         return actualizado;
     }
 
+    @Transactional
     @CacheEvict(value = {"envios.tracking", "envios.tracking.pagina", "envios.cliente.dashboard", "envios.analytics"}, allEntries = true)
     public void eliminar(Long id) {
+        evidenciaRepo.deleteByEnvioTrackingId(id);
+        eventoRepo.deleteByEnvioTrackingId(id);
         repo.deleteById(id);
     }
 

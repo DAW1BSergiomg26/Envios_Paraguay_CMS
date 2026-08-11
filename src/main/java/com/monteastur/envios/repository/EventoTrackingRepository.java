@@ -10,4 +10,5 @@ import java.util.List;
 public interface EventoTrackingRepository extends JpaRepository<EventoTracking, Long> {
     List<EventoTracking> findByEnvioTrackingIdOrderByFechaEventoDesc(Long envioId);
     List<EventoTracking> findTop20ByEnvioTrackingIdOrderByFechaEventoDesc(Long envioId);
+    void deleteByEnvioTrackingId(Long envioId);
 }
