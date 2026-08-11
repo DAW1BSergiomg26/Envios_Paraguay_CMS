@@ -112,12 +112,8 @@ public class ClienteApiController {
             return evDto;
         }).collect(Collectors.toList()));
         dto.setEvidencias(evidenciaService.listarPorEnvioParaCliente(envio.getId()).stream().map(ev -> {
-            EvidenciaDto evDto = new EvidenciaDto();
-            evDto.setTitulo(ev.getTitulo());
-            evDto.setDescripcion(ev.getDescripcion());
-            evDto.setTipo(ev.getTipo());
+            EvidenciaDto evDto = EvidenciaDto.from(ev);
             evDto.setUrlArchivo("/api/v1/cliente/evidencias/" + ev.getId() + "/archivo");
-            evDto.setVisibleCliente(ev.getVisibleCliente());
             return evDto;
         }).collect(Collectors.toList()));
         return ResponseEntity.ok(dto);

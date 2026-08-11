@@ -160,7 +160,7 @@ public class EnvioApiController {
         evidencia.setTipo(tipoNormalizado);
         evidencia.setUrlArchivo("/uploads/" + relPath);
         evidencia.setVisibleCliente(true);
-        return toEvidenciaDto(evidenciaService.guardar(evidencia));
+        return EvidenciaDto.from(evidenciaService.guardar(evidencia));
     }
 
     @PatchMapping("/evidencias/{id}/visibilidad")
@@ -169,7 +169,7 @@ public class EnvioApiController {
         evidenciaService.toggleVisibilidad(id);
         EvidenciaEnvio evidencia = evidenciaService.buscar(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Evidencia no encontrada: " + id));
-        return toEvidenciaDto(evidencia);
+        return EvidenciaDto.from(evidencia);
     }
 
     @DeleteMapping("/evidencias/{id}")
@@ -203,20 +203,8 @@ public class EnvioApiController {
             return evDto;
         }).toList());
         dto.setEvidencias(evidenciaService.listarPorEnvio(envio.getId()).stream()
-                .map(this::toEvidenciaDto)
+                .map(EvidenciaDto::from)
                 .toList());
-        return dto;
-    }
-
-    private EvidenciaDto toEvidenciaDto(EvidenciaEnvio evidencia) {
-        EvidenciaDto dto = new EvidenciaDto();
-        dto.setId(evidencia.getId());
-        dto.setTitulo(evidencia.getTitulo());
-        dto.setDescripcion(evidencia.getDescripcion());
-        dto.setTipo(evidencia.getTipo());
-        dto.setUrlArchivo(evidencia.getUrlArchivo());
-        dto.setVisibleCliente(evidencia.getVisibleCliente());
-        dto.setFechaSubida(evidencia.getFechaSubida());
         return dto;
     }
 }

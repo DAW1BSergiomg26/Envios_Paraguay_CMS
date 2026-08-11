@@ -1,5 +1,7 @@
 package com.monteastur.envios.dto.api;
 
+import com.monteastur.envios.model.EvidenciaEnvio;
+
 import java.time.LocalDateTime;
 
 public class EvidenciaDto {
@@ -27,4 +29,19 @@ public class EvidenciaDto {
     public void setVisibleCliente(Boolean visibleCliente) { this.visibleCliente = visibleCliente; }
     public LocalDateTime getFechaSubida() { return fechaSubida; }
     public void setFechaSubida(LocalDateTime fechaSubida) { this.fechaSubida = fechaSubida; }
+
+    public static EvidenciaDto from(EvidenciaEnvio evidencia) {
+        if (evidencia == null) {
+            return null;
+        }
+        EvidenciaDto dto = new EvidenciaDto();
+        dto.setId(evidencia.getId());
+        dto.setTitulo(evidencia.getTitulo());
+        dto.setDescripcion(evidencia.getDescripcion());
+        dto.setTipo(evidencia.getTipo());
+        dto.setUrlArchivo(evidencia.getUrlArchivo());
+        dto.setVisibleCliente(evidencia.getVisibleCliente());
+        dto.setFechaSubida(evidencia.getFechaSubida());
+        return dto;
+    }
 }

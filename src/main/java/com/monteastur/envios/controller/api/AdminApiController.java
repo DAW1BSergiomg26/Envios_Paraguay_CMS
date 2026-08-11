@@ -187,15 +187,9 @@ public class AdminApiController {
             evDto.setTipo(ev.getEstado());
             return evDto;
         }).collect(Collectors.toList()));
-        dto.setEvidencias(evidenciaService.listarPorEnvio(envio.getId()).stream().map(ev -> {
-            EvidenciaDto evDto = new EvidenciaDto();
-            evDto.setTitulo(ev.getTitulo());
-            evDto.setDescripcion(ev.getDescripcion());
-            evDto.setTipo(ev.getTipo());
-            evDto.setUrlArchivo(ev.getUrlArchivo());
-            evDto.setVisibleCliente(ev.getVisibleCliente());
-            return evDto;
-        }).collect(Collectors.toList()));
+        dto.setEvidencias(evidenciaService.listarPorEnvio(envio.getId()).stream()
+                .map(EvidenciaDto::from)
+                .collect(Collectors.toList()));
         return dto;
     }
 }
