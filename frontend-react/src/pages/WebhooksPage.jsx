@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, Fragment } from 'react'
 import {
   getAdminClientes,
   listarWebhooks,
@@ -276,8 +276,8 @@ export default function WebhooksPage() {
             </thead>
             <tbody>
               {webhooks.map((w) => (
-                <>
-                  <tr key={w.id}>
+                <Fragment key={w.id}>
+                  <tr>
                     <td>{nombreCliente(w.clienteId)}</td>
                     <td className="cell-mensaje">{w.url}</td>
                     <td>
@@ -299,7 +299,7 @@ export default function WebhooksPage() {
                     </td>
                   </tr>
                   {logsAbiertos[w.id] && (
-                    <tr key={`logs-${w.id}`}>
+                    <tr>
                       <td colSpan={5}>
                         <div className="logs-webhook">
                           <h4>Historial de despachos</h4>
@@ -341,7 +341,7 @@ export default function WebhooksPage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
