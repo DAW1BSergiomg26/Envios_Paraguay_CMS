@@ -136,15 +136,15 @@ describe('ImportBatchPage', () => {
     await screen.findByText('Lote #99')
 
     mockGetDocumentoUrl
-      .mockReturnValueOnce('/admin/documentos/lotes/99/etiquetas')
-      .mockReturnValueOnce('/admin/documentos/lotes/99/manifiesto')
+      .mockReturnValueOnce('/api/v1/admin/documentos/lotes/99/etiquetas')
+      .mockReturnValueOnce('/api/v1/admin/documentos/lotes/99/manifiesto')
 
     await user.click(screen.getByRole('button', { name: /etiquetas del lote/i }))
     expect(mockGetDocumentoUrl).toHaveBeenCalledWith('etiquetas-lote', 99)
-    expect(mockDescargarDocumento).toHaveBeenCalledWith('/admin/documentos/lotes/99/etiquetas')
+    expect(mockDescargarDocumento).toHaveBeenCalledWith('/api/v1/admin/documentos/lotes/99/etiquetas')
 
     await user.click(screen.getByRole('button', { name: /manifiesto/i }))
     expect(mockGetDocumentoUrl).toHaveBeenCalledWith('manifiesto', 99)
-    expect(mockDescargarDocumento).toHaveBeenCalledWith('/admin/documentos/lotes/99/manifiesto')
+    expect(mockDescargarDocumento).toHaveBeenCalledWith('/api/v1/admin/documentos/lotes/99/manifiesto')
   })
 })

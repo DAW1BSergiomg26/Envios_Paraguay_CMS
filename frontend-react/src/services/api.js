@@ -102,12 +102,12 @@ export async function checkSession() {
 
 export function getDocumentoUrl(tipo, referencia) {
   if (tipo === 'etiqueta') {
-    return `/admin/documentos/envios/${referencia}/etiqueta`;
+    return `/api/v1/admin/documentos/envios/${referencia}/etiqueta`;
   }
   if (tipo === 'etiquetas-lote') {
-    return `/admin/documentos/lotes/${referencia}/etiquetas`;
+    return `/api/v1/admin/documentos/lotes/${referencia}/etiquetas`;
   }
-  return `/admin/documentos/lotes/${referencia}/manifiesto`;
+  return `/api/v1/admin/documentos/lotes/${referencia}/manifiesto`;
 }
 
 export function descargarDocumento(url) {
@@ -190,6 +190,30 @@ export function getTextoLegal(slug) {
 
 export function putTextoLegal(slug, { titulo, contenido }) {
   return api.put(`/admin/textos/${slug}`, { titulo, contenido });
+}
+
+export function postAdminEnvio(data) {
+  return api.post('/admin/envios', data);
+}
+
+export function putAdminEnvio(codigo, data) {
+  return api.put(`/admin/envios/${codigo}`, data);
+}
+
+export function deleteAdminEnvio(codigo) {
+  return api.delete(`/admin/envios/${codigo}`);
+}
+
+export function uploadAdminEvidencia(codigo, formData) {
+  return api.post(`/admin/envios/${codigo}/evidencias`, formData);
+}
+
+export function patchAdminEvidenciaVisibilidad(id, visibleCliente) {
+  return api.patch(`/admin/envios/evidencias/${id}/visibilidad`, { visibleCliente });
+}
+
+export function deleteAdminEvidencia(id) {
+  return api.delete(`/admin/envios/evidencias/${id}`);
 }
 
 export default api;

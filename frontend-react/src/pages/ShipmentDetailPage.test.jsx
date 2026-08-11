@@ -52,11 +52,11 @@ describe('ShipmentDetailPage', () => {
 
   it('abre la etiqueta térmica en pestaña nueva', async () => {
     const user = userEvent.setup()
-    mockGetDocumentoUrl.mockReturnValue('/admin/documentos/envios/MT-0001/etiqueta')
+    mockGetDocumentoUrl.mockReturnValue('/api/v1/admin/documentos/envios/MT-0001/etiqueta')
     render(<ShipmentDetailPage />)
     const btn = await screen.findByRole('button', { name: /etiqueta térmica/i })
     await user.click(btn)
     expect(mockGetDocumentoUrl).toHaveBeenCalledWith('etiqueta', 'MT-0001')
-    expect(window.open).toHaveBeenCalledWith('/admin/documentos/envios/MT-0001/etiqueta', '_blank')
+    expect(window.open).toHaveBeenCalledWith('/api/v1/admin/documentos/envios/MT-0001/etiqueta', '_blank')
   })
 })

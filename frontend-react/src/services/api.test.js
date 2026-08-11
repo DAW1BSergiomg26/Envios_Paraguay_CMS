@@ -14,20 +14,26 @@ import api, {
   getAdminTextos,
   getTextoLegal,
   putTextoLegal,
+  postAdminEnvio,
+  putAdminEnvio,
+  deleteAdminEnvio,
+  uploadAdminEvidencia,
+  patchAdminEvidenciaVisibilidad,
+  deleteAdminEvidencia,
 } from './api';
 import { getDocumentoUrl, descargarDocumento, formatPesoBytes } from './api'
 
 describe('api helpers de documentos', () => {
   it('construye la URL de la etiqueta de un envío', () => {
-    expect(getDocumentoUrl('etiqueta', 'MT-0001')).toBe('/admin/documentos/envios/MT-0001/etiqueta')
+    expect(getDocumentoUrl('etiqueta', 'MT-0001')).toBe('/api/v1/admin/documentos/envios/MT-0001/etiqueta')
   })
 
   it('construye la URL de etiquetas de lote', () => {
-    expect(getDocumentoUrl('etiquetas-lote', 10)).toBe('/admin/documentos/lotes/10/etiquetas')
+    expect(getDocumentoUrl('etiquetas-lote', 10)).toBe('/api/v1/admin/documentos/lotes/10/etiquetas')
   })
 
   it('construye la URL del manifiesto de lote', () => {
-    expect(getDocumentoUrl('manifiesto', 10)).toBe('/admin/documentos/lotes/10/manifiesto')
+    expect(getDocumentoUrl('manifiesto', 10)).toBe('/api/v1/admin/documentos/lotes/10/manifiesto')
   })
 
   it('descargarDocumento crea un anchor con href y download, hace click y lo elimina', () => {
@@ -160,6 +166,57 @@ describe('api helpers de imagenes y textos legales', () => {
     const spy = vi.spyOn(api, 'put').mockResolvedValue({ data: {} })
     await putTextoLegal('aviso-legal', { titulo: 'T', contenido: 'C' })
     expect(spy).toHaveBeenCalledWith('/admin/textos/aviso-legal', { titulo: 'T', contenido: 'C' })
+    spy.mockRestore()
+  })
+})
+
+describe('api helpers de envíos y evidencias', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('postAdminEnvio llama a POST /admin/envios con el body', async () => {
+    const spy = vi.spyOn(api, 'post').mockResolvedValue({ data: {} })
+    const body = { estado: 'RECIBIDO', destinatario: 'María' }
+    await postAdminEnvio(body)
+    expect(spy).toHaveBeenCalledWith('/admin/envios', body)
+    spy.mockRestore()
+  })
+
+  it('putAdminEnvio llama a PUT /admin/envios/:codigo con el body', async () => {
+    const spy = vi.spyOn(api, 'put').mockResolvedValue({ data: {} })
+    const body = { estado: 'EN_TRANSITO' }
+    await putAdminEnvio('MT-0001', body)
+    expect(spy).toHaveBeenCalledWith('/admin/envios/MT-0001', body)
+    spy.mockRestore()
+  })
+
+  it('deleteAdminEnvio llama a DELETE /admin/envios/:codigo', async () => {
+    const spy = vi.spyOn(api, 'delete').mockResolvedValue({ data: {} })
+    await deleteAdminEnvio('MT-0001')
+    expect(spy).toHaveBeenCalledWith('/admin/envios/MT-0001')
+    spy.mockRestore()
+  })
+
+  it('uploadAdminEvidencia llama a POST /admin/envios/:codigo/evidencias con FormData', async () => {
+    const spy = vi.spyOn(api, 'post').mockResolvedValue({ data: {} })
+    const fd = new FormData()
+    await uploadAdminEvidencia('MT-0001', fd)
+    expect(spy).toHaveBeenCalledWith('/admin/envios/MT-0001/evidencias', fd)
+    spy.mockRestore()
+  })
+
+  it('patchAdminEvidenciaVisibilidad llama a PATCH /admin/envios/evidencias/:id/visibilidad', async () => {
+    const spy = vi.spyOn(api, 'patch').mockResolvedValue({ data: {} })
+    await patchAdminEvidenciaVisibilidad(7, false)
+    expect(spy).toHaveBeenCalledWith('/admin/envios/evidencias/7/visibilidad', { visibleCliente: false })
+    spy.mockRestore()
+  })
+
+  it('deleteAdminEvidencia llama a DELETE /admin/envios/evidencias/:id', async () => {
+    const spy = vi.spyOn(api, 'delete').mockResolvedValue({ data: {} })
+    await deleteAdminEvidencia(7)
+    expect(spy).toHaveBeenCalledWith('/admin/envios/evidencias/7')
     spy.mockRestore()
   })
 })
