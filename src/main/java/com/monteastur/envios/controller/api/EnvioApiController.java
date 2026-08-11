@@ -152,7 +152,7 @@ public class EnvioApiController {
             throw new BadRequestException("Debes seleccionar un archivo.");
         }
 
-        String relPath = uploadService.subirArchivo(archivo, "evidencias");
+        String relPath = uploadService.subirArchivo(archivo, "evidencias", "jpg", "jpeg", "png", "webp", "pdf");
         EvidenciaEnvio evidencia = new EvidenciaEnvio();
         evidencia.setEnvioTracking(envio);
         evidencia.setTitulo(titulo.trim());

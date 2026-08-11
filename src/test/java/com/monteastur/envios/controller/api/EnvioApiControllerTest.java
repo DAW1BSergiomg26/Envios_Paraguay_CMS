@@ -204,7 +204,7 @@ class EnvioApiControllerTest {
         EnvioTracking envio = envio("MT-2026-0001", "RECIBIDO", "María");
         EvidenciaEnvio ev = evidencia(1L, "Factura", "DOCUMENTO", "/uploads/evidencias/uuid.pdf");
         when(trackingRepo.findWithClienteByCodigoUnico("MT-2026-0001")).thenReturn(Optional.of(envio));
-        when(uploadService.subirArchivo(any(MultipartFile.class), anyString()))
+        when(uploadService.subirArchivo(any(MultipartFile.class), anyString(), any(String[].class)))
                 .thenReturn("evidencias/uuid.pdf");
         when(evidenciaService.guardar(any(EvidenciaEnvio.class))).thenReturn(ev);
 

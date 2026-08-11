@@ -23,13 +23,17 @@ public class UploadService {
     }
 
     public String subirArchivo(MultipartFile archivo, String subDir) throws IOException {
+        return subirArchivo(archivo, subDir, EXT_PERMITIDAS.toArray(String[]::new));
+    }
+
+    public String subirArchivo(MultipartFile archivo, String subDir, String... extensionesPermitidas) throws IOException {
         if (archivo == null || archivo.isEmpty()) {
             throw new BadRequestException("Debes seleccionar un archivo.");
         }
 
         String originalName = archivo.getOriginalFilename();
         String ext = extraerExtension(originalName);
-        if (!EXT_PERMITIDAS.contains(ext)) {
+        if (!List.of(extensionesPermitidas).contains(ext)) {
             throw new BadRequestException("Extensión de archivo no permitida.");
         }
 

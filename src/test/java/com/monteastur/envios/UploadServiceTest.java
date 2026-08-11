@@ -73,6 +73,26 @@ class UploadServiceTest {
     }
 
     @Test
+    void subirArchivo_customAllowlist_aceptaPdf() throws IOException {
+        UploadService service = service();
+        MultipartFile pdf = new MockMultipartFile("archivo", "doc.pdf", "application/pdf", "pdf".getBytes());
+
+        String relPath = service.subirArchivo(pdf, "evidencias", "jpg", "pdf");
+
+        assertThat(relPath).startsWith("evidencias/").endsWith(".pdf");
+        assertThat(Files.exists(tmp.resolve(relPath))).isTrue();
+    }
+
+    @Test
+    void subirArchivo_customAllowlist_rechazaSvg() {
+        UploadService service = service();
+        MultipartFile svg = new MockMultipartFile("archivo", "img.svg", "image/svg+xml", "svg".getBytes());
+
+        assertThatThrownBy(() -> service.subirArchivo(svg, "evidencias", "jpg", "pdf"))
+                .isInstanceOf(BadRequestException.class);
+    }
+
+    @Test
     void eliminarArchivo_borraYIdempotente() throws IOException {
         UploadService service = service();
         MultipartFile foto = new MockMultipartFile("archivo", "foto.jpg", "image/jpeg", "img".getBytes());
