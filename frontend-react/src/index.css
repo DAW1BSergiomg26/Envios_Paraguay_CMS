@@ -2529,3 +2529,127 @@ body {
   font-family: monospace;
 }
 
+/* ---- F6: Envíos CRUD y panel admin de evidencias ---- */
+.envio-form {
+  padding: 1.5rem;
+  background: #161922;
+  border: 1px solid #2a2d3a;
+  border-radius: 12px;
+}
+
+.btn-nuevo {
+  background: #d4762a;
+  border: 1px solid #d4762a;
+  color: #fff;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.btn-nuevo:hover { background: #e08535; border-color: #e08535; }
+.btn-nuevo:active:not(:disabled) { transform: scale(0.97); }
+.btn-nuevo:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.cell-actions {
+  white-space: nowrap;
+  text-align: right;
+}
+
+.acciones-fila {
+  background: #1a1d27;
+  border: 1px solid #2a2d3a;
+  color: #e1e5ee;
+  border-radius: 8px;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.acciones-fila:hover { border-color: #d4762a; color: #fff; }
+
+.acciones-fila--danger:hover {
+  border-color: #dc3545;
+  color: #ff8a8a;
+}
+
+.evidencias-admin-panel {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #161922;
+  border: 1px dashed #2a2d3a;
+  border-radius: 10px;
+}
+
+.evidencias-admin-panel .upload-form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.evidencias-admin-panel input[type="file"] {
+  font-size: 0.82rem;
+  color: #c3c9d6;
+}
+
+.evidencias-admin-panel .btn-primary {
+  background: #d4762a;
+  border-color: #d4762a;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.evidencias-admin-panel .btn-primary:disabled {
+  background: #2a2d3a;
+  border-color: #2a2d3a;
+  color: #8b93a7;
+  cursor: not-allowed;
+}
+
+.evidencias-admin-panel .btn-primary:not(:disabled):hover {
+  background: #e08535;
+  border-color: #e08535;
+  color: #fff;
+}
+
+.evidencia-admin-toggle {
+  width: 100%;
+  background: rgba(212, 118, 42, 0.12);
+  border: 1px solid rgba(212, 118, 42, 0.35);
+  color: #d4762a;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: background 0.15s, color 0.15s;
+}
+
+.evidencia-admin-toggle:hover {
+  background: rgba(212, 118, 42, 0.2);
+  color: #fff;
+}
+
+.evidencia-admin-delete {
+  width: 100%;
+  background: #0f1117;
+  border: 1px solid #2a2d3a;
+  color: #c3c9d6;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 500;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.evidencia-admin-delete:hover {
+  border-color: #dc3545;
+  color: #ff8a8a;
+}
+
+
