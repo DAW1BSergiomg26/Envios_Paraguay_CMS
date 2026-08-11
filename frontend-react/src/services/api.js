@@ -164,6 +164,38 @@ export function deleteAdminMensaje(id) {
   return api.delete(`/admin/mensajes/${id}`);
 }
 
+export function listarWebhooks(clienteId) {
+  return api.get('/admin/webhooks', { params: clienteId ? { clienteId } : {} });
+}
+
+export function crearWebhook(data) {
+  return api.post('/admin/webhooks', data);
+}
+
+export function actualizarWebhook(id, data) {
+  return api.put(`/admin/webhooks/${id}`, data);
+}
+
+export function eliminarWebhook(id) {
+  return api.delete(`/admin/webhooks/${id}`);
+}
+
+export function listarWebhookLogs(id, exitoso) {
+  const params = {};
+  if (exitoso !== undefined && exitoso !== null) params.exitoso = exitoso;
+  return api.get(`/admin/webhooks/${id}/logs`, { params });
+}
+
+export function listarNotificaciones(estado) {
+  const params = {};
+  if (estado) params.estado = estado;
+  return api.get('/admin/notificaciones', { params });
+}
+
+export function reintentarNotificacion(id) {
+  return api.post(`/admin/notificaciones/${id}/reintentar`);
+}
+
 export function getAdminImagenes() {
   return api.get('/admin/imagenes');
 }

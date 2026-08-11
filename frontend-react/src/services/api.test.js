@@ -20,6 +20,13 @@ import api, {
   uploadAdminEvidencia,
   patchAdminEvidenciaVisibilidad,
   deleteAdminEvidencia,
+  listarWebhooks,
+  crearWebhook,
+  actualizarWebhook,
+  eliminarWebhook,
+  listarWebhookLogs,
+  listarNotificaciones,
+  reintentarNotificacion,
 } from './api';
 import { getDocumentoUrl, descargarDocumento, formatPesoBytes } from './api'
 
@@ -217,6 +224,84 @@ describe('api helpers de envíos y evidencias', () => {
     const spy = vi.spyOn(api, 'delete').mockResolvedValue({ data: {} })
     await deleteAdminEvidencia(7)
     expect(spy).toHaveBeenCalledWith('/admin/envios/evidencias/7')
+    spy.mockRestore()
+  })
+})
+
+describe('api helpers de webhooks y notificaciones', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('listarWebhooks llama a GET /admin/webhooks sin params', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await listarWebhooks()
+    expect(spy).toHaveBeenCalledWith('/admin/webhooks', expect.objectContaining({ params: {} }))
+    spy.mockRestore()
+  })
+
+  it('listarWebhooks con clienteId incluye el param', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await listarWebhooks(3)
+    expect(spy).toHaveBeenCalledWith('/admin/webhooks', expect.objectContaining({ params: { clienteId: 3 } }))
+    spy.mockRestore()
+  })
+
+  it('crearWebhook llama a POST /admin/webhooks con el body', async () => {
+    const spy = vi.spyOn(api, 'post').mockResolvedValue({ data: {} })
+    const body = { clienteId: 3, url: 'https://hook.example.com/x', secretToken: 's3cr3t' }
+    await crearWebhook(body)
+    expect(spy).toHaveBeenCalledWith('/admin/webhooks', body)
+    spy.mockRestore()
+  })
+
+  it('actualizarWebhook llama a PUT /admin/webhooks/:id', async () => {
+    const spy = vi.spyOn(api, 'put').mockResolvedValue({ data: {} })
+    const body = { url: 'https://new.example.com', activo: false }
+    await actualizarWebhook(10, body)
+    expect(spy).toHaveBeenCalledWith('/admin/webhooks/10', body)
+    spy.mockRestore()
+  })
+
+  it('eliminarWebhook llama a DELETE /admin/webhooks/:id', async () => {
+    const spy = vi.spyOn(api, 'delete').mockResolvedValue({ data: {} })
+    await eliminarWebhook(10)
+    expect(spy).toHaveBeenCalledWith('/admin/webhooks/10')
+    spy.mockRestore()
+  })
+
+  it('listarWebhookLogs sin filtro no envía exitoso', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await listarWebhookLogs(10)
+    expect(spy).toHaveBeenCalledWith('/admin/webhooks/10/logs', expect.objectContaining({ params: {} }))
+    spy.mockRestore()
+  })
+
+  it('listarWebhookLogs con filtro envía exitoso', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await listarWebhookLogs(10, true)
+    expect(spy).toHaveBeenCalledWith('/admin/webhooks/10/logs', expect.objectContaining({ params: { exitoso: true } }))
+    spy.mockRestore()
+  })
+
+  it('listarNotificaciones sin estado omite el param', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await listarNotificaciones()
+    expect(spy).toHaveBeenCalledWith('/admin/notificaciones', expect.objectContaining({ params: {} }))
+    spy.mockRestore()
+  })
+
+  it('listarNotificaciones con estado incluye el param', async () => {
+    const spy = vi.spyOn(api, 'get').mockResolvedValue({ data: [] })
+    await listarNotificaciones('FALLIDO')
+    expect(spy).toHaveBeenCalledWith('/admin/notificaciones', expect.objectContaining({ params: { estado: 'FALLIDO' } }))
+    spy.mockRestore()
+  })
+
+  it('reintentarNotificacion llama a POST /admin/notificaciones/:id/reintentar', async () => {
+    const spy = vi.spyOn(api, 'post').mockResolvedValue({ data: {} })
+    await reintentarNotificacion(5)
+    expect(spy).toHaveBeenCalledWith('/admin/notificaciones/5/reintentar')
     spy.mockRestore()
   })
 })
