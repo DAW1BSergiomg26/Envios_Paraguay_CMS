@@ -93,4 +93,22 @@ class DesignSystemCssTest {
         assertThat(css).contains(".login-field");
         assertThat(css).contains(".toast-error");
     }
+
+    @Test
+    void h8_definesPublicSelectors() throws IOException {
+        String css = css();
+        assertThat(css).contains(".brand-banner");
+        assertThat(css).contains(".operation-card");
+        assertThat(css).contains(".operations-hero");
+        assertThat(css).contains(".lightbox");
+        assertThat(css).contains(".calendario");
+        assertThat(css).contains(".error-card");
+    }
+
+    @Test
+    void h8_noHardcodedHexInNewSection() throws IOException {
+        String css = css();
+        String section = css.substring(css.indexOf("H8: Restauración visual post-e72def6"));
+        assertThat(section).doesNotContainPattern("#[0-9a-fA-F]{3,8}");
+    }
 }
