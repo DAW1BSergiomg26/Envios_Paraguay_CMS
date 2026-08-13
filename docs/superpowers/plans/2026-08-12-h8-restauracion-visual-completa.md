@@ -124,8 +124,8 @@ docs/handoff.md  [MODIFY — entrada H8]
   - [x] `mvn clean test "-Dtest=!*IntegrationTest"` → BUILD SUCCESS, 349 tests.
   - [x] `cd frontend-react && npx vitest run` → 120 tests, 0 failures.
   - [x] `cd frontend-react && npm run build` → OK.
-  - [ ] `git log --oneline <base>..HEAD` → 4 commits atómicos H8 + 1 docs. *(4/4 commits de código presentes: `37e6a78`, `b0c504f`, `4fcac6d`, `5b8748b`; falta el commit de docs de cierre.)*
-  - [ ] `git status` limpio (solo `node_modules/` pre-existente). *(pendiente: `docs/handoff.md` y `docs/ARQUITECTURA_INTERFACES.md` modificados sin commitear.)*
+  - [x] `git log --oneline <base>..HEAD` → 4 commits atómicos H8 + 1 docs. *(4/4 commits de código presentes: `37e6a78`, `b0c504f`, `4fcac6d`, `5b8748b`; docs de cierre `a2a0db2`.)*
+  - [x] `git status` limpio (solo `node_modules/` pre-existente). *(Untracked restantes pre-existentes: `node_modules/`, `.claude-flow/`, `.swarm/`, `ruvector.db`; plan/spec F4 pendientes de commitear de una tarea previa — fuera de alcance H8.)*
   - [x] **No push** sin autorización.
 
 ---
