@@ -84,4 +84,13 @@ class DesignSystemCssTest {
         assertThat(css).contains(".public-container");
         assertThat(css).contains(".page-title");
     }
+
+    @Test
+    void h8_definesLoginSelectors() throws IOException {
+        String css = css();
+        assertThat(css).contains(".login-wrapper");
+        assertThat(css).contains(".login-body");
+        assertThat(css).contains(".login-field");
+        assertThat(css).contains(".toast-error");
+    }
 }
