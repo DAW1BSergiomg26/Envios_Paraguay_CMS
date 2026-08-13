@@ -20,24 +20,35 @@ public class ClienteController {
         this.clienteService = clienteService;
     }
 
-    @GetMapping("/login")
-    public String login(HttpSession session, Model model) {
+    @GetMapping
+    public String index(HttpSession session) {
         if (session.getAttribute("clienteId") != null) {
             return "redirect:/cliente/panel";
         }
+        return "redirect:/cliente/login?redirect=/cliente/panel";
+    }
+
+    @GetMapping("/login")
+    public String login(@RequestParam(value = "redirect", required = false) String redirect,
+                        HttpSession session, Model model) {
+        if (session.getAttribute("clienteId") != null) {
+            return "redirect:/cliente/panel";
+        }
+        model.addAttribute("redirect", safeRedirect(redirect));
         return "cliente/login";
     }
 
     @PostMapping("/login")
     public String doLogin(@RequestParam String email,
                           @RequestParam String password,
+                          @RequestParam(value = "redirect", required = false) String redirect,
                           HttpSession session,
                           RedirectAttributes ra) {
         var opt = clienteService.autenticar(email, password);
         if (opt.isPresent()) {
             session.setAttribute("clienteId", opt.get().getId());
             session.setAttribute("clienteNombre", opt.get().getNombre());
-            return "redirect:/cliente/panel";
+            return "redirect:" + safeRedirect(redirect);
         }
         ra.addFlashAttribute("error", "Email o contraseña incorrectos.");
         return "redirect:/cliente/login";
@@ -53,5 +64,15 @@ public class ClienteController {
     public String logoutPost(HttpSession session) {
         session.invalidate();
         return "redirect:/cliente/login";
+    }
+
+    private String safeRedirect(String redirect) {
+        if (redirect != null
+                && redirect.startsWith("/cliente")
+                && !redirect.startsWith("//")
+                && !redirect.contains(":")) {
+            return redirect;
+        }
+        return "/cliente/panel";
     }
 }

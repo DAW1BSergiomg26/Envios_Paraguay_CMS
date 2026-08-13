@@ -17,6 +17,7 @@
     <div th:if="${error}" class="toast toast-error" th:text="${error}">Error</div>
 
     <form method="post" th:action="@{/cliente/login}">
+        <input type="hidden" name="redirect" th:value="${redirect}">
         <div class="login-field">
             <label><i data-lucide="user" class="luxury-icon luxury-icon-sm"></i> Email</label>
             <input type="email" name="email" placeholder="tu@email.com" required class="form-control">

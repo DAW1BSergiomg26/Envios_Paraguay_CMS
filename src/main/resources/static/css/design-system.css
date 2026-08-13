@@ -115,18 +115,18 @@ body.light-mode {
   --text-primary-light: #0f172a;
   --text-secondary: #64748b;
   --text-secondary-green: #64748b;
-  --text-muted: #94a3b8;
+  --text-muted: #475569;
   --border-subtle: rgba(0, 0, 0, 0.08);
   --border-green-light: rgba(21, 60, 45, 0.15);
   --border-strong: rgba(0, 0, 0, 0.16);
   --border-orange-focus: rgba(230, 126, 34, 0.45);
-  --accent-color: #e67e22;
-  --accent-paraguay: #e67e22;
+  --accent-color: #c2410c;
+  --accent-paraguay: #c2410c;
   --accent-paraguay-amber: #f59e0b;
-  --accent-color-hover: #c65f12;
-  --accent-paraguay-hover: #c65f12;
-  --accent-color-active: #b45309;
-  --accent-paraguay-active: #b45309;
+  --accent-color-hover: #9a3412;
+  --accent-paraguay-hover: #9a3412;
+  --accent-color-active: #7c2d12;
+  --accent-paraguay-active: #7c2d12;
   --accent-glow: rgba(230, 126, 34, 0.18);
   --accent-paraguay-glow: rgba(230, 126, 34, 0.18);
   --accent-paraguay-glow-strong: rgba(230, 126, 34, 0.3);
@@ -166,8 +166,27 @@ body.light-mode {
   --spacing-lg: 24px;
   --spacing-xl: 32px;
   --nav-text: #0f172a;
-  --nav-text-hover: #e67e22;
+  --nav-text-hover: #c2410c;
   --nav-hover-bg: rgba(230, 126, 34, 0.08);
+}
+
+/* Transición suave al cambiar de tema (modo claro / oscuro) */
+body,
+a,
+button,
+input,
+select,
+textarea,
+nav,
+.header-top,
+footer,
+.card,
+.glass-card,
+.cookie-banner,
+.btn,
+.btn-luxury,
+.btn-theme-toggle {
+  transition: background-color 0.3s, color 0.3s ease;
 }
 
 /* Fondo base de la página: gradiente verde bosque (Asturias) */
@@ -493,7 +512,9 @@ footer {
 .footer-premium-link svg {
   width: 18px;
   height: 18px;
-  fill: currentColor;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
 }
 
 .footer-bottom {
@@ -2418,10 +2439,11 @@ footer {
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-#cookie-banner {
+.cookie-banner {
   background: var(--surface-header) !important;
   border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
   color: var(--text-secondary) !important;
+  transition: opacity 0.3s ease;
 }
 
 .banner-reserva {

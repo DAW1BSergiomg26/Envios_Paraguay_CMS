@@ -134,4 +134,41 @@
             document.body.appendChild(p);
         }
     }
+    // Cookie consent (persistente, con fade-out)
+    function initCookieBanner() {
+        var banner = document.querySelector('.cookie-banner');
+        if (!banner) return;
+
+        var aceptado = false;
+        try {
+            aceptado = localStorage.getItem('cookies_accepted') === 'true';
+        } catch (e) {
+            /* almacenamiento no disponible */
+        }
+        if (aceptado) {
+            banner.style.display = 'none';
+            return;
+        }
+
+        var btn = banner.querySelector('.btn-accept');
+        if (btn) {
+            btn.addEventListener('click', function () {
+                try {
+                    localStorage.setItem('cookies_accepted', 'true');
+                } catch (e) {
+                    /* almacenamiento no disponible */
+                }
+                banner.style.opacity = '0';
+                setTimeout(function () {
+                    banner.style.display = 'none';
+                }, 300);
+            });
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initCookieBanner);
+    } else {
+        initCookieBanner();
+    }
 })();

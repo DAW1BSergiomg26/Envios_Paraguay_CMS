@@ -50,23 +50,19 @@
         </nav>
     </header>
 
-    <div id="cookie-banner">
+    <div class="cookie-banner">
         <p>This website uses cookies to improve your experience.
             <a href="/en/politica-cookies">More info</a>
         </p>
-        <button onclick="acceptCookies()">Accept</button>
+        <button type="button" class="btn-accept">Accept</button>
     </div>
 
     <script>
-        function acceptCookies() {
-            localStorage.setItem('cookies_aceptadas', 'true');
-            document.getElementById('cookie-banner').style.display = 'none';
+        if (localStorage.getItem('cookies_accepted')) {
+            document.querySelector('.cookie-banner').style.display = 'none';
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('cookies_aceptadas') === 'true') {
-                document.getElementById('cookie-banner').style.display = 'none';
-            }
-        });
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             var burger = document.getElementById('btn-hamburguesa');
             var nav = document.getElementById('nav-principal');

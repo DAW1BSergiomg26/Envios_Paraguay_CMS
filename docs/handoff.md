@@ -148,6 +148,12 @@ Servicios del compose: `db` (MySQL), `app`, `nginx`, `certbot`, `prometheus`, `g
     - **ImportBatchPage**: botones "Etiquetas del lote" y "Manifiesto" en el card Lote #N (descarga vía anchor, `attachment`).
     - **DocumentosPage** (nueva): ruta protegida `/dashboard/documentos`, enlace navbar "Documentos", tabla de emisiones con filtro por tipo (`ETIQUETA_TERMICA`/`ETIQUETAS_LOTE`/`MANIFIESTO_CARGA`), peso en KB y fecha localizada.
     - **Tests frontend (15 nuevos):** `api.test.js` (5), `EvidenciasGrid.test.jsx` (4), `ShipmentDetailPage.test.jsx` (1), ampliación `ImportBatchPage.test.jsx` (1), `DocumentosPage.test.jsx` (4). Suite completa frontend: **36 tests, 0 fallos** + `npm run build` OK. Regresión backend: **317 tests, BUILD SUCCESS**.
+20. **FASE 1-3: Tema naranja corporativo, banner de cookies persistente y acceso de clientes `/cliente`** (completado, 2026-08-13, sin commit):
+    - **FASE 1 (tema):** tokens de acento dark → `#c2410c`/`#9a3412`/`#7c2d12`, `--nav-text-hover: #c2410c`, transición global de tema (selector amplio `a, button, input, select, textarea, nav, .header-top, footer, .card, .glass-card, .cookie-banner, .btn, .btn-luxury, .btn-theme-toggle`), `.footer-premium-link svg` → `fill:none; stroke:currentColor`. CSS balanceado (`open=825 close=825`).
+    - **FASE 2 (cookies):** clave unificada `cookies_accepted` en `localStorage`; lógica en `app.js` (`initCookieBanner`, fade-out 300ms, guard inline anti-flash en `header.html`/`header-en.html`); banner `class="cookie-banner cookie-consent"` con botón `btn-accept` sin onclick; elimina script inline `aceptarCookies()`.
+    - **FASE 3 (backend):** `ClienteController` (`GET /cliente` → panel si sesión, si no `/cliente/login?redirect=/cliente/panel`; `login`/`doLogin` con redirect saneado vía `safeRedirect` solo `/cliente*`, sin `//` ni `:`; `POST /cliente/logout`); `"/cliente"` añadido a `permitAll` en `SecurityConfig`; `cliente/login.html` con `th:action` + hidden `redirect`; footers ES/EN con enlaces `/cliente` (iconos Lucide `user`/`shield`).
+    - **Tests:** `ClienteControllerTest` (10 nuevos, slice `@WebMvcTest`). Suite objetivo **27/27 BUILD SUCCESS** (docker `maven:3.9-eclipse-temurin-25`).
+    - **Pendiente FASE 4 (fuera de esta tarea):** optimización de archivos estáticos (jsdelivr/html2canvas) y deploy del nuevo diseño.
 ---
 ## 🚀 Guía de Arranque Rápido para Desarrolladores
 ### 1. Requisitos previos

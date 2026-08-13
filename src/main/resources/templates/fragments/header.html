@@ -72,23 +72,19 @@
         </nav>
     </header>
 
-    <div id="cookie-banner">
+    <div class="cookie-banner">
         <p>Este sitio web utiliza cookies para mejorar tu experiencia.
             <a href="/politica-cookies">Más información</a>
         </p>
-        <button onclick="aceptarCookies()">Aceptar</button>
+        <button type="button" class="btn-accept">Aceptar</button>
     </div>
 
     <script>
-        function aceptarCookies() {
-            localStorage.setItem('cookies_aceptadas', 'true');
-            document.getElementById('cookie-banner').style.display = 'none';
+        if (localStorage.getItem('cookies_accepted')) {
+            document.querySelector('.cookie-banner').style.display = 'none';
         }
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('cookies_aceptadas') === 'true') {
-                document.getElementById('cookie-banner').style.display = 'none';
-            }
-        });
+    </script>
+    <script>
         document.addEventListener('DOMContentLoaded', function() {
             var burger = document.getElementById('btn-hamburguesa');
             var nav = document.getElementById('nav-principal');
