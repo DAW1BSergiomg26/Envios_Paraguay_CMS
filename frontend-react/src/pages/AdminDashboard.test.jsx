@@ -36,6 +36,7 @@ vi.mock('../services/offlineCache', () => ({
 }))
 
 vi.mock('../components/RefreshIndicator', () => ({ default: () => <div /> }))
+vi.mock('../components/AppleHero', () => ({ default: () => <div /> }))
 vi.mock('../components/AnalyticsSection', () => ({ default: () => <div /> }))
 vi.mock('../components/StatsCard', () => ({ default: () => <div /> }))
 vi.mock('../components/StatusBadge', () => ({ default: () => <span>estado</span> }))

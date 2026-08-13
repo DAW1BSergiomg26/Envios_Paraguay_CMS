@@ -5,6 +5,7 @@ import usePolling from '../hooks/usePolling';
 import { useToast } from '../context/NotificationContext';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { saveDashboardCache, getDashboardCache } from '../services/offlineCache';
+import AppleHero from '../components/AppleHero';
 import RefreshIndicator from '../components/RefreshIndicator';
 import AnalyticsSection from '../components/AnalyticsSection';
 import StatsCard from '../components/StatsCard';
@@ -157,6 +158,7 @@ export default function AdminDashboard() {
   return (
     <div className="dashboard">
       <OfflineBanner isOnline={isOnline} />
+      <AppleHero />
       <header className="dashboard-header">
         <div>
           <h1>Panel de Envíos</h1>
