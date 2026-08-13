@@ -145,7 +145,7 @@ Write-Host ""
 Write-Host " 🌐 ACCESOS DIRECTOS ABIERTOS:" -ForegroundColor White
 Write-Host "  - 🌲 Web Principal / Landing:    http://localhost:$port" -ForegroundColor Green
 Write-Host "  - 🏡 Sección La Casa:            http://localhost:$port/casa" -ForegroundColor Green
-Write-Host "  - 📦 Tracking Público:          http://localhost:$port/tracking" -ForegroundColor Green
+Write-Host "  - 📦 Tracking Público:           http://localhost:$port/tracking" -ForegroundColor Green
 Write-Host "  - 🔐 Login Administrativo:       http://localhost:$port/login" -ForegroundColor Green
 Write-Host "  - 📊 BI Dashboard & Analítica:   http://localhost:$port/admin/dashboard" -ForegroundColor Green
 Write-Host "  - 📄 Ingesta Masiva CSV:         http://localhost:$port/admin/imports" -ForegroundColor Green
@@ -158,7 +158,7 @@ Write-Host "  - Usuario:     $adminUser" -ForegroundColor Yellow
 Write-Host "  - Contraseña:  $adminPass" -ForegroundColor Yellow
 Write-Host ""
 Write-Host " 💡 COMANDOS ÚTILES:" -ForegroundColor White
-Write-Host "  - Detener la aplicación:   docker compose stop" -ForegroundColor Gray
-Write-Host "  - Ver logs en vivo:        docker compose logs -f app" -ForegroundColor Gray
+Write-Host "  - Detener la aplicación:    docker compose stop" -ForegroundColor Gray
+Write-Host "  - Ver logs en vivo:         docker compose logs -f app" -ForegroundColor Gray
 Write-Host "  - Arranque sin rebuild:    .\start-app.ps1 -NoBuild" -ForegroundColor Gray
 Write-Host "==============================================================================" -ForegroundColor Green
