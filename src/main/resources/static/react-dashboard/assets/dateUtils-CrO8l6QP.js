@@ -1,0 +1,1 @@
+function e(e){if(!e)return new Date;if(Array.isArray(e))return new Date(e[0],e[1]-1,e[2]||1,e[3]||0,e[4]||0,e[5]||0);if(typeof e==`string`){let t=new Date(e);if(!isNaN(t.getTime()))return t}return new Date}export{e as t};
