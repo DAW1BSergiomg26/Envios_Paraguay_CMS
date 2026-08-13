@@ -73,4 +73,15 @@ class DesignSystemCssTest {
         assertThat(css).contains(".tracking-pod");
         assertThat(css).contains(".tracking-evidencia");
     }
+
+    @Test
+    void h8_definesClienteSelectors() throws IOException {
+        String css = css();
+        assertThat(css).contains(".panel-stats");
+        assertThat(css).contains(".stat-card");
+        assertThat(css).contains(".login-wrapper");
+        assertThat(css).contains(".toast");
+        assertThat(css).contains(".public-container");
+        assertThat(css).contains(".page-title");
+    }
 }
