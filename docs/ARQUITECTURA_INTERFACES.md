@@ -103,3 +103,10 @@ No hay JWT. La SPA React comparte la sesión **Spring Security** vía cookie `JS
 - Hallazgo **H8** (commit `e72def6`): `design-system.css` no contiene `.sidebar`, `.nav-links`,
   `.main-content`, `.btn-logout` ni `.logout-form`. Regresión previa documentada en el backlog;
   pendiente para un futuro bloque de pulido visual.
+- **H8 completado (2026-08-12/13):** restauración visual completa post-`e72def6` — **234 selectores
+  CSS** recuperados en `design-system.css` bajo `/* ---- H8: Restauración visual post-e72def6 ---- */`,
+  modernizados a tokens (`--color-*`, `--glass-*`, `--radius-*`, `--spacing-*`, `--shadow-*`) con **cero
+  hexadecimales** en la sección nueva (verificado por test). Se restauraron los estilos perdidos de
+  **tracking público** (Grupo 1), **zona cliente** (Grupo 2), **login admin** (Grupo 3) y **páginas
+  públicas: home, contacto, reservas, operaciones, la casa, entorno, legales y error** (Grupo 4).
+  Sin cambios en plantillas Thymeleaf ni en Java. Commits: `37e6a78`, `b0c504f`, `4fcac6d`, `5b8748b`.
