@@ -42,7 +42,8 @@ class SpaForwardControllerTest {
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @ParameterizedTest
-    @ValueSource(strings = {"/login-react", "/dashboard", "/dashboard/envio/MT-1"})
+    @ValueSource(strings = {"/login-react", "/dashboard", "/dashboard/envio/MT-1",
+            "/react-dashboard", "/react-dashboard/"})
     void rutasSpa_reenvianAlIndexDelDashboard(String url) throws Exception {
         mockMvc.perform(get(url))
                 .andExpect(status().isOk())
