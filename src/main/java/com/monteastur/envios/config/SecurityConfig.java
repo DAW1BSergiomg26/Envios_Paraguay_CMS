@@ -32,7 +32,7 @@ public class SecurityConfig {
                                            ObjectMapper objectMapper) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/cliente/login", "/cliente/assets/**").permitAll()
+                .requestMatchers("/cliente", "/cliente/login", "/cliente/assets/**").permitAll()
                 .requestMatchers("/admin/**", "/api/v1/admin/**", "/api/v1/deliveries/**").authenticated()
                 .requestMatchers("/api/v1/docs", "/api/v1/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .requestMatchers("/cliente/**", "/api/v1/cliente/**").hasRole("CLIENTE")
