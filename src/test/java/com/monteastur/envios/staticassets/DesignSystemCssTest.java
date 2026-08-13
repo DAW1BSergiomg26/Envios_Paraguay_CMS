@@ -59,4 +59,18 @@ class DesignSystemCssTest {
         int end = css.indexOf("}", idx);
         assertThat(css.substring(idx, end)).contains("display: none");
     }
+
+    @Test
+    void h8_definesTrackingSelectors() throws IOException {
+        String css = css();
+        assertThat(css).contains(".status-badge");
+        assertThat(css).contains(".tracking-result-page");
+        assertThat(css).contains(".tracking-step");
+        assertThat(css).contains(".tracking-event");
+        assertThat(css).contains(".tracking-404-card");
+        assertThat(css).contains(".tracking-form-glass");
+        assertThat(css).contains(".tracking-help-card");
+        assertThat(css).contains(".tracking-pod");
+        assertThat(css).contains(".tracking-evidencia");
+    }
 }
