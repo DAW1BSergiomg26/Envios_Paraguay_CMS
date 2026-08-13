@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 import javax.sql.DataSource;
 
@@ -59,9 +60,21 @@ public class SecurityConfig {
             )
             .headers(headers -> headers
                 .frameOptions(frame -> frame.deny())
+                .contentTypeOptions(Customizer.withDefaults())
                 .referrerPolicy(referrer -> referrer
                     .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
                 )
+                .addHeaderWriter(new StaticHeadersWriter("Permissions-Policy",
+                    "geolocation=(), microphone=(), camera=(), payment=()"))
+                .httpStrictTransportSecurity(hsts -> hsts
+                    .includeSubDomains(true)
+                    .maxAgeInSeconds(31536000)
+                    .preload(true))
+                .contentSecurityPolicy(csp -> csp
+                    .policyDirectives(
+                        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; " +
+                        "img-src 'self' data: blob:; font-src 'self'; connect-src 'self'; " +
+                        "frame-ancestors 'none'; form-action 'self'"))
             )
             .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/api/**")

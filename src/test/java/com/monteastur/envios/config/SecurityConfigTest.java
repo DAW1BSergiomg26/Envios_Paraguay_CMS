@@ -24,10 +24,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import javax.sql.DataSource;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -142,5 +144,24 @@ class SecurityConfigTest {
         mockMvc.perform(formLogin("/login").user("admin").password("test"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/react-dashboard/"));
+    }
+
+    @Test
+    void respuestaContieneCabecerasDeSeguridadBasicas() throws Exception {
+        mockMvc.perform(post("/api/v1/push/test"))
+                .andExpect(header().string("X-Frame-Options", "DENY"))
+                .andExpect(header().string("X-Content-Type-Options", "nosniff"))
+                .andExpect(header().string("Referrer-Policy", "strict-origin-when-cross-origin"))
+                .andExpect(header().string("Content-Security-Policy",
+                        containsString("frame-ancestors 'none'")))
+                .andExpect(header().string("Permissions-Policy",
+                        containsString("geolocation=()")));
+    }
+
+    @Test
+    void hstsEmitidoEnHttps() throws Exception {
+        mockMvc.perform(post("/api/v1/push/test").secure(true))
+                .andExpect(header().string("Strict-Transport-Security",
+                        containsString("max-age=31536000")));
     }
 }
