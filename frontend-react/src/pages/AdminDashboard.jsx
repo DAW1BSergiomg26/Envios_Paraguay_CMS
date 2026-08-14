@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAdminEnvios, deleteAdminEnvio } from '../services/api';
 import usePolling from '../hooks/usePolling';
+import useRealTimeEnvios from '../hooks/useRealTimeEnvios';
 import { useToast } from '../context/NotificationContext';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
 import { saveDashboardCache, getDashboardCache } from '../services/offlineCache';
@@ -22,6 +23,15 @@ import { SkeletonRow, SkeletonCard } from '../components/SkeletonLoader';
 
 const PAGE_SIZE = 10;
 const POLL_INTERVAL = 15000;
+
+const ESTADO_LABELS = {
+  RECIBIDO: 'Recibido',
+  EN_ADUANA_ORIGEN: 'En aduana origen',
+  EN_TRANSITO: 'En tránsito',
+  EN_ADUANA_DESTINO: 'En aduana destino',
+  EN_REPARTO: 'En reparto',
+  ENTREGADO: 'Entregado'
+};
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
@@ -100,6 +110,22 @@ export default function AdminDashboard() {
     await baseRefresh();
     showSuccess('Datos actualizados');
   }, [baseRefresh, showSuccess]);
+
+  const enviosRef = useRef(envios);
+  const refreshFnRef = useRef(refreshFn);
+  useEffect(() => { enviosRef.current = envios; }, [envios]);
+  useEffect(() => { refreshFnRef.current = refreshFn; }, [refreshFn]);
+
+  const handleMensajeWs = useCallback((msg) => {
+    if (!msg || !msg.tracking || !msg.estado) return;
+    const visible = enviosRef.current.some(e => e.codigoUnico === msg.tracking);
+    if (!visible) return;
+    const etiqueta = ESTADO_LABELS[msg.estado] || msg.estado;
+    refreshFnRef.current();
+    showInfo(`Envío ${msg.tracking} actualizado a ${etiqueta}`);
+  }, [showInfo]);
+
+  useRealTimeEnvios({ onMessage: handleMensajeWs });
 
   const handleEliminar = useCallback(async (envio) => {
     if (!window.confirm(`¿Eliminar el envío ${envio.codigoUnico}?`)) return;

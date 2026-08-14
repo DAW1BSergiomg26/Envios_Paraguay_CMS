@@ -22,6 +22,10 @@ vi.mock('../hooks/usePolling', () => ({
   default: () => ({ polling: false, lastUpdated: null, refreshNow: mockRefreshNow, refreshError: null }),
 }))
 
+vi.mock('../hooks/useRealTimeEnvios', () => ({
+  default: () => ({ connected: false }),
+}))
+
 vi.mock('../hooks/useOnlineStatus', () => ({
   useOnlineStatus: () => ({ isOnline: true }),
 }))
