@@ -42,6 +42,7 @@ class WebhookDispatchIntegrationTest {
     private static volatile String receivedBody;
     private static volatile String receivedSignature;
     private static volatile int respondCode = 200;
+    private static volatile int sinkCalls;
 
     @Autowired
     private EnvioTrackingService envioTrackingService;
@@ -76,11 +77,13 @@ class WebhookDispatchIntegrationTest {
                 receivedBody = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
                 receivedSignature = exchange.getRequestHeaders().getFirst(CABECERA_FIRMA);
                 exchange.sendResponseHeaders(respondCode, -1);
+                sinkCalls++;
             } finally {
                 exchange.close();
             }
         });
         sink.start();
+        sinkCalls = 0;
     }
 
     @AfterAll
@@ -178,15 +181,22 @@ class WebhookDispatchIntegrationTest {
         transactionTemplate.executeWithoutResult(status ->
                 envioTrackingService.actualizarEstado(codigo, "EN_TRANSITO"));
 
+        sinkCalls = 0;
+
         await().atMost(Duration.ofSeconds(10)).untilAsserted(() -> {
             assertThat(receivedBody).isNotNull();
             List<WebhookLog> logs = webhookLogRepository.findByEnvioIdOrderByFechaCreacionDesc(envioId);
             assertThat(logs).hasSize(1);
             WebhookLog log = logs.get(0);
             assertThat(log.isExitoso()).isFalse();
-            assertThat(log.getResponseStatus()).isEqualTo(500);
-            assertThat(log.getErrorMensaje()).isEqualTo("HTTP 500");
+            assertThat(log.getResponseStatus()).isNull();
+            assertThat(log.getErrorMensaje())
+                    .contains("Fallo transitorio al enviar webhook")
+                    .contains("HTTP 500")
+                    .contains("tras 3 intento(s)");
         });
+
+        assertThat(sinkCalls).isEqualTo(3);
     }
 
     @Test

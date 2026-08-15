@@ -5,10 +5,16 @@ import com.monteastur.envios.model.Cliente;
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.model.WebhookConfig;
 import com.monteastur.envios.model.WebhookLog;
+import com.monteastur.envios.exception.WebhookDispatchException;
 import com.monteastur.envios.repository.EnvioTrackingRepository;
 import com.monteastur.envios.repository.WebhookConfigRepository;
 import com.monteastur.envios.repository.WebhookLogRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
+import io.github.resilience4j.core.IntervalFunction;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +29,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -62,10 +69,30 @@ class WebhookDispatchServiceTest {
 
     private WebhookDispatchService service;
 
+    private Retry retryPorDefecto() {
+        RetryConfig config = RetryConfig.custom()
+                .maxAttempts(3)
+                .intervalFunction(IntervalFunction.ofExponentialBackoff(Duration.ofMillis(50), 2))
+                .retryExceptions(WebhookDispatchException.class)
+                .build();
+        return Retry.of("webhook", config);
+    }
+
+    private CircuitBreaker circuitBreakerCerrado() {
+        CircuitBreakerConfig config = CircuitBreakerConfig.custom()
+                .slidingWindowSize(10)
+                .minimumNumberOfCalls(10)
+                .failureRateThreshold(50)
+                .recordExceptions(WebhookDispatchException.class)
+                .build();
+        return CircuitBreaker.of("webhook", config);
+    }
+
     @BeforeEach
     void setUp() {
         service = new WebhookDispatchService(envioTrackingRepository, webhookConfigRepository,
-                webhookLogRepository, new WebhookPayloadBuilder(new ObjectMapper()), webhookRestClient);
+                webhookLogRepository, new WebhookPayloadBuilder(new ObjectMapper()), webhookRestClient,
+                retryPorDefecto(), circuitBreakerCerrado());
         ReflectionTestUtils.setField(service, "baseUrl", "http://localhost:8080/tracking");
         org.mockito.Mockito.lenient().when(webhookRestClient.post()).thenReturn(requestBodyUriSpec);
         org.mockito.Mockito.lenient().when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodySpec);
@@ -175,12 +202,12 @@ class WebhookDispatchServiceTest {
 
         service.despachar(evento("MT-5", 5L));
 
+        verify(requestBodyUriSpec, org.mockito.Mockito.times(3)).uri(anyString());
         ArgumentCaptor<WebhookLog> captor = ArgumentCaptor.forClass(WebhookLog.class);
         verify(webhookLogRepository).save(captor.capture());
         WebhookLog log = captor.getValue();
         assertThat(log.isExitoso()).isFalse();
-        assertThat(log.getResponseStatus()).isEqualTo(500);
-        assertThat(log.getErrorMensaje()).isEqualTo("HTTP 500");
+        assertThat(log.getErrorMensaje()).contains("tras 3 intento(s)");
     }
 
     @Test
@@ -194,11 +221,89 @@ class WebhookDispatchServiceTest {
 
         service.despachar(evento("MT-6", 6L));
 
+        verify(requestBodyUriSpec, org.mockito.Mockito.times(3)).uri(anyString());
         ArgumentCaptor<WebhookLog> captor = ArgumentCaptor.forClass(WebhookLog.class);
         verify(webhookLogRepository).save(captor.capture());
         WebhookLog log = captor.getValue();
         assertThat(log.isExitoso()).isFalse();
         assertThat(log.getResponseStatus()).isNull();
         assertThat(log.getErrorMensaje()).contains("connect timed out");
+        assertThat(log.getErrorMensaje()).contains("tras 3 intento(s)");
+    }
+
+    @Test
+    void dosFallosTransitoriosYSegundoExito_tresIntentosYAuditoriaFinalExitosa() {
+        when(envioTrackingRepository.findWithClienteByCodigoUnico("MT-7"))
+                .thenReturn(Optional.of(envioConCliente("MT-7", 10L)));
+        WebhookConfig config = new WebhookConfig(10L, "https://hook.a/endpoint", "secret-a");
+        when(webhookConfigRepository.findByClienteIdAndActivoTrue(10L)).thenReturn(List.of(config));
+        when(responseSpec.toBodilessEntity())
+                .thenThrow(new ResourceAccessException("connect timed out"))
+                .thenThrow(new ResourceAccessException("connect timed out"))
+                .thenReturn(ResponseEntity.ok().build());
+
+        service.despachar(evento("MT-7", 7L));
+
+        verify(requestBodyUriSpec, org.mockito.Mockito.times(3)).uri(anyString());
+        ArgumentCaptor<WebhookLog> captor = ArgumentCaptor.forClass(WebhookLog.class);
+        verify(webhookLogRepository).save(captor.capture());
+        WebhookLog log = captor.getValue();
+        assertThat(log.isExitoso()).isTrue();
+        assertThat(log.getResponseStatus()).isEqualTo(200);
+        assertThat(log.getErrorMensaje()).isNull();
+    }
+
+    @Test
+    void respuesta400_noReintentaYAuditaFalloPorIntento() {
+        when(envioTrackingRepository.findWithClienteByCodigoUnico("MT-8"))
+                .thenReturn(Optional.of(envioConCliente("MT-8", 10L)));
+        WebhookConfig config = new WebhookConfig(10L, "https://hook.a/endpoint", "secret-a");
+        when(webhookConfigRepository.findByClienteIdAndActivoTrue(10L)).thenReturn(List.of(config));
+        when(responseSpec.toBodilessEntity()).thenThrow(
+                new RestClientResponseException("400 Bad Request", 400, "Bad Request",
+                        new HttpHeaders(), new byte[0], null));
+
+        service.despachar(evento("MT-8", 8L));
+
+        verify(requestBodyUriSpec, org.mockito.Mockito.times(1)).uri(anyString());
+        ArgumentCaptor<WebhookLog> captor = ArgumentCaptor.forClass(WebhookLog.class);
+        verify(webhookLogRepository).save(captor.capture());
+        WebhookLog log = captor.getValue();
+        assertThat(log.isExitoso()).isFalse();
+        assertThat(log.getResponseStatus()).isEqualTo(400);
+    }
+
+    @Test
+    void circuitBreakerAbierto_auditaFalloDeContingenciaSinLlamarAlSink() {
+        CircuitBreakerConfig config = CircuitBreakerConfig.custom()
+                .slidingWindowSize(2)
+                .minimumNumberOfCalls(2)
+                .failureRateThreshold(50)
+                .recordExceptions(WebhookDispatchException.class)
+                .build();
+        CircuitBreaker abiertoRapido = CircuitBreaker.of("webhook", config);
+        service = new WebhookDispatchService(envioTrackingRepository, webhookConfigRepository,
+                webhookLogRepository, new WebhookPayloadBuilder(new ObjectMapper()), webhookRestClient,
+                retryPorDefecto(), abiertoRapido);
+
+        when(envioTrackingRepository.findWithClienteByCodigoUnico("MT-9"))
+                .thenReturn(Optional.of(envioConCliente("MT-9", 10L)));
+        WebhookConfig config1 = new WebhookConfig(10L, "https://hook.a/endpoint", "secret-a");
+        when(webhookConfigRepository.findByClienteIdAndActivoTrue(10L)).thenReturn(List.of(config1));
+        when(responseSpec.toBodilessEntity()).thenThrow(
+                new RestClientResponseException("500 Internal Server Error", 500, "Internal Server Error",
+                        new HttpHeaders(), new byte[0], null));
+
+        service.despachar(evento("MT-9", 9L));
+        assertThat(abiertoRapido.getState()).isEqualTo(CircuitBreaker.State.OPEN);
+
+        service.despachar(evento("MT-9", 10L));
+
+        ArgumentCaptor<WebhookLog> captor = ArgumentCaptor.forClass(WebhookLog.class);
+        verify(webhookLogRepository, org.mockito.Mockito.times(2)).save(captor.capture());
+        WebhookLog finalBreaker = captor.getAllValues().get(1);
+        assertThat(finalBreaker.isExitoso()).isFalse();
+        assertThat(finalBreaker.getErrorMensaje())
+                .contains("CircuitBreaker", "abierto", "contingencia");
     }
 }
