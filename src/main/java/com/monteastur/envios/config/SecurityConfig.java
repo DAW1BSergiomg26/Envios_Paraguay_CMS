@@ -14,6 +14,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.expression.WebExpressionAuthorizationManager;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
@@ -36,6 +37,11 @@ public class SecurityConfig {
                 .requestMatchers("/admin/**", "/api/v1/admin/**", "/api/v1/deliveries/**").authenticated()
                 .requestMatchers("/api/v1/docs", "/api/v1/swagger-ui.html", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
                 .requestMatchers("/cliente/**", "/api/v1/cliente/**").hasRole("CLIENTE")
+                .requestMatchers("/actuator/health", "/actuator/health/**", "/actuator/info").permitAll()
+                .requestMatchers("/actuator/prometheus", "/actuator/metrics/**")
+                        .access(new WebExpressionAuthorizationManager(
+                                "hasIpAddress('172.16.0.0/12') or hasIpAddress('10.0.0.0/8') or hasIpAddress('127.0.0.1') or hasIpAddress('::1')"))
+                .requestMatchers("/actuator/**").hasRole("ADMIN")
                 .anyRequest().permitAll()
             )
             .exceptionHandling(handling -> handling

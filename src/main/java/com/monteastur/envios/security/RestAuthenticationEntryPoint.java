@@ -38,7 +38,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         String username = (auth != null && auth.isAuthenticated()) ? auth.getName() : "ANONYMOUS";
         rbacAccessLogger.logFailure(username, "AUTH_REQUIRED", uri, request, "Authentication required");
 
-        if (uri.startsWith("/api/") && !aceptaHtml(request)) {
+        if ((uri.startsWith("/api/") || uri.startsWith("/actuator")) && !aceptaHtml(request)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
