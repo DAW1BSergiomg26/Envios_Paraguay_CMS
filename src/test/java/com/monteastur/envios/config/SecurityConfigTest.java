@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import javax.sql.DataSource;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -154,6 +155,10 @@ class SecurityConfigTest {
                 .andExpect(header().string("Referrer-Policy", "strict-origin-when-cross-origin"))
                 .andExpect(header().string("Content-Security-Policy",
                         containsString("frame-ancestors 'none'")))
+                .andExpect(header().string("Content-Security-Policy",
+                        containsString("script-src 'self';")))
+                .andExpect(header().string("Content-Security-Policy",
+                        not(containsString("script-src 'self' 'unsafe-inline'"))))
                 .andExpect(header().string("Permissions-Policy",
                         containsString("geolocation=()")));
     }

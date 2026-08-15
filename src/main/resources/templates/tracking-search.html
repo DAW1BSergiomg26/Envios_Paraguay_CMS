@@ -19,7 +19,7 @@
             <button type="submit" class="btn-luxury">
                 <i data-lucide="search" class="luxury-icon luxury-icon-sm"></i> Buscar envío
             </button>
-            <button type="button" onclick="abrirEscanner()" class="btn-luxury btn-luxury-secondary">
+            <button type="button" id="btn-abrir-scanner" class="btn-luxury btn-luxury-secondary">
                 <i data-lucide="qrcode" class="luxury-icon luxury-icon-sm"></i> Escanear QR
             </button>
         </form>
@@ -60,7 +60,7 @@
     <div class="modal-content">
         <div class="qr-modal-header">
             <h3 class="font-bold">Escanear código QR</h3>
-            <button type="button" onclick="cerrarEscanner()" class="btn-luxury btn-luxury-secondary btn-sm">Cerrar</button>
+            <button type="button" id="btn-cerrar-scanner" class="btn-luxury btn-luxury-secondary btn-sm">Cerrar</button>
         </div>
         <div id="qr-reader" class="mt-4"></div>
         <p id="qr-error" class="alert alert-error hidden">No se pudo acceder a la cámara. Inténtalo de nuevo o introduce el código manualmente.</p>
@@ -70,28 +70,6 @@
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
 <script src="/js/vendor/html5-qrcode.min.js"></script>
-<script>
-    let qrScanner = null;
-    function abrirEscanner() {
-        document.getElementById('qr-modal').classList.remove('hidden');
-        document.getElementById('qr-error').classList.add('hidden');
-        if (typeof Html5Qrcode === 'undefined') {
-            document.getElementById('qr-error').classList.remove('hidden');
-            return;
-        }
-        qrScanner = new Html5Qrcode('qr-reader');
-        qrScanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: 220 },
-            function (texto) {
-                const m = texto.match(/\/tracking\/([A-Za-z0-9-]+)/);
-                const codigo = m ? m[1] : texto.trim();
-                window.location.href = '/tracking/' + encodeURIComponent(codigo);
-            },
-            function () {});
-    }
-    function cerrarEscanner() {
-        document.getElementById('qr-modal').classList.add('hidden');
-        if (qrScanner) { qrScanner.stop().then(() => qrScanner.clear()); qrScanner = null; }
-    }
-</script>
+<script src="/js/tracking-features.js" defer></script>
 </body>
 </html>

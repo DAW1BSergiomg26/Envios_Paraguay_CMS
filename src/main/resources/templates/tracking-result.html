@@ -87,7 +87,7 @@
         <h2 class="section-title">Historial del envío</h2>
         <ul th:if="${not #lists.isEmpty(view.eventos)}" class="tracking-history-list">
             <li th:each="ev : ${view.eventos}" class="tracking-event">
-                <button type="button" onclick="toggleEvento(this)" class="tracking-event-toggle">
+                <button type="button" class="tracking-event-toggle">
                     <span class="tracking-event-main">
                         <span class="tracking-event-icon"
                               th:style="'background:' + ${ev.color} + '33'" th:text="${ev.icono}">📦</span>
@@ -148,11 +148,6 @@
 
 <footer th:replace="~{fragments/footer :: footer}"></footer>
 
-<script>
-    function toggleEvento(boton) {
-        const detalle = boton.nextElementSibling;
-        detalle.classList.toggle('hidden');
-    }
-</script>
+<script src="/js/tracking-features.js" defer></script>
 </body>
 </html>

@@ -196,7 +196,7 @@ class PublicControllerTest {
     void themeAssets_marketingPage_hasAntiFoucAndToggle() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("setAttribute('data-theme'")))
+                .andExpect(content().string(containsString("/js/menu-cookie.js")))
                 .andExpect(content().string(containsString("btn-theme-toggle")));
     }
 }

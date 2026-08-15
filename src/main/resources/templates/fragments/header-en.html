@@ -1,18 +1,9 @@
 <head th:fragment="head(titulo)">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        (function () {
-            try {
-                var theme = localStorage.getItem('theme') || 'dark';
-                document.documentElement.setAttribute('data-theme', theme);
-            } catch (e) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        })();
-    </script>
     <link rel="stylesheet" th:href="@{/css/design-system.css(v=${@environment.getProperty('app.web.css-version')})}">
     <title th:text="${titulo} + ' - MONTEASTUR ENVIOS'">MONTEASTUR ENVIOS</title>
+    <script src="/js/menu-cookie.js"></script>
     <script src="/js/vendor/lucide.min.js" defer></script>
     <script src="/js/theme-toggle.js" defer></script>
 </head>
@@ -55,28 +46,5 @@
         <button type="button" class="btn-accept">Accept</button>
     </div>
 
-    <script>
-        if (localStorage.getItem('cookies_accepted')) {
-            document.querySelector('.cookie-banner').style.display = 'none';
-        }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var burger = document.getElementById('btn-hamburguesa');
-            var nav = document.getElementById('nav-principal');
-            if (burger && nav) {
-                burger.addEventListener('click', function() {
-                    var abierto = nav.classList.toggle('abierto');
-                    burger.setAttribute('aria-expanded', abierto ? 'true' : 'false');
-                });
-                document.addEventListener('click', function(e) {
-                    if (!burger.contains(e.target) && !nav.contains(e.target)) {
-                        nav.classList.remove('abierto');
-                        burger.setAttribute('aria-expanded', 'false');
-                    }
-                });
-            }
-        });
-    </script>
     <script src="/js/app.js" defer></script>
 </th:block>
