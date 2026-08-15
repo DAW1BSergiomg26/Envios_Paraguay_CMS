@@ -1,6 +1,7 @@
 package com.monteastur.envios.service.web;
 
 import com.monteastur.envios.dto.web.PublicTrackingView;
+import com.monteastur.envios.metrics.BusinessMetrics;
 import com.monteastur.envios.model.Cliente;
 import com.monteastur.envios.model.EnvioTracking;
 import com.monteastur.envios.model.EntregaEvidencia;
@@ -58,11 +59,17 @@ class PublicTrackingServiceTest {
         }
 
         @Bean
+        BusinessMetrics businessMetrics() {
+            return Mockito.mock(BusinessMetrics.class);
+        }
+
+        @Bean
         PublicTrackingService publicTrackingService(EnvioTrackingRepository repo,
                                                     EventoTrackingService eventos,
                                                     EvidenciaEnvioService evidencias,
-                                                    EntregaEvidenciaRepository entregas) {
-            return new PublicTrackingService(repo, eventos, evidencias, entregas);
+                                                    EntregaEvidenciaRepository entregas,
+                                                    BusinessMetrics businessMetrics) {
+            return new PublicTrackingService(repo, eventos, evidencias, entregas, businessMetrics);
         }
 
         @Bean

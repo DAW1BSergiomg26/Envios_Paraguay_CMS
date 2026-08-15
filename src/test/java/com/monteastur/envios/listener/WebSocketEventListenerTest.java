@@ -2,6 +2,7 @@ package com.monteastur.envios.listener;
 
 import com.monteastur.envios.dto.websocket.EnvioEstadoWsMessage;
 import com.monteastur.envios.event.EstadoEnvioActualizadoEvent;
+import com.monteastur.envios.metrics.BusinessMetrics;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,11 +27,14 @@ class WebSocketEventListenerTest {
     @Mock
     private SimpMessagingTemplate messagingTemplate;
 
+    @Mock
+    private BusinessMetrics businessMetrics;
+
     private WebSocketEventListener listener;
 
     @BeforeEach
     void setUp() {
-        listener = new WebSocketEventListener(messagingTemplate);
+        listener = new WebSocketEventListener(messagingTemplate, businessMetrics);
     }
 
     private EstadoEnvioActualizadoEvent evento() {

@@ -2,6 +2,8 @@ package com.monteastur.envios.listener;
 
 import com.monteastur.envios.dto.websocket.EnvioEstadoWsMessage;
 import com.monteastur.envios.event.EstadoEnvioActualizadoEvent;
+import com.monteastur.envios.metrics.BusinessMetrics;
+import io.micrometer.core.instrument.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -22,13 +24,18 @@ public class WebSocketEventListener {
     private static final Logger log = LoggerFactory.getLogger(WebSocketEventListener.class);
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final BusinessMetrics businessMetrics;
 
-    public WebSocketEventListener(SimpMessagingTemplate messagingTemplate) {
+    public WebSocketEventListener(SimpMessagingTemplate messagingTemplate,
+                                  BusinessMetrics businessMetrics) {
         this.messagingTemplate = messagingTemplate;
+        this.businessMetrics = businessMetrics;
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void manejar(EstadoEnvioActualizadoEvent event) {
+        Timer.Sample sample = businessMetrics.iniciarDifusion();
+        boolean exitosa = false;
         try {
             EnvioEstadoWsMessage mensaje = new EnvioEstadoWsMessage(
                     event.envioId(),
@@ -36,8 +43,11 @@ public class WebSocketEventListener {
                     event.estadoNuevo(),
                     event.timestamp().toInstant(ZoneOffset.UTC));
             messagingTemplate.convertAndSend("/topic/envios", mensaje);
+            exitosa = true;
         } catch (Exception e) {
             log.error("Fallo al difundir actualización de estado del envío {}", event.codigoRastreo(), e);
+        } finally {
+            businessMetrics.registrarDifusion(sample, exitosa);
         }
     }
 }
