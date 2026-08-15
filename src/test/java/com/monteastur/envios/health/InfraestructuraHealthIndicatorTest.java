@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class InfraHealthIndicatorTest {
+class InfraestructuraHealthIndicatorTest {
 
     @Mock
     private DataSource dataSource;
@@ -28,11 +28,11 @@ class InfraHealthIndicatorTest {
     @Mock
     private RedisConnectionFactory redisConnectionFactory;
 
-    private InfraHealthIndicator indicador;
+    private InfraestructuraHealthIndicator indicador;
 
     @BeforeEach
     void setUp() {
-        indicador = new InfraHealthIndicator(dataSource, redisConnectionFactory);
+        indicador = new InfraestructuraHealthIndicator(dataSource, redisConnectionFactory);
     }
 
     @Test

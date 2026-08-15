@@ -15,19 +15,19 @@ import java.sql.Statement;
 /**
  * HealthIndicator que verifica conectividad real de MySQL (SELECT 1) y
  * Redis (PING) midiendo la latencia de cada dependencia. Se registra
- * automáticamente como /actuator/health/infra y complementa a los
- * indicadores genéricos de Spring Boot (db, redis, ping, diskSpace).
+ * automáticamente como /actuator/health/infraestructura y complementa a
+ * los indicadores genéricos de Spring Boot (db, redis, ping, diskSpace).
  */
 @Component
-public class InfraHealthIndicator implements HealthIndicator {
+public class InfraestructuraHealthIndicator implements HealthIndicator {
 
-    private static final Logger log = LoggerFactory.getLogger(InfraHealthIndicator.class);
+    private static final Logger log = LoggerFactory.getLogger(InfraestructuraHealthIndicator.class);
 
     private final DataSource dataSource;
     private final RedisConnectionFactory redisConnectionFactory;
 
-    public InfraHealthIndicator(DataSource dataSource,
-                                RedisConnectionFactory redisConnectionFactory) {
+    public InfraestructuraHealthIndicator(DataSource dataSource,
+                                          RedisConnectionFactory redisConnectionFactory) {
         this.dataSource = dataSource;
         this.redisConnectionFactory = redisConnectionFactory;
     }

@@ -3,11 +3,13 @@ package com.monteastur.envios.metrics;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import org.springframework.stereotype.Component;
 
 /**
  * Métricas de negocio con Micrometer (Prometheus).
  * Registra búsquedas de rastreo y difusiones WebSocket con latencia y resultado.
  */
+@Component
 public class BusinessMetrics {
 
     private final MeterRegistry meterRegistry;
