@@ -48,6 +48,7 @@ Guía de trabajo para agentes de IA y desarrolladores en este repositorio. Estab
   docker run --rm -v "${PWD}:/app" -w /app --network envios_paraguay_cms_backend `
     -e SPRING_DATASOURCE_URL="jdbc:mysql://db:3306/envios_paraguay_cms_test?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true" `
     -e DB_USERNAME=root -e DB_PASSWORD=root -e SPRING_DATA_REDIS_HOST=redis `
+    -e SPRING_MAIL_HOST=mailpit `
     -v "${HOME}\.m2:/root/.m2" maven:3.9-eclipse-temurin-25 mvn clean test
   ```
 
