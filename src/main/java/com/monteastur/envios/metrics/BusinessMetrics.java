@@ -15,7 +15,7 @@ public class BusinessMetrics {
     private final MeterRegistry meterRegistry;
 
     private static final String CONTADOR_BUSQUEDA = "envios.tracking.resultado";
-    private static final String TIMER_BUSQUEDA = "envios.tracking.pagina";
+    private static final String TIMER_BUSQUEDA = "envios.tracking.busqueda";
     private static final String CONTADOR_DIFUSION = "envios.websocket.resultado";
     private static final String TIMER_DIFUSION = "envios.websocket.difusion";
     private static final String TAG_ENCONTRADO = "encontrado";
@@ -30,11 +30,9 @@ public class BusinessMetrics {
     }
 
     public void registrarBusqueda(Timer.Sample sample, boolean encontrado) {
-        Timer.builder(TIMER_BUSQUEDA)
-                .description("Tiempo de resolución de una búsqueda pública de rastreo")
-                .tag(TAG_ENCONTRADO, String.valueOf(encontrado))
-                .register(meterRegistry);
-        sample.stop(meterRegistry.timer(TIMER_BUSQUEDA, TAG_ENCONTRADO, String.valueOf(encontrado)));
+        sample.stop(meterRegistry.timer(TIMER_BUSQUEDA,
+                TAG_ENCONTRADO, String.valueOf(encontrado),
+                "description", "Tiempo de resolución de una búsqueda pública de rastreo"));
         counter(CONTADOR_BUSQUEDA, "Búsquedas públicas de rastreo").increment();
     }
 

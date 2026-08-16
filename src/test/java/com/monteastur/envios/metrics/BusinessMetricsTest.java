@@ -27,7 +27,7 @@ class BusinessMetricsTest {
         metrics.registrarBusqueda(sample, true);
 
         assertThat(registry.get("envios.tracking.resultado").counter().count()).isEqualTo(1);
-        Timer timer = registry.get("envios.tracking.pagina").tag("encontrado", "true").timer();
+        Timer timer = registry.get("envios.tracking.busqueda").tag("encontrado", "true").timer();
         assertThat(timer.count()).isEqualTo(1);
         assertThat(timer.totalTime(TimeUnit.NANOSECONDS)).isGreaterThanOrEqualTo(0);
     }
@@ -38,7 +38,7 @@ class BusinessMetricsTest {
         metrics.registrarBusqueda(sample, false);
 
         assertThat(registry.get("envios.tracking.resultado").counter().count()).isEqualTo(1);
-        assertThat(registry.get("envios.tracking.pagina").tag("encontrado", "false").timer().count())
+        assertThat(registry.get("envios.tracking.busqueda").tag("encontrado", "false").timer().count())
                 .isEqualTo(1);
     }
 

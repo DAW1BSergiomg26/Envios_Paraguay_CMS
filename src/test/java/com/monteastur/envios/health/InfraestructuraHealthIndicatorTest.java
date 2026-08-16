@@ -19,6 +19,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 @ExtendWith(MockitoExtension.class)
 class InfraestructuraHealthIndicatorTest {
 
@@ -78,5 +83,60 @@ class InfraestructuraHealthIndicatorTest {
 
         assertThat(salud.getStatus()).isEqualTo(Status.DOWN);
         assertThat((String) salud.getDetails().get("redis")).contains("redis down");
+    }
+
+    @Test
+    void mysqlTimeout_devuelveDownSinBloquearIndefinidamente() throws Exception {
+        Connection conexion = mock(Connection.class);
+        Statement stmt = mock(Statement.class);
+        when(dataSource.getConnection()).thenReturn(conexion);
+        when(conexion.createStatement()).thenReturn(stmt);
+        // Simular que execute() bloquea indefinidamente - en test real usaríamos un Future con timeout
+        when(stmt.execute("SELECT 1")).thenAnswer(invocation -> {
+            Thread.sleep(5000); // Simula query lenta (5s)
+            return true;
+        });
+        RedisConnection redis = mock(RedisConnection.class);
+        when(redisConnectionFactory.getConnection()).thenReturn(redis);
+        when(redis.ping()).thenReturn("PONG");
+
+        Health salud = indicador.health();
+
+        // Con timeout de 2s, debería devolver DOWN (no UP) y no bloquear 5s
+        assertThat(salud.getStatus()).isEqualTo(Status.DOWN);
+        assertThat((String) salud.getDetails().get("database")).containsIgnoringCase("timeout");
+    }
+
+    @Test
+    void redisTimeout_devuelveDownSinBloquearIndefinidamente() throws Exception {
+        Connection conexion = mock(Connection.class);
+        Statement stmt = mock(Statement.class);
+        when(dataSource.getConnection()).thenReturn(conexion);
+        when(conexion.createStatement()).thenReturn(stmt);
+        when(stmt.execute("SELECT 1")).thenReturn(true);
+        RedisConnection redis = mock(RedisConnection.class);
+        when(redisConnectionFactory.getConnection()).thenReturn(redis);
+        when(redis.ping()).thenAnswer(invocation -> {
+            Thread.sleep(5000); // Simula ping lento (5s)
+            return "PONG";
+        });
+
+        Health salud = indicador.health();
+
+        assertThat(salud.getStatus()).isEqualTo(Status.DOWN);
+        assertThat((String) salud.getDetails().get("redis")).containsIgnoringCase("timeout");
+    }
+
+    @Test
+    void mensajeError_sanitizado_noFiltraDetallesInternos() throws Exception {
+        when(dataSource.getConnection()).thenThrow(new SQLException("jdbc:mysql://localhost:3306/db?user=root&password=secret"));
+
+        Health salud = indicador.health();
+
+        assertThat(salud.getStatus()).isEqualTo(Status.DOWN);
+        String detalle = (String) salud.getDetails().get("database");
+        assertThat(detalle).doesNotContain("password");
+        assertThat(detalle).doesNotContain("jdbc:mysql");
+        assertThat(detalle).doesNotContain("localhost");
     }
 }

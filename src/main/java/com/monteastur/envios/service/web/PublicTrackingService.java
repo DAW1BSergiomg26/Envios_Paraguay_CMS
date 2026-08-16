@@ -64,8 +64,9 @@ public class PublicTrackingService {
                         .map(EntregaView::from)
                         .orElse(null);
             }
+            PublicTrackingView vista = PublicTrackingView.from(envio, eventos, evidencias, entrega);
             businessMetrics.registrarBusqueda(sample, true);
-            return PublicTrackingView.from(envio, eventos, evidencias, entrega);
+            return vista;
         } catch (RuntimeException e) {
             businessMetrics.registrarBusqueda(sample, false);
             throw e;

@@ -1,3 +1,28 @@
+@import "tailwindcss";
+
+/* === Tailwind Theme Override === */
+@theme {
+  --color-grafito-50: #e8ebf0;
+  --color-grafito-100: #d1d9e6;
+  --color-grafito-200: #a3b5cd;
+  --color-grafito-300: #7591b4;
+  --color-grafito-400: #4e7296;
+  --color-grafito-500: #335577;
+  --color-grafito-600: #2a455f;
+  --color-grafito-700: #22374b;
+  --color-grafito-800: #1a2c3d;
+  --color-grafito-900: #111827;
+  --color-grafito-950: #0b0f19;
+
+  --animate-pulse-soft: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-shimmer: shimmer 2s linear infinite;
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
 /* === Reset === */
 *, *::before, *::after {
   box-sizing: border-box;

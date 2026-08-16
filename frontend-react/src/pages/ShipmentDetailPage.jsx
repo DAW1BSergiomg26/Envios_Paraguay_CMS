@@ -6,7 +6,7 @@ import { useToast } from '../context/NotificationContext';
 import RefreshIndicator from '../components/RefreshIndicator';
 import UpdateEstadoPanel from '../components/UpdateEstadoPanel';
 import { parseLocalDateTime } from '../services/dateUtils';
-import StatusBadge from '../components/StatusBadge';
+import StatusBadge from '../features/tracking/StatusBadge';
 import Timeline from '../components/Timeline';
 import EvidenciasGrid from '../components/EvidenciasGrid';
 

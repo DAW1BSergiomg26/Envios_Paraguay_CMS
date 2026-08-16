@@ -1,7 +1,7 @@
 ﻿# ==============================================================================
 # ENVIOS PARAGUAY CMS - SCRIPT MAESTRO DE ARRANQUE 1-CLICK NIVEL DIOS
-# Infraestructura Docker completa (8 servicios) + espera de salud +
-# pestañas automáticas en el navegador (Público + Admin BI + Mailpit).
+# Infraestructura Docker completa + espera de salud +
+# pestañas automáticas en el navegador (Público + Admin BI + Mailpit + Actuator).
 # ==============================================================================
 
 param(
@@ -33,7 +33,7 @@ function Get-EnvValue {
 }
 
 Write-Header
-Write-Host " [1/3] 🐳 Levantando la infraestructura Docker completa (8 Servicios)..." -ForegroundColor Cyan
+Write-Host " [1/3] 🐳 Levantando la infraestructura Docker completa..." -ForegroundColor Cyan
 
 # 1. Comprobar que el comando docker exista
 if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
@@ -79,7 +79,7 @@ if ($NoBuild) {
     Write-Host " 🚀 Arrancando contenedores (sin reconstruir la imagen)..." -ForegroundColor Gray
     docker compose up -d
 } else {
-    Write-Host " 🏗️ Reconstruyendo la imagen (aplica CSS/estáticos y código nuevo) y arrancando..." -ForegroundColor Gray
+    Write-Host " 🏗️ Reconstruyendo la imagen (aplica estáticos, seguridad y código nuevo) y arrancando..." -ForegroundColor Gray
     docker compose up -d --build
 }
 if ($LASTEXITCODE -ne 0) {
@@ -104,7 +104,7 @@ while ($count -lt $maxRetries) {
             break
         }
     } catch {
-        # El backend aún está arrancando (Flyway, pool, etc.) -> reintentar
+        # El backend aún está arrancando (Flyway, pool de conexiones, etc.) -> reintentar
     }
     $count++
     Start-Sleep -Seconds 2
@@ -116,7 +116,7 @@ Write-Host ""
 if ($isHealthy) {
     Write-Host " [✔] ¡El backend y los servicios están 100% ONLINE y respondiendo! ($healthUrl)" -ForegroundColor Green
 } else {
-    Write-Host " [!] El backend aún no responde tras el tiempo de espera. Abriendo el navegador..." -ForegroundColor Yellow
+    Write-Host " [!] El backend tardó en responder, pero abriremos los accesos para revisión." -ForegroundColor Yellow
 }
 
 Write-Host ""
@@ -129,11 +129,12 @@ if (-not $NoBrowser) {
         "http://localhost:$port/tracking",
         "http://localhost:$port/login",
         "http://localhost:$port/admin/dashboard",
+        "http://localhost:$port/actuator/health/infraestructura",
         "http://localhost:$mailpitPort"
     )
     foreach ($url in $urls) {
         Start-Process $url
-        Start-Sleep -Milliseconds 500
+        Start-Sleep -Milliseconds 400
     }
 }
 
@@ -142,23 +143,26 @@ Write-Host "====================================================================
 Write-Host " 🎉 ¡SISTEMA ENVIOS PARAGUAY CMS OPERATIVO EN TU NAVEGADOR! " -ForegroundColor Yellow
 Write-Host "==============================================================================" -ForegroundColor Green
 Write-Host ""
-Write-Host " 🌐 ACCESOS DIRECTOS ABIERTOS:" -ForegroundColor White
-Write-Host "  - 🌲 Web Principal / Landing:    http://localhost:$port" -ForegroundColor Green
-Write-Host "  - 🏡 Sección La Casa:            http://localhost:$port/casa" -ForegroundColor Green
-Write-Host "  - 📦 Tracking Público:           http://localhost:$port/tracking" -ForegroundColor Green
-Write-Host "  - 🔐 Login Administrativo:       http://localhost:$port/login" -ForegroundColor Green
-Write-Host "  - 📊 BI Dashboard & Analítica:   http://localhost:$port/admin/dashboard" -ForegroundColor Green
-Write-Host "  - 📄 Ingesta Masiva CSV:         http://localhost:$port/admin/imports" -ForegroundColor Green
-Write-Host "  - 🖨️ Documentos & Etiquetas:    http://localhost:$port/admin/documentos" -ForegroundColor Green
-Write-Host "  - 🌐 Vía Nginx (si NGINX_PORT):  http://localhost:$nginxPort" -ForegroundColor Green
-Write-Host "  - 📬 Buzón de Email (Mailpit):   http://localhost:$mailpitPort" -ForegroundColor Green
+Write-Host " 🌐 ACCESOS DIRECTOS PRINCIPALES:" -ForegroundColor White
+Write-Host "  - 🌲 Web Principal / Landing:      http://localhost:$port" -ForegroundColor Green
+Write-Host "  - 🏡 Sección La Casa:              http://localhost:$port/casa" -ForegroundColor Green
+Write-Host "  - 📦 Tracking Público:             http://localhost:$port/tracking" -ForegroundColor Green
+Write-Host "  - 🔐 Login Administrativo:         http://localhost:$port/login" -ForegroundColor Green
+Write-Host "  - 📊 BI Dashboard & Analítica:     http://localhost:$port/admin/dashboard" -ForegroundColor Green
+Write-Host "  - 📄 Ingesta Masiva CSV:           http://localhost:$port/admin/imports" -ForegroundColor Green
+Write-Host "  - 🖨️ Documentos & Etiquetas:       http://localhost:$port/admin/documentos" -ForegroundColor Green
+Write-Host ""
+Write-Host " 🔭 OBSERVABILIDAD Y HERRAMIENTAS TÉCNICAS (FASE 6):" -ForegroundColor White
+Write-Host "  - 🩺 Health Check Infraestructura: http://localhost:$port/actuator/health/infraestructura" -ForegroundColor Cyan
+Write-Host "  - 📈 Métricas Prometheus:          http://localhost:$port/actuator/prometheus" -ForegroundColor Cyan
+Write-Host "  - 📬 Buzón de Email (Mailpit):     http://localhost:$mailpitPort" -ForegroundColor Cyan
 Write-Host ""
 Write-Host " 🔑 CREDENCIALES DE ACCESO ADMIN (leídas de .env):" -ForegroundColor White
 Write-Host "  - Usuario:     $adminUser" -ForegroundColor Yellow
 Write-Host "  - Contraseña:  $adminPass" -ForegroundColor Yellow
 Write-Host ""
 Write-Host " 💡 COMANDOS ÚTILES:" -ForegroundColor White
-Write-Host "  - Detener la aplicación:    docker compose stop" -ForegroundColor Gray
-Write-Host "  - Ver logs en vivo:         docker compose logs -f app" -ForegroundColor Gray
-Write-Host "  - Arranque sin rebuild:    .\start-app.ps1 -NoBuild" -ForegroundColor Gray
+Write-Host "  - Detener la aplicación:     docker compose stop" -ForegroundColor Gray
+Write-Host "  - Ver logs en vivo:          docker compose logs -f app" -ForegroundColor Gray
+Write-Host "  - Arranque sin rebuild:      .\start-app.ps1 -NoBuild" -ForegroundColor Gray
 Write-Host "==============================================================================" -ForegroundColor Green
