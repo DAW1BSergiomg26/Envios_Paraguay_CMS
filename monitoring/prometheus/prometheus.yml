@@ -7,5 +7,3 @@ scrape_configs:
     metrics_path: '/actuator/prometheus'
     static_configs:
       - targets: ['app:8080']
-        labels:
-          application: 'monteastur-envios'

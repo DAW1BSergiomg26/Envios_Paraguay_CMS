@@ -6,11 +6,11 @@ import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -23,8 +23,9 @@ import java.util.concurrent.TimeoutException;
  * automáticamente como /actuator/health/infraestructura y complementa a
  * los indicadores genéricos de Spring Boot (db, redis, ping, diskSpace).
  *
- * Incluye timeout acotado (2s) para evitar bloqueos indefinidos y
- * sanitización de mensajes de error para no filtrar credenciales.
+ * Utiliza un executor compartido (singleton) para evitar thread leaks
+ * bajo carga. Los timeouts están escalonados para evitar racing conditions:
+ * network timeout &lt; check timeout &lt; Redis timeout de Spring.
  */
 @Component
 public class InfraestructuraHealthIndicator implements HealthIndicator {
@@ -32,15 +33,17 @@ public class InfraestructuraHealthIndicator implements HealthIndicator {
     private static final Logger log = LoggerFactory.getLogger(InfraestructuraHealthIndicator.class);
 
     private static final long TIMEOUT_CHEQUEO_MS = 2000;
-    private static final int NETWORK_TIMEOUT_MS = 2000;
+    private static final int NETWORK_TIMEOUT_MS = 1500;
 
     private final DataSource dataSource;
     private final RedisConnectionFactory redisConnectionFactory;
+    private final ThreadPoolTaskExecutor healthCheckExecutor;
 
     public InfraestructuraHealthIndicator(DataSource dataSource,
                                           RedisConnectionFactory redisConnectionFactory) {
         this.dataSource = dataSource;
         this.redisConnectionFactory = redisConnectionFactory;
+        this.healthCheckExecutor = createSharedExecutor();
     }
 
     @Override
@@ -54,7 +57,7 @@ public class InfraestructuraHealthIndicator implements HealthIndicator {
             long inicio = System.nanoTime();
             CompletableFuture<Boolean> mysqlFuture = CompletableFuture.supplyAsync(() -> {
                 try (Connection conexion = dataSource.getConnection()) {
-                    conexion.setNetworkTimeout(java.util.concurrent.Executors.newSingleThreadExecutor(), NETWORK_TIMEOUT_MS);
+                    conexion.setNetworkTimeout(healthCheckExecutor, NETWORK_TIMEOUT_MS);
                     try (Statement stmt = conexion.createStatement()) {
                         stmt.execute("SELECT 1");
                     }
@@ -62,7 +65,7 @@ public class InfraestructuraHealthIndicator implements HealthIndicator {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            });
+            }, healthCheckExecutor);
             mysqlFuture.get(TIMEOUT_CHEQUEO_MS, TimeUnit.MILLISECONDS);
             databaseLatencyMs = latenciaMs(inicio);
         } catch (TimeoutException e) {
@@ -84,22 +87,12 @@ public class InfraestructuraHealthIndicator implements HealthIndicator {
         try {
             long inicio = System.nanoTime();
             CompletableFuture<String> redisFuture = CompletableFuture.supplyAsync(() -> {
-                RedisConnection conexionRedis = null;
-                try {
-                    conexionRedis = redisConnectionFactory.getConnection();
+                try (RedisConnection conexionRedis = redisConnectionFactory.getConnection()) {
                     return conexionRedis.ping();
                 } catch (Exception e) {
                     throw new RuntimeException(e);
-                } finally {
-                    if (conexionRedis != null) {
-                        try {
-                            conexionRedis.close();
-                        } catch (Exception ex) {
-                            log.warn("HealthCheck: no se pudo cerrar la conexión Redis", ex);
-                        }
-                    }
                 }
-            });
+            }, healthCheckExecutor);
             redisFuture.get(TIMEOUT_CHEQUEO_MS, TimeUnit.MILLISECONDS);
             redisLatencyMs = latenciaMs(inicio);
         } catch (TimeoutException e) {
@@ -135,7 +128,6 @@ public class InfraestructuraHealthIndicator implements HealthIndicator {
         if (msg == null || msg.isBlank()) {
             return e.getClass().getSimpleName();
         }
-        // Sanitizar: eliminar passwords, URLs JDBC, hosts, IPs, tokens
         String sanitized = msg
                 .replaceAll("(?i)password\\s*=\\s*[^\\s&;]+", "password=***")
                 .replaceAll("(?i)secret\\s*=\\s*[^\\s&;]+", "secret=***")
@@ -144,5 +136,18 @@ public class InfraestructuraHealthIndicator implements HealthIndicator {
                 .replaceAll("\\b\\d{1,3}(?:\\.\\d{1,3}){3}\\b", "***.***.***.***")
                 .replaceAll("\\b[0-9a-fA-F:]{2,}:[0-9a-fA-F:]+\\b", "***:***");
         return sanitized.isBlank() ? e.getClass().getSimpleName() : sanitized;
+    }
+
+    private static ThreadPoolTaskExecutor createSharedExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(4);
+        executor.setQueueCapacity(10);
+        executor.setThreadNamePrefix("health-check-");
+        executor.setDaemon(true);
+        executor.setWaitForTasksToCompleteOnShutdown(true);
+        executor.setAwaitTerminationSeconds(5);
+        executor.initialize();
+        return executor;
     }
 }
