@@ -102,9 +102,9 @@ body.dark-mode {
 html.light-mode,
 html.light-mode body,
 body.light-mode {
-  --bg-body: #f8fafc;
-  --bg-body-asturias: #f8fafc;
-  --bg-body-gradient: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  --bg-body: #f9fafb;
+  --bg-body-asturias: #f9fafb;
+  --bg-body-gradient: linear-gradient(180deg, #ffffff 0%, #f9fafb 50%, #f5f6f8 100%);
   --bg-surface: #ffffff;
   --bg-surface-green: #ffffff;
   --bg-card: #ffffff;
@@ -120,16 +120,16 @@ body.light-mode {
   --border-green-light: rgba(21, 60, 45, 0.15);
   --border-strong: rgba(0, 0, 0, 0.16);
   --border-orange-focus: rgba(230, 126, 34, 0.45);
-  --accent-color: #c2410c;
-  --accent-paraguay: #c2410c;
+  --accent-color: #d4762a;
+  --accent-paraguay: #d4762a;
   --accent-paraguay-amber: #f59e0b;
-  --accent-color-hover: #9a3412;
-  --accent-paraguay-hover: #9a3412;
-  --accent-color-active: #7c2d12;
-  --accent-paraguay-active: #7c2d12;
-  --accent-glow: rgba(230, 126, 34, 0.18);
-  --accent-paraguay-glow: rgba(230, 126, 34, 0.18);
-  --accent-paraguay-glow-strong: rgba(230, 126, 34, 0.3);
+  --accent-color-hover: #b8652a;
+  --accent-paraguay-hover: #b8652a;
+  --accent-color-active: #9c5520;
+  --accent-paraguay-active: #9c5520;
+  --accent-glow: rgba(212, 118, 42, 0.2);
+  --accent-paraguay-glow: rgba(212, 118, 42, 0.2);
+  --accent-paraguay-glow-strong: rgba(212, 118, 42, 0.35);
   --text-on-accent: #ffffff;
   --status-success: #16a34a;
   --status-warning: #d97706;
@@ -235,6 +235,7 @@ body {
 
   /* Tipografía global */
   --fuente-sistema: "Roboto", sans-serif;
+  --color-accent: var(--accent-color);
 }
 
 * {
@@ -6312,4 +6313,213 @@ body {
   .brand-banner-content p {
     font-size: 14px;
   }
+}
+
+/* ================================================================
+   LIGHT-MODE CONTRAST FIXES — Envios Paraguay CMS
+   Preserves white text in dark-background sections and fixes
+   light-on-light contrast issues when switching to light theme.
+   ================================================================ */
+
+/* --- Hero overlay: always dark background, text must stay white --- */
+html.light-mode .hero-premium .hero-overlay h1,
+html.light-mode .hero-premium-overlay h1,
+html.light-mode .hero-premium .hero-overlay p,
+html.light-mode .hero-premium-overlay p,
+html.light-mode .hero-premium .hero-brand,
+html.light-mode .hero-premium .hero-tag,
+html.light-mode .hero-premium .btn-ghost {
+  color: white !important;
+}
+
+html.light-mode .hero-premium .hero-brand {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+html.light-mode .hero-premium .hero-tag {
+  background: rgba(255, 255, 255, 0.11) !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* --- Brand banner: dark overlay over image --- */
+html.light-mode .brand-banner-content h3,
+html.light-mode .brand-banner-content p {
+  color: white !important;
+}
+
+/* --- Operations timeline: dark green gradient --- */
+html.light-mode .operations-timeline,
+html.light-mode .operations-timeline h2,
+html.light-mode .operations-timeline p,
+html.light-mode .operations-timeline li,
+html.light-mode .operations-timeline strong {
+  color: white !important;
+}
+
+html.light-mode .operations-timeline {
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+/* --- Banner reserva: orange gradient, white text correct --- */
+html.light-mode .banner-reserva {
+  border: 1px solid rgba(230, 126, 34, 0.45) !important;
+}
+
+/* --- Footer: light background in light mode, fix borders + text --- */
+html.light-mode footer {
+  background: var(--bg-body) !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: var(--text-main) !important;
+}
+
+html.light-mode .footer-col h3,
+html.light-mode .footer-col h4 {
+  color: var(--text-primary) !important;
+}
+
+html.light-mode .footer-col p {
+  color: var(--text-secondary) !important;
+}
+
+html.light-mode .footer-col a {
+  color: var(--text-secondary) !important;
+}
+
+html.light-mode .footer-col a:hover {
+  color: var(--accent-color) !important;
+}
+
+html.light-mode .footer-bottom {
+  border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: var(--text-muted) !important;
+}
+
+/* --- Header: fix border in light mode --- */
+html.light-mode header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* --- Casa hero: dark text on cream background in light mode --- */
+html.light-mode .casa-hero-premium h2 {
+  color: var(--casa-dark) !important;
+}
+
+html.light-mode .casa-hero-premium p {
+  color: #4a4a44 !important;
+}
+
+html.light-mode .casa-hero-pill {
+  color: var(--casa-dark) !important;
+}
+
+/* --- Reservas hero: dark text on cream background in light mode --- */
+html.light-mode .reservas-hero-premium h2 {
+  color: var(--reservas-green-dark) !important;
+}
+
+html.light-mode .reservas-hero-premium p {
+  color: #4a4a44 !important;
+}
+
+/* --- Glass cards: ensure dark text in light mode --- */
+html.light-mode .glass-card,
+html.light-mode .card,
+html.light-mode .container-box,
+html.light-mode .panel,
+html.light-mode .box {
+  background-color: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border-color: var(--glass-border) !important;
+}
+
+/* --- Pagina-titulo: ensure dark text --- */
+html.light-mode .pagina-titulo h2 {
+  color: var(--text-primary) !important;
+}
+
+html.light-mode .pagina-titulo p {
+  color: var(--text-secondary) !important;
+}
+
+/* --- Contenido / contenido-legal: dark text on white --- */
+html.light-mode .contenido,
+html.light-mode .contenido-legal {
+  color: var(--text-secondary) !important;
+}
+
+/* --- Cookie banner: fix border in light mode --- */
+html.light-mode .cookie-banner {
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+/* --- Trust/testimonial cards in light mode --- */
+html.light-mode .trust-premium,
+html.light-mode .testimonials-premium,
+html.light-mode .trust-logos-premium {
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+/* --- Logo VI ghost fix: white text with elegant halo in light mode --- */
+html.light-mode .tri-blanco {
+  color: #ffffff !important;
+  text-shadow:
+    0px 1px 2px rgba(0, 0, 0, 0.5),
+    0px 0px 4px rgba(0, 0, 0, 0.25),
+    0px 2px 8px rgba(0, 0, 0, 0.15);
+  -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Nav active border: corporate orange accent --- */
+html.light-mode #nav-principal a.active,
+html.light-mode #nav-principal a:hover {
+  border-bottom-color: var(--accent-color) !important;
+  color: var(--accent-color) !important;
+}
+
+/* --- Glass cards: layered shadows for floating depth --- */
+html.light-mode .glass-card,
+html.light-mode .card,
+html.light-mode .container-box,
+html.light-mode .panel,
+html.light-mode .box {
+  background-color: var(--card-bg) !important;
+  color: var(--text-main) !important;
+  border: 1px solid rgba(0, 0, 0, 0.04) !important;
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 4px 12px rgba(0, 0, 0, 0.04),
+    0 12px 28px rgba(0, 0, 0, 0.03) !important;
+}
+
+/* --- Hover: lift + intensify shadow with orange glow --- */
+html.light-mode .glass-card,
+html.light-mode .card,
+html.light-mode .container-box {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.light-mode .glass-card:hover,
+html.light-mode .card:hover,
+html.light-mode .container-box:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.06),
+    0 12px 24px rgba(212, 118, 42, 0.08),
+    0 20px 40px rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(212, 118, 42, 0.15) !important;
+}
+
+/* --- Button hover: lift + orange glow --- */
+html.light-mode .btn-luxury,
+html.light-mode .btn-primary {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.light-mode .btn-luxury:hover,
+html.light-mode .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 118, 42, 0.25) !important;
 }
