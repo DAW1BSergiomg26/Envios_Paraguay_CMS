@@ -13,7 +13,7 @@ import com.monteastur.envios.service.EnvioTrackingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -36,28 +36,28 @@ class AdminApiControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private EnvioTrackingRepository trackingRepo;
 
-    @MockBean
+    @MockitoBean
     private EvidenciaEnvioService evidenciaService;
 
-    @MockBean
+    @MockitoBean
     private EventoTrackingService eventoTrackingService;
 
-    @MockBean
+    @MockitoBean
     private EnvioTrackingService envioTrackingService;
 
-    @MockBean
+    @MockitoBean
     private ClienteRepository clienteRepository;
 
-    @MockBean
+    @MockitoBean
     private DataSource dataSource;
 
-    @MockBean
+    @MockitoBean
     private RBACAccessLogger rbacAccessLogger;
 
-    @MockBean
+    @MockitoBean
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     private Cliente cliente(Long id, String nombre, String email) {

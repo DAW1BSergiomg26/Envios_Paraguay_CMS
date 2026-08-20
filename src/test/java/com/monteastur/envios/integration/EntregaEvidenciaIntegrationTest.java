@@ -17,7 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -41,7 +41,7 @@ class EntregaEvidenciaIntegrationTest {
     @Autowired private EnvioTrackingService envioTrackingService;
     @Autowired private TransactionTemplate transactionTemplate;
 
-    @MockBean private EmailService emailService;
+    @MockitoBean private EmailService emailService;
 
     private Long envioId;
 

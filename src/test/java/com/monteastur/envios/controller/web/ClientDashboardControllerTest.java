@@ -15,7 +15,7 @@ import com.monteastur.envios.service.web.ClientDashboardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,25 +46,25 @@ class ClientDashboardControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private ClientDashboardService dashboardService;
 
-    @MockBean
+    @MockitoBean
     private DocumentoPdfService documentoPdfService;
 
-    @MockBean
+    @MockitoBean
     private EnvioTrackingRepository envioTrackingRepository;
 
-    @MockBean
+    @MockitoBean
     private ClienteService clienteService;
 
-    @MockBean
+    @MockitoBean
     private DataSource dataSource;
 
-    @MockBean
+    @MockitoBean
     private RBACAccessLogger rbacAccessLogger;
 
-    @MockBean
+    @MockitoBean
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     private Cliente cliente() {

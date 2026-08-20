@@ -15,7 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,17 +44,17 @@ class PublicControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean private ImagenRepository imagenRepo;
-    @MockBean private TextoLegalRepository textoRepo;
-    @MockBean private ReservaRepository reservaRepo;
-    @MockBean private MensajeContactoRepository mensajeRepo;
-    @MockBean private EmailService emailService;
-    @MockBean private DataSource dataSource;
+    @MockitoBean private ImagenRepository imagenRepo;
+    @MockitoBean private TextoLegalRepository textoRepo;
+    @MockitoBean private ReservaRepository reservaRepo;
+    @MockitoBean private MensajeContactoRepository mensajeRepo;
+    @MockitoBean private EmailService emailService;
+    @MockitoBean private DataSource dataSource;
 
-    @MockBean
+    @MockitoBean
     private RBACAccessLogger rbacAccessLogger;
 
-    @MockBean
+    @MockitoBean
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @ParameterizedTest

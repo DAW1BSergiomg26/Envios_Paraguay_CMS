@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -41,19 +41,19 @@ class NotificacionApiControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private NotificacionRepository notificacionRepository;
 
-    @MockBean
+    @MockitoBean
     private EmailService emailService;
 
-    @MockBean
+    @MockitoBean
     private DataSource dataSource;
 
-    @MockBean
+    @MockitoBean
     private RBACAccessLogger rbacAccessLogger;
 
-    @MockBean
+    @MockitoBean
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     private Notificacion notificacion(Long id, Notificacion.EstadoNotificacion estado, String destinatario) {

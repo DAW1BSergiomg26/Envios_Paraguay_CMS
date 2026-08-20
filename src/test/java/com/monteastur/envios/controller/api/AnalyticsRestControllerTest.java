@@ -10,7 +10,7 @@ import com.monteastur.envios.service.analytics.AnalyticsDashboardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,12 +41,12 @@ class AnalyticsRestControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @MockitoBean
     private AnalyticsDashboardService dashboardService;
 
-    @MockBean private RBACAccessLogger rbacAccessLogger;
-    @MockBean private CustomAccessDeniedHandler customAccessDeniedHandler;
-    @MockBean private DataSource dataSource;
+    @MockitoBean private RBACAccessLogger rbacAccessLogger;
+    @MockitoBean private CustomAccessDeniedHandler customAccessDeniedHandler;
+    @MockitoBean private DataSource dataSource;
 
     private AnalyticsSummaryDto resumenEjemplo() {
         AnalyticsSummaryDto dto = new AnalyticsSummaryDto();

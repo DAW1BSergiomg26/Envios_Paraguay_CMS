@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -51,7 +51,7 @@ class AnalyticsDashboardIntegrationTest {
     @Autowired private AnalyticsDashboardService analyticsService;
     @Autowired private CacheManager cacheManager;
 
-    @MockBean private EmailService emailService;
+    @MockitoBean private EmailService emailService;
 
     private final List<Long> enviosIds = new ArrayList<>();
     private final List<Long> clientesIds = new ArrayList<>();
