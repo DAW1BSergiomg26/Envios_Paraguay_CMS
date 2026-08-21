@@ -41,7 +41,7 @@ Guía de trabajo para agentes de IA y desarrolladores en este repositorio. Estab
 
 ## 🧪 Comandos de Verificación
 
-- Compilar y testear localmente (requiere JDK 17 + Maven): `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd clean test`
+- Compilar y testear localmente (requiere **JDK 25** apuntado en `JAVA_HOME`, p. ej. `C:\Users\astur\.jdks\openjdk-25.0.2` — el `pom.xml` usa `source/target 25`; con JDK < 25 falla con `invalid target release: 25`): `C:\Users\astur\Desktop\maven\apache-maven-3.9.9\bin\mvn.cmd clean test`
 - Suite completa en contenedor (con `db` y `redis` levantados en `envios_paraguay_cms_backend`):
 
   ```powershell

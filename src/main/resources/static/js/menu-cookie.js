@@ -1,11 +1,11 @@
 /* menu-cookie.js — Envios Paraguay CMS
- * Inicialización del tema (antes del primer pintado), menú hamburguesa y banner de cookies.
- * Cargado en <head> de forma síncrona para evitar el flash de tema (FOUC).
+ * Theme initialization (before first paint), hamburger menu and cookie banner.
+ * Loaded synchronously in <head> to prevent FOUC.
  */
 (function () {
     'use strict';
 
-    /* Inicialización del tema: se ejecuta de inmediato, antes de que el navegador pinte. */
+    /* Theme initialization: runs immediately, before the browser paints. */
     var tema = 'dark';
     try {
         var guardado = localStorage.getItem('theme');
@@ -13,11 +13,13 @@
             tema = guardado;
         }
     } catch (e) {
-        /* almacenamiento no disponible */
+        /* storage unavailable */
     }
     document.documentElement.setAttribute('data-theme', tema);
+    document.documentElement.classList.toggle('light-mode', tema === 'light');
+    document.documentElement.classList.toggle('dark-mode', tema === 'dark');
 
-    /* Menú hamburguesa y banner de cookies: dependen del DOM. */
+    /* Hamburger menu and cookie banner: depend on DOM. */
     function initHeader() {
         var burger = document.getElementById('btn-hamburguesa');
         var nav = document.getElementById('nav-principal');

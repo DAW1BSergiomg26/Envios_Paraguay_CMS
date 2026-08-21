@@ -1,6 +1,7 @@
 /* Theme Switcher — Envios Paraguay CMS
- * Mecanismo dual: atributo data-theme en <html> + clases light-mode/dark-mode en <html> y <body>.
- * La preferencia se persiste en localStorage bajo la clave 'theme'.
+ * Dual mechanism: data-theme attribute on <html> + light-mode/dark-mode classes on <html> and <body>.
+ * Persisted in localStorage under 'theme'.
+ * Selectors: #theme-toggle, .theme-toggle-btn, .btn-theme-toggle
  */
 (function () {
     'use strict';
@@ -19,7 +20,6 @@
         var root = document.documentElement;
         root.setAttribute('data-theme', theme);
 
-        /* Clases duplicadas en <html> y <body> para soportar selectores .light-mode / .dark-mode */
         root.classList.toggle('light-mode', theme === 'light');
         root.classList.toggle('dark-mode', theme === 'dark');
         if (document.body) {
@@ -33,7 +33,7 @@
     function syncIcon(theme) {
         var iconName = theme === 'dark' ? 'sun' : 'moon';
         var label = theme === 'dark' ? 'Activar modo claro' : 'Activar modo oscuro';
-        document.querySelectorAll('.btn-theme-toggle').forEach(function (btn) {
+        getAllButtons().forEach(function (btn) {
             btn.setAttribute('aria-label', label);
             btn.setAttribute('title', label);
             var icon = btn.querySelector('[data-lucide]');
@@ -46,18 +46,29 @@
         }
     }
 
+    function getAllButtons() {
+        var set = new Set();
+        var selectors = ['#theme-toggle', '.theme-toggle-btn', '.btn-theme-toggle'];
+        selectors.forEach(function (sel) {
+            document.querySelectorAll(sel).forEach(function (el) {
+                set.add(el);
+            });
+        });
+        return Array.from(set);
+    }
+
     function toggleTheme() {
         var next = currentTheme() === 'dark' ? 'light' : 'dark';
         applyTheme(next);
         try {
             localStorage.setItem(STORAGE_KEY, next);
         } catch (e) {
-            /* almacenamiento no disponible */
+            /* storage unavailable */
         }
     }
 
     function bindButtons() {
-        document.querySelectorAll('.btn-theme-toggle').forEach(function (btn) {
+        getAllButtons().forEach(function (btn) {
             btn.addEventListener('click', function () {
                 btn.classList.add('theme-rotating');
                 toggleTheme();
