@@ -34,13 +34,16 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         String username = (auth != null && auth.isAuthenticated()) ? auth.getName() : "ANONYMOUS";
         rbacAccessLogger.logFailure(username, "ACCESS_DENIED", request.getRequestURI(),
                 request, "Access denied");
-        if (request.getRequestURI().startsWith("/api/")) {
+        String uri = request.getRequestURI();
+        if (uri.startsWith("/api/")) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             objectMapper.writeValue(response.getWriter(),
                     new ErrorDto(Instant.now().toString(), 400, "Access denied"));
-        } else if (request.getRequestURI().startsWith("/cliente/")) {
+        } else if (uri.equals("/cliente/login") || uri.equals("/login")) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Access denied");
+        } else if (uri.startsWith("/cliente/")) {
             response.sendRedirect("/cliente/login");
         } else {
             response.sendRedirect("/login");
