@@ -40,8 +40,10 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             objectMapper.writeValue(response.getWriter(),
                     new ErrorDto(Instant.now().toString(), 400, "Access denied"));
+        } else if (request.getRequestURI().startsWith("/cliente/")) {
+            response.sendRedirect("/cliente/login");
         } else {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Access denied");
+            response.sendRedirect("/login");
         }
     }
 }

@@ -89,6 +89,12 @@ body.dark-mode {
   --transition-default: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* Iconos Lucide */
+  --icon-color: #e2e8f0;
+  --icon-color-accent: #e67e22;
+  --icon-size: 24px;
+  --icon-stroke-width: 1.75;
+
   /* Espaciados */
   --spacing-xs: 4px;
   --spacing-sm: 8px;
@@ -165,6 +171,10 @@ body.light-mode {
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
+  --icon-color: #1e293b;
+  --icon-color-accent: #d4762a;
+  --icon-size: 24px;
+  --icon-stroke-width: 1.75;
   --nav-text: #0f172a;
   --nav-text-hover: #c2410c;
   --nav-hover-bg: rgba(230, 126, 34, 0.08);
@@ -1253,6 +1263,10 @@ html.dark-mode body {
   --glass-bg-hover: rgba(27, 77, 59, 0.78);
   --surface-header: rgba(11, 30, 22, 0.85);
   --surface-card: rgba(27, 77, 59, 0.6);
+  --icon-color: #e2e8f0;
+  --icon-color-accent: #e67e22;
+  --icon-size: 24px;
+  --icon-stroke-width: 1.75;
 }
 
 :root[data-theme="light"],
@@ -1277,6 +1291,10 @@ html.light-mode body {
   --glass-bg-hover: #ffffff;
   --surface-header: rgba(248, 250, 252, 0.9);
   --surface-card: #ffffff;
+  --icon-color: #1e293b;
+  --icon-color-accent: #d4762a;
+  --icon-size: 24px;
+  --icon-stroke-width: 1.75;
 }
 
 header,
